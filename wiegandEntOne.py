@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import pigpio
+import relay_one
+import relay_two
+#import usbrelaytest
 
 class decoder:
 
@@ -114,22 +117,53 @@ class decoder:
 
 if __name__ == "__main__":
 
-   import time
+    import time
 
-   import pigpio
+    import pigpio
 
-   import wiegand
-
-   def callback(bits, value):
+    import wiegandEntOne
+    
+    from datetime import datetime
+    
+    def callback(bits, value):
       print("bits={} value={}".format(bits, value))
+      if value == 58589186 or value == 36443438 or value == 58589188 or value == 79668:
+          print("Authenticated")
+          relay_one.trigger_relay()
 
-   pi = pigpio.pi()
-
-   w = wiegand.decoder(pi, 14, 15, callback)
-
-   time.sleep(300)
-
-   w.cancel()
-
-   pi.stop()
+    pi = pigpio.pi()
+    #initialising pin5 for pushbutton1
+    pi.set_mode(5, pigpio.INPUT)
+    print(pi.read(5))
+    pi.set_pull_up_down(5, pigpio.PUD_UP)
+    print(pi.read(5))
+    pi.set_mode(6, pigpio.INPUT)
+    pi.set_pull_up_down(6, pigpio.PUD_UP)
+    
+    w1 = wiegandEntOne.decoder(pi, 2, 3, callback)
+   
+    #w2 = wiegandEntOne.decoder(pi, 22, 10, callback)
+    
+    while True: 
+        if pi.read(5) == 0:
+            print(pi.read(5))
+            print("Pb 1 was pushed at:" + str(datetime.now()))
+            relay_one.trigger_relay()
+        pi.set_pull_up_down(5, pigpio.PUD_UP)
+        if pi.read(6) == 1:
+            print("Entrance 1 is open!")
+        pi.set_pull_up_down(6, pigpio.PUD_UP)
+        #if pi.read(26) == 1:
+            #print("Entrance 2 is open!")
+        #pi.set_pull_up_down(26, pigpio.PUD_UP)
+    #usbrelaytest.magcontact()
+    time.sleep(3)
+    #while True: 
+        #relay_module_test.main()
+    
+    w.cancel()
+    
+    pi.stop()
+    
+    
 
