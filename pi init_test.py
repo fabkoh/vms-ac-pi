@@ -1,7 +1,7 @@
 # Python Program to Get IP Address
 import socket
 import subprocess
-import psutil
+#import psutil
 import os
 
 hostname = socket.gethostname()   

@@ -132,7 +132,7 @@ if __name__ == "__main__":
       print("bits={} value={}".format(bits, value))
       if value == 36443419 or value == 36443438:
           print("Authenticated")
-          relay_one.trigger_relay()
+          relay_two.trigger_relay()
 
     pi = pigpio.pi()
     #initialising pin5 for pushbutton1
@@ -149,15 +149,15 @@ if __name__ == "__main__":
     pi.set_mode(6, pigpio.INPUT) #pin 6 for mag contact
     pi.set_pull_up_down(6, pigpio.PUD_UP)
     
-    w1 = wiegandEntOne.decoder(pi, 2, 3, callback)
+    w1 = wiegandEntOne.decoder(pi, 22, 10, callback)
    
-    w2 = wiegandEntOne.decoder(pi, 14, 10, callback)
+    w2 = wiegandEntOne.decoder(pi, 24, 25, callback)
     
     while True: 
         if pi.read(5) == 0:
             print(pi.read(5))
             print("Pb 1 was pushed at " + str(datetime.now()))
-            relay_one.trigger_relay()
+            relay_two.trigger_relay()
         if pi.read(19) == 0:
             print(pi.read(19))
             print("Pb 2 was pushed at " + str(datetime.now()))
