@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request #import objects from the Flask model
 app = Flask(__name__) #define app using Flask
 import datetime
-import webapp3
+#import webapp3
 import json
 
 now = datetime.datetime.now()
@@ -12,7 +12,7 @@ timeString = now.strftime("%Y-%m-%d %H:%M")
                           
 @app.route('/', methods=['GET'])
 def main():
-    scannedRecord = [{'qrCode' : webapp3.data}, {'Time' : timeString}, {'flag' : '1'}]
+    #scannedRecord = [{'qrCode' : webapp3.data}, {'Time' : timeString}, {'flag' : '1'}]
     return jsonify({'Scanned Records' : scannedRecord})
 
 

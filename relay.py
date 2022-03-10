@@ -1,9 +1,10 @@
 import RPi.GPIO as GPIO
 from time import sleep
+from datetime import datetime
 
 # *** Config ***
 
-Relay_1 = 12
+Relay_1 = 27
 Relay_2 = 13
 
 # *** GPIO Setp/Cleanup ***
@@ -24,11 +25,11 @@ def setupRelayPin(relayPin):
     GPIO.output(relayPin, GPIO.LOW)  
     return
 
-def setRelayPinHigh(relayPin):  
+def setRelayPinHigh(relayPin):
     GPIO.output(relayPin, GPIO.HIGH)
     return
 
-def setRelayPinLow(relayPin): 
+def setRelayPinLow(relayPin):
     GPIO.output(relayPin, GPIO.LOW)
     return
 
@@ -65,7 +66,7 @@ def trigger_relay_one():
     setGpioMode()
     setupRelayPin(Relay_1)
     
-    print('  EM 1 unlocked')
+    print(" EM 1 unlocked at " + str(datetime.now()))
     toggleRelay(relayPin = Relay_1, activateLevel = 'High', \
                 activateMilliSeconds = 3000, deActivateMilliSeconds = 1000, \
                 toggleCount = 1)

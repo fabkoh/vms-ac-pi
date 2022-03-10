@@ -1,9 +1,38 @@
 import pigpio
 import time
-import RPi.GPIO as GPIO
+import threading
 from datetime import datetime
 import relay
-import transactionsMod
+#import transactionsMod
+
+
+
+
+E1_R1_D0= 22
+E1_R1_D1= 10
+#E1_R1_Buzz=
+#E1_R1_Led=
+E1_R2_D0=24
+E1_R2_D1=25
+#E1_R2_Buzz=
+#E1_R2_Led=
+E1_Mag= 6
+E1_Button= 5
+
+'''
+E2_R1_D0=
+E2_R1_D1=
+
+E2_R1_Buzz=
+E2_R1_Led=
+E2_R2_D0=
+E2_R2_D1=
+E2_R2_Buzz=
+E2_R2_Led=
+E2_Mag=
+E2_Button=
+'''
+     
 
 class decoder:
 
@@ -25,7 +54,7 @@ class decoder:
 
       self.pi.set_pull_up_down(gpio_0, pigpio.PUD_UP)
       self.pi.set_pull_up_down(gpio_1, pigpio.PUD_UP)
-
+    
       self.cb_0 = self.pi.callback(gpio_0, pigpio.FALLING_EDGE, self._cb)
       self.cb_1 = self.pi.callback(gpio_1, pigpio.FALLING_EDGE, self._cb)
 
@@ -69,6 +98,7 @@ class decoder:
                self.pi.set_watchdog(self.gpio_1, 0)
                self.in_code = False
                self.callback(self.bits, self.num)
+               return
 
    def cancel(self):
 
@@ -85,7 +115,8 @@ def callback_e1(bits, value):
     if value == 36443419 or value == 36443438:
         print("Authenticated")
         relay.trigger_relay_one()
-        transactionsMod.record(value,reader,exit)
+        print("jere")
+        #transactionsMod.record(value,reader,exit)
 
 def callback_e2(bits, value):
     print("bits={} value={}".format(bits, value))
@@ -93,19 +124,19 @@ def callback_e2(bits, value):
     if value == 36443419 or value == 36443438:
         print("Authenticated")
         relay.trigger_relay_two()
-        transactionsMod.record()
+        #transactionsMod.record()
 
 #initialising pi
 pi = pigpio.pi()
 
 #initialising E1_Button for pushbutton1
 pi.set_mode(E1_Button, pigpio.INPUT)
-pi.set_pull_up_down(E1_Button, pigpio.PUD_UP)
+#pi.set_pull_up_down(E1_Button, pigpio.PUD_UP)
 
 #E1_Mag for mag contact
 pi.set_mode(E1_Mag, pigpio.INPUT) 
 pi.set_pull_up_down(E1_Mag, pigpio.PUD_UP)
-
+'''
 #E1_R1_Buzz for Buzz
 pi.set_mode(E1_R1_Buzz, pigpio.INPUT) 
 pi.set_pull_up_down(E1_R1_Buzz, pigpio.PUD_UP)
@@ -145,49 +176,77 @@ pi.set_pull_up_down(E2_R2_Buzz, pigpio.PUD_UP)
 #E2_R1_Led for Led
 pi.set_mode(E2_R2_Led, pigpio.INPUT) 
 pi.set_pull_up_down(E2_R2_Led, pigpio.PUD_UP)
-
-#wiegand
+'''
 e1r1 = decoder(pi, E1_R1_D0, E1_R1_D1, callback_e1)
 e1r2 = decoder(pi, E1_R2_D0, E1_R2_D1, callback_e1)
+#e1r2 = decoder(pi, E1_R2_D0, E1_R2_D1, callback_e1)
 
-e2r1 = decoder(pi, E2_R1_D0, E2_R1_D1, callback_e2)
-e2r2 = decoder(pi, E2_R2_D0, E2_R2_D1, callback_e2)
+#e2r1 = decoder(pi, E2_R1_D0, E2_R1_D1, callback_e2)
+#e2r2 = decoder(pi, E2_R2_D0, E2_R2_D1, callback_e2)
 
+def cbmagrise(gpio, level, tick):
+    print("Entrance 1 is opened at " + str(datetime.now()))
+    
+def cbmagfall(gpio, level, tick):
+    print("Entrance 1 is closed at " + str(datetime.now()))
+    
+def cbbutton(gpio, level, tick):
+    print("Pb 1 was pushed at " + str(datetime.now()))
+    relay.trigger_relay_one()
 
+    
+    
 
-def button_callback_e1(channel):
-    if E1_Button:
-        print("Pb 1 was pushed at " + str(datetime.now()))
-    else:
-        print("Pb 1 was released at " + str(datetime.now()))
+def mag():
+    cb1 = pi.callback(E1_Mag, pigpio.RISING_EDGE, cbmagrise)
+    cb2 = pi.callback(E1_Mag, pigpio.FALLING_EDGE, cbmagfall)
 
-def button_callback_e2(channel):
-    if E2_Button:
-        print("Pb 2 was pushed at " + str(datetime.now()))
-    else:
-        print("Pb 2 was released at " + str(datetime.now()))
-
-def mag_callback_e1(channel):
-    if E1_Mag:
-        print("Entrance 1 is closed at " + str(datetime.now()))
-    else:
+    '''
+    while True:
+        
+        if pi.read(6) == 1:
+            print("Entrance opened at " + str(datetime.now()))
+            
+        
+        pi.wait_for_edge(6, pigpio.RISING_EDGE)
         print("Entrance 1 is opened at " + str(datetime.now()))
+        
+        pi.wait_for_edge(6, pigpio.FALLING_EDGE)
+        print("Entrance 1 is closed at " + str(datetime.now()))
+    ''' 
+    
+def button():
+    
+    cb3 = pi.callback(E1_Button, pigpio.FALLING_EDGE, cbbutton)
+    
+    '''
+    while True: 
+        if pi.read(5) == 0:
+            print(pi.read(5))
+            print("Pb 1 was pushed at " + str(datetime.now()))
+            #relay.trigger_relay_one()
+            print("Here")
+            
+        
+            
+    
+    while True:
+        pi.wait_for_edge(5, pigpio.FALLING_EDGE)
+        print("Pb 1 was pushed at " + str(datetime.now()))
+        relay.trigger_relay_one()
+        
+                    
+        if pi.read(5) == 0:
+            print("Pb 1 was pushed at " + str(datetime.now()))
+            relay.trigger_relay_one()
+    '''
+            
+t1 = threading.Thread(target=button)
+t2 = threading.Thread(target=mag)
 
-def mag_callback_e2(channel):
-    if E2_Mag:
-        print("Entrance 2 is closed at " + str(datetime.now()))
-    else:
-        print("Entrance 2 is opened at " + str(datetime.now()))
-
-
-GPIO.add_event_detect(E1_Button,GPIO.BOTH,callback=button_callback_e1)
-GPIO.add_event_detect(E2_Button,GPIO.BOTH,callback=button_callback_e2)
-
-E1_opened = False
-E2_opened = False
-
-GPIO.add_event_detect(E1_Mag,GPIO.BOTH,callback=mag_callback_e1)
-GPIO.add_event_detect(E2_Mag,GPIO.BOTH,callback=mag_callback_e2)
+    
+t1.start()
+t2.start()
 
 
 

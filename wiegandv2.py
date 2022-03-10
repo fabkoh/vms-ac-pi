@@ -5,6 +5,7 @@
 import pigpio
 import relay_one
 import relay_two
+import threading
 #import usbrelaytest
 
 class decoder:
@@ -130,10 +131,23 @@ if __name__ == "__main__":
     
     def callback(bits, value):
       print("bits={} value={}".format(bits, value))
+      
+      #check for auth method, if requires fingerprint and card
+          #check if value is in fingerprint of Credentials
+              # check if the other value is in card of the same Credentials
+          #check if value is in card of Credentials
+              # check if the other value is in fingerprint of the same Credentials
+      
       if value == 36443419 or value == 36443438:
           print("Authenticated")
-          relay_two.trigger_relay()
+          relay_one.trigger_relay()
+    
 
+    
+      
+
+    
+    
     pi = pigpio.pi()
     #initialising pin5 for pushbutton1
     pi.set_mode(5, pigpio.INPUT)
@@ -150,23 +164,27 @@ if __name__ == "__main__":
     pi.set_pull_up_down(6, pigpio.PUD_UP)
     
     w1 = wiegandEntOne.decoder(pi, 22, 10, callback)
-   
     w2 = wiegandEntOne.decoder(pi, 24, 25, callback)
+    
+    
+    
     
     while True: 
         if pi.read(5) == 0:
             print(pi.read(5))
             print("Pb 1 was pushed at " + str(datetime.now()))
-            relay_two.trigger_relay()
-        if pi.read(19) == 0:
-            print(pi.read(19))
-            print("Pb 2 was pushed at " + str(datetime.now()))
-            relay_two.trigger_relay()
+            relay_one.trigger_relay()
             
-        pi.set_pull_up_down(5, pigpio.PUD_UP)
+        #if pi.read(19) == 0:
+            #print(pi.read(19))
+            #print("Pb 2 was pushed at " + str(datetime.now()))
+            #relay_two.trigger_relay()
+        
+        pi.set_pull_up_down(6, pigpio.PUD_UP)
         if pi.read(6) == 1:
             print("Entrance 1 is opened at " + str(datetime.now()))
         pi.set_pull_up_down(6, pigpio.PUD_UP)
+        
         #if pi.read(26) == 1:
             #print("Entrance 2 is open!")
         #pi.set_pull_up_down(26, pigpio.PUD_UP)
@@ -174,6 +192,8 @@ if __name__ == "__main__":
     time.sleep(3)
     #while True: 
         #relay_module_test.main()
+    
+
     
     w.cancel()
     

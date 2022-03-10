@@ -3,7 +3,7 @@ from time import sleep
 
 # *** Config ***
 
-relayPin0      = 22
+relayPin0      = 27
 
 magContactPin = 0
 # *** GPIO Setp/Cleanup ***
