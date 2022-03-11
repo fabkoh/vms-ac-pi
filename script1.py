@@ -57,8 +57,12 @@ class decoder:
     
       self.cb_0 = self.pi.callback(gpio_0, pigpio.FALLING_EDGE, self._cb)
       self.cb_1 = self.pi.callback(gpio_1, pigpio.FALLING_EDGE, self._cb)
+      
 
-   def _cb(self, gpio, level, tick):
+      
+            
+            
+   def _cb(self, gpio, level,tick):
 
       """
       Accumulate bits until both gpios 0 and 1 timeout.
@@ -111,20 +115,49 @@ class decoder:
 
 def callback_e1(bits, value):
     print("bits={} value={}".format(bits, value))
-    # if value in list of credid 
+    if bits == 4:
+        pincollector(value)
+        
+    #credcollector(value)
+    # if value in list of credid
+    # check for device auth_method
+        # if wiegand, store as it is
+        # if pin, store 
+    
     if value == 36443419 or value == 36443438:
         print("Authenticated")
+        credcollector(str(value))
         relay.trigger_relay_one()
         print("jere")
         #transactionsMod.record(value,reader,exit)
 
 def callback_e2(bits, value):
     print("bits={} value={}".format(bits, value))
-    # if value in list of credid 
+    # if value in list of credid
+    
     if value == 36443419 or value == 36443438:
         print("Authenticated")
         relay.trigger_relay_two()
         #transactionsMod.record()
+        
+credentials = list()
+pinsvalue = list()
+
+#takes in string and add to credentials 
+def credcollector(cred):
+    credentials.append(cred)
+    print(credentials)
+
+def pincollector(pin):
+    if pin >= 0 and pin <= 9:
+        pinsvalue.append(str(pin))
+    elif pin == 10: #CLEAR
+        del pinsvalue [:]
+    elif pin == 11: #"ENTER"
+        credcollector("".join(pinsvalue))
+        del pinsvalue [:]
+        
+    print(pinsvalue)
 
 #initialising pi
 pi = pigpio.pi()
@@ -184,6 +217,7 @@ e1r2 = decoder(pi, E1_R2_D0, E1_R2_D1, callback_e1)
 #e2r1 = decoder(pi, E2_R1_D0, E2_R1_D1, callback_e2)
 #e2r2 = decoder(pi, E2_R2_D0, E2_R2_D1, callback_e2)
 
+    
 def cbmagrise(gpio, level, tick):
     print("Entrance 1 is opened at " + str(datetime.now()))
     
@@ -200,7 +234,7 @@ def cbbutton(gpio, level, tick):
 def mag():
     cb1 = pi.callback(E1_Mag, pigpio.RISING_EDGE, cbmagrise)
     cb2 = pi.callback(E1_Mag, pigpio.FALLING_EDGE, cbmagfall)
-
+    
     '''
     while True:
         
@@ -217,18 +251,18 @@ def mag():
     
 def button():
     
-    cb3 = pi.callback(E1_Button, pigpio.FALLING_EDGE, cbbutton)
+    #cb3 = pi.callback(E1_Button, pigpio.RISING_EDGE, cbbutton)
     
-    '''
+    
     while True: 
         if pi.read(5) == 0:
             print(pi.read(5))
             print("Pb 1 was pushed at " + str(datetime.now()))
-            #relay.trigger_relay_one()
+            relay.trigger_relay_one()
             print("Here")
             
         
-            
+    '''    
     
     while True:
         pi.wait_for_edge(5, pigpio.FALLING_EDGE)
