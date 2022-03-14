@@ -101,7 +101,7 @@ class decoder:
                self.pi.set_watchdog(self.gpio_0, 0)
                self.pi.set_watchdog(self.gpio_1, 0)
                self.in_code = False
-               self.callback(self.bits, self.num)
+               self.callback(self.bits, self.num,self.gpio_0)
                return
 
    def cancel(self):
@@ -113,16 +113,11 @@ class decoder:
       self.cb_0.cancel()
       self.cb_1.cancel()
 
-def callback_e1(bits, value):
+
+def callback_e1(bits, value, D0pin):
     print("bits={} value={}".format(bits, value))
     if bits == 4:
         pincollector(value)
-        
-    #credcollector(value)
-    # if value in list of credid
-    # check for device auth_method
-        # if wiegand, store as it is
-        # if pin, store 
     
     if value == 36443419 or value == 36443438:
         print("Authenticated")
@@ -130,8 +125,27 @@ def callback_e1(bits, value):
         relay.trigger_relay_one()
         print("jere")
         #transactionsMod.record(value,reader,exit)
+    
+    #check for type using gpio pin
+    if E1_R1_D0 == D0pin :
+        #check for length of authmethod 
+        # if 1 :
+            #verify.check_for_wiegand
+            #if return none, clears list 
+            #else, unlock, , clears list 
+        # if 2:
+            #name = verify.check_for_wiegand for first value 
+            #use name to check if second value is in the cred 
 
-def callback_e2(bits, value):
+
+
+    if E1_R2_D0 == D0pin:
+        pass
+
+    
+
+
+def callback_e2(bits, value, D0pin):
     print("bits={} value={}".format(bits, value))
     # if value in list of credid
     
