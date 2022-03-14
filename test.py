@@ -1,6 +1,6 @@
-#import pigpio
+import pigpio
 from datetime import datetime, date
-#import relay
+import relay
 #import transactionsMod
 import json 
 import time
@@ -11,12 +11,165 @@ data = json.load(test)
 
 
 CRED_TIMEOUT = 10
+MAG_TIMEOUT = 10
 credentials = []
 pinsvalue = []
 
+E1_R1_D0= 22
+E1_R1_D1= 10
+#E1_R1_Buzz=
+#E1_R1_Led=
+E1_R2_D0=24
+E1_R2_D1=25
+#E1_R2_Buzz=
+#E1_R2_Led=
+E1_Mag= 6
+E1_Button= 5
+
+'''
+E2_R1_D0=
+E2_R1_D1=
+
+E2_R1_Buzz=
+E2_R1_Led=
+E2_R2_D0=
+E2_R2_D1=
+E2_R2_Buzz=
+E2_R2_Led=
+E2_Mag=
+E2_Button=
+'''
+
+#initialising pi
+pi = pigpio.pi()
+
+#initialising E1_Button for pushbutton1
+pi.set_mode(E1_Button, pigpio.INPUT)
+#pi.set_pull_up_down(E1_Button, pigpio.PUD_UP)
+
+#E1_Mag for mag contact
+pi.set_mode(E1_Mag, pigpio.INPUT) 
+pi.set_pull_up_down(E1_Mag, pigpio.PUD_UP)
+'''
+#E1_R1_Buzz for Buzz
+pi.set_mode(E1_R1_Buzz, pigpio.INPUT) 
+pi.set_pull_up_down(E1_R1_Buzz, pigpio.PUD_UP)
+
+#E1_R1_Led for Led
+pi.set_mode(E1_R1_Led, pigpio.INPUT) 
+pi.set_pull_up_down(E1_R1_Led, pigpio.PUD_UP)
+
+#E1_R2_Buzz for Buzz
+pi.set_mode(E1_R2_Buzz, pigpio.INPUT) 
+pi.set_pull_up_down(E1_R2_Buzz, pigpio.PUD_UP)
+
+#E1_R2_Led for Led
+pi.set_mode(E1_R2_Led, pigpio.INPUT) 
+pi.set_pull_up_down(E1_R2_Led, pigpio.PUD_UP)
+
+#initialising E2_Button for pushbutton2
+pi.set_mode(E2_Button, pigpio.INPUT)
+pi.set_pull_up_down(E2_Button, pigpio.PUD_UP)
+
+#E2_Mag for mag contact
+pi.set_mode(E2_Mag, pigpio.INPUT) 
+pi.set_pull_up_down(E2_Mag, pigpio.PUD_UP)
+
+#E2_R1_Buzz for Buzz
+pi.set_mode(E2_R1_Buzz, pigpio.INPUT) 
+pi.set_pull_up_down(E2_R1_Buzz, pigpio.PUD_UP)
+
+#E2_R1_Led for Led
+pi.set_mode(E2_R1_Led, pigpio.INPUT) 
+pi.set_pull_up_down(E2_R1_Led, pigpio.PUD_UP)
+
+#E2_R1_Buzz for Buzz
+pi.set_mode(E2_R2_Buzz, pigpio.INPUT) 
+pi.set_pull_up_down(E2_R2_Buzz, pigpio.PUD_UP)
+
+#E2_R1_Led for Led
+pi.set_mode(E2_R2_Led, pigpio.INPUT) 
+pi.set_pull_up_down(E2_R2_Led, pigpio.PUD_UP)
+'''
+
+class decoder:
+
+   def __init__(self, pi, gpio_0, gpio_1, callback, bit_timeout=5):
 
 
+      self.pi = pi
+      self.gpio_0 = gpio_0
+      self.gpio_1 = gpio_1
 
+      self.callback = callback
+
+      self.bit_timeout = bit_timeout
+
+      self.in_code = False
+
+      self.pi.set_mode(gpio_0, pigpio.INPUT)
+      self.pi.set_mode(gpio_1, pigpio.INPUT)
+
+      self.pi.set_pull_up_down(gpio_0, pigpio.PUD_UP)
+      self.pi.set_pull_up_down(gpio_1, pigpio.PUD_UP)
+    
+      self.cb_0 = self.pi.callback(gpio_0, pigpio.FALLING_EDGE, self._cb)
+      self.cb_1 = self.pi.callback(gpio_1, pigpio.FALLING_EDGE, self._cb)
+      
+
+      
+            
+            
+   def _cb(self, gpio, level,tick):
+
+      """
+      Accumulate bits until both gpios 0 and 1 timeout.
+      """
+
+      if level < pigpio.TIMEOUT:
+
+         if self.in_code == False:
+            self.bits = 1
+            self.num = 0
+
+            self.in_code = True
+            self.code_timeout = 0
+            self.pi.set_watchdog(self.gpio_0, self.bit_timeout)
+            self.pi.set_watchdog(self.gpio_1, self.bit_timeout)
+         else:
+            self.bits += 1
+            self.num = self.num << 1
+
+         if gpio == self.gpio_0:
+            self.code_timeout = self.code_timeout & 2 # clear gpio 0 timeout
+         else:
+            self.code_timeout = self.code_timeout & 1 # clear gpio 1 timeout
+            self.num = self.num | 1
+
+      else:
+
+         if self.in_code:
+
+            if gpio == self.gpio_0:
+               self.code_timeout = self.code_timeout | 1 # timeout gpio 0
+            else:
+               self.code_timeout = self.code_timeout | 2 # timeout gpio 1
+
+            if self.code_timeout == 3: # both gpios timed out
+               self.pi.set_watchdog(self.gpio_0, 0)
+               self.pi.set_watchdog(self.gpio_1, 0)
+               self.in_code = False
+               self.callback(self.bits, self.num,self.gpio_0)
+               return
+
+   def cancel(self):
+
+      """
+      Cancel the Wiegand decoder.
+      """
+
+      self.cb_0.cancel()
+      self.cb_1.cancel()
 
 Accessgroups = data["EntranceDetails"]["AccessGroups"]
 
@@ -25,6 +178,7 @@ Accessgroups = data["EntranceDetails"]["AccessGroups"]
 def check_for_wiegand(value):
     for specificAccessGroup in Accessgroups:
         for groupName, groupdetails in specificAccessGroup.items():
+
             for persondetails in groupdetails["Persons"]:
                 diffpassword = list()
                 authmethod = None
@@ -37,7 +191,7 @@ def check_for_wiegand(value):
                         diffpassword.append(password)
                     
                 if authmethod:
-                    return {"Name": personName,"diffpassword" : diffpassword, "AccessGroup": groupName}
+                    return {"Name": personName,"diffpassword" : diffpassword, "AccessGroup": groupName,"Schedule":groupdetails["Schedule"]}
 
 
 
@@ -66,7 +220,7 @@ def pincollector(pin):
 
 def verify_credentials(num,credentials,persondetails):
             if len(credentials) == 1 and num == 1 :
-                if persondetails:
+                if persondetails and verify_datetime(persondetails["Schedule"]): 
                     print(persondetails)
                     #opendoor
                 else:
@@ -74,7 +228,7 @@ def verify_credentials(num,credentials,persondetails):
                 del credentials [:]
             
             elif len(credentials) == 2 and num == 2:
-                if credentials[1] in persondetails["diffpassword"]:
+                if credentials[1] in persondetails["diffpassword"] and verify_datetime(persondetails["Schedule"]):
                     #opendoor
                     print(persondetails)
                 else:
@@ -114,6 +268,16 @@ def callback_e1(bits, value):
             #transactionsMod.record(value,reader,exit)
 
 
+def callback_e2(bits, value):
+    print("bits={} value={}".format(bits, value))
+    # if value in list of credid
+    
+    if value == 36443419 or value == 36443438:
+        print("Authenticated")
+        relay.trigger_relay_two()
+        #transactionsMod.record()
+
+
 #take in verifydetails("MainDoor","In") return auth type
 def verify_authtype(entrance,device):
     #for data in listofentrances
@@ -121,39 +285,94 @@ def verify_authtype(entrance,device):
         for devicenumber,devicedetails in data["EntranceDetails"]["AuthenticationDevices"].items():
             if devicedetails["Direction"] == device:
                 for methoddict in devicedetails["AuthMethod"]:
-                    for scheduledate,scheduletime in methoddict["Schedule"].items():
-                        if verify_datetime(scheduledate,scheduletime):
+                    if verify_datetime(methoddict["Schedule"]):
                             return methoddict["Method"]
 
-def verify_datetime(scheduledate,scheduletime):
-    if scheduledate == str(date.today()):
-        now_hour = datetime.now().strftime(("%H"))
-        now_min = datetime.now().strftime(("%M"))
-        # now_hour = "18"
-        # now_min = "00"
-        start = scheduletime["starttime"]
-        end = scheduletime["endtime"]
-        start_hour = start.split(":")[0]
-        start_min = start.split(":")[1]
-        end_hour = end.split(":")[0]
-        end_min = end.split(":")[1]
 
-        
-        if now_hour > start_hour and now_hour < end_hour: # strictly within
-            return True
-        
-        if now_hour == start_hour:
-            if now_min >= start_min:
-                return True
-        
-        if now_hour == end_hour:
-            if end_min > now_min:
-                return True
 
-    return False 
+                    # for scheduledate,scheduletime in methoddict["Schedule"].items():
+                    #     if verify_datetime(scheduledate,scheduletime):
+                    #         return methoddict["Method"]
+
+
+def verify_datetime(schedule):
+
+    for scheduledate,scheduletime in schedule.items():
+        if scheduledate == str(date.today()):
+            now_hour = datetime.now().strftime(("%H"))
+            now_min = datetime.now().strftime(("%M"))
+            # now_hour = "18"
+            # now_min = "00"
+            start = scheduletime["starttime"]
+            end = scheduletime["endtime"]
+            start_hour = start.split(":")[0]
+            start_min = start.split(":")[1]
+            end_hour = end.split(":")[0]
+            end_min = end.split(":")[1]
+
+            
+            if now_hour > start_hour and now_hour < end_hour: # strictly within
+                return True
+            
+            if now_hour == start_hour:
+                if now_min >= start_min:
+                    return True
+            
+            if now_hour == end_hour:
+                if end_min > now_min:
+                    return True
+
+        return False 
 
 
 print(verify_datetime("2022-03-14",{"starttime":"09:00","endtime":"23:00"}))
+
+#everytime relay triggers, mag_status_open = True 
+# if mag_contact opened but mag_status_open = False, TRIGGER ALARM 
+
+def cbmagrise(gpio, level, tick):
+    print("Entrance 1 is opened at " + str(datetime.now()))
+    timeout_mag.start()
+
+    
+def cbmagfall(gpio, level, tick):
+    print("Entrance 1 is closed at " + str(datetime.now()))
+    mag_status_open = False
+    timeout_mag.stop()
+
+def cbbutton(gpio, level, tick):
+    print("Pb 1 was pushed at " + str(datetime.now()))
+    relay.trigger_relay_one()
+
+def mag():
+    cb1 = pi.callback(E1_Mag, pigpio.RISING_EDGE, cbmagrise)
+    cb2 = pi.callback(E1_Mag, pigpio.FALLING_EDGE, cbmagfall)
+    
+    '''
+    while True:
+        
+        if pi.read(6) == 1:
+            print("Entrance opened at " + str(datetime.now()))
+            
+        
+        pi.wait_for_edge(6, pigpio.RISING_EDGE)
+        print("Entrance 1 is opened at " + str(datetime.now()))
+        
+        pi.wait_for_edge(6, pigpio.FALLING_EDGE)
+        print("Entrance 1 is closed at " + str(datetime.now()))
+    ''' 
+    
+def button():
+    
+    #cb3 = pi.callback(E1_Button, pigpio.RISING_EDGE, cbbutton)
+    
+    
+    while True: 
+        if pi.read(5) == 0:
+            print(pi.read(5))
+            print("Pb 1 was pushed at " + str(datetime.now()))
+            relay.trigger_relay_one()
+            print("Here")
 
 
 class TimerError(Exception):
@@ -204,13 +423,21 @@ def check():
             if timeout_cred.check(CRED_TIMEOUT):
                 timeout_cred.stop()
                 del credentials [:]
+
+        if timeout_mag.status():
+            if timeout_mag.check(MAG_TIMEOUT):
+                print("BUZZZZZZZZZZZZZZZZZZ")
+
         time.sleep(0.1)
 
 timeout_cred = Timer()
+timeout_mag = Timer()
 
-t1=threading.Thread(target=inputnum,)
-t2=threading.Thread(target=check,)
+t1 = threading.Thread(target=button)
+t2 = threading.Thread(target=mag)
+t3=threading.Thread(target=check,)
 
 t1.start()
 t2.start()
+t3.start()
 
