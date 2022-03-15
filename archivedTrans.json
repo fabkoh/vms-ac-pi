@@ -1,0 +1,22 @@
+{
+    "controllerId": "",
+    "actualVisitLogs": [
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "AuthenticationMethod": "Card",
+            "Name": "YongNing",
+            "AccessGroup": "ISS",
+            "datetimeScanned": "03/15/2022 17:57:16"
+        },
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "AuthenticationMethod": "Card",
+            "Name": "YongNing",
+            "AccessGroup": "ISS",
+            "datetimeScanned": "03/15/2022 17:57:19"
+        }
+    ],
+    "exitButtonPushes": []
+}
