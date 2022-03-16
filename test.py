@@ -361,7 +361,10 @@ def mag():
         pi.wait_for_edge(6, pigpio.FALLING_EDGE)
         print("Entrance 1 is closed at " + str(datetime.now()))
     ''' 
-    
+def buzz():
+    pass
+
+
 def button():
     
     #cb3 = pi.callback(E1_Button, pigpio.RISING_EDGE, cbbutton)
