@@ -1,0 +1,64 @@
+{"controllerConfig":
+    [{"controllerId":"", 
+      "controllerName":"", 
+      "controllerIP":"", 
+      "controllerMAC":"",
+      "controllerSerialNo":""
+      }
+    ],
+    "ZoneStatus":
+    {
+      "controllersInZoneE1":[{"controllerId":"123456","Entrance":"E1"},
+                          {"controllerId":"222222","Entrance":"E2"}],
+      "controllersInZoneE2":[{}]
+    },
+
+
+
+    "EntranceName":
+    {
+        "E1R1" : ["MainDoor","In"],
+        "E1R2" : ["MainDoor","Out"],
+        "E2R1" : ["SideDoor","In"],
+        "E2R2" : ["SideDoor","Out"],
+        "E1":["MainDoor"],
+        "E2":["SideDoor"]
+
+    },
+    
+    "GPIOpins":
+    [{"E1_R1_D0":"",
+      "E1_R1_D1":"",
+      "E1_R1_Buzz":"",
+      "E1_R1_Led":"",
+      "E1_R2_D0":"",
+      "E1_R2_D1":"",
+      "E1_R2_Buzz":"",
+      "E1_R2_Led":"",
+      "E1_Mag":"",
+      "E1_Button":"",
+      
+      "E2_R1_D0":"",
+      "E2_R1_D1":"",
+      "E2_R1_Buzz":"",
+      "E2_R1_Led":"",
+      "E2_R2_D0":"",
+      "E2_R2_D1":"",
+      "E2_R2_Buzz":"",
+      "E2_R2_Led":"",
+      "E2_Mag":"",
+      "E2_Button":"",
+      
+      "Relay_1":"",
+      "Relay_2":"",
+      "Fire":"",
+      
+      "Gen_In_1":"",
+      "Gen_Out_1":"",
+      "Gen_In_2":"",
+      "Gen_Out_2":"",
+      "Gen_In_3":"",
+      "Gen_Out_3":""
+      }
+    ]
+}

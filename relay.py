@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
-from GPIOconfig import Relay_1, Relay_2
+from program import Relay_1, Relay_2
 
 
 

@@ -1,0 +1,16 @@
+{
+    "Status": [
+        {
+            "Name": "YongNing",
+            "AccessGroup": "ISS"
+        },
+        {
+            "Name": "WeiHong",
+            "AccessGroup": "ISS"
+        },
+        {
+            "Name": "Bryan",
+            "AccessGroup": "ISS"
+        }
+    ]
+}

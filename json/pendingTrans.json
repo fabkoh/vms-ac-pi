@@ -7,16 +7,14 @@
             "AuthenticationMethod": "Card",
             "Name": "YongNing",
             "AccessGroup": "ISS",
-            "datetimeScanned": "03/15/2022 17:57:16"
-        },
+            "datetimeScanned": "2022-03-16 17:00:19"
+        }
+    ],
+    "exitButtonPushes": [
         {
             "Entrance": "Maindoor",
             "Status": "In",
-            "AuthenticationMethod": "Card",
-            "Name": "YongNing",
-            "AccessGroup": "ISS",
-            "datetimeScanned": "03/15/2022 17:57:19"
+            "datetimeScanned": "2022-03-16 17:00:19"
         }
-    ],
-    "exitButtonPushes": []
+    ]
 }
