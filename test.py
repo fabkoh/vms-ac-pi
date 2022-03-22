@@ -15,14 +15,14 @@ MAG_TIMEOUT = 10
 credentials = []
 pinsvalue = []
 
-E1_R1_D0= 22
-E1_R1_D1= 10
-#E1_R1_Buzz=
-#E1_R1_Led=
-E1_R2_D0=24
-E1_R2_D1=25
-#E1_R2_Buzz=
-#E1_R2_Led=
+E1_R1_D0= 24
+E1_R1_D1= 25
+E1_R1_Buzz=7
+E1_R1_Led=8
+E1_R2_D0=22
+E1_R2_D1=10
+E1_R2_Buzz=11
+E1_R2_Led=9
 E1_Mag= 6
 E1_Button= 5
 
@@ -50,47 +50,27 @@ pi.set_mode(E1_Button, pigpio.INPUT)
 #E1_Mag for mag contact
 pi.set_mode(E1_Mag, pigpio.INPUT) 
 pi.set_pull_up_down(E1_Mag, pigpio.PUD_UP)
-'''
+
 #E1_R1_Buzz for Buzz
-pi.set_mode(E1_R1_Buzz, pigpio.INPUT) 
-pi.set_pull_up_down(E1_R1_Buzz, pigpio.PUD_UP)
+pi.set_mode(E1_R1_Buzz, pigpio.OUTPUT)
+pi.write(E1_R1_Buzz, 0)
+#pi.write(E1_R1_Buzz, 1)
+#pi.set_PWM_dutycycle(E1_R1_Buzz, 255) # PWM full on
 
 #E1_R1_Led for Led
 pi.set_mode(E1_R1_Led, pigpio.INPUT) 
-pi.set_pull_up_down(E1_R1_Led, pigpio.PUD_UP)
+pi.write(E1_R1_Led, 0)
 
 #E1_R2_Buzz for Buzz
 pi.set_mode(E1_R2_Buzz, pigpio.INPUT) 
-pi.set_pull_up_down(E1_R2_Buzz, pigpio.PUD_UP)
+pi.write(E1_R2_Buzz, 0)
 
 #E1_R2_Led for Led
 pi.set_mode(E1_R2_Led, pigpio.INPUT) 
-pi.set_pull_up_down(E1_R2_Led, pigpio.PUD_UP)
+pi.write(E1_R2_Led, 0)
 
-#initialising E2_Button for pushbutton2
-pi.set_mode(E2_Button, pigpio.INPUT)
-pi.set_pull_up_down(E2_Button, pigpio.PUD_UP)
 
-#E2_Mag for mag contact
-pi.set_mode(E2_Mag, pigpio.INPUT) 
-pi.set_pull_up_down(E2_Mag, pigpio.PUD_UP)
 
-#E2_R1_Buzz for Buzz
-pi.set_mode(E2_R1_Buzz, pigpio.INPUT) 
-pi.set_pull_up_down(E2_R1_Buzz, pigpio.PUD_UP)
-
-#E2_R1_Led for Led
-pi.set_mode(E2_R1_Led, pigpio.INPUT) 
-pi.set_pull_up_down(E2_R1_Led, pigpio.PUD_UP)
-
-#E2_R1_Buzz for Buzz
-pi.set_mode(E2_R2_Buzz, pigpio.INPUT) 
-pi.set_pull_up_down(E2_R2_Buzz, pigpio.PUD_UP)
-
-#E2_R1_Led for Led
-pi.set_mode(E2_R2_Led, pigpio.INPUT) 
-pi.set_pull_up_down(E2_R2_Led, pigpio.PUD_UP)
-'''
 
 class decoder:
 
@@ -159,7 +139,7 @@ class decoder:
                self.pi.set_watchdog(self.gpio_0, 0)
                self.pi.set_watchdog(self.gpio_1, 0)
                self.in_code = False
-               self.callback(self.bits, self.num,self.gpio_0)
+               self.callback(self.bits, self.num)
                return
 
    def cancel(self):
@@ -228,10 +208,11 @@ def verify_credentials(num,credentials,persondetails):
                 del credentials [:]
             
             elif len(credentials) == 2 and num == 2:
-                if credentials[1] in persondetails["diffpassword"] and verify_datetime(persondetails["Schedule"]):
-                    #opendoor
-                    print(persondetails)
-                else:
+                try:
+                    if credentials[1] in persondetails["diffpassword"] and verify_datetime(persondetails["Schedule"]):
+                        #opendoor
+                        print(persondetails)
+                except:
                     print("NOT FOUND")
                 del credentials [:]
             
@@ -325,7 +306,6 @@ def verify_datetime(schedule):
         return False 
 
 
-print(verify_datetime("2022-03-14",{"starttime":"09:00","endtime":"23:00"}))
 
 #everytime relay triggers, mag_status_open = True 
 # if mag_contact opened but mag_status_open = False, TRIGGER ALARM 
@@ -364,16 +344,16 @@ def mag():
     
 def button():
     
-    #cb3 = pi.callback(E1_Button, pigpio.RISING_EDGE, cbbutton)
+    cb3 = pi.callback(E1_Button, pigpio.RISING_EDGE, cbbutton)
     
-    
+    '''
     while True: 
         if pi.read(5) == 0:
             print(pi.read(5))
             print("Pb 1 was pushed at " + str(datetime.now()))
             relay.trigger_relay_one()
             print("Here")
-
+    '''
 
 class TimerError(Exception):
     """A custom exception used to report errors in use of Timer class"""
@@ -385,18 +365,18 @@ class Timer:
     def start(self):
         """Start a new timer"""
         if self._start_time is not None:
-            raise TimerError(f"Timer is running. Use .stop() to stop it")
+            raise TimerError("Timer is running. Use .stop() to stop it".format())
 
         self._start_time = time.perf_counter()
 
     def stop(self):
         """Stop the timer, and report the elapsed time"""
         if self._start_time is None:
-            raise TimerError(f"Timer is not running. Use .start() to start it")
+            raise TimerError("Timer is not running. Use .start() to start it".format())
 
         elapsed_time = time.perf_counter() - self._start_time
         self._start_time = None
-        print(f"Elapsed time: {elapsed_time:0.4f} seconds")
+        print("Elapsed time: {} seconds".format(elapsed_time))
     
     def check(self,TIME):
         current_elapsed_time = time.perf_counter() - self._start_time
@@ -423,13 +403,25 @@ def check():
             if timeout_cred.check(CRED_TIMEOUT):
                 timeout_cred.stop()
                 del credentials [:]
+                del pinsvalue [:]
 
         if timeout_mag.status():
             if timeout_mag.check(MAG_TIMEOUT):
-                print("BUZZZZZZZZZZZZZZZZZZ")
+                pi.write(E1_R2_Buzz, 1)
+                pi.write(E1_R1_Buzz, 1)
+                pi.write(E1_R2_Led, 1)
+                pi.write(E1_R1_Led, 1)
+        else:
+            pi.write(E1_R2_Buzz, 0)
+            pi.write(E1_R1_Buzz, 0)
+            pi.write(E1_R2_Led, 0)
+            pi.write(E1_R1_Led, 0)
+                
 
         time.sleep(0.1)
-
+        
+e1r1 = decoder(pi, E1_R1_D0, E1_R1_D1, callback_e1)
+e1r2 = decoder(pi, E1_R2_D0, E1_R2_D1, callback_e1)
 timeout_cred = Timer()
 timeout_mag = Timer()
 

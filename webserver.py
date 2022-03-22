@@ -35,5 +35,5 @@ def processtest():
         return 'Content-Type not supported!'
     
 if __name__ == "__main__":
-   app.run(host='0.0.0.0', port=8080, debug=True)
+   app.run(host='192.168.1.46', port=8080, debug=True)
        #authenticated = None
