@@ -1,5 +1,5 @@
 {"controllerConfig":
-    [{"controllerId":"", 
+    [{"controllerId":"123456", 
       "controllerName":"", 
       "controllerIP":"", 
       "controllerMAC":"",
@@ -8,7 +8,7 @@
     ],
     "ZoneStatus":
     {
-      "controllersInZoneE1":[{"controllerId":"123456","Entrance":"E1"},
+      "controllersInZoneE1":[{"controllerId":"333333","Entrance":"E1"},
                           {"controllerId":"222222","Entrance":"E2"}],
       "controllersInZoneE2":[{}]
     },

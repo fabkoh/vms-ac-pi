@@ -7,14 +7,66 @@
             "AuthenticationMethod": "Card",
             "Name": "YongNing",
             "AccessGroup": "ISS",
-            "datetimeScanned": "2022-03-16 17:00:19"
+            "datetimeScanned": "2022-03-18 16:11:29"
+        },
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "AuthenticationMethod": "Card",
+            "Name": "YongNing",
+            "AccessGroup": "ISS",
+            "datetimeScanned": "2022-03-18 16:11:49"
+        },
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "AuthenticationMethod": "Card",
+            "Name": "YongNing",
+            "AccessGroup": "ISS",
+            "datetimeScanned": "2022-03-18 16:11:55"
+        },
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "AuthenticationMethod": "Card",
+            "Name": "YongNing",
+            "AccessGroup": "ISS",
+            "datetimeScanned": "2022-03-18 16:12:10"
+        },
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "AuthenticationMethod": "Card",
+            "Name": "YongNing",
+            "AccessGroup": "ISS",
+            "datetimeScanned": "2022-03-18 16:12:16"
         }
     ],
     "exitButtonPushes": [
         {
             "Entrance": "Maindoor",
             "Status": "In",
-            "datetimeScanned": "2022-03-16 17:00:19"
+            "datetimeScanned": "2022-03-18 16:11:29"
+        },
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "datetimeScanned": "2022-03-18 16:11:49"
+        },
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "datetimeScanned": "2022-03-18 16:11:55"
+        },
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "datetimeScanned": "2022-03-18 16:12:10"
+        },
+        {
+            "Entrance": "Maindoor",
+            "Status": "In",
+            "datetimeScanned": "2022-03-18 16:12:16"
         }
     ]
 }

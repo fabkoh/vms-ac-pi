@@ -1,9 +1,11 @@
 from datetime import datetime, date
-import relay
+from api import update_external_zone_status
+#import relay
 import transactionsMod
 import json 
 import time
 import threading
+import api
 
 
 '''
@@ -60,35 +62,37 @@ credentials = [] #array to store credentials
 pinsvalue = []  #array to store pins
 
 
-filerules = open('json/credRulesSet.json') 
-credRulesSet = json.load(filerules)
+filerules = open('json/credOccur.json') 
+credOccur = json.load(filerules)
 
 fileconfig = open('json/config.json')
 config = json.load(fileconfig)
 
-Accessgroups = credRulesSet["EntranceDetails"]["AccessGroups"]
+
 
 #takes in string wiegand value, return name, passwords, accessgroup and schedule 
 def check_for_wiegand(value):
-    for specificAccessGroup in Accessgroups:
-        for groupName, groupdetails in specificAccessGroup.items():
-            for persondetails in groupdetails["Persons"]:
+    for entranceslist in credOccur:
+        Accessgroups = entranceslist["EntranceDetails"]["AccessGroups"]
+        for specificAccessGroup in Accessgroups:
+            for groupName, groupdetails in specificAccessGroup.items():
+                for persondetails in groupdetails["Persons"]:
 
-                diffpassword = list()
-                authmethod = None
+                    diffpassword = list()
+                    authmethod = None
 
-                # check wiegand value belongs to which person, add the rest of wiegand values and pins to diffpassowrd 
-                for type,password in persondetails["Credentials"].items():
-                    if value == password:
-                        authmethod = type
-                        personName = persondetails["Name"]
-            
-                    if type != authmethod:
-                        diffpassword.append(password)
+                    # check wiegand value belongs to which person, add the rest of wiegand values and pins to diffpassowrd 
+                    for type,password in persondetails["Credentials"].items():
+                        if value == password:
+                            authmethod = type
+                            personName = persondetails["Name"]
                 
-                # once done, return the data
-                if authmethod:
-                    return {"Name": personName,"diffpassword" : diffpassword, "AccessGroup": groupName,"Schedule":groupdetails["Schedule"]}
+                        if type != authmethod:
+                            diffpassword.append(password)
+                    
+                    # once done, return the data
+                    if authmethod:
+                        return {"Name": personName,"diffpassword" : diffpassword, "AccessGroup": groupName,"Schedule":groupdetails["Schedule"]}
 
 
 # keep track of wiegand values and pins 
@@ -113,35 +117,33 @@ def bits_reader(bits, value,entrance):
         entrancestatus = config["EntranceName"][entrance][1]
 
         authtype = verify_authtype(entrancename,entrancestatus)
+        authlength = len(authtype.split(","))
 
-        if authtype == "Card" or authtype == "Fingerprint":
-            if verify_credentials(1,credentials,persondetails) and verify_zone_status(entrance,entrancestatus,persondetails):
+        if verify_credentials(authlength,credentials,persondetails) :
+            if verify_antipassback(entrancename):
+                if verify_zone_status(entrance,entrancestatus,persondetails):
+                    print("Authenticated")
+                    #relay.trigger_relay_one()
+                    update_zone_status(entrance,entrancestatus,persondetails)
+                    transactionsMod.record_auth(persondetails,authtype,entrancename,entrancestatus)
+            else:
                 print("Authenticated")
-                relay.trigger_relay_one()
-                update_zone_status(entrance,persondetails)
-                transactionsMod.record_auth(persondetails,authtype,entrancename,entrancestatus)
-              
-        if authtype == "Card,Pin" or authtype == "Fingerprint,Pin" or "Fingerprint,Card":      
-            if verify_credentials(2,credentials,persondetails) and verify_zone_status(entrance,entrancestatus,persondetails):
-                print("Authenticated")
-                relay.trigger_relay_one()
-                update_zone_status(entrance,persondetails)
+                #relay.trigger_relay_one()
                 transactionsMod.record_auth(persondetails,authtype,entrancename,entrancestatus)
 
 
-def verify_zone_status(persondetails):
-    pass
 
 #take in verifydetails("MainDoor","In") return auth type
 def verify_authtype(entrance,device):
     #for data in list of entrances
-    if credRulesSet["Entrance"] == entrance:
-        for devicenumber,devicedetails in credRulesSet["EntranceDetails"]["AuthenticationDevices"].items():
-            if devicedetails["Direction"] == device:
-                for methoddict in devicedetails["AuthMethod"]:
-                    # check which authtype is activated for that particular schedule
-                    if verify_datetime(methoddict["Schedule"]):
-                        return methoddict["Method"]
+    for entranceslist in credOccur:
+        if entranceslist["Entrance"] == entrance:
+            for devicenumber,devicedetails in entranceslist["EntranceDetails"]["AuthenticationDevices"].items():
+                if devicedetails["Direction"] == device:
+                    for methoddict in devicedetails["AuthMethod"]:
+                        # check which authtype is activated for that particular schedule
+                        if verify_datetime(methoddict["Schedule"]):
+                            return methoddict["Method"]
 
 
 '''
@@ -153,10 +155,10 @@ schedule = {
 '''
 
 def verify_datetime(schedule):
-    print(schedule)
-    print(type(schedule))
+    #print(schedule)
+    #print(type(schedule))
     for scheduledate,scheduletime in schedule.items():
-        print(scheduledate,scheduletime)
+        #print(scheduledate,scheduletime)
         if scheduledate == str(date.today()):
             now_hour = datetime.now().strftime(("%H"))
             now_min = datetime.now().strftime(("%M"))
@@ -231,7 +233,6 @@ def verify_credentials(num,credentials,persondetails):
             del credentials [:]
             return False
 
-    del credentials [:] 
     return False
 
 #check if person has entered the zone
@@ -244,64 +245,81 @@ def verify_credentials(num,credentials,persondetails):
 # 	- if person not inside local json, not allowed to leave 
 
 def verify_zone_status(entrance,entrancestatus,persondetails):
-    filename = "json/"+ entrance[:2]+ "status.json"
+    filename = "json/"+  "status.json"
     with open(filename,"r") as checkfile:
         try:
             checkdata = json.load(checkfile)
         except:
-            checkdata ={"Status":[]}
+            checkdata ={entrance[:2]:[]}
 
         if entrancestatus == "In": #check if person inside 
-            for person in checkdata["Status"]:
-                name = person["Name"]
-                accessgroup = person["AccessGroup"]
-                if persondetails['Name'] == name and persondetails["AccessGroup"] == accessgroup:
-                    return False 
+            try:
+                
+                for person in checkdata[entrance[:2]]:
+                    name = person["Name"]
+                    accessgroup = person["AccessGroup"]
+                    if persondetails['Name'] == name and persondetails["AccessGroup"] == accessgroup:
+                        return False 
+            except:
+                pass
             return True
         
         elif entrancestatus == "Out":
-            for person in checkdata["Status"]:
-                name = person["Name"]
-                accessgroup = person["AccessGroup"]
-                if persondetails['Name'] == name and persondetails["AccessGroup"] == accessgroup:
-                    return True
+            try:
+                for person in checkdata[entrance[:2]]:
+                    name = person["Name"]
+                    accessgroup = person["AccessGroup"]
+                    if persondetails['Name'] == name and persondetails["AccessGroup"] == accessgroup:
+                        return True
+            except:
+                pass
             return False
     
     return False
 
 def update_zone_status(entrance,entrancestatus,persondetails):
-    filename = "json/"+ entrance[:2]+ "status.json"
+
+    
+
+    filename = "json/"+"status.json"
     with open(filename,"r") as checkfile:
         try:
             checkdata = json.load(checkfile)
         except:
-            checkdata ={"Status":[]}
+            checkdata ={"controllerId": "","E1":[],"E2":[]}
     
-    print(verify_zone_status(entrance,entrancestatus,persondetails))
+    #print(verify_zone_status(entrance,entrancestatus,persondetails))
     if verify_zone_status(entrance,entrancestatus,persondetails):
+        controllerId = config["controllerConfig"][0]["controllerId"]
+        dictionary = {"Name":persondetails["Name"],"AccessGroup": persondetails["AccessGroup"]}
         with open(filename,"w+") as outfile:
-            if entrancestatus == "In":
+            api.update_external_zone_status(controllerId, entrance[:2],dictionary,entrancestatus)  
 
-                dictionary = {"Name":persondetails["Name"],"AccessGroup": persondetails["AccessGroup"]}
-                checkdata["Status"].append(dictionary)
+            if entrancestatus == "In":   
+                checkdata[entrance[:2]].append(dictionary)
                 json.dump(checkdata,outfile,indent=4) 
                 
             elif entrancestatus == "Out" :
-                for person in checkdata["Status"]:
+                for person in checkdata[entrance[:2]]:
                     if persondetails['Name'] == person["Name"] and persondetails["AccessGroup"] == person["AccessGroup"]:
-                        checkdata["Status"].remove(person)       
+                        checkdata[entrance[:2]].remove(person)       
                 json.dump(checkdata,outfile,indent=4) 
 
 
 
-persondetails = {"Name": "Bryan","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}
-#print(verify_zone_status("E1R1","In",persondetails))
-update_zone_status("E1R1","In",persondetails)
+# persondetails = {"Name": "Bryan","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}
+# print(verify_zone_status("E1R1","In",persondetails))
+# update_zone_status("E1R1","In",persondetails)
 
 #check if antipassback if required 
-def verify_antipassback():
-    #read from config.json
-    return True
+def verify_antipassback(entrancename):
+    #read from credOccur.json
+    for entrancelist in credOccur:
+        if entrancelist["Entrance"] == entrancename:
+            if entrancelist["EntranceDetails"]["Antipassback"] == "Yes":
+                return True 
+    
+    return False 
 
 
 def cbmagrise(gpio, level, tick):
@@ -330,3 +348,19 @@ def check():
                 print("BUZZZZZZZZZZZZZZZZZZ")
 
         time.sleep(0.1)
+
+# 1st person going in
+# bits_reader(26,"s1e97ncksiu","E1R1")
+# bits_reader(26,"696955874","E1R1")
+
+# 2nd person going in
+# bits_reader(26,"2535645","E1R1")
+# bits_reader(26,"ege56g4er","E1R1")
+
+# 2nd person going in AGAIN 
+# bits_reader(26,"2535645","E1R1")
+# bits_reader(26,"ege56g4er","E1R1")
+
+# 1st person going out
+bits_reader(26,"s1e97ncksiu","E1R2")
+bits_reader(26,"696955874","E1R2")

@@ -95,9 +95,18 @@ def clear_file_storage(file):
             checkfile.close()
 
 
+def main():
+    persondetails = {"Name": "YongNing","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}
 
-# persondetails = {"Name": "YongNing","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}
+    record_auth(persondetails,"Card","Maindoor","In")
+    record_button("Maindoor","In")
 
-# record_auth(persondetails,"Card","Maindoor","In")
-# record_button("Maindoor","In")
+    # record_auth(persondetails,"Card","Maindoor","In")
+    # record_button("Maindoor","In")
+    # record_auth(persondetails,"Card","Maindoor","In")
+    # record_button("Maindoor","In")
+    # record_auth(persondetails,"Card","Maindoor","In")
+    # record_button("Maindoor","In")
 
+if __name__ == "__main__":
+    main()

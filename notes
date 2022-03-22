@@ -29,3 +29,35 @@ zone
 - if out 
 	- if person inside local json, allowed to leave and remove from json
 	- if person not inside local json, not allowed to leave 
+
+
+issuses
+- 4 secs delay 
+
+function demo
+- cant type pin before scans 
+- clears after a certain period of time ( 10secs for now )
+- pin #enter *clear, add to the list 
+- mag contact opened for a certain period of time ( buzzzz, 10 secs for now )
+- auto clears after taking in certain number of inputs ( 2 for now ), timer restart
+
+scipt test cases demo 
+- show 4 cases 
+	- check coming in or out ( refer to config.json )
+	- check whether he is inside ( refer to status.json )
+	- check for type supported at a particular time 
+	- check schedule time
+	- check access group schedule 
+- update pending and status , archived
+
+- show trans long 
+	- keep updating 
+	- once exceeds a certain length, purge half
+	- try sending to another api, if success, clear 
+
+
+
+
+
+
+
