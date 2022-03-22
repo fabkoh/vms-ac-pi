@@ -14,6 +14,7 @@ def system_call(command):
 def get_serialnum():
     return system_call("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2")
 
+
 def get_host_ip(hostIP=None):
     if hostIP is None or hostIP == 'auto':
         hostIP = 'ip'
@@ -54,9 +55,8 @@ def get_gateway_ip():
 
 
 print("Hostname:" + hostname)
-
 processedIP = get_host_ip().split('.',1)[0] + "." + get_host_ip().split('.',2)[1] + "."+get_host_ip().split('.',3)[2] +".250"
-print("processed IP: " + processedIP)
+print("host IP: " + get_host_ip())
 print ("Gateway IP: " + get_gateway_ip().decode())
 print ("DNS: " + socket.getfqdn())
 print ("Serial Num: " + get_serialnum().decode())
