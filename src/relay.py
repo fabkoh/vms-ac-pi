@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
 from program import Relay_1, Relay_2
+import asyncio
 
 
 
@@ -52,25 +53,25 @@ def deActivateRelay(relayPin, activateLevel):
         setRelayPinHigh(relayPin)
     return
 
-def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+async def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     for i in range(toggleCount):
         activateRelay(relayPin, activateLevel)
-        sleep(activateMilliSeconds / 1000)
+        asyncio.sleep(activateMilliSeconds / 1000)
         deActivateRelay(relayPin, activateLevel)
-        sleep(deActivateMilliSeconds / 1000)
+        asyncio.sleep(deActivateMilliSeconds / 1000)
     return
 
 # *** Tests ***
 
 # *** Toggle Relay ***
 
-def trigger_relay_one():
+async def trigger_relay_one():
 
     setGpioMode()
     setupRelayPin(Relay_1)
     
     print(" EM 1 unlocked at " + str(datetime.now()))
-    toggleRelay(relayPin = Relay_1, activateLevel = 'High', \
+    await toggleRelay(relayPin = Relay_1, activateLevel = 'High', \
                 activateMilliSeconds = 3000, deActivateMilliSeconds = 1000, \
                 toggleCount = 1)
 
