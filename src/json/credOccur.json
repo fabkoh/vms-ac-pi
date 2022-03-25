@@ -1,6 +1,6 @@
 [{
     "Entrance": "MainDoor",
-    "EntranceSchedule":{ "2022-03-18": {"starttime":"08:00","endtime":"09:00"}},
+    "EntranceSchedule":{ "2022-03-18": [{"starttime":"08:00","endtime":"09:00"}]},
     "EntranceDetails": {
       "Antipassback":"Yes",
       "Zone": "ZoneId",
@@ -11,15 +11,15 @@
             {
               "Method": "Fingerprint,Card",
               "Schedule": {
-                "2022-03-14":{"starttime":"18:00","endtime":"23:00"},
-                "2022-03-16": {"starttime":"18:00","endtime":"23:00"}
+                "2022-03-14":[{"starttime":"18:00","endtime":"23:00"}],
+                "2022-03-16": [{"starttime":"18:00","endtime":"23:00"}]
               }
             },
             {
               "Method": "Card,Pin",
               "Schedule": {
-                "2022-03-14": {"starttime":"09:00","endtime":"18:00"},
-                "2022-03-18": {"starttime":"09:00","endtime":"18:00"}
+                "2022-03-14": [{"starttime":"09:00","endtime":"18:00"}],
+                "2022-03-18": [{"starttime":"09:00","endtime":"18:00"}]
               }
             }
           ]

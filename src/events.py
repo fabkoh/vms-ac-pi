@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from api import update_external_zone_status
-#import relay
-import transactionsMod
+import relay
+import eventsMod
 import json 
 import time
 import threading
@@ -62,10 +62,10 @@ credentials = [] #array to store credentials
 pinsvalue = []  #array to store pins
 
 
-filerules = open('json/credOccur.json') 
+filerules = open('./src/json/credOccur.json') 
 credOccur = json.load(filerules)
 
-fileconfig = open('json/config.json')
+fileconfig = open('./src/json/config.json')
 config = json.load(fileconfig)
 
 
@@ -125,11 +125,11 @@ def bits_reader(bits, value,entrance):
                     print("Authenticated")
                     #relay.trigger_relay_one()
                     update_zone_status(entrance,entrancestatus,persondetails)
-                    transactionsMod.record_auth(persondetails,authtype,entrancename,entrancestatus)
+                    eventsMod.record_auth(persondetails,authtype,entrancename,entrancestatus)
             else:
                 print("Authenticated")
                 #relay.trigger_relay_one()
-                transactionsMod.record_auth(persondetails,authtype,entrancename,entrancestatus)
+                eventsMod.record_auth(persondetails,authtype,entrancename,entrancestatus)
 
 
 
@@ -157,29 +157,31 @@ schedule = {
 def verify_datetime(schedule):
     #print(schedule)
     #print(type(schedule))
+
     for scheduledate,scheduletime in schedule.items():
         #print(scheduledate,scheduletime)
         if scheduledate == str(date.today()):
-            now_hour = datetime.now().strftime(("%H"))
-            now_min = datetime.now().strftime(("%M"))
-            start = scheduletime["starttime"]
-            end = scheduletime["endtime"]
-            start_hour = start.split(":")[0]
-            start_min = start.split(":")[1]
-            end_hour = end.split(":")[0]
-            end_min = end.split(":")[1]
+            for timing in scheduletime:
+                now_hour = datetime.now().strftime(("%H"))
+                now_min = datetime.now().strftime(("%M"))
+                start = timing["starttime"]
+                end = timing["endtime"]
+                start_hour = start.split(":")[0]
+                start_min = start.split(":")[1]
+                end_hour = end.split(":")[0]
+                end_min = end.split(":")[1]
 
-            
-            if now_hour > start_hour and now_hour < end_hour: # strictly within
-                return True
-            
-            if now_hour == start_hour:
-                if now_min >= start_min:
+                
+                if now_hour > start_hour and now_hour < end_hour: # strictly within
                     return True
-            
-            if now_hour == end_hour:
-                if end_min > now_min:
-                    return True
+                
+                if now_hour == start_hour:
+                    if now_min >= start_min:
+                        return True
+                
+                if now_hour == end_hour:
+                    if end_min > now_min:
+                        return True
 
     return False 
 
@@ -279,8 +281,6 @@ def verify_zone_status(entrance,entrancestatus,persondetails):
 
 def update_zone_status(entrance,entrancestatus,persondetails):
 
-    
-
     filename = "json/"+"status.json"
     with open(filename,"r") as checkfile:
         try:
@@ -324,17 +324,20 @@ def verify_antipassback(entrancename):
 
 def cbmagrise(gpio, level, tick):
     print("Entrance 1 is opened at " + str(datetime.now()))
+    eventsMod.record_buzzer("MainDoor","opened")
     timeout_mag.start()
 
     
 def cbmagfall(gpio, level, tick):
     print("Entrance 1 is closed at " + str(datetime.now()))
+    eventsMod.record_buzzer("MainDoor","closed")
     mag_status_open = False
     timeout_mag.stop()
 
 def cbbutton(gpio, level, tick):
     print("Pb 1 was pushed at " + str(datetime.now()))
-    relay.trigger_relay_one()
+    relay.trigger_relay_one
+    eventsMod.record_button_pressed("MainDoor","Security Guard Button")
 
 def check():
     while True:
@@ -362,5 +365,5 @@ def check():
 # bits_reader(26,"ege56g4er","E1R1")
 
 # 1st person going out
-bits_reader(26,"s1e97ncksiu","E1R2")
-bits_reader(26,"696955874","E1R2")
+# bits_reader(26,"s1e97ncksiu","E1R2")
+# bits_reader(26,"696955874","E1R2")
