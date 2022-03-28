@@ -1,4 +1,5 @@
-# Python Program to Get IP Address
+# Python Program to SET IP Address to 250
+# rmb to set dns to 8.8.8.8
 import socket
 import subprocess
 #import psutil
@@ -55,25 +56,14 @@ def get_gateway_ip():
 
 
 print("Hostname:" + hostname)
+
 processedIP = get_host_ip().split('.',1)[0] + "." + get_host_ip().split('.',2)[1] + "."+get_host_ip().split('.',3)[2] +".250"
 print("host IP: " + get_host_ip())
 print ("Gateway IP: " + get_gateway_ip().decode())
 print ("DNS: " + socket.getfqdn())
 print ("Serial Num: " + get_serialnum().decode())
 #print ("get_netmask():" + get_netmask())
-def config_IP():
 
-    os.system('sudo ifconfig eth0 down')
-
-    #os.system('sudo ifconfig eth0 '+processedIP +' netmask '+ get_netmask())
-    os.system('sudo ifconfig eth0 '+processedIP +' netmask 255.255.255.0')
-    os.system('sudo ifconfig eth0 up')
-    
-    #os.system('sudo hostname uniCon' + '88')
-    #to do:
-    #get dns and configure dns as well
-    
-#config_IP()
 stat = os.system('systemctl is-active startup.service')
 if (stat) == 0:
    print ("starting Jar")
