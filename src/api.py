@@ -5,7 +5,7 @@ import os
 def update_server_events():
     url = 'http://192.168.1.250:8082/unicon/event'
 
-    file = open("./src/json/archivedLogs.json") 
+    file = open("./json/archivedLogs.json") 
     data = json.load(file)
     
     headers = {'Content-type': 'application/json'}
@@ -15,13 +15,15 @@ def update_server_events():
 
     if r.status_code == 201 or r.status_code == 200:
         print("SUCCESS")
-        # open('json/pendingTrans.json', 'w').close()
+        fileclear = open('json/pendingLogs.json', 'w')
+        fileclear.close()
 
 #dictionary = {"Name": "Bryan","AccessGroup": "ISS"}
 #entrance = E1/ E2
 
 def update_external_zone_status(controllerId, entrance, dictionary,direction):
     while True:
+        break
         url = 'http://127.0.0.1:5000/status'
 
         data = {"controllerId": controllerId,
@@ -41,6 +43,6 @@ def update_external_zone_status(controllerId, entrance, dictionary,direction):
         
 
 
-update_server_events()
+#update_server_events()
 #update_external_zone_status("123456","E1",{"Name": "YongNing","AccessGroup": "ISS"},"In")
 #update_external_zone_status("123456","E1",{"Name": "YongNing","AccessGroup": "ISS"},"Out")

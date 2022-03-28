@@ -1,14 +1,5 @@
 {
-    "controllerId": "123456",
-    "E1": [
-        {
-            "Name": "Bryan",
-            "AccessGroup": "ISS"
-        },
-        {
-            "Name": "Kerry",
-            "AccessGroup": "AccessGroup1"
-        }
-    ],
+    "controllerId": "",
+    "E1": [],
     "E2": []
 }

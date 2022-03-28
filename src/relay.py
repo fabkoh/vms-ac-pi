@@ -1,14 +1,15 @@
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
-from program import Relay_1, Relay_2
 import multitasking
+
 
 
 #everytime relay triggers, mag_status_open = True 
 # if mag_contact opened but mag_status_open = False, TRIGGER ALARM 
 
-
+Relay_1 = 27
+Relay_2 = 13
 
 # *** GPIO Setp/Cleanup ***
 

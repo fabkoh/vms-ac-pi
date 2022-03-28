@@ -21,9 +21,10 @@ e1r2 = decoder(pi, E1_R2_D0, E1_R2_D1, bits_reader,"E1R2")
 #         bits_reader(bits,value)
 
 
-def mag(cbmagrise,cbmagfall):
+def mag():
     cb1 = pi.callback(E1_Mag, pigpio.RISING_EDGE, cbmagrise)
     cb2 = pi.callback(E1_Mag, pigpio.FALLING_EDGE, cbmagfall)
+    
     
     '''
     while True:
@@ -39,7 +40,7 @@ def mag(cbmagrise,cbmagfall):
         print("Entrance 1 is closed at " + str(datetime.now()))
     ''' 
    
-def button(cbbutton):
+def button():
     
     cb3 = pi.callback(E1_Button, pigpio.RISING_EDGE, cbbutton)
     
@@ -51,7 +52,40 @@ def button(cbbutton):
             relay.trigger_relay_one()
             print("Here")
     '''
+def check():
+    while True:
+        if timeout_cred.status(): 
+            if timeout_cred.check(CRED_TIMEOUT):
+                timeout_cred.stop()
+                del credentials [:]
+                del pinsvalue[:]
+        
+        if timeout_buzzer.status():
+            if timeout_buzzer.check(BUZZER_TIMEOUT):
+                print("email")
+            
+        if timeout_mag.status():
+            if timeout_mag.check(MAG_TIMEOUT):
+                pi.write(E1_R2_Buzz,1)
+                pi.write(E1_R1_Buzz,1)
+                pi.write(E1_R2_Led,1)
+                pi.write(E1_R1_Led,1)
+                if not timeout_buzzer.status():
+                    timeout_buzzer.start()
+                    eventsMod.record_buzzer("MainDoor","Buzzer started buzzing")
+                    api.update_server_events()
+        else:
+            pi.write(E1_R2_Buzz,0)
+            pi.write(E1_R1_Buzz,0)
+            pi.write(E1_R2_Led,0)
+            pi.write(E1_R1_Led,0)
+            if timeout_buzzer.status():
+                timeout_buzzer.stop()
+                eventsMod.record_buzzer("MainDoor","Buzzer stopped buzzing")
+                api.update_server_events()
 
+        time.sleep(0.1)
+        
 t1 = threading.Thread(target=button)
 t2 = threading.Thread(target=mag)
 t3= threading.Thread(target=check)

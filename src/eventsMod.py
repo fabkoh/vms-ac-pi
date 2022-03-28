@@ -36,29 +36,65 @@ def record_auth_scans(persondetails,authtype,entrance,status):
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
     
-    update("./src/json/archivedLogs.json",dictionary)
-    update("./src/json/pendingLogs.json",dictionary)
+    update("json/archivedLogs.json",dictionary)
+    update("json/pendingLogs.json",dictionary)
 
+#updates pendingLogs.json and send to backend 
+#updates archivedLogs.json for backup 
+def record_auth_scans(persondetails,authtype,entrance,status):
+    name = persondetails["Name"]
+    accessGroup = persondetails["AccessGroup"]
+
+    dictionary = {"name":name,"accessgroup":accessGroup, "authmethod":authtype,
+                "direction": status,"entrance":entrance,"eventActionType": "authenticated_scans", 
+                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    }
+    
+    update("json/archivedLogs.json",dictionary)
+    update("json/pendingLogs.json",dictionary)
+    
+    
 #updates pendingTrans.json and send to backend 
 #updates archivedTrans.json for backup 
+def record_unauth_scans(authtype,entrance,status):
+
+    dictionary = {"authmethod":authtype,
+                "direction": status,"entrance":entrance,"eventActionType": "unauthenticated_scans", 
+                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    }
+    
+    update("json/archivedLogs.json",dictionary)
+    update("json/pendingLogs.json",dictionary)
+
 def record_button_pressed(entrance,name_of_button):
 
     dictionary = {"entrance":entrance,"eventActionType": name_of_button+" pressed", 
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
-    update("./src/json/archivedLogs.json",dictionary)
-    update("./src/json/pendingLogs.json",dictionary)
-
+    update("json/archivedLogs.json",dictionary)
+    update("json/pendingLogs.json",dictionary)
 # status = opened/ closed
+
+
+def record_antipassback(authtype,entrance,status):
+
+    dictionary = {"authmethod":authtype,
+                "direction": status,"entrance":entrance,"eventActionType": "ANTIPASSBACK : authenticated_scan ", 
+                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    }
+    
+    update("json/archivedLogs.json",dictionary)
+    update("json/pendingLogs.json",dictionary)
+    
 def record_mag_changes(entrance,status):
 
     dictionary = {"entrance":entrance,"eventActionType": status, 
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
-    update("./src/json/archivedLogs.json",dictionary)
-    update("./src/json/pendingLogs.json",dictionary)
+    update("json/archivedLogs.json",dictionary)
+    update("json/pendingLogs.json",dictionary)
 
 # status = started buzzing/ stopped buzzing 
 def record_buzzer(entrance,status):
@@ -67,8 +103,8 @@ def record_buzzer(entrance,status):
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
-    update("./src/json/archivedLogs.json",dictionary)
-    update("./src/json/pendingLogs.json",dictionary)
+    update("json/archivedLogs.json",dictionary)
+    update("json/pendingLogs.json",dictionary)
     
 #update to update json files
 def update(file,dictionary):

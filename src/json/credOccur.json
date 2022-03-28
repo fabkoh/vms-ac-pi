@@ -9,7 +9,7 @@
           "Direction": "In",
           "AuthMethod": [
             {
-              "Method": "Fingerprint,Card",
+              "Method": "Card,Pin",
               "Schedule": {
                 "2022-03-14":[{"starttime":"18:00","endtime":"23:00"}],
                 "2022-03-16": [{"starttime":"18:00","endtime":"23:00"}]
@@ -19,7 +19,7 @@
               "Method": "Card,Pin",
               "Schedule": {
                 "2022-03-14": [{"starttime":"09:00","endtime":"18:00"}],
-                "2022-03-18": [{"starttime":"09:00","endtime":"18:00"}]
+                "2022-03-28": [{"starttime":"09:00","endtime":"23:59"}]
               }
             }
           ]
@@ -28,14 +28,14 @@
           "Direction": "Out",
           "AuthMethod": [
             {
-              "Method": "Fingerprint",
+              "Method": "Card",
               "Schedule": {
-                "2022-03-14":{"starttime":"18:00","endtime":"23:00"},
-                "2022-03-18": {"starttime":"18:00","endtime":"23:00"}
+                "2022-03-14":[{"starttime":"18:00","endtime":"23:00"}],
+                "2022-03-28": [{"starttime":"09:00","endtime":"23:59"}]
               }
             },
             {
-              "Method": "Fingerprint,Pin",
+              "Method": "Card",
               "Schedule": {
                 "2022-03-14":{"starttime":"18:00","endtime":"23:00"},
                 "2022-03-18": {"starttime":"09:00","endtime":"18:00"}
@@ -51,16 +51,16 @@
               {
                 "Name": "John",
                 "Credentials": {
-                  "Card": "696955874",
-                  "PIN": "225588",
+                  "Card": "36443438",
+                  "PIN": "123456",
                   "Fingerprint": "s1e97ncksiu"
                 }
               },
               {
                 "Name": "Kerry",
                 "Credentials": {
-                  "Card": "2535645",
-                  "PIN": "3423",
+                  "Card": "36443419",
+                  "PIN": "123456",
                   "Fingerprint": "ege56g4er"
                 }
               },
@@ -74,8 +74,8 @@
               }
             ],
             "Schedule": {
-              "2022-03-14":{"starttime":"18:00","endtime":"23:00"},
-              "2022-03-18": {"starttime":"09:00","endtime":"18:00"}
+              "2022-03-14":[{"starttime":"18:00","endtime":"23:00"}],
+              "2022-03-28": [{"starttime":"09:00","endtime":"23:59"}]
             }
           }
         },

@@ -101,30 +101,16 @@ class decoder:
 Relay_1 = 27 
 Relay_2 = 13
 
-E1_R1_D0= 22
-E1_R1_D1= 10
-#E1_R1_Buzz=
-#E1_R1_Led=
-E1_R2_D0=24
-E1_R2_D1=25
-#E1_R2_Buzz=
-#E1_R2_Led=
+E1_R1_D0= 24
+E1_R1_D1= 25
+E1_R1_Buzz=7
+E1_R1_Led=8
+E1_R2_D0=22
+E1_R2_D1=10
+E1_R2_Buzz=11
+E1_R2_Led=9
 E1_Mag= 6
 E1_Button= 5
-
-'''
-E2_R1_D0=
-E2_R1_D1=
-
-E2_R1_Buzz=
-E2_R1_Led=
-E2_R2_D0=
-E2_R2_D1=
-E2_R2_Buzz=
-E2_R2_Led=
-E2_Mag=
-E2_Button=
-'''
 
 #initialising pi
 pi = pigpio.pi()
@@ -135,24 +121,19 @@ pi.set_mode(E1_Button, pigpio.INPUT)
 
 #E1_Mag for mag contact
 pi.set_mode(E1_Mag, pigpio.INPUT) 
-pi.set_pull_up_down(E1_Mag, pigpio.PUD_UP)
-'''
+
 #E1_R1_Buzz for Buzz
-pi.set_mode(E1_R1_Buzz, pigpio.INPUT) 
-pi.set_pull_up_down(E1_R1_Buzz, pigpio.PUD_UP)
+pi.set_mode(E1_R1_Buzz, pigpio.OUTPUT) 
 
 #E1_R1_Led for Led
-pi.set_mode(E1_R1_Led, pigpio.INPUT) 
-pi.set_pull_up_down(E1_R1_Led, pigpio.PUD_UP)
+pi.set_mode(E1_R1_Led, pigpio.OUTPUT) 
 
 #E1_R2_Buzz for Buzz
-pi.set_mode(E1_R2_Buzz, pigpio.INPUT) 
-pi.set_pull_up_down(E1_R2_Buzz, pigpio.PUD_UP)
+pi.set_mode(E1_R2_Buzz, pigpio.OUTPUT) 
 
 #E1_R2_Led for Led
-pi.set_mode(E1_R2_Led, pigpio.INPUT) 
-pi.set_pull_up_down(E1_R2_Led, pigpio.PUD_UP)
-
+pi.set_mode(E1_R2_Led, pigpio.OUTPUT) 
+'''
 #initialising E2_Button for pushbutton2
 pi.set_mode(E2_Button, pigpio.INPUT)
 pi.set_pull_up_down(E2_Button, pigpio.PUD_UP)

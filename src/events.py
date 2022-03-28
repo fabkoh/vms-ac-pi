@@ -7,7 +7,7 @@ import time
 import threading
 import api
 
-
+mag_status_open = False
 '''
     1. contains class Timer 
     2. check_for_wiegand
@@ -55,17 +55,19 @@ class Timer:
 
 timeout_cred = Timer()  
 timeout_mag = Timer()
+timeout_buzzer = Timer()
 
 CRED_TIMEOUT = 10  #number of seconds to wait before credentials arrays is cleared automaically 
 MAG_TIMEOUT = 10  #number of seconds to wait before buzzer is triggered automaically 
+BUZZER_TIMEOUT = 5
 credentials = [] #array to store credentials
 pinsvalue = []  #array to store pins
 
 
-filerules = open('./src/json/credOccur.json') 
+filerules = open('json/credOccur.json') 
 credOccur = json.load(filerules)
 
-fileconfig = open('./src/json/config.json')
+fileconfig = open('json/config.json')
 config = json.load(fileconfig)
 
 
@@ -101,6 +103,7 @@ def check_for_wiegand(value):
 # record Trans
 def bits_reader(bits, value,entrance):
     print("bits={} value={}".format(bits, value))
+    global mag_status_open
 
     if bits == 4:
         if len(credentials) > 0: #unable to type pin before detecting wiegand values
@@ -110,26 +113,54 @@ def bits_reader(bits, value,entrance):
     if bits == 26:
         credcollector(str(value))
 
-        # name, passwords, accessgroup and schedule 
+        # name, passwords, accessgroup and schedule
+    try:
         persondetails = check_for_wiegand(credentials[0])
+    except:
+        persondetails = {}
 
-        entrancename = config["EntranceName"][entrance][0]
-        entrancestatus = config["EntranceName"][entrance][1]
+    entrancename = config["EntranceName"][entrance][0]
+    entrancestatus = config["EntranceName"][entrance][1]
 
-        authtype = verify_authtype(entrancename,entrancestatus)
+    authtype = verify_authtype(entrancename,entrancestatus)
+    print(authtype)
+    try:
         authlength = len(authtype.split(","))
-
-        if verify_credentials(authlength,credentials,persondetails) :
+    except:
+        authlength = 1
+    
+    '''
+    if value == 36443438 or value == 36443419:
+        print("Authenticated")
+        relay.trigger_relay_one()
+        update_zone_status(entrance,entrancestatus,persondetails)
+        eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrancestatus)
+    '''
+    if authlength == len(credentials):
+        timeout_cred.stop()
+        if verify_credentials(authlength,credentials,persondetails):
             if verify_antipassback(entrancename):
                 if verify_zone_status(entrance,entrancestatus,persondetails):
                     print("Authenticated")
-                    #relay.trigger_relay_one()
+                    mag_status_open = True
+                    relay.trigger_relay_one()
                     update_zone_status(entrance,entrancestatus,persondetails)
-                    eventsMod.record_auth(persondetails,authtype,entrancename,entrancestatus)
+                    eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrancestatus)
+                    api.update_server_events()
+                else:
+                    print("Denied, antipassback")
+                    eventsMod.record_antipassback(authtype,entrance,entrancestatus)
+                    api.update_server_events()
             else:
                 print("Authenticated")
-                #relay.trigger_relay_one()
-                eventsMod.record_auth(persondetails,authtype,entrancename,entrancestatus)
+                mag_status_open = True
+                relay.trigger_relay_one()
+                eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrancestatus)
+                api.update_server_events()
+        else:
+            print("Denied")
+            eventsMod.record_unauth_scans(authtype,entrance,entrancestatus)
+            api.update_server_events()
 
 
 
@@ -324,33 +355,31 @@ def verify_antipassback(entrancename):
 
 def cbmagrise(gpio, level, tick):
     print("Entrance 1 is opened at " + str(datetime.now()))
-    eventsMod.record_buzzer("MainDoor","opened")
+    
+    if mag_status_open:
+        eventsMod.record_mag_changes("MainDoor","opened")
+    else:
+        eventsMod.record_mag_changes("MainDoor","WARNING : opened without authentication")
+    api.update_server_events()
     timeout_mag.start()
 
     
 def cbmagfall(gpio, level, tick):
     print("Entrance 1 is closed at " + str(datetime.now()))
-    eventsMod.record_buzzer("MainDoor","closed")
+    eventsMod.record_mag_changes("MainDoor","closed")
+    api.update_server_events()
+    global mag_status_open
     mag_status_open = False
     timeout_mag.stop()
 
 def cbbutton(gpio, level, tick):
     print("Pb 1 was pushed at " + str(datetime.now()))
-    relay.trigger_relay_one
+    global mag_status_open
+    mag_status_open = True
+    relay.trigger_relay_one()
     eventsMod.record_button_pressed("MainDoor","Security Guard Button")
+    api.update_server_events()
 
-def check():
-    while True:
-        if timeout_cred.status(): 
-            if timeout_cred.check(CRED_TIMEOUT):
-                timeout_cred.stop()
-                del credentials [:]
-
-        if timeout_mag.status():
-            if timeout_mag.check(MAG_TIMEOUT):
-                print("BUZZZZZZZZZZZZZZZZZZ")
-
-        time.sleep(0.1)
 
 # 1st person going in
 # bits_reader(26,"s1e97ncksiu","E1R1")
