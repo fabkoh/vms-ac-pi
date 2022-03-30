@@ -1,10 +1,11 @@
-# Python Program to Get IP Address and send to server 
+# Python Program to Get IP Address and send to server 250
 import socket
 import subprocess
 #import psutil
 import os
 import json
 import requests
+import time
 
 hostname = socket.gethostname()   
 
@@ -33,8 +34,14 @@ def get_host_ip(hostIP=None):
         if hostIP.startswith("127."):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             # doesn't have to be reachable
-            s.connect(('10.255.255.255', 1))
-            hostIP = s.getsockname()[0]
+            while True:
+                try:
+                    s.connect(('10.255.255.255', 1))
+                    hostIP = s.getsockname()[0]
+                    break
+                except:
+                    time.sleep(0.1)
+
     return hostIP
 
 host_ip =   str(get_host_ip())
@@ -58,4 +65,9 @@ def update_ipaddress():
     if r.status_code == 201 or r.status_code == 200:
         print("SUCCESS")
 
-update_ipaddress()
+while True:
+    try:
+        update_ipaddress()
+        break
+    except:
+        time.sleep(0.1)

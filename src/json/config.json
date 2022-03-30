@@ -1,7 +1,7 @@
 {"controllerConfig":
     [{"controllerId":"123456", 
       "controllerName":"", 
-      "controllerIP":"", 
+      "controllerIp":"", 
       "controllerMAC":"",
       "controllerSerialNo":""
       }
