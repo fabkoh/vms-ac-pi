@@ -19,7 +19,7 @@
               "Method": "Card,Pin",
               "Schedule": {
                 "2022-03-14": [{"starttime":"09:00","endtime":"18:00"}],
-                "2022-03-28": [{"starttime":"09:00","endtime":"23:59"}]
+                "2022-03-29": [{"starttime":"09:00","endtime":"23:59"}]
               }
             }
           ]
@@ -31,7 +31,7 @@
               "Method": "Card",
               "Schedule": {
                 "2022-03-14":[{"starttime":"18:00","endtime":"23:00"}],
-                "2022-03-28": [{"starttime":"09:00","endtime":"23:59"}]
+                "2022-03-29": [{"starttime":"09:00","endtime":"23:59"}]
               }
             },
             {
@@ -75,7 +75,7 @@
             ],
             "Schedule": {
               "2022-03-14":[{"starttime":"18:00","endtime":"23:00"}],
-              "2022-03-28": [{"starttime":"09:00","endtime":"23:59"}]
+              "2022-03-29": [{"starttime":"09:00","endtime":"23:59"}]
             }
           }
         },

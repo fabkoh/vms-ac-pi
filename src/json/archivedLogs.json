@@ -1,73 +1,63 @@
 [
     {
-        "authmethod": "Card",
-        "direction": "Out",
-        "entrance": "E1R2",
-        "eventActionType": "ANTIPASSBACK : authenticated_scan ",
-        "eventTime": "2022-03-28 12:00:50"
-    },
-    {
-        "authmethod": "Card",
-        "direction": "Out",
-        "entrance": "E1R2",
-        "eventActionType": "ANTIPASSBACK : authenticated_scan ",
-        "eventTime": "2022-03-28 12:02:46"
-    },
-    {
-        "authmethod": "Card",
-        "direction": "Out",
-        "entrance": "E1R2",
-        "eventActionType": "ANTIPASSBACK : authenticated_scan ",
-        "eventTime": "2022-03-28 12:05:00"
-    },
-    {
-        "name": "John",
-        "accessgroup": "AccessGroup1",
-        "authmethod": "Card,Pin",
-        "direction": "In",
         "entrance": "MainDoor",
-        "eventActionType": "authenticated_scans",
-        "eventTime": "2022-03-28 12:11:23"
-    },
-    {
-        "name": "John",
-        "accessgroup": "AccessGroup1",
-        "authmethod": "Card",
-        "direction": "Out",
-        "entrance": "MainDoor",
-        "eventActionType": "authenticated_scans",
-        "eventTime": "2022-03-28 12:11:34"
-    },
-    {
-        "entrance": "MainDoor",
-        "eventActionType": "Security Guard Button pressed",
-        "eventTime": "2022-03-28 12:21:44"
-    },
-    {
-        "authmethod": "Card",
-        "direction": "Out",
-        "entrance": "E1R2",
-        "eventActionType": "ANTIPASSBACK : authenticated_scan ",
-        "eventTime": "2022-03-28 12:23:14"
-    },
-    {
-        "entrance": "MainDoor",
-        "eventActionType": "WARNING : opened without authentication",
-        "eventTime": "2022-03-28 12:49:18"
-    },
-    {
-        "entrance": "MainDoor",
-        "eventActionType": "Buzzer started buzzing",
-        "eventTime": "2022-03-28 12:49:29"
+        "eventActionType": "opened",
+        "eventTime": "2022-03-29 09:53:32"
     },
     {
         "entrance": "MainDoor",
         "eventActionType": "closed",
-        "eventTime": "2022-03-28 12:49:35"
+        "eventTime": "2022-03-29 09:53:34"
+    },
+    {
+        "authmethod": "Card",
+        "direction": "Out",
+        "entrance": "E1R2",
+        "eventActionType": "ANTIPASSBACK : authenticated_scan ",
+        "eventTime": "2022-03-29 09:53:37"
+    },
+    {
+        "entrance": "MainDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-03-29 09:53:39"
+    },
+    {
+        "entrance": "MainDoor",
+        "eventActionType": "Buzzer started buzzing",
+        "eventTime": "2022-03-29 09:53:49"
+    },
+    {
+        "entrance": "MainDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-03-29 09:53:49"
     },
     {
         "entrance": "MainDoor",
         "eventActionType": "Buzzer stopped buzzing",
-        "eventTime": "2022-03-28 12:49:36"
+        "eventTime": "2022-03-29 09:53:49"
+    },
+    {
+        "authmethod": "Card",
+        "direction": "Out",
+        "entrance": "E1R2",
+        "eventActionType": "unauthenticated_scans",
+        "eventTime": "2022-03-29 09:54:43"
+    },
+    {
+        "entrance": "MainDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-03-29 11:39:59"
+    },
+    {
+        "entrance": "MainDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-03-29 11:40:00"
+    },
+    {
+        "authmethod": null,
+        "direction": "Out",
+        "entrance": "E1R2",
+        "eventActionType": "unauthenticated_scans",
+        "eventTime": "2022-03-30 11:21:27"
     }
 ]
