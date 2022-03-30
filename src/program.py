@@ -76,6 +76,9 @@ def check():
                     api.update_server_events()
         else:
             pi.write(E1_R2_Buzz,0)
+            
+            
+            
             pi.write(E1_R1_Buzz,0)
             pi.write(E1_R2_Led,0)
             pi.write(E1_R1_Led,0)

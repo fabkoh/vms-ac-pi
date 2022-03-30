@@ -5,7 +5,7 @@ import os
 def update_server_events():
     url = 'http://192.168.1.250:8082/unicon/event'
 
-    file = open("./json/archivedLogs.json") 
+    file = open("./json/pendingLogs.json") 
     data = json.load(file)
     
     headers = {'Content-type': 'application/json'}
