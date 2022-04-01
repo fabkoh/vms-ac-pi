@@ -41,12 +41,10 @@ def record_auth_scans(persondetails,authtype,entrance,status):
 
 #updates pendingLogs.json and send to backend 
 #updates archivedLogs.json for backup 
-def record_auth_scans(persondetails,authtype,entrance,status):
-    name = persondetails["Name"]
-    accessGroup = persondetails["AccessGroup"]
+def record_masterpassword_used(authtype,entrancename,entrance_direction):
 
-    dictionary = {"name":name,"accessgroup":accessGroup, "authmethod":authtype,
-                "direction": status,"entrance":entrance,"eventActionType": "authenticated_scans", 
+    dictionary = {"authmethod":authtype,
+                "direction": entrance_direction,"entrance":entrancename,"eventActionType": "Masterpassword used", 
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
     

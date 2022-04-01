@@ -85,6 +85,8 @@ DEFAULT_CRED_TIMEOUT = 20
 DEFAULT_MAG_TIMEOUT = 10
 DEFAULT_BUZZER_TIMEOUT = 10
 
+MAX_PIN_LENGTH = 6
+
 try:
     CRED_TIMEOUT_E1 = int(TIMEOUT["CRED_TIMEOUT_E1"])  #number of seconds to wait before credentials arrays is cleared automaically 
 except:
@@ -185,8 +187,12 @@ def reader_detects_bits(bits, value,entrance):
 
     # reader_currently_used = entrance_direction
     if bits == 4:
-        if len(credentials) > 0: #unable to type pin before detecting wiegand values
-            pincollector(credentials,pinsvalue,value,timeout_cred) 
+        if not timeout_cred.status():
+            timeout_cred.start()
+        if len(pinsvalue) <= MAX_PIN_LENGTH: #unable to type pin before detecting wiegand values
+            pincollector(credentials,pinsvalue,value,timeout_cred)
+        else:
+            del pinsvalue[:]
 
     if bits == 26:
         credcollector(credentials,str(value),timeout_cred)
@@ -207,6 +213,22 @@ def reader_detects_bits(bits, value,entrance):
     except:
         authlength = 1
     
+    if len(credentials) == 1:
+        if check_for_masterpassword(credentials,entrancename,entrance_direction):
+            print("Authenticated")
+            if entrance.split("_")[0] == "E1":
+                mag_E1_allowed_to_open = True
+                relay.trigger_relay_one()
+            if entrance.split("_")[0] == "E2":
+                mag_E2_allowed_to_open = True
+                relay.trigger_relay_two()
+            
+            timeout_cred.stop()
+            del pinsvalue[:]
+            del credentials[:]       
+            eventsMod.record_masterpassword_used(authtype,entrancename,entrance_direction)
+            api.update_server_events()
+        
     '''
     if value == 36443438 or value == 36443419:
         print("Authenticated")
@@ -250,6 +272,14 @@ def reader_detects_bits(bits, value,entrance):
             api.update_server_events()
 
 
+def check_for_masterpassword(credentials,entrancename,entrance_direction):
+    for entranceslist in credOccur:
+        if entranceslist["Entrance"] == entrancename:
+            for devicenumber,devicedetails in entranceslist["EntranceDetails"]["AuthenticationDevices"].items():
+                if devicedetails["Direction"] == entrance_direction:
+                    if credentials[0] == devicedetails["Masterpassword"]:
+                        return True
+    return False
 
 #take in verifydetails("MainDoor","In") return auth type
 def verify_authtype(entrance,device):

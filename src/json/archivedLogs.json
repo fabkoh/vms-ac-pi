@@ -33,5 +33,28 @@
         "entrance": "SideDoor",
         "eventActionType": "Security Guard Button pressed",
         "eventTime": "2022-04-01 19:48:55"
+    },
+    {
+        "authmethod": "Card,Pin",
+        "direction": "IN",
+        "entrance": "SideDoor",
+        "eventActionType": "Masterpassword used",
+        "eventTime": "2022-04-01 21:06:34"
+    },
+    {
+        "authmethod": "Card,Pin",
+        "direction": "IN",
+        "entrance": "SideDoor",
+        "eventActionType": "unauthenticated_scans",
+        "eventTime": "2022-04-01 21:08:50"
+    },
+    {
+        "name": "John",
+        "accessgroup": "AccessGroup1",
+        "authmethod": "Card,Pin",
+        "direction": "IN",
+        "entrance": "SideDoor",
+        "eventActionType": "authenticated_scans",
+        "eventTime": "2022-04-01 21:09:21"
     }
 ]

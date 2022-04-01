@@ -6,6 +6,7 @@
       "Zone": "ZoneId",
       "AuthenticationDevices": {
         "Device1": {
+          "Masterpassword":"666666",
           "Direction": "IN",
           "AuthMethod": [
             {
@@ -25,7 +26,8 @@
           ]
         },
         "Device2": {
-          "Direction": "OUT",
+          "Masterpassword":"111111",
+          "Direction": "OUT", 
           "AuthMethod": [
             {
               "Method": "Card",
