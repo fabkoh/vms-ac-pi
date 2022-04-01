@@ -1,13 +1,13 @@
+from asyncio.windows_events import NULL
 from datetime import datetime, date
 from api import update_external_zone_status
 import relay
 import eventsMod
 import json 
 import time
-import threading
 import api
 
-mag_status_open = False
+
 '''
     1. contains class Timer 
     2. check_for_wiegand
@@ -51,25 +51,74 @@ class Timer:
             return True 
         return False
 
-
-
-timeout_cred = Timer()  
-timeout_mag = Timer()
-timeout_buzzer = Timer()
-
-CRED_TIMEOUT = 10  #number of seconds to wait before credentials arrays is cleared automaically 
-MAG_TIMEOUT = 10  #number of seconds to wait before buzzer is triggered automaically 
-BUZZER_TIMEOUT = 5
-credentials = [] #array to store credentials
-pinsvalue = []  #array to store pins
-
-
 filerules = open('json/credOccur.json') 
 credOccur = json.load(filerules)
 
 fileconfig = open('json/config.json')
 config = json.load(fileconfig)
+GPIOpins = config["GPIOpins"]
+TIMEOUT = config["TIMEOUT"]
 
+E1 = config["EntranceName"]["E1"]
+E2 = config["EntranceName"]["E2"]
+
+E1_Mag= int(GPIOpins["E1_Mag"])
+E1_Button= int(GPIOpins["E1_Button"])
+
+E2_Mag= int(GPIOpins["E2_Mag"])
+E2_Button= int(GPIOpins["E2_Button"])
+
+mag_E1_allowed_to_open = False
+mag_E2_allowed_to_open = False
+
+timeout_cred_E1_IN = Timer()  
+timeout_cred_E1_OUT = Timer()  
+timeout_mag_E1 = Timer()
+timeout_buzzer_E1 = Timer()
+
+timeout_cred_E2_IN = Timer()  
+timeout_cred_E2_OUT = Timer()  
+timeout_mag_E2 = Timer()
+timeout_buzzer_E2 = Timer()
+
+DEFAULT_CRED_TIMEOUT = 20
+DEFAULT_MAG_TIMEOUT = 10
+DEFAULT_BUZZER_TIMEOUT = 10
+
+try:
+    CRED_TIMEOUT_E1 = int(TIMEOUT["CRED_TIMEOUT_E1"])  #number of seconds to wait before credentials arrays is cleared automaically 
+except:
+    CRED_TIMEOUT_E1 = DEFAULT_CRED_TIMEOUT
+try:
+    CRED_TIMEOUT_E2 = int(TIMEOUT["CRED_TIMEOUT_E2"])  #number of seconds to wait before credentials arrays is cleared automaically 
+except:
+    CRED_TIMEOUT_E2 = DEFAULT_CRED_TIMEOUT
+try:
+    MAG_TIMEOUT_E1 = int(TIMEOUT["MAG_TIMEOUT_E1"])  #number of seconds to wait before credentials arrays is cleared automaically 
+except:
+    MAG_TIMEOUT_E1 = DEFAULT_MAG_TIMEOUT
+try:
+    MAG_TIMEOUT_E2 = int(TIMEOUT["MAG_TIMEOUT_E2"])  #number of seconds to wait before credentials arrays is cleared automaically 
+except:
+    MAG_TIMEOUT_E2 = DEFAULT_MAG_TIMEOUT
+try:
+    BUZZER_TIMEOUT_E1 = int(TIMEOUT["BUZZER_TIMEOUT_E1"])  #number of seconds to wait before buzzer is triggered automaically 
+except:
+    BUZZER_TIMEOUT_E1 = DEFAULT_BUZZER_TIMEOUT
+try:
+    BUZZER_TIMEOUT_E2 = int(TIMEOUT["BUZZER_TIMEOUT_E2"])
+except:
+    BUZZER_TIMEOUT_E2 = DEFAULT_BUZZER_TIMEOUT
+
+credentials_E1_IN = [] #array to store credentials
+credentials_E1_OUT = [] #array to store credentials
+credentials_E2_IN = [] #array to store credentials
+credentials_E2_OUT = [] #array to store credentials
+
+pinsvalue_E1_IN = []  #array to store pins
+pinsvalue_E1_OUT = []  #array to store pins
+pinsvalue_E2_IN = []  #array to store pins
+pinsvalue_E2_OUT = []  #array to store pins
 
 
 #takes in string wiegand value, return name, passwords, accessgroup and schedule 
@@ -101,17 +150,46 @@ def check_for_wiegand(value):
 # check if person allowed to enter 
 # trigger relays 
 # record Trans
-def bits_reader(bits, value,entrance):
+def reader_detects_bits(bits, value,entrance):
     print("bits={} value={}".format(bits, value))
-    global mag_status_open
+    global mag_E1_allowed_to_open
+    global mag_E2_allowed_to_open
 
+
+    entrancename = config["EntranceName"][entrance.split("_")[0]]
+    entrance_direction = entrance.split("_")[1]
+
+    if entrance == "E1_IN":
+        credentials = credentials_E1_IN
+        pinsvalue = pinsvalue_E1_IN
+        timeout_cred = timeout_cred_E1_IN
+
+    if entrance == "E1_OUT":
+        credentials = credentials_E1_OUT
+        pinsvalue = pinsvalue_E1_OUT
+        timeout_cred = timeout_cred_E1_OUT
+
+    if entrance == "E2_IN":
+        credentials = credentials_E2_IN
+        pinsvalue = pinsvalue_E2_IN
+        timeout_cred = timeout_cred_E2_IN
+
+    if entrance == "E2_OUT":
+        credentials = credentials_E2_OUT
+        pinsvalue = pinsvalue_E2_OUT
+        timeout_cred = timeout_cred_E2_OUT
+
+
+    # if reader_currently_used != "" and reader_currently_used != entrance_direction:
+    #     return
+
+    # reader_currently_used = entrance_direction
     if bits == 4:
         if len(credentials) > 0: #unable to type pin before detecting wiegand values
-            pincollector(value) 
-
+            pincollector(pinsvalue,value) 
 
     if bits == 26:
-        credcollector(str(value))
+        credcollector(credentials,str(value),timeout_cred)
 
         # name, passwords, accessgroup and schedule
     try:
@@ -119,11 +197,11 @@ def bits_reader(bits, value,entrance):
     except:
         persondetails = {}
 
-    entrancename = config["EntranceName"][entrance][0]
-    entrancestatus = config["EntranceName"][entrance][1]
 
-    authtype = verify_authtype(entrancename,entrancestatus)
-    print(authtype)
+
+
+    authtype = verify_authtype(entrancename,entrance_direction)
+    print(entrancename, entrance_direction, authtype)
     try:
         authlength = len(authtype.split(","))
     except:
@@ -133,33 +211,42 @@ def bits_reader(bits, value,entrance):
     if value == 36443438 or value == 36443419:
         print("Authenticated")
         relay.trigger_relay_one()
-        update_zone_status(entrance,entrancestatus,persondetails)
-        eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrancestatus)
+        update_zone_status(entrance,entrance_direction,persondetails)
+        eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrance_direction)
     '''
     if authlength == len(credentials):
         timeout_cred.stop()
         if verify_credentials(authlength,credentials,persondetails):
             if verify_antipassback(entrancename):
-                if verify_zone_status(entrance,entrancestatus,persondetails):
+                if verify_zone_status(entrance,entrance_direction,persondetails):
                     print("Authenticated")
-                    mag_status_open = True
-                    relay.trigger_relay_one()
-                    update_zone_status(entrance,entrancestatus,persondetails)
-                    eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrancestatus)
+                    if entrance.split("_")[0] == "E1":
+                        mag_E1_allowed_to_open = True
+                        relay.trigger_relay_one()
+                    if entrance.split("_")[0] == "E2":
+                        mag_E2_allowed_to_open = True
+                        relay.trigger_relay_two()
+                    
+                    update_zone_status(entrance,entrance_direction,persondetails)
+                    eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrance_direction)
                     api.update_server_events()
                 else:
                     print("Denied, antipassback")
-                    eventsMod.record_antipassback(authtype,entrance,entrancestatus)
+                    eventsMod.record_antipassback(authtype,entrance,entrance_direction)
                     api.update_server_events()
             else:
                 print("Authenticated")
-                mag_status_open = True
-                relay.trigger_relay_one()
-                eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrancestatus)
+                if entrance.split("_")[0] == "E1":
+                    mag_E1_allowed_to_open = True
+                    relay.trigger_relay_one()
+                if entrance.split("_")[0] == "E2":
+                    mag_E2_allowed_to_open = True
+                    relay.trigger_relay_two()
+                eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrance_direction)
                 api.update_server_events()
         else:
             print("Denied")
-            eventsMod.record_unauth_scans(authtype,entrance,entrancestatus)
+            eventsMod.record_unauth_scans(authtype,entrance,entrance_direction)
             api.update_server_events()
 
 
@@ -218,7 +305,7 @@ def verify_datetime(schedule):
 
 
 # takes in wiegand value in strings and add to credentials list 
-def credcollector(cred):
+def credcollector(credentials,cred,timeout_cred):
     credentials.append(cred)
     # if it is the first wiegand value, start timing 
     if len(credentials) == 1:
@@ -231,7 +318,7 @@ def credcollector(cred):
     print(credentials)
 
 # takes in pin values and add to pinsvalue list 
-def pincollector(pin):
+def pincollector(pinsvalue,pin):
     if pin >= 0 and pin <= 9:
         pinsvalue.append(str(pin))
     elif pin == 10: #               * means CLEAR pinvalue list
@@ -353,36 +440,72 @@ def verify_antipassback(entrancename):
     return False 
 
 
-def cbmagrise(gpio, level, tick):
-    print("Entrance 1 is opened at " + str(datetime.now()))
-    
-    if mag_status_open:
-        eventsMod.record_mag_changes("MainDoor","opened")
-    else:
-        eventsMod.record_mag_changes("MainDoor","WARNING : opened without authentication")
-    api.update_server_events()
-    timeout_mag.start()
+def mag_detects_rising(gpio, level, tick):
+    global mag_E1_allowed_to_open
+    global mag_E2_allowed_to_open
+
+    if gpio == E1_Mag:
+        timeout_mag_E1.start()
+        print(f"{E1} is opened at " + str(datetime.now()))
+        if mag_E1_allowed_to_open:
+            eventsMod.record_mag_changes(E1,"opened")
+        else:
+            eventsMod.record_mag_changes(E1,"WARNING : opened without authentication")
+        api.update_server_events()
+
+    if gpio == E2_Mag:
+        timeout_mag_E2.start()
+        print(f"{E2} is opened at " + str(datetime.now()))
+        if mag_E2_allowed_to_open:
+            eventsMod.record_mag_changes(E2,"opened")
+        else:
+            eventsMod.record_mag_changes(E2,"WARNING : opened without authentication")
+        api.update_server_events()
 
     
-def cbmagfall(gpio, level, tick):
-    print("Entrance 1 is closed at " + str(datetime.now()))
-    eventsMod.record_mag_changes("MainDoor","closed")
-    api.update_server_events()
-    global mag_status_open
-    mag_status_open = False
-    timeout_mag.stop()
+def mag_detects_falling(gpio, level, tick):
+    global mag_E1_allowed_to_open
+    global mag_E2_allowed_to_open
 
-def cbbutton(gpio, level, tick):
-    print("Pb 1 was pushed at " + str(datetime.now()))
-    global mag_status_open
-    mag_status_open = True
-    relay.trigger_relay_one()
-    eventsMod.record_button_pressed("MainDoor","Security Guard Button")
-    api.update_server_events()
+    if gpio == E1_Mag:
+        timeout_mag_E1.stop()
+        print(f"{E1} is closed at " + str(datetime.now()))
+        mag_E1_allowed_to_open = False
+        eventsMod.record_mag_changes(E1,"closed")
+        eventsMod.record_mag_changes(E1,"WARNING : opened without authentication")
+        api.update_server_events()
+
+    if gpio == E2_Mag:
+        timeout_mag_E2.stop()
+        print(f"{E2} is closed at " + str(datetime.now()))
+        mag_E2_allowed_to_open = False
+        eventsMod.record_mag_changes(E2,"closed")
+        eventsMod.record_mag_changes(E2,"WARNING : opened without authentication")
+        api.update_server_events()
+
+
+def button_detects_change(gpio, level, tick):
+    global mag_E1_allowed_to_open
+    global mag_E2_allowed_to_open
+
+    if gpio == E1_Button:
+        print(f"{E1} push button is pressed at " + str(datetime.now()))
+        mag_E1_allowed_to_open = True
+        relay.trigger_relay_one()
+        eventsMod.record_button_pressed(E1,"Security Guard Button")
+        api.update_server_events()
+
+    if gpio == E2_Button:
+        print(f"{E2} push button is pressed at " + str(datetime.now()))
+        mag_E2_allowed_to_open = True
+        relay.trigger_relay_two()
+        eventsMod.record_button_pressed(E2,"Security Guard Button")
+        api.update_server_events()
+
 
 
 # 1st person going in
-# bits_reader(26,"s1e97ncksiu","E1R1")
+# reader_detects_bits(26,"s1e97ncksiu","E1_IN")
 # bits_reader(26,"696955874","E1R1")
 
 # 2nd person going in
@@ -396,3 +519,4 @@ def cbbutton(gpio, level, tick):
 # 1st person going out
 # bits_reader(26,"s1e97ncksiu","E1R2")
 # bits_reader(26,"696955874","E1R2")
+

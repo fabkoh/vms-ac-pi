@@ -2,14 +2,18 @@ import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
 import multitasking
-
+import json
 
 
 #everytime relay triggers, mag_status_open = True 
 # if mag_contact opened but mag_status_open = False, TRIGGER ALARM 
 
-Relay_1 = 27
-Relay_2 = 13
+fileconfig = open('json/config.json')
+config = json.load(fileconfig)
+GPIOpins = config["GPIOpins"]
+
+Relay_1 = int(GPIOpins["Relay_1"])
+Relay_2 = int(GPIOpins["Relay_2"])
 
 # *** GPIO Setp/Cleanup ***
 

@@ -1,5 +1,5 @@
 import pigpio 
-import time
+import json
 from datetime import datetime
 
 
@@ -10,6 +10,101 @@ from datetime import datetime
    3. includes class Timer
 '''
 
+fileconfig = open('json/config.json')
+config = json.load(fileconfig)
+
+GPIOpins = config["GPIOpins"]
+
+Fire = int(GPIOpins["Fire"])
+Relay_1 = int(GPIOpins["Relay_1"])
+Relay_2 = int(GPIOpins["Relay_2"])
+
+E1_IN_D0= int(GPIOpins["E1_IN_D0"])
+E1_IN_D1= int(GPIOpins["E1_IN_D1"])
+E1_IN_Buzz= int(GPIOpins["E1_IN_Buzz"])
+E1_IN_Led= int(GPIOpins["E1_IN_Led"])
+E1_OUT_D0= int(GPIOpins["E1_OUT_D0"])
+E1_OUT_D1= int(GPIOpins["E1_OUT_D1"])
+E1_OUT_Buzz= int(GPIOpins["E1_OUT_Buzz"])
+E1_OUT_Led= int(GPIOpins["E1_OUT_Led"])
+E1_Mag= int(GPIOpins["E1_Mag"])
+E1_Button= int(GPIOpins["E1_Button"])
+
+E2_IN_D0= int(GPIOpins["E2_IN_D0"])
+E2_IN_D1= int(GPIOpins["E2_IN_D1"])
+E2_IN_Buzz= int(GPIOpins["E2_IN_Buzz"])
+E2_IN_Led= int(GPIOpins["E2_IN_Led"])
+E2_OUT_D0= int(GPIOpins["E2_OUT_D0"])
+E2_OUT_D1= int(GPIOpins["E2_OUT_D1"])
+E2_OUT_Buzz= int(GPIOpins["E2_OUT_Buzz"])
+E2_OUT_Led= int(GPIOpins["E2_OUT_Led"])
+E2_Mag= int(GPIOpins["E2_Mag"])
+E2_Button= int(GPIOpins["E2_Button"])
+
+Gen_In_1= int(GPIOpins["Gen_In_1"])
+Gen_Out_1= int(GPIOpins["Gen_Out_1"])
+Gen_In_2= int(GPIOpins["Gen_In_2"])
+Gen_Out_2= int(GPIOpins["Gen_Out_2"])
+Gen_In_3= int(GPIOpins["Gen_In_3"])
+Gen_Out_3= int(GPIOpins["Gen_Out_3"])
+
+#initialising pi
+pi = pigpio.pi()
+
+#initialising E1
+pi.set_mode(E1_Button, pigpio.INPUT)
+pi.set_mode(E1_Mag, pigpio.INPUT) 
+pi.set_mode(E1_IN_Buzz, pigpio.OUTPUT) 
+pi.set_mode(E1_IN_Led, pigpio.OUTPUT) 
+pi.set_mode(E1_OUT_Buzz, pigpio.OUTPUT) 
+pi.set_mode(E1_OUT_Led, pigpio.OUTPUT) 
+
+#initialising E2
+pi.set_mode(E2_Button, pigpio.INPUT)
+pi.set_mode(E2_Mag, pigpio.INPUT) 
+pi.set_mode(E2_IN_Buzz, pigpio.OUTPUT) 
+pi.set_mode(E2_IN_Led, pigpio.OUTPUT) 
+pi.set_mode(E2_OUT_Buzz, pigpio.OUTPUT) 
+pi.set_mode(E2_OUT_Led, pigpio.OUTPUT) 
+
+#initialising Fire
+pi.set_mode(Fire, pigpio.INPUT)
+
+#initialising Gen, check whether IN or OUT is being used
+try:
+   Gen_In_1= int(GPIOpins["Gen_In_1"])
+   pi.set_mode(Gen_In_1, pigpio.INPUT)    
+except:
+   pass
+
+try:
+   Gen_Out_1= int(GPIOpins["Gen_Out_1"])
+   pi.set_mode(Gen_Out_1, pigpio.OUTPUT) 
+except:
+   pass
+
+try:
+   Gen_In_1= int(GPIOpins["Gen_In_2"])
+   pi.set_mode(Gen_In_2, pigpio.INPUT)    
+except:
+   pass
+
+try:
+   Gen_Out_1= int(GPIOpins["Gen_Out_2"])
+   pi.set_mode(Gen_Out_2, pigpio.OUTPUT) 
+except:pass
+
+try:
+   Gen_In_1= int(GPIOpins["Gen_In_3"])
+   pi.set_mode(Gen_In_3, pigpio.INPUT)    
+except:pass
+
+try:
+   Gen_Out_1= int(GPIOpins["Gen_Out_3"])
+   pi.set_mode(Gen_Out_1, pigpio.OUTPUT) 
+
+except:
+   pass
 
 class decoder:
 
@@ -94,71 +189,25 @@ class decoder:
 
 
 
+def activate_buzz_led() :
+   pi.write(E1_IN_Buzz,1)
+   pi.write(E1_IN_Led,1)
+   pi.write(E1_OUT_Buzz,1)
+   pi.write(E1_OUT_Led,1)
+   pi.write(E2_IN_Buzz,1)
+   pi.write(E2_IN_Led,1)
+   pi.write(E2_OUT_Buzz,1)
+   pi.write(E2_OUT_Led,1)
 
-
-
-
-Relay_1 = 27 
-Relay_2 = 13
-
-E1_R1_D0= 24
-E1_R1_D1= 25
-E1_R1_Buzz=7
-E1_R1_Led=8
-E1_R2_D0=22
-E1_R2_D1=10
-E1_R2_Buzz=11
-E1_R2_Led=9
-E1_Mag= 6
-E1_Button= 5
-
-#initialising pi
-pi = pigpio.pi()
-
-#initialising E1_Button for pushbutton1
-pi.set_mode(E1_Button, pigpio.INPUT)
-#pi.set_pull_up_down(E1_Button, pigpio.PUD_UP)
-
-#E1_Mag for mag contact
-pi.set_mode(E1_Mag, pigpio.INPUT) 
-
-#E1_R1_Buzz for Buzz
-pi.set_mode(E1_R1_Buzz, pigpio.OUTPUT) 
-
-#E1_R1_Led for Led
-pi.set_mode(E1_R1_Led, pigpio.OUTPUT) 
-
-#E1_R2_Buzz for Buzz
-pi.set_mode(E1_R2_Buzz, pigpio.OUTPUT) 
-
-#E1_R2_Led for Led
-pi.set_mode(E1_R2_Led, pigpio.OUTPUT) 
-'''
-#initialising E2_Button for pushbutton2
-pi.set_mode(E2_Button, pigpio.INPUT)
-pi.set_pull_up_down(E2_Button, pigpio.PUD_UP)
-
-#E2_Mag for mag contact
-pi.set_mode(E2_Mag, pigpio.INPUT) 
-pi.set_pull_up_down(E2_Mag, pigpio.PUD_UP)
-
-#E2_R1_Buzz for Buzz
-pi.set_mode(E2_R1_Buzz, pigpio.INPUT) 
-pi.set_pull_up_down(E2_R1_Buzz, pigpio.PUD_UP)
-
-#E2_R1_Led for Led
-pi.set_mode(E2_R1_Led, pigpio.INPUT) 
-pi.set_pull_up_down(E2_R1_Led, pigpio.PUD_UP)
-
-#E2_R1_Buzz for Buzz
-pi.set_mode(E2_R2_Buzz, pigpio.INPUT) 
-pi.set_pull_up_down(E2_R2_Buzz, pigpio.PUD_UP)
-
-#E2_R1_Led for Led
-pi.set_mode(E2_R2_Led, pigpio.INPUT) 
-pi.set_pull_up_down(E2_R2_Led, pigpio.PUD_UP)
-'''
-
+def deactivate_buzz_led() :
+   pi.write(E1_IN_Buzz,0)
+   pi.write(E1_IN_Led,0)
+   pi.write(E1_OUT_Buzz,0)
+   pi.write(E1_OUT_Led,0)
+   pi.write(E2_IN_Buzz,0)
+   pi.write(E2_IN_Led,0)
+   pi.write(E2_OUT_Buzz,0)
+   pi.write(E2_OUT_Led,0)
 
 
 
