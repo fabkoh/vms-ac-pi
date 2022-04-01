@@ -17,8 +17,8 @@
 
     "EntranceName":
     {
-        "E1":["MainDoor"],
-        "E2":["SideDoor"]
+        "E1":"MainDoor",
+        "E2":"SideDoor"
     },
     
     "GPIOpins":
@@ -41,7 +41,7 @@
       "E2_OUT_D1":"10",
       "E2_OUT_Buzz":"11",
       "E2_OUT_Led":"9",
-      "E2_Mag":"19",
+      "E2_Mag":"26",
       "E2_Button":"12",
       
       "Relay_1":"27",

@@ -29,6 +29,11 @@ def mag_and_button():
     cb6 = pi.callback(E2_Button, pigpio.RISING_EDGE, button_detects_change)
 
 def check_events_for(entrance):
+    if entrance.split("_")[0] == "E1":
+        entrancename = E1
+    if entrance.split("_")[0] == "E2":
+        entrancename = E2
+    
     if entrance == "E1_IN":
         credentials = credentials_E1_IN
         pinsvalue = pinsvalue_E1_IN
@@ -84,13 +89,13 @@ def check_events_for(entrance):
             activate_buzz_led()
             if not timeout_buzzer.status():
                 timeout_buzzer.start()
-                eventsMod.record_buzzer(entrance,"Buzzer started buzzing")
+                eventsMod.record_buzzer(entrancename,"Buzzer started buzzing")
                 api.update_server_events()
     else:
         deactivate_buzz_led()
         if timeout_buzzer.status():
             timeout_buzzer.stop()
-            eventsMod.record_buzzer(entrance,"Buzzer stopped buzzing")
+            eventsMod.record_buzzer(entrancename,"Buzzer stopped buzzing")
             api.update_server_events()
 
     time.sleep(0.1)

@@ -1,44 +1,44 @@
 [{
-    "Entrance": "MainDoor",
-    "EntranceSchedule":{ "2022-03-18": [{"starttime":"08:00","endtime":"09:00"}]},
+    "Entrance": "SideDoor",
+    "EntranceSchedule":{ "2022-04-01": [{"starttime":"08:00","endtime":"19:00"}]},
     "EntranceDetails": {
-      "Antipassback":"Yes",
+      "Antipassback":"No",
       "Zone": "ZoneId",
       "AuthenticationDevices": {
         "Device1": {
-          "Direction": "In",
+          "Direction": "IN",
           "AuthMethod": [
             {
               "Method": "Card,Pin",
               "Schedule": {
                 "2022-03-14":[{"starttime":"18:00","endtime":"23:00"}],
-                "2022-03-16": [{"starttime":"18:00","endtime":"23:00"}]
+                "2022-04-01": [{"starttime":"18:00","endtime":"23:00"}]
               }
             },
             {
               "Method": "Card,Pin",
               "Schedule": {
                 "2022-03-14": [{"starttime":"09:00","endtime":"18:00"}],
-                "2022-03-29": [{"starttime":"09:00","endtime":"23:59"}]
+                "2022-04-01": [{"starttime":"09:00","endtime":"23:59"}]
               }
             }
           ]
         },
         "Device2": {
-          "Direction": "Out",
+          "Direction": "OUT",
           "AuthMethod": [
             {
               "Method": "Card",
               "Schedule": {
                 "2022-03-14":[{"starttime":"18:00","endtime":"23:00"}],
-                "2022-03-29": [{"starttime":"09:00","endtime":"23:59"}]
+                "2022-04-01": [{"starttime":"09:00","endtime":"23:59"}]
               }
             },
             {
               "Method": "Card",
               "Schedule": {
                 "2022-03-14":{"starttime":"18:00","endtime":"23:00"},
-                "2022-03-18": {"starttime":"09:00","endtime":"18:00"}
+                "2022-04-01": {"starttime":"09:00","endtime":"18:00"}
               }
             }
           ]
@@ -75,7 +75,7 @@
             ],
             "Schedule": {
               "2022-03-14":[{"starttime":"18:00","endtime":"23:00"}],
-              "2022-03-29": [{"starttime":"09:00","endtime":"23:59"}]
+              "2022-04-01": [{"starttime":"09:00","endtime":"23:59"}]
             }
           }
         },
@@ -109,7 +109,7 @@
             ],
             "Schedule": {
               "2022-03-17":{"starttime":"18:00","endtime":"23:00"},
-              "2022-03-18": {"starttime":"09:00","endtime":"18:00"}
+              "2022-04-01": {"starttime":"09:00","endtime":"18:00"}
             }
           }
         },
@@ -143,7 +143,7 @@
             ],
             "Schedule": {
               "2022-03-14":{"starttime":"18:00","endtime":"23:00"},
-              "2022-03-18": {"starttime":"09:00","endtime":"18:00"}
+              "2022-04-01": {"starttime":"09:00","endtime":"18:00"}
             }
           }
         }
@@ -160,7 +160,7 @@
             },
             "Schedule": {
               "2022-03-14":{"starttime":"18:00","endtime":"23:00"},
-              "2022-03-18": {"starttime":"09:00","endtime":"18:00"}
+              "2022-04-01": {"starttime":"09:00","endtime":"18:00"}
             }
           }
         },
@@ -183,13 +183,13 @@
   },
 
 {
-  "Entrance": "SideDoor",
+  "Entrance": "MainDoor",
   "EntranceSchedule":{ "2022-03-18": {"starttime":"08:00","endtime":"09:00"}},
   "EntranceDetails": {
     "Zone": "ZoneId",
     "AuthenticationDevices": {
       "Device1": {
-        "Direction": "In",
+        "Direction": "IN",
         "AuthMethod": [
           {
             "Method": "Fingerprint,Card",
@@ -208,7 +208,7 @@
         ]
       },
       "Device2": {
-        "Direction": "Out",
+        "Direction": "OUT",
         "AuthMethod": [
           {
             "Method": "Fingerprint",

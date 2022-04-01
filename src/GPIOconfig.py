@@ -41,13 +41,6 @@ E2_OUT_Led= int(GPIOpins["E2_OUT_Led"])
 E2_Mag= int(GPIOpins["E2_Mag"])
 E2_Button= int(GPIOpins["E2_Button"])
 
-Gen_In_1= int(GPIOpins["Gen_In_1"])
-Gen_Out_1= int(GPIOpins["Gen_Out_1"])
-Gen_In_2= int(GPIOpins["Gen_In_2"])
-Gen_Out_2= int(GPIOpins["Gen_Out_2"])
-Gen_In_3= int(GPIOpins["Gen_In_3"])
-Gen_Out_3= int(GPIOpins["Gen_Out_3"])
-
 #initialising pi
 pi = pigpio.pi()
 

@@ -57,6 +57,7 @@ def deActivateRelay(relayPin, activateLevel):
         setRelayPinHigh(relayPin)
     return
 
+
 def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     for i in range(toggleCount):
         activateRelay(relayPin, activateLevel)
@@ -76,11 +77,15 @@ def trigger_relay_one():
     setupRelayPin(Relay_1)
     
     print(" EM 1 unlocked at " + str(datetime.now()))
-    toggleRelay(relayPin = Relay_1, activateLevel = 'High', \
-                activateMilliSeconds = 3000, deActivateMilliSeconds = 1000, \
+    try:
+        toggleRelay(relayPin = Relay_1, activateLevel = 'High', \
+                activateMilliSeconds = 5000, deActivateMilliSeconds = 1000, \
                 toggleCount = 1)
+        cleanupGpio()
+    except RuntimeError:
+        print("Entrance is still opened")
 
-    cleanupGpio()
+    
     return
 
 @multitasking.task
@@ -90,11 +95,13 @@ def trigger_relay_two():
     setupRelayPin(Relay_2)
     
     print('  EM 2 unlocked')
-    toggleRelay(relayPin = Relay_2, activateLevel = 'High', \
-                activateMilliSeconds = 3000, deActivateMilliSeconds = 1000, \
+    try:
+        toggleRelay(relayPin = Relay_2, activateLevel = 'High', \
+                activateMilliSeconds = 5000, deActivateMilliSeconds = 1000, \
                 toggleCount = 1)
-
-    cleanupGpio()
+        cleanupGpio()
+    except RuntimeError:
+        print("Entrance is still opened")
     return
 
 

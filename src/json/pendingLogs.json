@@ -1,9 +1,0 @@
-[
-    {
-        "authmethod": null,
-        "direction": "Out",
-        "entrance": "E1R2",
-        "eventActionType": "unauthenticated_scans",
-        "eventTime": "2022-03-30 11:21:27"
-    }
-]

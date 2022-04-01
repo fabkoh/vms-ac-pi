@@ -1,4 +1,4 @@
-from asyncio.windows_events import NULL
+
 from datetime import datetime, date
 from api import update_external_zone_status
 import relay
@@ -186,7 +186,7 @@ def reader_detects_bits(bits, value,entrance):
     # reader_currently_used = entrance_direction
     if bits == 4:
         if len(credentials) > 0: #unable to type pin before detecting wiegand values
-            pincollector(pinsvalue,value) 
+            pincollector(credentials,pinsvalue,value,timeout_cred) 
 
     if bits == 26:
         credcollector(credentials,str(value),timeout_cred)
@@ -232,7 +232,7 @@ def reader_detects_bits(bits, value,entrance):
                     api.update_server_events()
                 else:
                     print("Denied, antipassback")
-                    eventsMod.record_antipassback(authtype,entrance,entrance_direction)
+                    eventsMod.record_antipassback(authtype,entrancename,entrance_direction)
                     api.update_server_events()
             else:
                 print("Authenticated")
@@ -246,7 +246,7 @@ def reader_detects_bits(bits, value,entrance):
                 api.update_server_events()
         else:
             print("Denied")
-            eventsMod.record_unauth_scans(authtype,entrance,entrance_direction)
+            eventsMod.record_unauth_scans(authtype,entrancename,entrance_direction)
             api.update_server_events()
 
 
@@ -259,7 +259,7 @@ def verify_authtype(entrance,device):
             for devicenumber,devicedetails in entranceslist["EntranceDetails"]["AuthenticationDevices"].items():
                 if devicedetails["Direction"] == device:
                     for methoddict in devicedetails["AuthMethod"]:
-                        # check which authtype is activated for that particular schedule
+    # check which authtype is activated for that particular schedule
                         if verify_datetime(methoddict["Schedule"]):
                             return methoddict["Method"]
 
@@ -318,14 +318,15 @@ def credcollector(credentials,cred,timeout_cred):
     print(credentials)
 
 # takes in pin values and add to pinsvalue list 
-def pincollector(pinsvalue,pin):
+def pincollector(credentials,pinsvalue,pin,timeout_cred):
+    
     if pin >= 0 and pin <= 9:
         pinsvalue.append(str(pin))
     elif pin == 10: #               * means CLEAR pinvalue list
         del pinsvalue [:]
         
     elif pin == 11: #               # means ADD pinvalue string to credentials and CLEAR list
-        credcollector("".join(pinsvalue))
+        credcollector(credentials,"".join(pinsvalue),timeout_cred)
         del pinsvalue [:]    
 
     print(pinsvalue)
@@ -346,10 +347,14 @@ def verify_credentials(num,credentials,persondetails):
             return False
     
     elif len(credentials) == 2 and num == 2:
-        if credentials[1] in persondetails["diffpassword"] and verify_datetime(persondetails["Schedule"]):
-            del credentials [:]
-            return True
-        else:
+        try:
+            if credentials[1] in persondetails["diffpassword"] and verify_datetime(persondetails["Schedule"]):
+                del credentials [:]
+                return True
+            else:
+                del credentials [:]
+                return False
+        except:
             del credentials [:]
             return False
 
@@ -372,7 +377,7 @@ def verify_zone_status(entrance,entrancestatus,persondetails):
         except:
             checkdata ={entrance[:2]:[]}
 
-        if entrancestatus == "In": #check if person inside 
+        if entrancestatus == "IN": #check if person inside 
             try:
                 
                 for person in checkdata[entrance[:2]]:
@@ -384,7 +389,7 @@ def verify_zone_status(entrance,entrancestatus,persondetails):
                 pass
             return True
         
-        elif entrancestatus == "Out":
+        elif entrancestatus == "OUT":
             try:
                 for person in checkdata[entrance[:2]]:
                     name = person["Name"]
@@ -472,7 +477,6 @@ def mag_detects_falling(gpio, level, tick):
         print(f"{E1} is closed at " + str(datetime.now()))
         mag_E1_allowed_to_open = False
         eventsMod.record_mag_changes(E1,"closed")
-        eventsMod.record_mag_changes(E1,"WARNING : opened without authentication")
         api.update_server_events()
 
     if gpio == E2_Mag:
@@ -480,7 +484,6 @@ def mag_detects_falling(gpio, level, tick):
         print(f"{E2} is closed at " + str(datetime.now()))
         mag_E2_allowed_to_open = False
         eventsMod.record_mag_changes(E2,"closed")
-        eventsMod.record_mag_changes(E2,"WARNING : opened without authentication")
         api.update_server_events()
 
 
