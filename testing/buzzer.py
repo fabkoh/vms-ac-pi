@@ -1,31 +1,42 @@
+import os
 
-import pigpio
+'''
+interface wlan0
+static ip_address=192.168.1.120/24
+static routers=192.168.1.254
+static domain_name_servers=192.168.1.254
+'''
 
-pi = pigpio.pi()
-fileconfig = open('json/config.json')
-config = json.load(fileconfig)
 
-GPIOpins = config["GPIOpins"]
+def change_static_ip(ip_address, routers, dns):
+    conf_file = '/etc/dhcpcd.conf'
+    try:            
+        # Sanitize/validate params above
+        with open(conf_file, 'r') as file:
+            data = file.readlines()
 
-E1_IN_D0= int(GPIOpins["E1_IN_D0"])
-E1_IN_D1= int(GPIOpins["E1_IN_D1"])
+        # Find if config exists
+        ethFound = next((x for x in data if 'interface eth0' in x), None)
 
-E1_OUT_D0= int(GPIOpins["E1_OUT_D0"])
-E1_OUT_D1= int(GPIOpins["E1_OUT_D1"])
+        if ethFound:
+            ethIndex = data.index(ethFound)
+            if data[ethIndex].startswith('#'):
+                data[ethIndex] = ('interface eth0\n') # commented out by default, make active
 
-E2_IN_D0= int(GPIOpins["E2_IN_D0"])
-E2_IN_D1= int(GPIOpins["E2_IN_D1"])
+        # If config is found, use index to edit the lines you need ( the next 3)
+        if ethIndex:
+            data[ethIndex+1] = (f'static ip_address={ip_address}/24\n')
+            data[ethIndex+2] = (f'static routers={routers}\n')
+            data[ethIndex+3] = (f'static domain_name_servers={dns}\n')
 
-E2_OUT_D0= int(GPIOpins["E2_OUT_D0"])
-E2_OUT_D1= int(GPIOpins["E2_OUT_D1"])
+        with open(conf_file, 'w') as file:
+            file.writelines( data )
 
-def test_for_connection(D0,D1):
-    if pi.read(D0) == 1 and pi.read(D1) == 1:
-        return True
-    else:
-        return False
-    
-print(test_for_connection(E1_IN_D0,E1_IN_D1))
-print(test_for_connection(E2_IN_D0,E2_IN_D1))
-print(test_for_connection(E1_OUT_D0,E1_OUT_D1))
-print(test_for_connection(E2_OUT_D0,E2_OUT_D1))
+    except Exception as ex:
+        logging.exception("IP changing error: %s", ex)
+    finally:
+        pass
+
+change_static_ip("192.168.1.50", "192.168.1.254", "8.8.8.8")
+os.system('sudo ifconfig eth0 down')
+os.system('sudo ifconfig eth0 up')
