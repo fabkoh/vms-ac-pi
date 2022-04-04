@@ -1,9 +1,10 @@
-from dateutil.rrule import *
-from datetime import *
-from dateutil.parser import *
+from datetime import datetime
 
-start_date = datetime(2014, 12, 31)
-#print(list(rrule(freq=MONTHLY, count=4, dtstart=start_date)))
-cal = (list(rrule(DAILY,dtstart=parse("19970902T090000"),until=parse("19971224T000000"))))
-for i in range(len(cal)):
-    print(cal[i])
+# datetime object containing current date and time
+now = datetime.now()
+ 
+print("now =", now)
+
+# dd/mm/YY H:M:S
+dt_string = now.strftime("%d-%m-%Y %H:%M:%S")
+print(type(dt_string))

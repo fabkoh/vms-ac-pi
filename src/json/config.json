@@ -3,7 +3,14 @@
       "controllerName":"", 
       "controllerIp":"", 
       "controllerMAC":"",
-      "controllerSerialNo":""
+      "controllerSerialNo":"",
+      "readersConnection":{
+                          "E1_IN":"Connected",
+                          "E1_OUT":"Connected",
+                          "E2_IN":"Connected",
+                          "E2_OUT":"Connected",
+                          "dateAndTime":""
+                          }
       }
     ],
     "ZoneStatus":
@@ -12,7 +19,6 @@
                           {"controllerId":"222222","Entrance":"E2"}],
       "controllersInZoneE2":[{}]
     },
-
 
 
     "EntranceName":
