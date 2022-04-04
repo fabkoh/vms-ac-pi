@@ -77,23 +77,23 @@ except:
    pass
 
 try:
-   Gen_In_1= int(GPIOpins["Gen_In_2"])
+   Gen_In_2= int(GPIOpins["Gen_In_2"])
    pi.set_mode(Gen_In_2, pigpio.INPUT)    
 except:
    pass
 
 try:
-   Gen_Out_1= int(GPIOpins["Gen_Out_2"])
+   Gen_Out_2= int(GPIOpins["Gen_Out_2"])
    pi.set_mode(Gen_Out_2, pigpio.OUTPUT) 
 except:pass
 
 try:
-   Gen_In_1= int(GPIOpins["Gen_In_3"])
+   Gen_In_3= int(GPIOpins["Gen_In_3"])
    pi.set_mode(Gen_In_3, pigpio.INPUT)    
 except:pass
 
 try:
-   Gen_Out_1= int(GPIOpins["Gen_Out_3"])
+   Gen_Out_3= int(GPIOpins["Gen_Out_3"])
    pi.set_mode(Gen_Out_1, pigpio.OUTPUT) 
 
 except:

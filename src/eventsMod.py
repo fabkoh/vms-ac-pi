@@ -6,8 +6,13 @@ from datetime import datetime
     1. record_auth and record_button to record transLogs in archivedTrans.json and pendingTrans.json
 '''
 
+fileconfig = open('json/config.json')
+config = json.load(fileconfig)
 
-MAX_JSON_LENGTH = 10 # max length before first half of jsons get deleted 
+try:
+    MAX_JSON_LENGTH = int(config["archivedMAXlength"]) # max length before first half of jsons get deleted 
+except:
+    MAX_JSON_LENGTH = 10
 
 
 '''

@@ -1,48 +1,47 @@
+import flask
+import healthcheck
 import json
-import requests
-import os
-
-def update_server_events():
-    url = 'http://192.168.1.250:8082/unicon/event'
-
-    file = open("./json/pendingLogs.json") 
-    data = json.load(file)
-    
-    headers = {'Content-type': 'application/json'}
-    r = requests.post(url, data=json.dumps(data), headers=headers,verify=False)
-    print(r)
-    print(r.status_code)
-
-    if r.status_code == 201 or r.status_code == 200:
-        print("SUCCESS")
-        fileclear = open('json/pendingLogs.json', 'w')
-        fileclear.close()
-
-#dictionary = {"Name": "Bryan","AccessGroup": "ISS"}
-#entrance = E1/ E2
-
-def update_external_zone_status(controllerId, entrance, dictionary,direction):
-    while True:
-        break
-        url = 'http://127.0.0.1:5000/status'
-
-        data = {"controllerId": controllerId,
-               entrance: [dictionary],
-               "Direction":direction}
-
-        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-        r = requests.post(url, data=json.dumps(data), headers=headers)
-
-        print(r.status_code)
-
-        if r.status_code == 200:
-            break
-
-        else:
-            break
-        
+from werkzeug.exceptions import BadRequest
 
 
-#update_server_events()
-#update_external_zone_status("123456","E1",{"Name": "YongNing","AccessGroup": "ISS"},"In")
-#update_external_zone_status("123456","E1",{"Name": "YongNing","AccessGroup": "ISS"},"Out")
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+
+
+#get triggers healthcheck and send updated config file to backend 
+#post checks for ip static ( set ip to static ) and Name, id, entranceName, pins, timeout, archivedmaxlength 
+@app.route('/config', methods=['GET','POST'])
+def config():
+    if flask.request.method == 'GET':
+        try:
+            print("here")
+            healthcheck.main()
+            return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+        except:
+            raise BadRequest('Error executing healthcheck')
+
+    if flask.request.method == 'POST':
+        content = flask.request.json
+        try:
+            file = "json/config.json"
+            outfile = open(file)
+            data = json.load(outfile)
+            controllerConfig = data["controllerConfig"]
+            if content["controllerSerialNo"] == controllerConfig["controllerSerialNo"] and content["controllerMAC"] == controllerConfig["controllerMAC"]:
+                with open(file,"w+") as writefile:
+                    json.dump(content,writefile,indent=4) 
+                    outfile.close()
+            return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+        except:
+            raise BadRequest('Error updating config.json')
+
+
+
+@app.route('/', methods=['GET'])
+def home():
+    return "<h1>Distant Reading Archive</h1><p>This site is a prototype API for distant reading of science fiction novels.</p>"
+
+
+
+
+app.run()

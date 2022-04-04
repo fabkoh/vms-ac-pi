@@ -90,13 +90,13 @@ def check_events_for(entrance):
             if not timeout_buzzer.status():
                 timeout_buzzer.start()
                 eventsMod.record_buzzer(entrancename,"Buzzer started buzzing")
-                api.update_server_events()
+                updateserver.update_server_events()
     else:
         deactivate_buzz_led()
         if timeout_buzzer.status():
             timeout_buzzer.stop()
             eventsMod.record_buzzer(entrancename,"Buzzer stopped buzzing")
-            api.update_server_events()
+            updateserver.update_server_events()
 
     time.sleep(0.1)
 

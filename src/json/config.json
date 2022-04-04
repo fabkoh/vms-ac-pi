@@ -71,5 +71,7 @@
         "MAG_TIMEOUT_E2": "10",
         "BUZZER_TIMEOUT_E1": "5",
         "BUZZER_TIMEOUT_E2": "5"
-    }
+    },
+
+    "archivedMAXlength":"30"
 }

@@ -1,11 +1,11 @@
 
 from datetime import datetime, date
-from api import update_external_zone_status
+from updateserver import update_external_zone_status
 import relay
 import eventsMod
 import json 
 import time
-import api
+import updateserver
 
 
 '''
@@ -227,7 +227,7 @@ def reader_detects_bits(bits, value,entrance):
             del pinsvalue[:]
             del credentials[:]       
             eventsMod.record_masterpassword_used(authtype,entrancename,entrance_direction)
-            api.update_server_events()
+            updateserver.update_server_events()
         
     '''
     if value == 36443438 or value == 36443419:
@@ -251,11 +251,11 @@ def reader_detects_bits(bits, value,entrance):
                     
                     update_zone_status(entrance,entrance_direction,persondetails)
                     eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrance_direction)
-                    api.update_server_events()
+                    updateserver.update_server_events()
                 else:
                     print("Denied, antipassback")
                     eventsMod.record_antipassback(authtype,entrancename,entrance_direction)
-                    api.update_server_events()
+                    updateserver.update_server_events()
             else:
                 print("Authenticated")
                 if entrance.split("_")[0] == "E1":
@@ -265,11 +265,11 @@ def reader_detects_bits(bits, value,entrance):
                     mag_E2_allowed_to_open = True
                     relay.trigger_relay_two()
                 eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrance_direction)
-                api.update_server_events()
+                updateserver.update_server_events()
         else:
             print("Denied")
             eventsMod.record_unauth_scans(authtype,entrancename,entrance_direction)
-            api.update_server_events()
+            updateserver.update_server_events()
 
 
 def check_for_masterpassword(credentials,entrancename,entrance_direction):
@@ -446,7 +446,7 @@ def update_zone_status(entrance,entrancestatus,persondetails):
         controllerId = config["controllerConfig"][0]["controllerId"]
         dictionary = {"Name":persondetails["Name"],"AccessGroup": persondetails["AccessGroup"]}
         with open(filename,"w+") as outfile:
-            api.update_external_zone_status(controllerId, entrance[:2],dictionary,entrancestatus)  
+            updateserver.update_external_zone_status(controllerId, entrance[:2],dictionary,entrancestatus)  
 
             if entrancestatus == "In":   
                 checkdata[entrance[:2]].append(dictionary)
@@ -486,7 +486,7 @@ def mag_detects_rising(gpio, level, tick):
             eventsMod.record_mag_changes(E1,"opened")
         else:
             eventsMod.record_mag_changes(E1,"WARNING : opened without authentication")
-        api.update_server_events()
+        updateserver.update_server_events()
 
     if gpio == E2_Mag:
         timeout_mag_E2.start()
@@ -495,7 +495,7 @@ def mag_detects_rising(gpio, level, tick):
             eventsMod.record_mag_changes(E2,"opened")
         else:
             eventsMod.record_mag_changes(E2,"WARNING : opened without authentication")
-        api.update_server_events()
+        updateserver.update_server_events()
 
     
 def mag_detects_falling(gpio, level, tick):
@@ -507,14 +507,14 @@ def mag_detects_falling(gpio, level, tick):
         print(f"{E1} is closed at " + str(datetime.now()))
         mag_E1_allowed_to_open = False
         eventsMod.record_mag_changes(E1,"closed")
-        api.update_server_events()
+        updateserver.update_server_events()
 
     if gpio == E2_Mag:
         timeout_mag_E2.stop()
         print(f"{E2} is closed at " + str(datetime.now()))
         mag_E2_allowed_to_open = False
         eventsMod.record_mag_changes(E2,"closed")
-        api.update_server_events()
+        updateserver.update_server_events()
 
 
 def button_detects_change(gpio, level, tick):
@@ -526,14 +526,14 @@ def button_detects_change(gpio, level, tick):
         mag_E1_allowed_to_open = True
         relay.trigger_relay_one()
         eventsMod.record_button_pressed(E1,"Security Guard Button")
-        api.update_server_events()
+        updateserver.update_server_events()
 
     if gpio == E2_Button:
         print(f"{E2} push button is pressed at " + str(datetime.now()))
         mag_E2_allowed_to_open = True
         relay.trigger_relay_two()
         eventsMod.record_button_pressed(E2,"Security Guard Button")
-        api.update_server_events()
+        updateserver.update_server_events()
 
 
 
