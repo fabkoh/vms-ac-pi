@@ -1,0 +1,9 @@
+[
+    {
+        "authmethod": null,
+        "direction": "IN",
+        "entrance": "SideDoor",
+        "eventActionType": "unauthenticated_scans",
+        "eventTime": "2022-04-04 05:43:21"
+    }
+]
