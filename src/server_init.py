@@ -5,6 +5,17 @@ import socket
 import subprocess
 #import psutil
 import os
+import netifaces
+
+
+def get_default_gateway_windows():
+    """Use netifaces module to get the default gateway."""
+    try:
+        import netifaces
+        gws = netifaces.gateways()
+        return gws['default'][netifaces.AF_INET][0]
+    except:
+        return None
 
 hostname = socket.gethostname()   
 
@@ -48,7 +59,7 @@ def get_netmask():
         #print('---')
 def get_gateway_ip():
         
-    return system_call("route | grep eth0 | grep default | awk '{print $2}'")
+    return system_call("ip r | grep default")
 
 
 
@@ -59,7 +70,7 @@ def get_gateway_ip():
 print("Hostname:" + hostname)
 processedIP = get_host_ip().split('.',1)[0] + "." + get_host_ip().split('.',2)[1] + "."+get_host_ip().split('.',3)[2] +".250"
 print("host IP: " + get_host_ip())
-print ("Gateway IP: " + get_gateway_ip().decode())
+print(get_default_gateway_windows())
 print ("DNS: " + socket.getfqdn())
 print ("Serial Num: " + get_serialnum().decode())
 #print ("get_netmask():" + get_netmask())
@@ -75,7 +86,7 @@ def config_IP():
     #to do:
     #get dns and configure dns as well
     
-config_IP()
+#config_IP()
 stat = os.system('systemctl is-active startup.service')
 if (stat) == 0:
    print ("starting Jar")

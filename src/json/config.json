@@ -1,6 +1,6 @@
 {
     "controllerConfig": {
-        "controllerId": "123456",
+        "controllerId": "2",
         "controllerName": "",
         "controllerIp": "192.168.1.46",
         "controllerIpStatic": "",
@@ -11,7 +11,7 @@
             "E1_OUT": "",
             "E2_IN": "Connected",
             "E2_OUT": "Connected",
-            "dateAndTime": "04-04-2022 09:54:27"
+            "dateAndTime": "04-04-2022 13:30:11"
         }
     },
     "ZoneStatus": {
@@ -72,6 +72,5 @@
         "BUZZER_TIMEOUT_E1": "5",
         "BUZZER_TIMEOUT_E2": "5"
     },
-
-    "archivedMAXlength":"30"
+    "archivedMAXlength": "30"
 }

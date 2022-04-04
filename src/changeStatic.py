@@ -1,4 +1,5 @@
 import os
+import netifaces
 
 '''
 interface wlan0
@@ -37,6 +38,20 @@ def change_static_ip(ip_address, routers, dns):
     finally:
         pass
 
-change_static_ip("192.168.1.50", "192.168.1.254", "8.8.8.8")
+
+
+
+def get_default_gateway_windows():
+    """Use netifaces module to get the default gateway."""
+    try:
+        import netifaces
+        gws = netifaces.gateways()
+        return gws['default'][netifaces.AF_INET][0]
+    except:
+        return None
+    
+'''
+change_static_ip("192.168.1.50", get_default_gateway_windows(), "8.8.8.8")
 os.system('sudo ifconfig eth0 down')
+'''
 os.system('sudo ifconfig eth0 up')
