@@ -1,0 +1,17 @@
+[
+    {
+        "EventTrigger":["GEN_IN_1","ALWAYS_TRUE","ALWAYS_TRUE"],
+        "EventAction":["GEN_OUT_4"]
+    },
+
+    {
+        "EventTrigger":["magcontactopened","buzzer","ALWAYS_TRUE"],
+        "EventAction":["sendEmail"]
+    },
+
+    {
+        "EventTrigger":["GEN_IN_1","GEN_IN_2","ALWAYS_TRUE"],
+        "EventAction":["GEN_OUT_3"]
+    }
+
+]
