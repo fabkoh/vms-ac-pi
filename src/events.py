@@ -1,6 +1,5 @@
 
 from datetime import datetime, date
-from updateserver import update_external_zone_status
 import relay
 import eventsMod
 import json 

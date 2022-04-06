@@ -52,27 +52,6 @@ def main():
 
         return hostIP
 
-
-
-
-    def update_ipaddress():
-        url = 'http://192.168.1.250:8082/unicon/config'
-        file = "json/config.json"
-        with open(file,"r+") as outfile:
-            try:
-                data = json.load(outfile)
-            except:
-                data = []
-        
-        headers = {'Content-type': 'application/json'}
-        r = requests.post(url, data=json.dumps(data), headers=headers,verify=False)
-        print(r)
-        print(r.status_code)
-
-        if r.status_code == 201 or r.status_code == 200:
-            print("SUCCESS")
-
-
     pi = pigpio.pi()
     fileconfig = open('json/config.json')
     config = json.load(fileconfig)
@@ -140,6 +119,25 @@ def main():
         outfile.close()
 
 
+
+def update_ipaddress():
+        url = 'http://192.168.1.250:8082/unicon/config'
+        file = "json/config.json"
+        with open(file,"r+") as outfile:
+            try:
+                data = json.load(outfile)
+            except:
+                data = []
+        
+        headers = {'Content-type': 'application/json'}
+        r = requests.post(url, data=json.dumps(data), headers=headers,verify=False)
+        print(r)
+        print(r.status_code)
+
+        if r.status_code == 201 or r.status_code == 200:
+            print("SUCCESS")
+            
+def update_server_config():
     while True:
         try:
             update_ipaddress()
@@ -148,5 +146,6 @@ def main():
             time.sleep(0.1)
 
 #main()
+#update_server_config()
 
 

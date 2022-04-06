@@ -25,8 +25,8 @@ def mag_and_button():
     cb2 = pi.callback(E1_Mag, pigpio.FALLING_EDGE, mag_detects_falling)
     cb3 = pi.callback(E2_Mag, pigpio.RISING_EDGE, mag_detects_rising)
     cb4 = pi.callback(E2_Mag, pigpio.FALLING_EDGE, mag_detects_falling)
-    cb5 = pi.callback(E1_Button, pigpio.RISING_EDGE, button_detects_change)
-    cb6 = pi.callback(E2_Button, pigpio.RISING_EDGE, button_detects_change)
+    cb5 = pi.callback(E1_Button, pigpio.FALLING_EDGE, button_detects_change)
+    cb6 = pi.callback(E2_Button, pigpio.FALLING_EDGE, button_detects_change)
 
 def check_events_for(entrance):
     if entrance.split("_")[0] == "E1":

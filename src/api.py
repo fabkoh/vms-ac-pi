@@ -17,6 +17,7 @@ def config():
     if flask.request.method == 'GET':
         try:
             healthcheck.main()
+            healthcheck.update_server_config()
             return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
         except:
             raise BadRequest('Error executing healthcheck')
@@ -25,6 +26,7 @@ def config():
         content = flask.request.json
         config = content["controllerConfig"]
         try:
+            healthcheck.main()
             file = "json/config.json"
             outfile = open(file)
             data = json.load(outfile)
@@ -38,12 +40,13 @@ def config():
                 changeStatic.change_static_ip(config["controllerIp"],changeStatic.get_default_gateway_windows(),"8.8.8.8")
                 os.system('sudo ifconfig eth0 down')
                 os.system('sudo ifconfig eth0 up')
+                healthcheck.update_server_config()
             return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
         except:
             raise BadRequest('Error updating config.json')
 
 
-
+#update current file and  ( NOT DONE : restart program )
 @app.route('/credOccur', methods=['POST'])
 def credOccur():
     if flask.request.method == 'POST':
