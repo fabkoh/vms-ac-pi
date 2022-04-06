@@ -36,11 +36,66 @@ for eventActionTriggers in data:
     exec(f"if {trigger[0]} and {trigger[1]} and {trigger[2]}: {action}_function()")
 
 
-# how to factor in timing ?
-# need to write all possible functions 
+
+
+# need to write all possible output 
+# write dynamic input functions to check if true or false
+# single action trigger, unless include timer 
+# multiple actions can be triggered 
 # need to reset everything back to False
-# max number of event triggers and event action 
-# huge while loop running 
 
 
+# all events will be sent to eventslog
+# SCHEDULE 
+# multiple unauth scans within a period of time ( use a script to monitor event logs )
+
+
+''' 
+POSSIBLE EVENTTRIGGER
+
+( WITHOUT TIMER ) SINGLE
+----------------------------------------------
+Authenticated credential scan 
+
+Un-authenticated credential scan 
+
+Exit push button pressed
+
+Door (magnetic contact) closed 
+
+Door (magnetic contact) opened without authentication 
+
+Door (magnetic contact) opened with authentication 
+
+Door (magnetic contact) remains closed after authenticated cred scan  ??????????????????????????? push button ?
+
+External alarm (coming into our in/out alarm pin) 
+
+General input pins 
+
+General output pins ?????????????????????????????????????
+
+( TIMER ) ALLOW FOR MULTIPLE
+----------------------------------------------
+Magnetic contact opened 
+
+Reader buzzer & LED ( buzz stop buzz stop / LED flash ) ????????????????????
+
+'''
+
+
+
+
+'''
+POSSIBLE EVENTACTION
+-----------------------------------------------------------------
+External alarm (coming into our in/out alarm pin) 
+
+General output pins (both local and on another controller node) ???????????????????????
+
+Relay pin
+
+Notifications (see notification service)
+
+'''
 

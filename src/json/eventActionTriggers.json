@@ -5,7 +5,7 @@
     },
 
     {
-        "EventTrigger":["magcontactopened","buzzer","ALWAYS_TRUE"],
+        "EventTrigger":["magcontactopened,10","buzzer","ALWAYS_TRUE"],
         "EventAction":["sendEmail"]
     },
 
