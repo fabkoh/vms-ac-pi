@@ -87,14 +87,17 @@ def check_events_for(entrance):
     if timeout_mag.status():
         if timeout_mag.check(MAG_TIMEOUT):
             activate_buzz_led()
+            
             if not timeout_buzzer.status():
                 timeout_buzzer.start()
+                print("Buzzer started buzzing")
                 eventsMod.record_buzzer(entrancename,"Buzzer started buzzing")
                 updateserver.update_server_events()
     else:
         deactivate_buzz_led()
         if timeout_buzzer.status():
             timeout_buzzer.stop()
+            print("Buzzer stopped buzzing")
             eventsMod.record_buzzer(entrancename,"Buzzer stopped buzzing")
             updateserver.update_server_events()
 
