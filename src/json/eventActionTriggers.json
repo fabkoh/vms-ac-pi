@@ -1,17 +1,32 @@
 [
     {
-        "EventTrigger":["GEN_IN_1","ALWAYS_TRUE","ALWAYS_TRUE"],
-        "EventAction":["GEN_OUT_4"]
+        "EventTrigger":["GEN_IN_1"],
+        "EventAction":["GEN_OUT_4","GEN_OUT_2"],
+        "ExternalControllerAction":
+                                    [{"controllerId":"1",
+                                        "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
+
+                                        {"controllerId":"2",
+                                        "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
+                                    ]
     },
 
     {
-        "EventTrigger":["magcontactopened,10","buzzer","ALWAYS_TRUE"],
-        "EventAction":["sendEmail"]
+        "EventTrigger":[["timeout_buzzer","0.5"],"GEN_IN_1"],
+        "EventAction":["sendEmail","sendSMS"],
+        "ExternalControllerAction":
+                                    [{"controllerId":"1",
+                                        "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
+
+                                        {"controllerId":"2",
+                                        "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
+                                    ]
     },
 
     {
-        "EventTrigger":["GEN_IN_1","GEN_IN_2","ALWAYS_TRUE"],
-        "EventAction":["GEN_OUT_3"]
+        "EventTrigger":["GEN_IN_1","GEN_IN_2"],
+        "EventAction":["GEN_OUT_3"],
+        "ExternalControllerAction":[]
     }
 
 ]

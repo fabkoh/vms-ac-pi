@@ -42,6 +42,10 @@ class Timer:
     
     def check(self,TIME):
         """return True if current_elapsed_time exceeds TIME"""
+        if self._start_time is None:
+            print("Timer is not running. Use .start() to start it")
+            return 
+            
         current_elapsed_time = time.perf_counter() - self._start_time
         if current_elapsed_time > TIME:
             return True
