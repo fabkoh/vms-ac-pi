@@ -11,46 +11,46 @@ import json
 import requests
 import time
 
+hostname = socket.gethostname()   
+
+
+def system_call(command):
+    p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
+    return p.stdout.read()
+
+def get_serialnum():
+    return system_call("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2")
+
+def get_mac():
+    return system_call("cat /sys/class/net/eth0/address")
+
+def get_host_ip(hostIP=None):
+    if hostIP is None or hostIP == 'auto':
+        hostIP = 'ip'
+
+    if hostIP == 'dns':
+        hostIP = socket.getfqdn()
+    elif hostIP == 'ip':
+        from socket import gaierror
+        try:
+            hostIP = socket.gethostbyname(socket.getfqdn())
+        except gaierror:
+            logger.warn('gethostbyname(socket.getfqdn()) failed... trying on hostname()')
+            hostIP = socket.gethostbyname(socket.gethostname())
+        if hostIP.startswith("127."):
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            # doesn't have to be reachable
+            while True:
+                try:
+                    s.connect(('10.255.255.255', 1))
+                    hostIP = s.getsockname()[0]
+                    break
+                except:
+                    time.sleep(0.1)
+
+    return hostIP
+
 def main():
-
-    hostname = socket.gethostname()   
-
-
-    def system_call(command):
-        p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
-        return p.stdout.read()
-
-    def get_serialnum():
-        return system_call("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2")
-
-    def get_mac():
-        return system_call("cat /sys/class/net/eth0/address")
-
-    def get_host_ip(hostIP=None):
-        if hostIP is None or hostIP == 'auto':
-            hostIP = 'ip'
-
-        if hostIP == 'dns':
-            hostIP = socket.getfqdn()
-        elif hostIP == 'ip':
-            from socket import gaierror
-            try:
-                hostIP = socket.gethostbyname(socket.getfqdn())
-            except gaierror:
-                logger.warn('gethostbyname(socket.getfqdn()) failed... trying on hostname()')
-                hostIP = socket.gethostbyname(socket.gethostname())
-            if hostIP.startswith("127."):
-                s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                # doesn't have to be reachable
-                while True:
-                    try:
-                        s.connect(('10.255.255.255', 1))
-                        hostIP = s.getsockname()[0]
-                        break
-                    except:
-                        time.sleep(0.1)
-
-        return hostIP
 
     pi = pigpio.pi()
     fileconfig = open('json/config.json')
@@ -145,7 +145,13 @@ def update_server_config():
         except:
             time.sleep(0.1)
 
-#main()
-#update_server_config()
 
+def set_env_variables():
+    host_ip = str(get_host_ip())
+    os.environ['DEVICE_IP']=host_ip
+    os.environ['SECRET_ENCRYPTION_KEY']='ISSSecretkey'
+
+main()
+update_server_config()
+set_env_variables()
 

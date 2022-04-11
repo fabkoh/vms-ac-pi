@@ -82,6 +82,7 @@ def notification_function():
     pass
 
 timeout_buzzer = Timer()
+timeout_mag = Timer()
 
 # for eventActionTriggers in data:
 #     trigger = []
@@ -100,7 +101,7 @@ timeout_buzzer = Timer()
 
 # takes in eventtrigger and calls event actions 
 def check_for_EventTrigger_and_EventAction(EventTrigger):
-    for eventActionTriggers in data:
+    for eventActionTriggers in data["EventsIncludingSingleEvent"]:
         trigger = []
         action = []
         external = []
@@ -163,12 +164,70 @@ def check_for_EventTrigger_and_EventAction(EventTrigger):
                                         
                 # check for previous events with timer
 
+
+def check_for_EventsWithTimerOnly():
+    for EventsWithTimerOnly in data["EventsWithTimerOnly"]:
+        trigger = []
+        action = []
+        external = []
+        for dictkey, dictvalue in EventsWithTimerOnly.items():
+
+            if dictkey == "EventTrigger":
+                for eventrigger in dictvalue:
+                    trigger.append(eventrigger)
+            if dictkey == "EventAction":
+                for eventaction in dictvalue:
+                    action.append(eventaction)
+            if dictkey == "ExternalControllerAction":
+                for externalactions in dictvalue:
+                    external.append(externalactions)
+        
+        #print(trigger,action)
+        
+            command_to_check_and_execute = ""
+            for j in range(len(trigger)):
+                #print(trigger[j])
+                #has timer 
+                # print(trigger[j],type(trigger[j]))
+                if command_to_check_and_execute == "":
+                    command_to_check_and_execute += f"if {trigger[j][0]}.check({trigger[j][1]}) "
+                else:
+                    command_to_check_and_execute += f"and {trigger[j][0]}.check({trigger[j][1]}) "
+
+                    
+            command_to_execute = ""
+            for i in action:
+                command_to_execute += f"    {i}_function() \n"  
+
+            if len(external)>0:
+                for controlleraction in external:
+                    command_to_execute += f"    external_controller_GEN_OUT_function{controlleraction['controllerId'],controlleraction['EventAction']}\n"  
+            
+            if command_to_check_and_execute != "":
+                command_to_check_and_execute += f": \n{command_to_execute}"
+
+            
+        #print(command_to_check_and_execute)
+        # while True():
+        exec(command_to_check_and_execute)
+
+
+'''
 timeout_buzzer.start()
 time.sleep(1)
 test1 = "GEN_IN_1"
 test2 = "GEN_IN_2"
 check_for_EventTrigger_and_EventAction(test1)
 check_for_EventTrigger_and_EventAction(test2)
+'''
+timeout_buzzer.start()
+timeout_mag.start()
+
+while True:
+    check_for_EventsWithTimerOnly()
+    time.sleep(0.1)
+
+
 
 # need to write all possible output 
 # write dynamic input functions to check if true or false
