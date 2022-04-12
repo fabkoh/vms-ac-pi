@@ -3,12 +3,14 @@ from time import sleep
 from datetime import datetime
 import multitasking
 import json
+import os
+path = os.path.dirname(os.path.abspath(__file__))
 
 
 #everytime relay triggers, mag_status_open = True 
 # if mag_contact opened but mag_status_open = False, TRIGGER ALARM 
 
-fileconfig = open('json/config.json')
+fileconfig = open(path+'/json/config.json')
 config = json.load(fileconfig)
 GPIOpins = config["GPIOpins"]
 

@@ -1,6 +1,8 @@
 import pigpio 
 import json
 from datetime import datetime
+import os
+path = os.path.dirname(os.path.abspath(__file__))
 
 
 '''
@@ -10,7 +12,7 @@ from datetime import datetime
    3. includes class Timer
 '''
 
-fileconfig = open('json/config.json')
+fileconfig = open(path +'/json/config.json')
 config = json.load(fileconfig)
 
 GPIOpins = config["GPIOpins"]

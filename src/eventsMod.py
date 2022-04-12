@@ -1,12 +1,14 @@
 import json
-from datetime import datetime 
+from datetime import datetime
+import os
+path = os.path.dirname(os.path.abspath(__file__))
 
 
 '''
     1. record_auth and record_button to record transLogs in archivedTrans.json and pendingTrans.json
 '''
 
-fileconfig = open('json/config.json')
+fileconfig = open(path +'/json/config.json')
 config = json.load(fileconfig)
 
 try:
@@ -53,8 +55,8 @@ def record_masterpassword_used(authtype,entrancename,entrance_direction):
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
     
-    update("json/archivedLogs.json",dictionary)
-    update("json/pendingLogs.json",dictionary)
+    update(path +"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
     
     
 #updates pendingTrans.json and send to backend 
@@ -66,8 +68,8 @@ def record_unauth_scans(authtype,entrance,status):
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
     
-    update("json/archivedLogs.json",dictionary)
-    update("json/pendingLogs.json",dictionary)
+    update(path +"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
 
 def record_button_pressed(entrance,name_of_button):
 
@@ -75,8 +77,8 @@ def record_button_pressed(entrance,name_of_button):
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
-    update("json/archivedLogs.json",dictionary)
-    update("json/pendingLogs.json",dictionary)
+    update(path +"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
 # status = opened/ closed
 
 
@@ -87,8 +89,8 @@ def record_antipassback(authtype,entrance,status):
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
     
-    update("json/archivedLogs.json",dictionary)
-    update("json/pendingLogs.json",dictionary)
+    update(path +"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
     
 def record_mag_changes(entrance,status):
 
@@ -96,8 +98,8 @@ def record_mag_changes(entrance,status):
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
-    update("json/archivedLogs.json",dictionary)
-    update("json/pendingLogs.json",dictionary)
+    update(path +"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
 
 # status = started buzzing/ stopped buzzing 
 def record_buzzer(entrance,status):
@@ -106,8 +108,8 @@ def record_buzzer(entrance,status):
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
-    update("json/archivedLogs.json",dictionary)
-    update("json/pendingLogs.json",dictionary)
+    update(path +"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
     
 #update to update json files
 def update(file,dictionary):

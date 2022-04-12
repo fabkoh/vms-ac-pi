@@ -11,6 +11,9 @@ import json
 import requests
 import time
 
+path = os.path.dirname(os.path.abspath(__file__))
+file = path+"/json/config.json"
+
 def main():
 
     hostname = socket.gethostname()   
@@ -57,7 +60,7 @@ def main():
 
     def update_ipaddress():
         url = 'http://192.168.1.250:8082/unicon/config'
-        file = "json/config.json"
+        
         with open(file,"r+") as outfile:
             try:
                 data = json.load(outfile)
@@ -74,7 +77,7 @@ def main():
 
 
     pi = pigpio.pi()
-    fileconfig = open('json/config.json')
+    fileconfig = open(file)
     config = json.load(fileconfig)
 
 
@@ -109,14 +112,13 @@ def main():
 
 
 
-    file = "json/config.json"
-    with open(file,"r+") as outfile:
+    with open(file,"w+") as outfile:
         try:
             data = json.load(outfile)
         except:
             data = []
         
-        readersConnection = data["controllerConfig"]["readersConnection"]
+        readersConnection = config["controllerConfig"]["readersConnection"]
         test_for_connection(E1_IN_D0,E1_IN_D1,"E1_IN")
         test_for_connection(E2_IN_D0,E2_IN_D1,"E2_IN")
         test_for_connection(E1_OUT_D0,E1_OUT_D1,"E1_OUT")
@@ -129,14 +131,14 @@ def main():
         host_ip =   str(get_host_ip())
         serial_num =  str(get_serialnum().decode())
         mac =  str(get_mac().decode())
-        data["controllerConfig"]["controllerIp"] = host_ip
-        data["controllerConfig"]["controllerSerialNo"] = serial_num[:-1]
-        data["controllerConfig"]["controllerMAC"] = mac[:-1]
+        config["controllerConfig"]["controllerIp"] = host_ip
+        config["controllerConfig"]["controllerSerialNo"] = serial_num[:-1]
+        config["controllerConfig"]["controllerMAC"] = mac[:-1]
         
 
 
         outfile.seek(0)
-        json.dump(data,outfile,indent=4) 
+        json.dump(config,outfile,indent=4) 
         outfile.close()
 
 
@@ -146,7 +148,10 @@ def main():
             break
         except:
             time.sleep(0.1)
-
-#main()
+    
+    program = ("python3 " +path+"/program.py")
+    os.system(program)
+    
+main()
 
 

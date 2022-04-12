@@ -6,7 +6,8 @@ import eventsMod
 import json 
 import time
 import updateserver
-
+import os
+path = os.path.dirname(os.path.abspath(__file__))
 
 '''
     1. contains class Timer 
@@ -55,10 +56,10 @@ class Timer:
             return True 
         return False
 
-filerules = open('json/credOccur.json') 
+filerules = open(path+'/json/credOccur.json') 
 credOccur = json.load(filerules)
 
-fileconfig = open('json/config.json')
+fileconfig = open(path+'/json/config.json')
 config = json.load(fileconfig)
 GPIOpins = config["GPIOpins"]
 TIMEOUT = config["TIMEOUT"]
