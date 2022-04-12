@@ -89,13 +89,13 @@ def get_gateway_ip():
     return system_call("ip r | grep default")
 
 def set_env_variables():
-    host_ip = str(get_host_ip)
+    host_ip = str(get_host_ip())
     os.environ['DEVICE_IP']=host_ip
     os.environ['SECRET_ENCRYPTION_KEY'] = 'ISSSecretkey'
 
 def run_servers():
     javacmd = 'java -jar "-Dspring.profiles.active=production" /home/pi/vms-ac-backend-0.0.1-SNAPSHOT.jar'
-    postgrescmd = 'sudo service postgresql stop'
+    postgrescmd = 'sudo service postgresql start'
     os.system(javacmd)
     os.system(postgrescmd)
 
