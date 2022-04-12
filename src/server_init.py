@@ -6,6 +6,42 @@ import subprocess
 #import psutil
 import os
 import netifaces
+import time 
+
+
+hostname = socket.gethostname()   
+
+
+def change_static_ip(ip_address, routers, dns):
+    conf_file = '/etc/dhcpcd.conf'
+    try:            
+        # Sanitize/validate params above
+        with open(conf_file, 'r') as file:
+            data = file.readlines()
+
+        # Find if config exists
+        ethFound = next((x for x in data if 'interface eth0' in x), None)
+
+        if ethFound:
+            ethIndex = data.index(ethFound)
+            if data[ethIndex].startswith('#'):
+                data[ethIndex] = ('interface eth0\n') # commented out by default, make active
+
+        # If config is found, use index to edit the lines you need ( the next 3)
+        if ethIndex:
+            data[ethIndex+1] = (f'static ip_address={ip_address}/24\n')
+            data[ethIndex+2] = (f'static routers={routers}\n')
+            data[ethIndex+3] = (f'static domain_name_servers={dns}\n')
+
+        with open(conf_file, 'w') as file:
+            file.writelines( data )
+
+    except Exception as ex:
+        logging.exception("IP changing error: %s", ex)
+    finally:
+        pass
+
+
 
 
 def get_default_gateway_windows():
@@ -17,7 +53,7 @@ def get_default_gateway_windows():
     except:
         return None
 
-hostname = socket.gethostname()   
+
 
 
 def system_call(command):
@@ -48,46 +84,63 @@ def get_host_ip(hostIP=None):
             hostIP = s.getsockname()[0]
     return hostIP
 
-def get_netmask():
-    for interface, data in psutil.net_if_addrs().items(): 
-        addr = data[0]
-        if interface == "eth0":
-            return  addr.netmask
-        #print('address  :', addr.address)
-        #print('netmask  :', addr.netmask)
-        #print('broadcast:', addr.broadcast)
-        #print('---')
 def get_gateway_ip():
         
     return system_call("ip r | grep default")
 
+def set_env_variables():
+    host_ip = str(get_host_ip)
+    os.environ['DEVICE_IP']=host_ip
+    os.environ['SECRET_ENCRYPTION_KEY'] = 'ISSSecretkey'
 
+def run_servers():
+    javacmd = 'java -jar "-Dspring.profiles.active=production" /home/pi/vms-ac-backend-0.0.1-SNAPSHOT.jar'
+    postgrescmd = 'sudo service postgresql stop'
+    os.system(javacmd)
+    os.system(postgrescmd)
 
 
 #def get_dns_servers():
 
 
-print("Hostname:" + hostname)
-processedIP = get_host_ip().split('.',1)[0] + "." + get_host_ip().split('.',2)[1] + "."+get_host_ip().split('.',3)[2] +".250"
-print("host IP: " + get_host_ip())
-print(get_default_gateway_windows())
-print ("DNS: " + socket.getfqdn())
-print ("Serial Num: " + get_serialnum().decode())
+
 #print ("get_netmask():" + get_netmask())
-def config_IP():
-
-    os.system('sudo ifconfig eth0 down')
-
-    #os.system('sudo ifconfig eth0 '+processedIP +' netmask '+ get_netmask())
-    os.system('sudo ifconfig eth0 '+processedIP +' netmask 255.255.255.0')
-    os.system('sudo ifconfig eth0 up')
     
-    #os.system('sudo hostname uniCon' + '88')
-    #to do:
-    #get dns and configure dns as well
-    
-#config_IP()
-stat = os.system('systemctl is-active startup.service')
-if (stat) == 0:
-   print ("starting Jar")
+
+def main():
+    print("Hostname:" + hostname)
+    processedIP = get_host_ip().split('.',1)[0] + "." + get_host_ip().split('.',2)[1] + "."+get_host_ip().split('.',3)[2] +".250"
+    print("host IP: " + get_host_ip())
+    print(get_default_gateway_windows())
+    print ("DNS: " + socket.getfqdn())
+    print ("Serial Num: " + get_serialnum().decode())
+
+    if get_host_ip() != processedIP:
+        change_static_ip(processedIP,get_default_gateway_windows(),"8.8.8.8")
+        os.system('sudo ifconfig eth down')
+        os.system('sudo ifconfig eth up')
+
+
+while True:
+    try:
+        main()
+        break
+    except:
+        pass
+
+
+while True:
+    try:
+        set_env_variables()
+        break
+    except:
+        pass
+
+
+while True:
+    try:
+        run_servers()
+        break
+    except:
+        pass
    #os.system('nohup java -jar -Dspring.profiles.active=production /home/pi/etlas/vms-ac-backend-0.0.1-SNAPSHOT.jar &')
