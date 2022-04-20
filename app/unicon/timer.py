@@ -4,7 +4,7 @@ class TimerException(Exception):
     '''Exception to raise when timer has an error'''
 
 class Timer:
-    '''???'''
+    '''Timer object'''
     def __init__(self):
         self._start_time = None
 
