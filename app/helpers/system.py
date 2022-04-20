@@ -1,7 +1,10 @@
+from datetime import datetime
 import socket
 import subprocess
 import time
-from config import flask_config
+from config import flask_config, controller_config
+import json
+import pigpio
 
 def system_call(command):
     '''Helper method to run command on a unix terminal
@@ -63,5 +66,54 @@ def get_host_ip(dns_enabled=True):
     return str(host_ip)
 
 def update_ip_address():
+    '''???'''
     url = flask_config.ETLAS_DOMAIN + '/unicon/config'
-    print(url)
+    # r = requests.post(url, 
+    #                   data=json.dump(controller_config.read()),
+    #                   headers={ 'Content-type': 'application/json' }
+    #                   verify=False)
+    # print(r)
+    # print(r.status_code)
+
+    # if 200 <= r.status_code <= 201:
+    #     print("update_pi_address(): SUCCESS")
+
+def healthcheck():
+    pi = pigpio.pi()
+    gpio_pins = controller_config.read('GPIOpins')
+
+    pins = [] #stores the pin numbers
+    for entrance in ('E1_', 'E2_'):
+       for direction in ('IN_', 'OUT_'):
+           for data in ('D0', 'D1'):
+               pins.append(int(gpio_pins[entrance+direction+data]))
+
+    for pin in pins:
+        pi.set_mode(pin, pigpio.INPUT)
+
+    readers_connection = controller_config.read('controllerConfig', 'readersConnection')
+    auth_device_types = ['E1_IN', 'E1_OUT', 'E2_IN', 'E2_OUT'] # in same order as pins
+    # update connection status
+    for i in range(4):
+        readers_connection[auth_device_types[i]] = \
+            "Connected" if \
+            (pi.read(pins[i*2]) and pi.read(pins[i*2+1])) else \
+            ""
+
+    # last updated
+    readers_connection["dateAndTime"] = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+
+    controller_info = controller_config.read('controllerConfig')
+    controller_info['controllerIp'] = get_host_ip()
+    controller_info['controllerSerialNo'] = str(get_serial_number().decode())[:-1]
+    controller_info['controllerMAC'] = str(get_mac_address().decode())[:-1]
+
+    # commit changed to json file
+    controller_config.update()
+
+    while True:
+        try:
+            update_ip_address()
+            break
+        except:
+            time.sleep(1)

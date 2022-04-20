@@ -4,7 +4,7 @@ import os
 path = os.path.dirname(os.path.abspath(__file__))
 
 class FlaskConfig:
-    ETLAS_DOMAIN = 'http://192.168.1.250:8082'
+    ETLAS_DOMAIN = os.environ.get('ETLAS_DOMAIN', 'http://192.168.1.250:8082')
 
 class DevConfig(FlaskConfig):
     DEBUG = True
@@ -39,12 +39,22 @@ class JsonConfig:
 
         Returns:
             value (any): the value reached by the keys, returns empty dict if keys not found
+
+        if this dict is edited, remember to call update(self) to dump into filename 
+        or the info in this class and filename would be different
         '''
         d = self._json
         for arg in args:
             d = d.get(arg, {})
 
         return d
+
+    def update(self):
+        '''Updates filename to self._json'''
+        with open(self._filepath, 'w+') as outfile:
+            json.dump(self._json, self._filepath, indent=4)
+            outfile.close()
+            # need to clear after?
 
 class ControllerConfig(JsonConfig):
     '''Class used to access config.json'''
