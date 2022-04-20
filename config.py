@@ -4,15 +4,13 @@ import os
 path = os.path.dirname(os.path.abspath(__file__))
 
 class FlaskConfig:
-    print("flask config initialised")
     ETLAS_DOMAIN = 'http://192.168.1.250:8082'
 
 class DevConfig(FlaskConfig):
-    print("dev config initialised")
     DEBUG = True
 
 class ProductionConfig(FlaskConfig):
-    print("prod config initialised")
+    placeholder = 1
 
 class JsonConfig:
     '''Helper class to read a maintain a json file'''
@@ -58,6 +56,7 @@ flask_configs = {
     'production': ProductionConfig
 }
 
-flask_config = flask_configs.get(os.environ.get('FLASK_ENV', 'production'), ProductionConfig)
 
+# configs to import
+flask_config = flask_configs.get(os.environ.get('FLASK_ENV', 'production'), ProductionConfig)
 controller_config = ControllerConfig()

@@ -1,5 +1,6 @@
 from flask import Flask
 from config import flask_config
+from app.unicon.main import main
 
 def create_app():
     '''returns a flask app
@@ -15,3 +16,5 @@ def create_app():
     app.register_blueprint(main_blueprint)
 
     return app
+
+# main()
