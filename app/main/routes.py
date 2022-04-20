@@ -1,5 +1,6 @@
+from turtle import update
 from . import main
-from ...helpers.system import update_ip_address
+from app.helpers.system import update_ip_address
 
 @main.route('/')
 def index():

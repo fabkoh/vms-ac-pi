@@ -1,7 +1,7 @@
 import socket
 import subprocess
 import time
-from ...config import config
+from config import flask_config
 
 def system_call(command):
     '''Helper method to run command on a unix terminal
@@ -63,7 +63,5 @@ def get_host_ip(dns_enabled=True):
     return str(host_ip)
 
 def update_ip_address():
-    print('test')
-    url = config.ETLAS_DOMAIN + '/unicon/config'
-
+    url = flask_config.ETLAS_DOMAIN + '/unicon/config'
     print(url)

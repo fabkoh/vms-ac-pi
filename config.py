@@ -51,7 +51,7 @@ class JsonConfig:
 class ControllerConfig(JsonConfig):
     '''Class used to access config.json'''
     def __init__(self):
-        super().__init__(path + '/json/config.json')
+        super().__init__(path + '/app/json/config.json')
 
 flask_configs = {
     'development': DevConfig,
