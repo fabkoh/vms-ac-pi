@@ -1,4 +1,5 @@
 import os
 from app import create_app
+from unicon import t10
 
-app = create_app(os.getenv('FLASK_CONFIG', 'production'))
+app = create_app()
