@@ -14,3 +14,7 @@ def get_config():
         return response
     except:
         raise BadRequest('Error executing healthcheck')
+
+@routes.route('/config', methods=['POST'])
+def post_config():
+    return "<p>post</p>"

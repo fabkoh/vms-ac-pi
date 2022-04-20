@@ -1,0 +1,52 @@
+[
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 10:35:26"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 10:35:27"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 10:35:27"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 10:35:28"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 10:35:28"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 10:39:50"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 10:52:06"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 10:53:10"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 11:00:03"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-12 11:02:34"
+    }
+]

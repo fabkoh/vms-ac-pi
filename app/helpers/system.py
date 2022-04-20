@@ -80,7 +80,8 @@ def update_ip_address():
 
 def healthcheck():
     pi = pigpio.pi()
-    gpio_pins = controller_config.read('GPIOpins')
+    controller_config_json = controller_config.read()
+    gpio_pins = controller_config_json['GPIOpins']
 
     pins = [] #stores the pin numbers
     for entrance in ('E1_', 'E2_'):
@@ -91,7 +92,7 @@ def healthcheck():
     for pin in pins:
         pi.set_mode(pin, pigpio.INPUT)
 
-    readers_connection = controller_config.read('controllerConfig', 'readersConnection')
+    readers_connection = controller_config_json['controllerConfig']['readersConnection']
     auth_device_types = ['E1_IN', 'E1_OUT', 'E2_IN', 'E2_OUT'] # in same order as pins
     # update connection status
     for i in range(4):
@@ -103,13 +104,13 @@ def healthcheck():
     # last updated
     readers_connection["dateAndTime"] = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
 
-    controller_info = controller_config.read('controllerConfig')
+    controller_info = controller_config_json['controllerConfig']
     controller_info['controllerIp'] = get_host_ip()
     controller_info['controllerSerialNo'] = str(get_serial_number().decode())[:-1]
     controller_info['controllerMAC'] = str(get_mac_address().decode())[:-1]
 
     # commit changed to json file
-    controller_config.update()
+    controller_config.update(controller_config_json)
 
     while True:
         try:

@@ -12,7 +12,7 @@ class DevConfig(FlaskConfig):
 class ProductionConfig(FlaskConfig):
     placeholder = 1
 
-class JsonConfig:
+class JsonReader:
     '''Helper class to read a maintain a json file'''
     def __init__(self, filepath):
         '''
@@ -20,7 +20,7 @@ class JsonConfig:
             filepath (string): the filepath to the json file
             
         Returns:
-            json_config (JsonConfig object)
+            json_reader (JsonReader object)
         '''
         self._filepath = filepath
         with open(filepath, "r+") as outfile:
@@ -29,37 +29,24 @@ class JsonConfig:
             except:
                 self._json = {}
 
-    def read(self, *args):
+    def read(self):
         '''Helper method to read value in dict
-        Args:
-            args (any): the keys to reach a nested value
-
-        Raises:
-            TypeError: if trying to access the key of a non dict object
-
         Returns:
             value (any): the value reached by the keys, returns empty dict if keys not found
 
-        if this dict is edited, remember to call update(self) to dump into filename 
+        if the returned object is edited, remember to call JsonReader.update() to dump into filename 
         or the info in this class and filename would be different
         '''
-        d = self._json
-        for arg in args:
-            d = d.get(arg, {})
+        return self._json
 
-        return d
-
-    def update(self):
+    def update(self, new_json):
         '''Updates filename to self._json'''
         with open(self._filepath, 'w+') as outfile:
-            json.dump(self._json, self._filepath, indent=4)
+            json.dump(new_json, self._filepath, indent=4)
             outfile.close()
             # need to clear after?
 
-class ControllerConfig(JsonConfig):
-    '''Class used to access config.json'''
-    def __init__(self):
-        super().__init__(path + '/app/json/config.json')
+        self._json = new_json
 
 flask_configs = {
     'development': DevConfig,
@@ -69,4 +56,6 @@ flask_configs = {
 
 # configs to import
 flask_config = flask_configs.get(os.environ.get('FLASK_ENV', 'production'), ProductionConfig)
-controller_config = ControllerConfig()
+controller_config = JsonReader(path + '/app/json/config.json')
+credential_config = JsonReader(path + '/app/json/credOccur.json')
+pending_logs      = JsonReader(path + '/app/json/pendingLogs.json')

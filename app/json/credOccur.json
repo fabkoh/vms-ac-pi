@@ -1,0 +1,505 @@
+[
+    {
+        "Entrance": "SideDoor",
+        "EntranceSchedule": {
+            "2022-04-04": [
+                {
+                    "starttime": "08:00",
+                    "endtime": "19:00"
+                }
+            ]
+        },
+        "EntranceDetails": {
+            "Antipassback": "No",
+            "Zone": "ZoneId",
+            "AuthenticationDevices": {
+                "Device1": {
+                    "Masterpassword": "666666",
+                    "Direction": "IN",
+                    "AuthMethod": [
+                        {
+                            "Method": "Card,Pin",
+                            "Schedule": {
+                                "2022-03-14": [
+                                    {
+                                        "starttime": "18:00",
+                                        "endtime": "23:00"
+                                    }
+                                ],
+                                "2022-04-04": [
+                                    {
+                                        "starttime": "18:00",
+                                        "endtime": "23:00"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Method": "Card,Pin",
+                            "Schedule": {
+                                "2022-03-14": [
+                                    {
+                                        "starttime": "09:00",
+                                        "endtime": "18:00"
+                                    }
+                                ],
+                                "2022-04-04": [
+                                    {
+                                        "starttime": "09:00",
+                                        "endtime": "23:59"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "Device2": {
+                    "Masterpassword": "111111",
+                    "Direction": "OUT",
+                    "AuthMethod": [
+                        {
+                            "Method": "Card",
+                            "Schedule": {
+                                "2022-03-14": [
+                                    {
+                                        "starttime": "18:00",
+                                        "endtime": "23:00"
+                                    }
+                                ],
+                                "2022-04-04": [
+                                    {
+                                        "starttime": "09:00",
+                                        "endtime": "23:59"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Method": "Card",
+                            "Schedule": {
+                                "2022-03-14": {
+                                    "starttime": "18:00",
+                                    "endtime": "23:00"
+                                },
+                                "2022-04-04": {
+                                    "starttime": "09:00",
+                                    "endtime": "18:00"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "AccessGroups": [
+                {
+                    "AccessGroup1": {
+                        "Persons": [
+                            {
+                                "Name": "John",
+                                "Credentials": {
+                                    "Card": "36443438",
+                                    "PIN": "123456",
+                                    "Fingerprint": "s1e97ncksiu"
+                                }
+                            },
+                            {
+                                "Name": "Kerry",
+                                "Credentials": {
+                                    "Card": "36443419",
+                                    "PIN": "123456",
+                                    "Fingerprint": "ege56g4er"
+                                }
+                            },
+                            {
+                                "Name": "Steven",
+                                "Credentials": {
+                                    "Card": "47567858679",
+                                    "PIN": "85757",
+                                    "Fingerprint": "gd15hry51r"
+                                }
+                            }
+                        ],
+                        "Schedule": {
+                            "2022-03-14": [
+                                {
+                                    "starttime": "18:00",
+                                    "endtime": "23:00"
+                                }
+                            ],
+                            "2022-04-04": [
+                                {
+                                    "starttime": "09:00",
+                                    "endtime": "23:59"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "AccessGroup2": {
+                        "Persons": [
+                            {
+                                "Name": "Mike",
+                                "Credentials": {
+                                    "Card": "6451234653",
+                                    "PIN": "123132",
+                                    "Fingerprint": "ui233211sd"
+                                }
+                            },
+                            {
+                                "Name": "Keith",
+                                "Credentials": {
+                                    "Card": "12345983",
+                                    "PIN": "456456",
+                                    "Fingerprint": "654tyjyt5j132"
+                                }
+                            },
+                            {
+                                "Name": "Ron",
+                                "Credentials": {
+                                    "Card": "98794621",
+                                    "PIN": "654321",
+                                    "Fingerprint": "46ytj546r5th"
+                                }
+                            }
+                        ],
+                        "Schedule": {
+                            "2022-03-17": {
+                                "starttime": "18:00",
+                                "endtime": "23:00"
+                            },
+                            "2022-04-04": {
+                                "starttime": "09:00",
+                                "endtime": "18:00"
+                            }
+                        }
+                    }
+                },
+                {
+                    "AccessGroup3": {
+                        "Persons": [
+                            {
+                                "Name": "Kim",
+                                "Credentials": {
+                                    "Card": "8657345345",
+                                    "PIN": "987654",
+                                    "Fingerprint": "tyh56r4h5r4"
+                                }
+                            },
+                            {
+                                "Name": "Tan",
+                                "Credentials": {
+                                    "Card": "78654353245",
+                                    "PIN": "456789",
+                                    "Fingerprint": "84we56rh"
+                                }
+                            },
+                            {
+                                "Name": "Lee",
+                                "Credentials": {
+                                    "Card": "74563452354",
+                                    "PIN": "123456",
+                                    "Fingerprint": "errg456e4ty"
+                                }
+                            }
+                        ],
+                        "Schedule": {
+                            "2022-03-14": {
+                                "starttime": "18:00",
+                                "endtime": "23:00"
+                            },
+                            "2022-04-04": {
+                                "starttime": "09:00",
+                                "endtime": "18:00"
+                            }
+                        }
+                    }
+                }
+            ],
+            "EventActionTriggers": [
+                {
+                    "Trigger1": {
+                        "inputEventActions": {
+                            "magContactOpenNoTimer": "",
+                            "magContactOpenWithTimer": "5secs"
+                        },
+                        "outputEventActions": {
+                            "cardReaderBuzzer": ""
+                        },
+                        "Schedule": {
+                            "2022-03-14": {
+                                "starttime": "18:00",
+                                "endtime": "23:00"
+                            },
+                            "2022-04-04": {
+                                "starttime": "09:00",
+                                "endtime": "18:00"
+                            }
+                        }
+                    }
+                },
+                {
+                    "Trigger2": {
+                        "inputEventActions": {
+                            "cardReaderBuzzerWithTimer": "60secs"
+                        },
+                        "outputEventActions": {
+                            "emailNotification": ""
+                        },
+                        "Schedule": {
+                            "2022-03-14": {
+                                "starttime": "18:00",
+                                "endtime": "23:00"
+                            },
+                            "2022-03-18": {
+                                "starttime": "09:00",
+                                "endtime": "18:00"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "Entrance": "MainDoor",
+        "EntranceSchedule": {
+            "2022-03-18": {
+                "starttime": "08:00",
+                "endtime": "09:00"
+            }
+        },
+        "EntranceDetails": {
+            "Zone": "ZoneId",
+            "AuthenticationDevices": {
+                "Device1": {
+                    "Direction": "IN",
+                    "AuthMethod": [
+                        {
+                            "Method": "Fingerprint,Card",
+                            "Schedule": {
+                                "2022-03-14": {
+                                    "starttime": "18:00",
+                                    "endtime": "23:00"
+                                },
+                                "2022-03-16": {
+                                    "starttime": "18:00",
+                                    "endtime": "23:00"
+                                }
+                            }
+                        },
+                        {
+                            "Method": "Card,Pin",
+                            "Schedule": {
+                                "2022-03-14": {
+                                    "starttime": "09:00",
+                                    "endtime": "18:00"
+                                },
+                                "2022-03-18": {
+                                    "starttime": "09:00",
+                                    "endtime": "18:00"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "Device2": {
+                    "Direction": "OUT",
+                    "AuthMethod": [
+                        {
+                            "Method": "Fingerprint",
+                            "Schedule": {
+                                "2022-03-14": {
+                                    "starttime": "18:00",
+                                    "endtime": "23:00"
+                                },
+                                "2022-03-18": {
+                                    "starttime": "18:00",
+                                    "endtime": "23:00"
+                                }
+                            }
+                        },
+                        {
+                            "Method": "Fingerprint,Pin",
+                            "Schedule": {
+                                "2022-03-14": {
+                                    "starttime": "18:00",
+                                    "endtime": "23:00"
+                                },
+                                "2022-03-18": {
+                                    "starttime": "09:00",
+                                    "endtime": "18:00"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "AccessGroups": [
+                {
+                    "AccessGroup1": {
+                        "Persons": [
+                            {
+                                "Name": "John",
+                                "Credentials": {
+                                    "Card": "696955874",
+                                    "PIN": "225588",
+                                    "Fingerprint": "s1e97ncksiu"
+                                }
+                            },
+                            {
+                                "Name": "Kerry",
+                                "Credentials": {
+                                    "Card": "696955874",
+                                    "PIN": "225588",
+                                    "Fingerprint": "s1e97ncksiu"
+                                }
+                            },
+                            {
+                                "Name": "Steven",
+                                "Credentials": {
+                                    "Card": "696955874",
+                                    "PIN": "225588",
+                                    "Fingerprint": "s1e97ncksiu"
+                                }
+                            }
+                        ],
+                        "Schedule": {
+                            "2022-03-14": {
+                                "starttime": "18:00",
+                                "endtime": "23:00"
+                            },
+                            "2022-03-18": {
+                                "starttime": "09:00",
+                                "endtime": "18:00"
+                            }
+                        }
+                    }
+                },
+                {
+                    "AccessGroup2": {
+                        "Persons": [
+                            {
+                                "Name": "Mike",
+                                "Credentials": {
+                                    "Card": "6451234653",
+                                    "PIN": "123132",
+                                    "Fingerprint": "ui233211sd"
+                                }
+                            },
+                            {
+                                "Name": "Keith",
+                                "Credentials": {
+                                    "Card": "12345983",
+                                    "PIN": "456456",
+                                    "Fingerprint": "654tyjyt5j132"
+                                }
+                            },
+                            {
+                                "Name": "Ron",
+                                "Credentials": {
+                                    "Card": "98794621",
+                                    "PIN": "654321",
+                                    "Fingerprint": "46ytj546r5th"
+                                }
+                            }
+                        ],
+                        "Schedule": {
+                            "2022-03-17": {
+                                "starttime": "18:00",
+                                "endtime": "23:00"
+                            },
+                            "2022-03-18": {
+                                "starttime": "09:00",
+                                "endtime": "18:00"
+                            }
+                        }
+                    }
+                },
+                {
+                    "AccessGroup3": {
+                        "Persons": [
+                            {
+                                "Name": "Kim",
+                                "Credentials": {
+                                    "Card": "8657345345",
+                                    "PIN": "987654",
+                                    "Fingerprint": "tyh56r4h5r4"
+                                }
+                            },
+                            {
+                                "Name": "Tan",
+                                "Credentials": {
+                                    "Card": "78654353245",
+                                    "PIN": "456789",
+                                    "Fingerprint": "84we56rh"
+                                }
+                            },
+                            {
+                                "Name": "Lee",
+                                "Credentials": {
+                                    "Card": "74563452354",
+                                    "PIN": "123456",
+                                    "Fingerprint": "errg456e4ty"
+                                }
+                            }
+                        ],
+                        "Schedule": {
+                            "2022-03-14": {
+                                "starttime": "18:00",
+                                "endtime": "23:00"
+                            },
+                            "2022-03-18": {
+                                "starttime": "09:00",
+                                "endtime": "18:00"
+                            }
+                        }
+                    }
+                }
+            ],
+            "EventActionTriggers": [
+                {
+                    "Trigger1": {
+                        "inputEventActions": {
+                            "magContactOpenNoTimer": "",
+                            "magContactOpenWithTimer": "5secs"
+                        },
+                        "outputEventActions": {
+                            "cardReaderBuzzer": ""
+                        },
+                        "Schedule": {
+                            "2022-03-14": {
+                                "starttime": "18:00",
+                                "endtime": "23:00"
+                            },
+                            "2022-03-18": {
+                                "starttime": "09:00",
+                                "endtime": "18:00"
+                            }
+                        }
+                    }
+                },
+                {
+                    "Trigger2": {
+                        "inputEventActions": {
+                            "cardReaderBuzzerWithTimer": "60secs"
+                        },
+                        "outputEventActions": {
+                            "emailNotification": ""
+                        },
+                        "Schedule": {
+                            "2022-03-14": {
+                                "starttime": "18:00",
+                                "endtime": "23:00"
+                            },
+                            "2022-03-18": {
+                                "starttime": "09:00",
+                                "endtime": "18:00"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+]
