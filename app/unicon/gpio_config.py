@@ -1,8 +1,8 @@
-from config import controller_config
+from config import ControllerConfig
 import pigpio
 from app.helpers.util import int_or_default
 
-controller_config_json = controller_config.read()
+controller_config_json = ControllerConfig.read()
 gpio_pins = controller_config_json['GPIOpins']
 
 # in global namespace for main.py

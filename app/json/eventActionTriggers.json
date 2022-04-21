@@ -1,0 +1,63 @@
+{"EventsIncludingSingleEvent":
+    [
+        {
+            "EventTrigger":["GEN_IN_1"],
+            "EventAction":["GEN_OUT_4","GEN_OUT_2"],
+            "ExternalControllerAction":
+                                        [{"controllerId":"1",
+                                            "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
+    
+                                            {"controllerId":"2",
+                                            "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
+                                        ]
+        },
+    
+        {
+            "EventTrigger":[["timeout_buzzer","0.5"],"GEN_IN_1"],
+            "EventAction":["sendEmail","sendSMS"],
+            "ExternalControllerAction":
+                                        [{"controllerId":"1",
+                                            "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
+    
+                                            {"controllerId":"2",
+                                            "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
+                                        ]
+        },
+    
+        {
+            "EventTrigger":["GEN_IN_1","GEN_IN_2"],
+            "EventAction":["GEN_OUT_3"],
+            "ExternalControllerAction":[]
+        }
+    
+    ],
+    
+    "EventsWithTimerOnly":
+    [
+        {
+            "EventTrigger":[["timeout_buzzer","0.5"],["timeout_mag","0.5"]],
+            "EventAction":["GEN_OUT_4","GEN_OUT_2"],
+            "ExternalControllerAction":
+                                        [{"controllerId":"1",
+                                            "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
+    
+                                            {"controllerId":"2",
+                                            "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
+                                        ]
+        },
+    
+        {
+            "EventTrigger":[["timeout_buzzer","0.5"]],
+            "EventAction":["sendEmail","sendSMS"],
+            "ExternalControllerAction":
+                                        [{"controllerId":"1",
+                                            "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
+    
+                                            {"controllerId":"2",
+                                            "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
+                                        ]
+        }
+    
+    ]
+    
+    }

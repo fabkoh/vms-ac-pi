@@ -1,13 +1,24 @@
 import pigpio
 
-class decoder:
+class Decoder:
     '''???'''
 
     #callback refers to the function that is being called when the wiegand reader reads an input 
     #entrance refers to the particular entrance and reader e.g. E1R1
     def __init__(self, pi, gpio_0, gpio_1, callback, entrance, bit_timeout=5):
+        '''initialises decoder
+        
+        Args:
+            pi (gpio pi)
+            gpio_0 (int): the pin number
+            gpio_1 (int): the pin number
+            callback (func): function to execute when reader detects an input
+                calls the function with inputs bits, value, entrance ???
+            entrance (string): the entrance name ( 'E1_IN' | 'E1_OUT' | 'E2_IN' | 'E2_OUT' )
 
-
+        Returns:
+            Decoder object
+        '''
         self.pi = pi
         self.gpio_0 = gpio_0
         self.gpio_1 = gpio_1
@@ -29,10 +40,16 @@ class decoder:
         self.cb_0 = self.pi.callback(gpio_0, pigpio.FALLING_EDGE, self._cb)
         self.cb_1 = self.pi.callback(gpio_1, pigpio.FALLING_EDGE, self._cb)        
             
-    def _cb(self, gpio, level,tick):
-        """
-        Accumulate bits until both gpios 0 and 1 timeout.
-        """
+    def _cb(self, gpio, level, tick):
+        '''accumulates bits until d0 and d1 timeout
+
+        Args:
+            gpio (int): the gpio pin ( self.gpio_0 | self.gpio_1 )
+            level (enum): type of peak to detect ( pigio.RISING_EDGE | pigpio.FALLING_EDGE | pigpio.EITHER_EDGE )
+            tick: ??
+
+        Does not return anything, but calls self.callback(bits, num, entrance)
+        '''
         if level < pigpio.TIMEOUT:
 
             if self.in_code == False:
@@ -70,8 +87,6 @@ class decoder:
                     return
 
     def cancel(self):
-        """
-        Cancel the Wiegand decoder.
-        """
+        '''Cancel the Wiegand decoder.'''
         self.cb_0.cancel()
         self.cb_1.cancel()

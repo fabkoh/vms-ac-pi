@@ -2,9 +2,11 @@ from datetime import datetime
 import socket
 import subprocess
 import time
-from config import flask_config, controller_config
+from config import FlaskConfig, ControllerConfig
 import json
 import pigpio
+import requests
+import time
 
 def system_call(command):
     '''Helper method to run command on a unix terminal
@@ -34,7 +36,7 @@ def get_mac_address():
     '''
     return system_call("cat /sys/class/net/eth0/address")
 
-def get_host_ip(dns_enabled=True):
+def get_host_ip(dns_enabled=False):
     '''Helper method to return host ip
     
     Args:
@@ -46,12 +48,12 @@ def get_host_ip(dns_enabled=True):
     if dns_enabled:
         return socket.getfqdn()
 
-    from socket import gaierror
     try:
         host_ip = socket.gethostbyname(socket.getfqdn())
-    except gaierror:
-        # logger.warn('socket.gethostbyname(socket.getfqdn()) failed...\ntrying socket.gethostbyname(socket.hostname())')
+    except socket.gaierror:
+        print('socket.gethostbyname(socket.getfqdn()) failed...\ntrying socket.gethostbyname(socket.hostname())')
         host_ip = socket.gethostbyname(socket.gethostname())
+
     if host_ip.startswith('127.'): # private ip i think
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         
@@ -65,22 +67,23 @@ def get_host_ip(dns_enabled=True):
                 time.sleep(0.1)
     return str(host_ip)
 
-def update_ip_address():
-    '''???'''
-    url = flask_config.ETLAS_DOMAIN + '/unicon/config'
-    # r = requests.post(url, 
-    #                   data=json.dump(controller_config.read()),
-    #                   headers={ 'Content-type': 'application/json' }
-    #                   verify=False)
-    # print(r)
-    # print(r.status_code)
+def post_config_to_etlas(): # post config to server
+    '''POST config.json to etlas'''
+    url = FlaskConfig.ETLAS_DOMAIN + '/unicon/config'
+    ControllerConfig.update(ControllerConfig.read()) # ensures config.json is same as controller_config
+    r = requests.post(url, 
+                      data=json.dump(ControllerConfig.read()),
+                      headers={ 'Content-type': 'application/json' },
+                      verify=False)
+    print(r)
+    print(r.status_code)
 
-    # if 200 <= r.status_code <= 201:
-    #     print("update_pi_address(): SUCCESS")
+    if 200 <= r.status_code <= 201:
+        print("update_pi_address(): SUCCESS")
 
 def healthcheck():
     pi = pigpio.pi()
-    controller_config_json = controller_config.read()
+    controller_config_json = ControllerConfig.read()
     gpio_pins = controller_config_json['GPIOpins']
 
     pins = [] #stores the pin numbers
@@ -110,11 +113,11 @@ def healthcheck():
     controller_info['controllerMAC'] = str(get_mac_address().decode())[:-1]
 
     # commit changed to json file
-    controller_config.update(controller_config_json)
+    ControllerConfig.update(controller_config_json)
 
     while True:
         try:
-            update_ip_address()
+            post_config_to_etlas()
             break
         except:
             time.sleep(1)

@@ -1,5 +1,5 @@
 import json
-from config import pending_logs, flask_config
+from config import PendingLogs, flask_config
 
 def update_server_events():
     url = flask_config.ETLAS_DOMAIN + '/unicon/event'

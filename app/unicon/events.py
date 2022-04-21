@@ -1,4 +1,4 @@
-from config import controller_config, credential_config
+from config import ControllerConfig, CredentialConfig
 from timer import Timer
 from app.helpers.util import int_or_default
 
@@ -9,7 +9,7 @@ MAX_PIN_LENGH = 6
 
 def initialise():
     '''initialise events'''
-    controller_config_json = controller_config.read()
+    controller_config_json = ControllerConfig.read()
     gpio_pins = controller_config_json['GPIOPins']
     timeout = controller_config_json['TIMEOUT']
 

@@ -3,13 +3,13 @@ import os
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-class FlaskConfig:
+class Config:
     ETLAS_DOMAIN = os.environ.get('ETLAS_DOMAIN', 'http://192.168.1.250:8082')
 
-class DevConfig(FlaskConfig):
+class DevConfig(Config):
     DEBUG = True
 
-class ProductionConfig(FlaskConfig):
+class ProductionConfig(Config):
     placeholder = 1
 
 class JsonReader:
@@ -55,7 +55,8 @@ flask_configs = {
 
 
 # configs to import
-flask_config = flask_configs.get(os.environ.get('FLASK_ENV', 'production'), ProductionConfig)
-controller_config = JsonReader(path + '/app/json/config.json')
-credential_config = JsonReader(path + '/app/json/credOccur.json')
-pending_logs      = JsonReader(path + '/app/json/pendingLogs.json')
+FlaskConfig = flask_configs.get(os.environ.get('FLASK_ENV', 'production'), ProductionConfig)
+ControllerConfig    = JsonReader(path + '/app/json/config.json')
+CredentialConfig    = JsonReader(path + '/app/json/credOccur.json')
+PendingLogs         = JsonReader(path + '/app/json/pendingLogs.json')
+EventActionTriggers = JsonReader(path + '/json/eventActionTriggers.json')
