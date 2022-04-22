@@ -1,18 +1,6 @@
-'''Starts the program
-'''
+'''Starts the program'''
+import unicon
+import api
 
-# first run healthcheck
-
-
-
-
-
-
-
-
-# # test
-# import unicon
-# import api
-
-# unicon.main()
-# api.main()
+unicon.main()
+api.main()
