@@ -73,11 +73,9 @@ class JsonReader:
         '''
         with open(self._filename, 'w') as file:
             json.dump(content, file, indent=4)
-            print('wrote content', content)
             self._content = content
             file.close()
         
-        print('read content', self.read())
         update(self._file_num)
 
 # import the below objects to access json files
@@ -91,7 +89,7 @@ PendingLogs        = JsonReader(path + '/json/pendingLogs.json'        , 5)
 Status             = JsonReader(path + '/json/status.json'             , 6)
 TestJson           = JsonReader(path + '/json/test.json'               , 7)
 
-# or import these containers, to get updates info call container[0] as demonstrated in main
+# or import these containers, to get updated info call container[0] as demonstrated in main
 ArchivedLogsConatiner        = [ArchivedLogs.read()]
 ConfigConatiner              = [Config.read()]
 CredOccurConatiner           = [CredOccur.read()]
