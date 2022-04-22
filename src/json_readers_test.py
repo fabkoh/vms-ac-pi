@@ -1,4 +1,6 @@
 '''This file has to be external to test if some pocs of importing from json_reader'''
+'''test to delete'''
+
 from random import randint
 from json_readers import TestJson, TestJsonContainer
 
