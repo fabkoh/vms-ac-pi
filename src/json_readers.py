@@ -14,7 +14,7 @@ def update(file_num):
         ArchivedLogsConatiner[0] = ArchivedLogs.read()
 
     elif file_num == 1:
-        ConfigConatiner[0](Config.read())
+        ConfigConatiner[0] = Config.read()
 
     elif file_num == 2:
         CredOccurConatiner[0] = ArchivedLogs.read()
