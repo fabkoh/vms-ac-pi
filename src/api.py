@@ -2,6 +2,7 @@
 import json
 import flask
 import os
+from healthcheck import healthcheck
 from helpers import int_or_none
 from json_readers import ConfigConatiner, Config
 from system_calls import change_ip, check_if_static_ip, get_host_ip
@@ -24,19 +25,27 @@ def get_status():
             controllerMAC          (string)
         status_code: 200
     '''
-    body = check_auth_device_status()
-    config = ConfigConatiner[0]['controllerConfig']
-    body['controllerIPStatic'] = (config['controllerIpStatic'] != '')
-    body['controllerIP']       = config['controllerIP']
-    body['controllerId']       = int_or_none(config['controllerId'])
-    body['controllerMAC']      = config['controllerMAC']
+    healthcheck()
+    controller_config = ConfigConatiner[0]['controllerConfig']
+    body = {}
+    body['controllerIPStatic'] = (controller_config['controllerIpStatic'] == 'static')
+    body['controllerIP']       = controller_config['controllerIp']
+    body['controllerId']       = int_or_none(controller_config['controllerId'])
+    body['controllerMAC']      = controller_config['controllerMAC']
+
+    auth_device_config = controller_config['readerConnection']
+    body['E1IN'] = auth_device_config['E1_IN']
+    body['E1OUT'] = auth_device_config['E1_OUT']
+    body['E2IN'] = auth_device_config['E2_IN']
+    body['E2OUT'] = auth_device_config['E2_OUT']
+
     return flask.Response(
         json.dumps(body),
         200,
         headers={ 'Content-type': 'application/json' }
     )
 
-@app.route('/api/config', methods=['POST'])
+@app.route('/api/unicon/config', methods=['POST'])
 def post_config():
     body = flask.request.json
     config = ConfigConatiner[0]
