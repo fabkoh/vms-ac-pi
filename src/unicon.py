@@ -23,7 +23,8 @@ E2_OUT = None
 
 pi = pigpio.pi()
 
-def initialise_entrance_readers():
+def set_readers_to_read():
+    '''Set readers to read, requires config.json ['GPIOpins'] dict'''
     global E1_IN_D0, E1_IN_D1, E1_OUT_D0, E1_OUT_D1, \
            E2_IN_D0, E2_IN_D1, E2_OUT_D0, E2_OUT_D1, \
            E1_IN, E1_OUT, E2_IN, E2_OUT
@@ -39,7 +40,6 @@ def initialise_entrance_readers():
     E2_OUT_D0 = int(pins_config['E2_OUT_D0'])
     E2_OUT_D1 = int(pins_config['E2_OUT_D1'])
 
-    # initialise decoder class here eventually
     pi.set_mode(E1_IN_D0,  pigpio.INPUT)
     pi.set_mode(E1_IN_D1,  pigpio.INPUT)
     pi.set_mode(E1_OUT_D0, pigpio.INPUT)
@@ -52,6 +52,8 @@ def initialise_entrance_readers():
 
 def check_auth_device_status():
     '''checks if auth devices are responding
+    Note:
+        requires pins to be initialised first
     
     Returns:
         auth_device_status (dict): with keys 'E1IN', 'E1OUT', 'E2IN', 'E2OUT' mapped to bool
@@ -64,4 +66,4 @@ def check_auth_device_status():
     }
 
 def main():
-    initialise_entrance_readers()
+    set_readers_to_read()

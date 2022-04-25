@@ -1,7 +1,7 @@
 import socket
 import subprocess
 import time
-from config import ETLAS_DOMAIN
+from config import IP_CONF_FILE
 
 def system_call(command):
     '''Helper to run system command and return the output
@@ -54,3 +54,13 @@ def get_host_ip(dns_enabled=False):
 
             return str(host_ip)
 
+def check_if_static_ip():
+    '''checks if pi's ip is static by reading /etc/dhcp.conf
+    
+    Returns:
+        is_static_ip (bool)
+    '''
+    with open(IP_CONF_FILE, 'r') as f:
+        data = f.readlines()
+    
+    return any(map(lambda l: l.startswith('static ip_address'), data))
