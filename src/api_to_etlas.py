@@ -1,12 +1,13 @@
 import requests
 from config import ETLAS_DOMAIN
-from json_readers import ConfigConatiner
+from json_readers import ConfigContainer
 import json
 
 def post_config_to_etlas():
+    '''Reads through config.json and sends content to etlas'''
     url = ETLAS_DOMAIN + '/api/unicon/controller'
     
-    config = ConfigConatiner[0]['controllerConfig']
+    config = ConfigContainer[0]['controllerConfig']
     controller_id = config['controllerId'] or None
     controller_ip_static = config['controllerIpStatic']
     controller_ip = config['controllerIp']

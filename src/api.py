@@ -4,7 +4,7 @@ import flask
 import os
 from healthcheck import healthcheck
 from helpers import int_or_none
-from json_readers import ConfigConatiner, Config
+from json_readers import ConfigContainer, Config
 from system_calls import change_ip, check_if_static_ip, get_host_ip
 from unicon import check_auth_device_status
 from api_to_etlas import post_config_to_etlas
@@ -26,7 +26,7 @@ def get_status():
         status_code: 200
     '''
     healthcheck()
-    controller_config = ConfigConatiner[0]['controllerConfig']
+    controller_config = ConfigContainer[0]['controllerConfig']
     body = {}
     body['controllerIPStatic'] = (controller_config['controllerIpStatic'] == 'static')
     body['controllerIP']       = controller_config['controllerIp']
@@ -47,8 +47,16 @@ def get_status():
 
 @app.route('/api/unicon/config', methods=['POST'])
 def post_config():
+    ''' Updates pi with new config, and sends new config to etlas
+    
+    Args: (in request)
+        body:
+            controllerSerialNumber (string)
+            controllerIPStatic     (bool)
+            controllerIP           (string)        
+    '''
     body = flask.request.json
-    config = ConfigConatiner[0]
+    config = ConfigContainer[0]
     controller_config = config['controllerConfig']
 
     assert(body['controllerSerialNumber'] == controller_config['controllerSerialNo'])

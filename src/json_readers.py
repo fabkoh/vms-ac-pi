@@ -11,25 +11,25 @@ def update(file_num):
         file_num(int): refer the the elif statement to see which file is updated
     '''
     if file_num == 0:
-        ArchivedLogsConatiner[0] = ArchivedLogs.read()
+        ArchivedLogsContainer[0] = ArchivedLogs.read()
 
     elif file_num == 1:
-        ConfigConatiner[0] = Config.read()
+        ConfigContainer[0] = Config.read()
 
     elif file_num == 2:
-        CredOccurConatiner[0] = ArchivedLogs.read()
+        CredOccurContainer[0] = ArchivedLogs.read()
 
     elif file_num == 3:
-        CredRulesSetConatiner[0] = ArchivedLogs.read()
+        CredRulesSetContainer[0] = ArchivedLogs.read()
 
     elif file_num == 4:
-        EventActionTriggersConatiner[0] = ArchivedLogs.read()
+        EventActionTriggersContainer[0] = ArchivedLogs.read()
 
     elif file_num == 5:
-        PendingLogsConatiner[0] = ArchivedLogs.read()
+        PendingLogsContainer[0] = ArchivedLogs.read()
 
     elif file_num == 6:
-        StatusConatiner[0] = ArchivedLogs.read()
+        StatusContainer[0] = ArchivedLogs.read()
 
     elif file_num == 7:
         TestJsonContainer[0] = TestJson.read()
@@ -90,13 +90,13 @@ Status             = JsonReader(path + '/json/status.json'             , 6)
 TestJson           = JsonReader(path + '/json/test.json'               , 7)
 
 # or import these containers, to get updated info call container[0] as demonstrated in main
-ArchivedLogsConatiner        = [ArchivedLogs.read()]
-ConfigConatiner              = [Config.read()]
-CredOccurConatiner           = [CredOccur.read()]
-CredRulesSetConatiner        = [CredRulesSet.read()]
-EventActionTriggersConatiner = [EventActionTrigger.read()]
-PendingLogsConatiner         = [PendingLogs.read()]
-StatusConatiner              = [Status.read()]
+ArchivedLogsContainer        = [ArchivedLogs.read()]
+ConfigContainer              = [Config.read()]
+CredOccurContainer           = [CredOccur.read()]
+CredRulesSetContainer        = [CredRulesSet.read()]
+EventActionTriggersContainer = [EventActionTrigger.read()]
+PendingLogsContainer         = [PendingLogs.read()]
+StatusContainer              = [Status.read()]
 TestJsonContainer            = [TestJson.read()]
 
 # tests

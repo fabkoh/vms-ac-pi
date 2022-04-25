@@ -1,7 +1,7 @@
 '''contains the controller code'''
 import threading
 import time
-from json_readers import ConfigConatiner, TestJsonContainer
+from json_readers import ConfigContainer, TestJsonContainer
 import pigpio
 from decoder import Decoder
 
@@ -29,7 +29,7 @@ def set_readers_to_read():
            E2_IN_D0, E2_IN_D1, E2_OUT_D0, E2_OUT_D1, \
            E1_IN, E1_OUT, E2_IN, E2_OUT
     
-    pins_config = ConfigConatiner[0]['GPIOpins']
+    pins_config = ConfigContainer[0]['GPIOpins']
     E1_IN_D0  = int(pins_config['E1_IN_D0'])
     E1_IN_D1  = int(pins_config['E1_IN_D1'])
     E1_OUT_D0 = int(pins_config['E1_OUT_D0'])

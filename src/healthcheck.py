@@ -3,15 +3,15 @@ import time
 from api_to_etlas import post_config_to_etlas
 from system_calls import check_if_static_ip, get_host_ip, get_mac_address, get_serial_number
 from unicon import check_auth_device_status
-from json_readers import Config, ConfigConatiner
+from json_readers import Config, ConfigContainer
 
 def healthcheck():
     '''Checks for pi's mac address, ip, ip static, serial number and writes to Config
     
     Note:
-        require pi's pi to be initialised
+        require pi's pins to be initialised
     '''
-    config = ConfigConatiner[0]
+    config = ConfigContainer[0]
 
     auth_device_status = check_auth_device_status()
     auth_device_config = config['controllerConfig']['readersConnection']
