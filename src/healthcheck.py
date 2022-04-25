@@ -27,8 +27,8 @@ def healthcheck():
     controller_config = config['controllerConfig']
     controller_config['controllerIp']           = get_host_ip()
     controller_config['controllerIpStatic']     = 'static' if check_if_static_ip() else ''
-    controller_config['controllerSerialNumber'] = str(get_serial_number())[:-1]
-    controller_config['controllerMAC']          = str(get_mac_address())[:-1]
+    controller_config['controllerSerialNumber'] = str(get_serial_number().decode())[:-1]
+    controller_config['controllerMAC']          = str(get_mac_address().decode())[:-1]
 
     Config.write(config)
 
