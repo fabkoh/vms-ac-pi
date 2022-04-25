@@ -34,10 +34,10 @@ def get_status():
     body['controllerMAC']      = controller_config['controllerMAC']
 
     auth_device_config = controller_config['readersConnection']
-    body['E1IN'] = auth_device_config['E1_IN']
-    body['E1OUT'] = auth_device_config['E1_OUT']
-    body['E2IN'] = auth_device_config['E2_IN']
-    body['E2OUT'] = auth_device_config['E2_OUT']
+    body['E1IN']  = auth_device_config['E1_IN']  == 'connected'
+    body['E1OUT'] = auth_device_config['E1_OUT'] == 'connected'
+    body['E2IN']  = auth_device_config['E2_IN']  == 'connected'
+    body['E2OUT'] = auth_device_config['E2_OUT'] == 'connected'
 
     return flask.Response(
         json.dumps(body),
