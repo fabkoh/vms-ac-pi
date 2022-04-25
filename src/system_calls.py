@@ -123,7 +123,7 @@ def change_ip_to_dynamic():
                     eth_index = i
                     break
 
-            if eth_index is not None:
+            if (eth_index is not None) and (not data[eth_index].startswith('#')):
                 # comment out the 4 lines
                 for i in range(4):
                     data[eth_index+i] = '# ' + data[eth_index+i]
