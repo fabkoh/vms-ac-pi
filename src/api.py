@@ -33,7 +33,7 @@ def get_status():
     body['controllerId']       = int_or_none(controller_config['controllerId'])
     body['controllerMAC']      = controller_config['controllerMAC']
 
-    auth_device_config = controller_config['readerConnection']
+    auth_device_config = controller_config['readersConnection']
     body['E1IN'] = auth_device_config['E1_IN']
     body['E1OUT'] = auth_device_config['E1_OUT']
     body['E2IN'] = auth_device_config['E2_IN']
