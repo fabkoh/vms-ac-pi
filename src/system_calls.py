@@ -93,10 +93,10 @@ def change_ip_to_static(ip_address, routers=None, dns='8.8.8.8'):
             if 'interface eth0' in data[i]:
                 eth_index = i
                 break
-
+            
         # if config is found, use index to edit the lines you need (the next 3)
         if eth_index:
-            data[eth_index]   = 'eth0 interface\n'
+            data[eth_index]   = 'interface eth0\n'
             data[eth_index+1] = f'static ip_address={ip_address}/24\n'
             data[eth_index+2] = f'static routers={routers}\n'
             data[eth_index+3] = f'static domain_name_servers={dns}\n'

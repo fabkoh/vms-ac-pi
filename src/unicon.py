@@ -61,8 +61,8 @@ def check_auth_device_status():
     return {
         'E1IN' : (pi.read(E1_IN_D0) and pi.read(E1_IN_D1)),
         'E1OUT': (pi.read(E1_OUT_D0) and pi.read(E1_OUT_D1)),
-        'E2IN' : (pi.read(E1_IN_D0) and pi.read(E1_IN_D1)),
-        'E2OUT': (pi.read(E1_OUT_D0) and pi.read(E1_OUT_D1))
+        'E2IN' : (pi.read(E2_IN_D0) and pi.read(E2_IN_D1)),
+        'E2OUT': (pi.read(E2_OUT_D0) and pi.read(E2_OUT_D1))
     }
 
 def main():
