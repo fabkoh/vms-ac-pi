@@ -1,6 +1,6 @@
 import datetime
 import time
-from api_to_etlas import post_config
+from api_to_etlas import post_config_to_etlas
 from system_calls import check_if_static_ip, get_host_ip, get_mac_address, get_serial_number
 from unicon import check_auth_device_status
 from json_readers import Config, ConfigConatiner

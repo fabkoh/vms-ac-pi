@@ -3,7 +3,7 @@ from config import ETLAS_DOMAIN
 from json_readers import ConfigConatiner
 import json
 
-def post_config():
+def post_config_to_etlas():
     url = ETLAS_DOMAIN + '/api/unicon/controller'
     
     config = ConfigConatiner[0]['controllerConfig']
@@ -31,4 +31,4 @@ def post_config():
     print('SUCCESS' if r.status_code == 200 or r.status_code == 201 else 'FAIL')
 
 if __name__ == '__main__':
-    post_config()
+    post_config_to_etlas()
