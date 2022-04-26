@@ -12,6 +12,22 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 @app.route('/api/status')
 def get_status():
+    '''returns healthcheck info
+    
+    Returns: (response)
+        code: 200
+        body: {
+            controllerId       (int or null): 1
+            controllerIP       (string):      192.168.1.46
+            controllerIPStatic (bool):        true
+            controllerMAC      (string):      e4:5f:01:25:85:f3
+            controllerSerialNo (string):      100000005a46e105
+            'E1 IN'            (bool):        false
+            'E1 OUT'           (bool):        false
+            'E2 IN'            (bool):        true
+            'E2 OUT'           (bool):        true
+        }
+    '''
     healthcheck.main(False)
     with open(path + '/json/config.json', 'r') as f:
         data = json.load(f)
@@ -35,6 +51,19 @@ def get_status():
 
 @app.route('/api/config', methods=['POST'])
 def post_config():
+    '''changes config.json and post changes to etlas, 
+    aborts if controllerSerialNo is different
+    
+    Args (request):
+        body: {
+            controllerIPStatic  (bool):   true
+            controllerIP        (string): 192.168.1.46
+            controllerSerialNo  (string): 100000005a46e105
+        }
+        
+    Returns (response):
+        code: 200
+    '''
     request_body = flask.request.json
     with open(path + '/json/config.json', 'r') as f:
         data = json.load(f)
@@ -45,5 +74,27 @@ def post_config():
     changeStatic.change_ip(request_body['controllerIPStatic'], request_body['controllerIP'])
     healthcheck.main() # post new config to etlas
     return flask.Response({}, 204)
+
+@app.route('/api/reset', methods=['POST'])
+def post_reset():
+    '''Resets the controller. Resets ip to 192.168.1.67. then posts new config to etlas
+    
+    Returns (response):
+        code: 200
+    '''
+    changeStatic.change_ip(True, '192.168.1.67')
+    healthcheck.main() # post new config to etlas
+    return flask.Response({}, 200)
+
+@app.route('/api/reboot', method=['POST'])
+def post_reboot():
+    '''reboots the controller'''
+    os.system('sudo reboot')
+
+@app.route('/api/shutdown', method=['POST'])
+def post_shutdown():
+    '''shutdowns the controller'''
+    os.system('sudo halt')
+
 
 app.run(host='0.0.0.0',port=5000,debug = True )
