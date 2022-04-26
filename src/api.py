@@ -10,11 +10,6 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 path = os.path.dirname(os.path.abspath(__file__))
 
-#get triggers healthcheck and send updated config file to backend 
-#post checks for ip static ( set ip to static ) and Name, id, entranceName, pins, timeout, archivedmaxlength 
-
-
-
 @app.route('/api/status')
 def get_status():
     healthcheck.main(False)
@@ -38,4 +33,17 @@ def get_status():
 
     return flask.Response(json.dumps(body), headers={ 'Content-type': 'application/json' })
 
-app.run(host='0.0.0.0',port=5002,debug = True )
+@app.route('/api/config', methods=['POST'])
+def post_config():
+    request_body = flask.request.json
+    with open(path + 'json/config.json', 'r') as f:
+        data = json.load(f)
+        f.close()
+    # check if this is the intended controller
+    assert(request_body['controllerSerialNo'] == data['controllerConfig']['controllerSerialNo'])
+
+    changeStatic.change_ip(request_body['controllerIPStatic'], request_body['controllerIP'])
+    healthcheck.main() # post new config to etlas
+    return flask.Response({}, 204)
+
+app.run(host='0.0.0.0',port=5000,debug = True )

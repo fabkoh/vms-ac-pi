@@ -21,6 +21,33 @@ def check_ip_static():
         
         return any(map(lambda s: s.startswith('static ip_address'), data)) # checks if any of the strings start with 'static ip_address'
 
+def get_host_ip(hostIP=None):
+    if hostIP is None or hostIP == 'auto':
+        hostIP = 'ip'
+
+    if hostIP == 'dns':
+        hostIP = socket.getfqdn()
+        
+    elif hostIP == 'ip':
+        from socket import gaierror
+        try:
+            hostIP = socket.gethostbyname(socket.getfqdn())
+        except gaierror:
+            logger.warn('gethostbyname(socket.getfqdn()) failed... trying on hostname()')
+            hostIP = socket.gethostbyname(socket.gethostname())
+        if hostIP.startswith("127."):
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            # doesn't have to be reachable
+            while True:
+                try:
+                    s.connect(('10.255.255.255', 1))
+                    hostIP = s.getsockname()[0]
+                    break
+                except:
+                    time.sleep(0.1)
+
+    return str(hostIP)
+
 def main(post_to_etlas=True):
 
     hostname = socket.gethostname()   
@@ -36,31 +63,7 @@ def main(post_to_etlas=True):
     def get_mac():
         return system_call("cat /sys/class/net/eth0/address")
 
-    def get_host_ip(hostIP=None):
-        if hostIP is None or hostIP == 'auto':
-            hostIP = 'ip'
-
-        if hostIP == 'dns':
-            hostIP = socket.getfqdn()
-        elif hostIP == 'ip':
-            from socket import gaierror
-            try:
-                hostIP = socket.gethostbyname(socket.getfqdn())
-            except gaierror:
-                logger.warn('gethostbyname(socket.getfqdn()) failed... trying on hostname()')
-                hostIP = socket.gethostbyname(socket.gethostname())
-            if hostIP.startswith("127."):
-                s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                # doesn't have to be reachable
-                while True:
-                    try:
-                        s.connect(('10.255.255.255', 1))
-                        hostIP = s.getsockname()[0]
-                        break
-                    except:
-                        time.sleep(0.1)
-
-        return str(hostIP)
+    
 
     def post_to_etlas():
         url = 'http://192.168.1.250:8082/api/unicon/controller'
