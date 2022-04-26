@@ -75,7 +75,7 @@ def change_dhcp():
         for i in range(4):
             data[eth_index+i] = '# ' + data[eth_index+i]
 
-    with open('etc/dhcpcd.conf', 'w') as f:
+    with open('/etc/dhcpcd.conf', 'w') as f:
         f.writelines(data) # write changes
         f.close()
 
