@@ -8,80 +8,32 @@ import os
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-
+path = os.path.dirname(os.path.abspath(__file__))
 
 #get triggers healthcheck and send updated config file to backend 
 #post checks for ip static ( set ip to static ) and Name, id, entranceName, pins, timeout, archivedmaxlength 
-@app.route('/config', methods=['GET','POST'])
-def config():
-    if flask.request.method == 'GET':
-        try:
-            healthcheck.main()
-            healthcheck.update_server_config()
-            return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
-        except:
-            raise BadRequest('Error executing healthcheck')
-
-    if flask.request.method == 'POST':
-        content = flask.request.json
-        config = content["controllerConfig"]
-        try:
-            healthcheck.main()
-            file = "json/config.json"
-            outfile = open(file)
-            data = json.load(outfile)
-            controllerConfig = data["controllerConfig"]
-            if config["controllerSerialNo"] == controllerConfig["controllerSerialNo"] and config["controllerMAC"] == controllerConfig["controllerMAC"]:
-                with open(file,"w") as writefile:
-                    json.dump(content,writefile,indent=4) 
-                    outfile.close()
-                    
-            if config["controllerIp"] != controllerConfig["controllerIp"] and config["controllerIpStatic"] == "True":
-                changeStatic.change_static_ip(config["controllerIp"],changeStatic.get_default_gateway_windows(),"8.8.8.8")
-                os.system('sudo ifconfig eth0 down')
-                os.system('sudo ifconfig eth0 up')
-                healthcheck.update_server_config()
-            return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
-        except:
-            raise BadRequest('Error updating config.json')
-
-
-#update current file and  ( NOT DONE : restart program )
-@app.route('/credOccur', methods=['POST'])
-def credOccur():
-    if flask.request.method == 'POST':
-        content = flask.request.json
-        try:
-            entrance1 = content[0]["Entrance"]
-            
-        except:
-            entrance1 = ""
-        
-        try:
-            entrance2 = content[1]["Entrance"]
-            
-        except:
-            entrance2 = ""
-            
-        try:
-            file = "json/config.json"
-            outfile = open(file)
-            data = json.load(outfile)
-            try:
-                credEntrance1 = data["EntranceName"]["E1"]
-            except:
-                credEntrance1 = ""
-            try:
-                credEntrance2 = data["EntranceName"]["E2"]
-            except:
-                credEntrance2 = ""
-                
-            if (credEntrance1 == entrance1 and credEntrance2 == entrance2) or (credEntrance2 == entrance1 and credEntrance1 == entrance2):
-                with open("json/credOccur.json","w") as writefile:
-                    json.dump(content,writefile,indent=4) 
-                    outfile.close()
-            return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
-        except:
-            raise BadRequest('Error updating config.json')
 
 app.run(host='0.0.0.0',port=5000,debug = True )
+
+@app.route('/api/status')
+def get_status():
+    healthcheck.main(False)
+    with open(path + '/json/config.json', 'r') as f:
+        data = json.load(f)
+        f.close()
+
+    controller_config = data['controllerConfig']
+    readers_config = controller_config['readersConnection']
+    body = {
+        'controllerId': controller_config['controllerId'] or None,
+        'controllerIP': controller_config['controllerIp'],
+        'controllerIPStatic': healthcheck.check_ip_static(),
+        'controllerMAC': controller_config['controllerMAC'],
+        'controllerSerialNo': controller_config['controllerSerialNo'],
+        'E1 IN': readers_config['E1_IN'] == 'Connected',
+        'E1 OUT': readers_config['E1_OUT'] == 'Connected',
+        'E2 IN': readers_config['E2_IN'] == 'Connected',
+        'E2 OUT': readers_config['E2_OUT'] == 'Connected'
+    }
+
+    return flask.Response(body, headers={ 'Content-type': 'application/json' })

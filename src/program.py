@@ -3,6 +3,7 @@ from events import *
 import threading
 import pigpio 
 import eventsMod
+import healthcheck # runs heathcheck main()
 
 '''
     1. main program that runs everything, including E1

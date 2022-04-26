@@ -14,7 +14,14 @@ import time
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
 
-def main():
+def check_ip_static():
+        '''checks /etc/dhcpcd.conf to see if ip is static'''
+        with open('/etc/dhcpcd.conf', 'r') as f:
+            data = f.readlines()
+        
+        return any(map(lambda s: s.startswith('static ip_address'), data)) # checks if any of the strings start with 'static ip_address'
+
+def main(post_to_etlas=True):
 
     hostname = socket.gethostname()   
 
@@ -53,22 +60,30 @@ def main():
                     except:
                         time.sleep(0.1)
 
-        return hostIP
+        return str(hostIP)
 
-
-
-
-    def update_ipaddress():
-        url = 'http://192.168.1.250:8082/unicon/config'
+    def post_to_etlas():
+        url = 'http://192.168.1.250:8082/api/unicon/controller'
         
         with open(file,"r+") as outfile:
-            try:
-                data = json.load(outfile)
-            except:
-                data = []
+            data = json.load(outfile)
+            outfile.close()
         
         headers = {'Content-type': 'application/json'}
-        r = requests.post(url, data=json.dumps(data), headers=headers,verify=False)
+        controllerConfig = data['controllerConfig']
+        readersConfig = controllerConfig['readersConnection']
+        body = {
+            'controllerId': controllerConfig['controllerId'] or None,
+            'controllerIP': controllerConfig['controllerIp'], # ip updated already below before this function call
+            'controllerIPStatic': check_ip_static(),
+            'controllerMAC': controllerConfig['controllerMAC'],
+            'controllerSerialNo': controllerConfig['controllerSerialNo'],
+            'E1 IN': readersConfig['E1_IN'] == 'Connected',
+            'E1 OUT': readersConfig['E1_OUT'] == 'Connected',
+            'E2 IN': readersConfig['E2_IN'] == 'Connected',
+            'E2 OUT': readersConfig['E2_OUT'] == 'Connected'
+        }
+        r = requests.post(url, data=json.dumps(body), headers=headers,verify=False)
         print(r)
         print(r.status_code)
 
@@ -107,7 +122,6 @@ def main():
     def test_for_connection(D0,D1,reader):
         if pi.read(D0) == 1 and pi.read(D1) == 1:
             readersConnection[reader] = "Connected"
-            print(D0, D1, 'good')
         else:
             readersConnection[reader] = ""
 
@@ -142,16 +156,13 @@ def main():
         json.dump(config,outfile,indent=4) 
         outfile.close()
 
-
-    while True:
-        try:
-            update_ipaddress()
-            break
-        except:
-            time.sleep(0.1)
-    
-    program = ("python3 " +path+"/program.py")
-    os.system(program)
+    if post_to_etlas:
+        while True:
+            try:
+                post_to_etlas()
+                break
+            except:
+                time.sleep(0.1)
     
 main()
 
