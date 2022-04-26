@@ -107,6 +107,7 @@ def main():
     def test_for_connection(D0,D1,reader):
         if pi.read(D0) == 1 and pi.read(D1) == 1:
             readersConnection[reader] = "Connected"
+            print(D0, D1, 'good')
         else:
             readersConnection[reader] = ""
 

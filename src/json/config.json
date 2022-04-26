@@ -1,76 +1,76 @@
 {
-    "controllerConfig": {
-        "controllerId": "2",
-        "controllerName": "",
-        "controllerIp": "192.168.1.46",
-        "controllerIpStatic": "",
-        "controllerMAC": "e4:5f:01:25:85:f3",
-        "controllerSerialNo": "100000005a46e105",
-        "readersConnection": {
-            "E1_IN": "",
-            "E1_OUT": "",
-            "E2_IN": "Connected",
-            "E2_OUT": "Connected",
-            "dateAndTime": "12-04-2022 11:02:24"
-        }
-    },
     "ZoneStatus": {
         "controllersInZoneE1": [
             {
-                "controllerId": "333333",
-                "Entrance": "E1"
+                "Entrance": "E1",
+                "controllerId": "333333"
             },
             {
-                "controllerId": "222222",
-                "Entrance": "E2"
+                "Entrance": "E2",
+                "controllerId": "222222"
             }
         ],
         "controllersInZoneE2": [
             {}
         ]
     },
+    "controllerConfig": {
+        "controllerId": "2",
+        "controllerMAC": "e4:5f:01:25:85:f3",
+        "controllerIpStatic": "",
+        "readersConnection": {
+            "E2_IN": "Connected",
+            "E1_IN": "",
+            "E2_OUT": "Connected",
+            "E1_OUT": "",
+            "dateAndTime": "25-04-2022 16:54:31"
+        },
+        "controllerSerialNo": "100000005a46e105",
+        "controllerName": "",
+        "controllerIp": "192.168.1.46"
+    },
     "EntranceName": {
         "E1": "MainDoor",
         "E2": "SideDoor"
     },
     "GPIOpins": {
-        "E1_IN_D0": "14",
-        "E1_IN_D1": "15",
-        "E1_IN_Buzz": "23",
-        "E1_IN_Led": "18",
-        "E1_OUT_D0": "2",
-        "E1_OUT_D1": "3",
-        "E1_OUT_Buzz": "17",
-        "E1_OUT_Led": "4",
-        "E1_Mag": "6",
-        "E1_Button": "5",
+        "Gen_Out_3": "",
+        "Gen_Out_2": "",
+        "Gen_Out_1": "",
         "E2_IN_D0": "24",
-        "E2_IN_D1": "25",
         "E2_IN_Buzz": "7",
+        "E2_OUT_Buzz": "11",
+        "E1_IN_Buzz": "23",
+        "E2_Mag": "26",
         "E2_IN_Led": "8",
+        "Fire": "26",
+        "E1_IN_Led": "18",
+        "E1_Mag": "6",
+        "E1_IN_D1": "15",
+        "E1_IN_D0": "14",
+        "E1_OUT_Led": "4",
+        "E2_OUT_Led": "9",
+        "E1_OUT_D1": "3",
+        "E1_OUT_D0": "2",
         "E2_OUT_D0": "22",
         "E2_OUT_D1": "10",
-        "E2_OUT_Buzz": "11",
-        "E2_OUT_Led": "9",
-        "E2_Mag": "26",
-        "E2_Button": "12",
         "Relay_1": "27",
         "Relay_2": "13",
-        "Fire": "26",
         "Gen_In_1": "16",
-        "Gen_Out_1": "",
-        "Gen_In_2": "20",
-        "Gen_Out_2": "",
         "Gen_In_3": "21",
-        "Gen_Out_3": ""
+        "Gen_In_2": "20",
+        "E2_Button": "12",
+        "E1_Button": "5",
+        "E2_IN_D1": "25",
+        "E1_OUT_Buzz": "17"
     },
     "TIMEOUT": {
+        "BUZZER_TIMEOUT_E2": "5",
         "CRED_TIMEOUT_E1": "10",
         "CRED_TIMEOUT_E2": "10",
-        "MAG_TIMEOUT_E1": "10",
-        "MAG_TIMEOUT_E2": "10",
         "BUZZER_TIMEOUT_E1": "5",
-        "BUZZER_TIMEOUT_E2": "5"
+        "MAG_TIMEOUT_E1": "10",
+        "MAG_TIMEOUT_E2": "10"
     },
     "archivedMAXlength": "30"
 }

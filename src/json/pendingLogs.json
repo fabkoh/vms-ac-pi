@@ -48,5 +48,32 @@
         "entrance": "SideDoor",
         "eventActionType": "Security Guard Button pressed",
         "eventTime": "2022-04-12 11:02:34"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-25 10:43:49"
+    },
+    {
+        "authmethod": null,
+        "direction": "OUT",
+        "entrance": "SideDoor",
+        "eventActionType": "unauthenticated_scans",
+        "eventTime": "2022-04-25 10:45:19"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-25 16:54:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-25 16:54:33"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-04-26 08:08:08"
     }
 ]
