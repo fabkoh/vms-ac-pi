@@ -36,7 +36,7 @@ def get_status():
 @app.route('/api/config', methods=['POST'])
 def post_config():
     request_body = flask.request.json
-    with open(path + 'json/config.json', 'r') as f:
+    with open(path + '/json/config.json', 'r') as f:
         data = json.load(f)
         f.close()
     # check if this is the intended controller
