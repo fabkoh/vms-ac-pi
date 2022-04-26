@@ -13,7 +13,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 #get triggers healthcheck and send updated config file to backend 
 #post checks for ip static ( set ip to static ) and Name, id, entranceName, pins, timeout, archivedmaxlength 
 
-app.run(host='0.0.0.0',port=5000,debug = True )
+
 
 @app.route('/api/status')
 def get_status():
@@ -36,4 +36,6 @@ def get_status():
         'E2 OUT': readers_config['E2_OUT'] == 'Connected'
     }
 
-    return flask.Response(body, headers={ 'Content-type': 'application/json' })
+    return flask.Response(json.dumps(body), headers={ 'Content-type': 'application/json' })
+
+app.run(host='0.0.0.0',port=5002,debug = True )
