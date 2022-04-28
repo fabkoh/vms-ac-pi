@@ -86,12 +86,12 @@ def post_reset():
     healthcheck.main() # post new config to etlas
     return flask.Response({}, 200)
 
-@app.route('/api/reboot', method=['POST'])
+@app.route('/api/reboot', methods=['POST'])
 def post_reboot():
     '''reboots the controller'''
     os.system('sudo reboot')
 
-@app.route('/api/shutdown', method=['POST'])
+@app.route('/api/shutdown', methods=['POST'])
 def post_shutdown():
     '''shutdowns the controller'''
     os.system('sudo halt')
