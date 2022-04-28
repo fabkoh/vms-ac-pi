@@ -84,7 +84,7 @@ def post_reset():
     '''
     changeStatic.change_ip(True, '192.168.1.67')
     healthcheck.main() # post new config to etlas
-    return flask.Response({}, 200)
+    return flask.Response({}, 204)
 
 @app.route('/api/reboot', method=['POST'])
 def post_reboot():
