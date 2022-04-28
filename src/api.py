@@ -22,10 +22,10 @@ def get_status():
             controllerIPStatic (bool):        true
             controllerMAC      (string):      e4:5f:01:25:85:f3
             controllerSerialNo (string):      100000005a46e105
-            'E1 IN'            (bool):        false
-            'E1 OUT'           (bool):        false
-            'E2 IN'            (bool):        true
-            'E2 OUT'           (bool):        true
+            'E1_IN'            (bool):        false
+            'E1_OUT'           (bool):        false
+            'E2_IN'            (bool):        true
+            'E2_OUT'           (bool):        true
         }
     '''
     healthcheck.main(False)
@@ -41,10 +41,10 @@ def get_status():
         'controllerIPStatic': healthcheck.check_ip_static(),
         'controllerMAC': controller_config['controllerMAC'],
         'controllerSerialNo': controller_config['controllerSerialNo'],
-        'E1 IN': readers_config['E1_IN'] == 'Connected',
-        'E1 OUT': readers_config['E1_OUT'] == 'Connected',
-        'E2 IN': readers_config['E2_IN'] == 'Connected',
-        'E2 OUT': readers_config['E2_OUT'] == 'Connected'
+        'E1_IN': readers_config['E1_IN'] == 'Connected',
+        'E1_OUT': readers_config['E1_OUT'] == 'Connected',
+        'E2_IN': readers_config['E2_IN'] == 'Connected',
+        'E2_OUT': readers_config['E2_OUT'] == 'Connected'
     }
 
     return flask.Response(json.dumps(body), headers={ 'Content-type': 'application/json' })
