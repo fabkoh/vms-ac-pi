@@ -81,10 +81,10 @@ def main(post_to_etlas=True):
             'controllerIPStatic': check_ip_static(),
             'controllerMAC': controllerConfig['controllerMAC'],
             'controllerSerialNo': controllerConfig['controllerSerialNo'],
-            'E1 IN': readersConfig['E1_IN'] == 'Connected',
-            'E1 OUT': readersConfig['E1_OUT'] == 'Connected',
-            'E2 IN': readersConfig['E2_IN'] == 'Connected',
-            'E2 OUT': readersConfig['E2_OUT'] == 'Connected'
+            'E1_IN': readersConfig['E1_IN'] == 'Connected',
+            'E1_OUT': readersConfig['E1_OUT'] == 'Connected',
+            'E2_IN': readersConfig['E2_IN'] == 'Connected',
+            'E2_OUT': readersConfig['E2_OUT'] == 'Connected'
         }
         r = requests.post(url, data=json.dumps(body), headers=headers,verify=False)
         print(r)
