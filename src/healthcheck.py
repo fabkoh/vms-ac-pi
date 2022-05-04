@@ -11,7 +11,7 @@ import json
 import requests
 import time
 
-from changeStatic import change_ip
+from changeStatic import change_ip, change_static_ip, get_default_gateway_windows
 
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
@@ -48,9 +48,9 @@ def get_host_ip(hostIP=None):
                 except:
                     time.sleep(0.1)
 
-            if str(hostIP).startswith('169.254') and (not check_ip_static()): # apipa, use static ip
-                change_ip(True, '192.168.1.230')
-                return get_host_ip('ip')
+        if str(hostIP).startswith('169.254') and (not check_ip_static()): # apipa, use static ip
+            change_static_ip('192.168.1.230', get_default_gateway_windows(), '8.8.8.8')
+            return get_host_ip('ip')
 
     return str(hostIP)
 
