@@ -66,6 +66,10 @@ def post_config():
         code: 200
     '''
     request_body = flask.request.json
+
+    if ('controllerIPStatic' not in request_body) or ('controllerIP' not in request_body) or ('controllerSerialNo' not in request_body):
+        flask.abort(400)
+
     with open(path + '/json/config.json', 'r') as f:
         data = json.load(f)
         f.close()
