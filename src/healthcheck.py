@@ -72,7 +72,7 @@ def main(post_to_etlas=False):
     
 
     def post_to_etlas():
-        url = 'http://192.168.1.250:8082/api/unicon/controller'
+        url = 'http://192.168.1.185:8082/api/unicon/controller'
         
         with open(file,"r+") as outfile:
             data = json.load(outfile)

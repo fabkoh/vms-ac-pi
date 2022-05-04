@@ -15,7 +15,7 @@
         ]
     },
     "controllerConfig": {
-        "controllerId": "2",
+        "controllerId": "",
         "controllerMAC": "e4:5f:01:25:85:f3",
         "controllerIpStatic": "",
         "readersConnection": {
@@ -23,7 +23,7 @@
             "E1_IN": "",
             "E2_OUT": "Connected",
             "E1_OUT": "",
-            "dateAndTime": "04-05-2022 12:52:27"
+            "dateAndTime": "04-05-2022 12:57:33"
         },
         "controllerSerialNo": "100000005a46e105",
         "controllerName": "",
