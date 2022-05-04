@@ -332,11 +332,7 @@ def verify_datetime(schedule):
                     return True
                 
                 if now_hour == start_hour:
-                    if now_min >= start_min:
-                        return True
-                
-                if now_hour == end_hour:
-                    if end_min >= now_min:
+                    if now_min >= start_min and now_min <= end_min:
                         return True
 
     return False 
