@@ -5,6 +5,7 @@ from werkzeug.exceptions import BadRequest
 import changeStatic
 import os
 
+healthcheck.main(True)
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -72,7 +73,7 @@ def post_config():
     assert(request_body['controllerSerialNo'] == data['controllerConfig']['controllerSerialNo'])
 
     changeStatic.change_ip(request_body['controllerIPStatic'], request_body['controllerIP'])
-    healthcheck.main() # post new config to etlas
+    healthcheck.main(True) # post new config to etlas
     return flask.Response({}, 204)
 
 @app.route('/api/reset', methods=['POST'])
@@ -83,7 +84,7 @@ def post_reset():
         code: 200
     '''
     changeStatic.change_ip(True, '192.168.1.67')
-    healthcheck.main() # post new config to etlas
+    healthcheck.main(True) # post new config to etlas
     return flask.Response({}, 204)
 
 @app.route('/api/reboot', method=['POST'])

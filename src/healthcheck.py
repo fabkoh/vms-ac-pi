@@ -48,7 +48,7 @@ def get_host_ip(hostIP=None):
 
     return str(hostIP)
 
-def main(post_to_etlas=True):
+def main(post_to_etlas=False):
 
     hostname = socket.gethostname()   
 
@@ -166,8 +166,4 @@ def main(post_to_etlas=True):
                 break
             except:
                 time.sleep(0.1)
-    
-main()
-
-
 
