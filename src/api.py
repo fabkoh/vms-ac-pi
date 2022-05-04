@@ -63,11 +63,9 @@ def post_config():
         }
         
     Returns (response):
-        code: 200
+        code: 204
     '''
-    my_json = flask.request.data.decode('utf8').replace("'", '"')
-    my_string = str(my_json)
-    request_body = json.loads(my_string)
+    request_body = flask.request.json
 
     if ('controllerIPStatic' not in request_body) or ('controllerIP' not in request_body) or ('controllerSerialNo' not in request_body):
         flask.abort(400)
@@ -103,5 +101,38 @@ def post_shutdown():
     '''shutdowns the controller'''
     os.system('sudo halt')
 
+@app.route('/api/entrance-name', methods=['POST'])
+def post_entrance_name():
+    '''changes config.json
+
+    Args (request):
+        body:
+            E1                 (string): MainDoor
+            E2                 (string): SideDoor
+            controllerSerialNo (string): 100000005a46e105
+
+    Returns (response):
+        code: 204
+    '''
+    request_body = flask.request.json
+
+    if ('E1' not in request_body) or ('E2' not in request_body) or ('controllerSerialNo' not in request_body):
+        flask.abort(400)
+    
+    with open(path + '/json/config.json', 'r') as f:
+        data = json.load(f)
+        f.close()
+
+    assert(request_body['controllerSerialNo'] == data['controllerConfig']['controllerSerialNo'])
+
+    data['EntranceName']['E1'] = request_body['E1']
+    data['EntranceName']['E2'] = request_body['E2']
+
+    with open(path + '/json/config.json', 'w') as f:
+        f.writelines(data)
+        f.close()
+
+    return flask.Response({}, 204)
+    
 
 app.run(host='0.0.0.0',port=5000,debug = True )
