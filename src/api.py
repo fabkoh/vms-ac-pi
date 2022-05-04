@@ -65,7 +65,9 @@ def post_config():
     Returns (response):
         code: 200
     '''
-    request_body = flask.request.json
+    my_json = flask.request.data.decode('utf8').replace("'", '"')
+    my_string = str(my_json)
+    request_body = json.loads(my_string)
 
     if ('controllerIPStatic' not in request_body) or ('controllerIP' not in request_body) or ('controllerSerialNo' not in request_body):
         flask.abort(400)

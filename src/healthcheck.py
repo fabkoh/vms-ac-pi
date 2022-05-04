@@ -11,7 +11,7 @@ import json
 import requests
 import time
 
-from changeStatic import change_ip, change_static_ip, get_default_gateway_windows
+from changeStatic import change_static_ip, get_default_gateway_windows
 
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
