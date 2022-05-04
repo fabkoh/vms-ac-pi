@@ -10,7 +10,7 @@ import healthcheck # runs heathcheck main()
     2. when detects any events, imports events.py
     3. checks for API calls
 '''
-
+healthcheck.main(False)
 
 
 E1_IN = decoder(pi, E1_IN_D0, E1_IN_D1, reader_detects_bits,"E1_IN") 

@@ -11,6 +11,8 @@ import json
 import requests
 import time
 
+from changeStatic import change_ip
+
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
 
@@ -46,9 +48,13 @@ def get_host_ip(hostIP=None):
                 except:
                     time.sleep(0.1)
 
+            if str(hostIP).startswith('169.254') and (not check_ip_static()): # apipa, use static ip
+                change_ip(True, '192.168.1.230')
+                return get_host_ip('ip')
+
     return str(hostIP)
 
-def main(post_to_etlas=True):
+def main(post_to_etlas=False):
 
     hostname = socket.gethostname()   
 
@@ -166,8 +172,4 @@ def main(post_to_etlas=True):
                 break
             except:
                 time.sleep(0.1)
-    
-main()
-
-
 
