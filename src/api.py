@@ -87,7 +87,7 @@ def post_reset():
     Returns (response):
         code: 200
     '''
-    changeStatic.change_ip(True, '192.168.1.67')
+    changeStatic.change_ip(False, '192.168.1.67')
     healthcheck.main(True) # post new config to etlas
     return flask.Response({}, 204)
 
