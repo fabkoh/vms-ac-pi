@@ -134,5 +134,9 @@ def post_entrance_name():
 
     return flask.Response({}, 204)
     
+@app.route('/api/healthcheck')
+def get_check():
+    healthcheck.main(True)
+    return flask.Response({}, 204)
 
 app.run(host='0.0.0.0',port=5000,debug = True )

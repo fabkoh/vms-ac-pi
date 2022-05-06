@@ -167,6 +167,7 @@ def reader_detects_bits(bits, value,entrance):
 
 
     entrancename = config["EntranceName"][entrance.split("_")[0]]
+    # if entrance not found
     entrance_direction = entrance.split("_")[1]
 
     if entrance == "E1_IN":
