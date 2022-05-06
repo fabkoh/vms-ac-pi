@@ -99,6 +99,7 @@ def post_reboot():
 @app.route('/api/shutdown', methods=['POST'])
 def post_shutdown():
     '''shutdowns the controller'''
+    changeStatic.change_dhcp()
     os.system('sudo halt')
 
 @app.route('/api/entrance-name', methods=['POST'])
