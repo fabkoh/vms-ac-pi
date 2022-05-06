@@ -5,8 +5,6 @@ from werkzeug.exceptions import BadRequest
 import changeStatic
 import os
 
-healthcheck.main(True)
-
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 path = os.path.dirname(os.path.abspath(__file__))
@@ -141,3 +139,5 @@ def get_check():
     return flask.Response({}, 204)
 
 app.run(host='0.0.0.0',port=5000,debug = True )
+
+healthcheck.main(True)
