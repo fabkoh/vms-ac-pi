@@ -16,6 +16,35 @@ from changeStatic import change_static_ip, get_default_gateway_windows
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
 
+pi = pigpio.pi()
+fileconfig = open(file)
+config = json.load(fileconfig)
+fileconfig.close()
+
+
+GPIOpins = config["GPIOpins"]
+
+E1_IN_D0= int(GPIOpins["E1_IN_D0"])
+E1_IN_D1= int(GPIOpins["E1_IN_D1"])
+pi.set_mode(E1_IN_D0, pigpio.INPUT)
+pi.set_mode(E1_IN_D1, pigpio.INPUT)
+
+E1_OUT_D0= int(GPIOpins["E1_OUT_D0"])
+E1_OUT_D1= int(GPIOpins["E1_OUT_D1"])
+pi.set_mode(E1_OUT_D0, pigpio.INPUT)
+pi.set_mode(E1_OUT_D1, pigpio.INPUT)
+
+E2_IN_D0= int(GPIOpins["E2_IN_D0"])
+E2_IN_D1= int(GPIOpins["E2_IN_D1"])
+pi.set_mode(E2_IN_D0, pigpio.INPUT)
+pi.set_mode(E2_IN_D1, pigpio.INPUT)
+
+E2_OUT_D0= int(GPIOpins["E2_OUT_D0"])
+E2_OUT_D1= int(GPIOpins["E2_OUT_D1"])
+pi.set_mode(E2_OUT_D0, pigpio.INPUT)
+pi.set_mode(E2_OUT_D1, pigpio.INPUT)
+
+ 
 def check_ip_static():
         '''checks /etc/dhcpcd.conf to see if ip is static'''
         with open('/etc/dhcpcd.conf', 'r') as f:
@@ -99,35 +128,6 @@ def main(post_to_etlas=False):
         if r.status_code == 201 or r.status_code == 200:
             print("SUCCESS")
 
-
-    pi = pigpio.pi()
-    fileconfig = open(file)
-    config = json.load(fileconfig)
-
-
-
-    GPIOpins = config["GPIOpins"]
-
-    E1_IN_D0= int(GPIOpins["E1_IN_D0"])
-    E1_IN_D1= int(GPIOpins["E1_IN_D1"])
-    pi.set_mode(E1_IN_D0, pigpio.INPUT)
-    pi.set_mode(E1_IN_D1, pigpio.INPUT)
-
-    E1_OUT_D0= int(GPIOpins["E1_OUT_D0"])
-    E1_OUT_D1= int(GPIOpins["E1_OUT_D1"])
-    pi.set_mode(E1_OUT_D0, pigpio.INPUT)
-    pi.set_mode(E1_OUT_D1, pigpio.INPUT)
-
-    E2_IN_D0= int(GPIOpins["E2_IN_D0"])
-    E2_IN_D1= int(GPIOpins["E2_IN_D1"])
-    pi.set_mode(E2_IN_D0, pigpio.INPUT)
-    pi.set_mode(E2_IN_D1, pigpio.INPUT)
-
-    E2_OUT_D0= int(GPIOpins["E2_OUT_D0"])
-    E2_OUT_D1= int(GPIOpins["E2_OUT_D1"])
-    pi.set_mode(E2_OUT_D0, pigpio.INPUT)
-    pi.set_mode(E2_OUT_D1, pigpio.INPUT)
-
     def test_for_connection(D0,D1,reader):
         if pi.read(D0) == 1 and pi.read(D1) == 1:
             readersConnection[reader] = "Connected"
@@ -164,8 +164,6 @@ def main(post_to_etlas=False):
         outfile.seek(0)
         json.dump(config,outfile,indent=4) 
         outfile.close()
-
-    del pi
 
     if post_to_etlas:
         while True:
