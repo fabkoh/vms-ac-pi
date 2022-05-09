@@ -10,7 +10,7 @@ import os
 import json
 import requests
 import time
-
+import gc
 from changeStatic import change_static_ip, get_default_gateway_windows
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -164,6 +164,8 @@ def main(post_to_etlas=False):
         outfile.seek(0)
         json.dump(config,outfile,indent=4) 
         outfile.close()
+
+    del pi
 
     if post_to_etlas:
         while True:
