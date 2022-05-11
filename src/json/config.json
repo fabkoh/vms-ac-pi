@@ -23,11 +23,11 @@
             "E1_IN": "",
             "E2_OUT": "Connected",
             "E1_OUT": "",
-            "dateAndTime": "06-05-2022 16:52:15"
+            "dateAndTime": "11-05-2022 09:46:45"
         },
         "controllerSerialNo": "100000005a46e105",
         "controllerName": "",
-        "controllerIp": "192.168.1.70"
+        "controllerIp": "192.168.1.155"
     },
     "EntranceName": {
         "E1": "MainDoor",

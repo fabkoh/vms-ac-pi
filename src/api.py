@@ -138,6 +138,6 @@ def get_check():
     healthcheck.main(True)
     return flask.Response({}, 204)
 
-app.run(host='0.0.0.0',port=5000,debug = True )
-
 healthcheck.main(True)
+
+app.run(host='0.0.0.0',port=5000,debug = True )
