@@ -138,6 +138,22 @@ def get_check():
     healthcheck.main(True)
     return flask.Response({}, 204)
 
+@app.route('/api/credOccur', methods=['POST'])
+def post_credOccur():
+    '''changes credOccur.json
+
+    Check https://iss-sec.atlassian.net/wiki/spaces/ISSSEC/pages/194805765/JSON+File+for+credOccur+Schedules+and+AccessGroups
+    for format
+
+    Returns (response):
+        code: 204
+    '''
+    with open(path + '/json/credOccur.json', 'w+') as f:
+        f.writelines(flask.request.json)
+        f.close()
+
+    return flask.Response({}, 204)
+
 healthcheck.main(True)
 
 app.run(host='0.0.0.0',port=5000,debug = True )
