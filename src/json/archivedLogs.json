@@ -1,0 +1,147 @@
+[
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-05-04 12:33:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-05-04 12:33:08"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-05-04 12:33:08"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-05-04 12:33:08"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-05-04 12:33:08"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-05-04 12:33:08"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-05-04 12:33:08"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "WARNING : opened without authentication",
+        "eventTime": "2022-05-04 12:37:23"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Buzzer started buzzing",
+        "eventTime": "2022-05-04 12:37:33"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "closed",
+        "eventTime": "2022-05-04 12:37:34"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Buzzer stopped buzzing",
+        "eventTime": "2022-05-04 12:37:34"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-04 12:38:05"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-04 13:35:53"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-05 13:41:02"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-06 13:30:54"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-09 09:26:12"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-09 09:26:13"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-09 09:26:19"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-10 15:26:07"
+    },
+    {
+        "entrance": "SideDoor",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-10 16:56:44"
+    }
+]

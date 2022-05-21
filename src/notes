@@ -1,0 +1,20 @@
+
+# methods to check status 
+# when all tgt, trigger something
+# execute, dynamic function, async await for API 
+
+
+zone
+- store in local jsons and send to other controllers in controllerInZone
+- if In
+	- if person inside local jsons, not allowed to enter
+	- if person not inside local jsons, allowed to enter, add to json
+- if out 
+	- if person inside local json, allowed to leave and remove from json
+	- if person not inside local json, not allowed to leave 
+
+
+
+
+
+

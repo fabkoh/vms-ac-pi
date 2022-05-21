@@ -1,4 +1,3 @@
-
 import cv2
 import json
 import datetime
@@ -59,4 +58,3 @@ while True:
 # free camera object and exit
 cap.release()
 cv2.destroyAllWindows()
-
