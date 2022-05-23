@@ -260,9 +260,11 @@ def reader_detects_bits(bits, value,entrance):
     if credential_added:
         try:
             device_details = {}
+            entrance_details = {}
             for entrance_list in credOccur:
                 if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
-                    device_details = entrance_list.get("EntranceDetails", {}).get("AuthenticationDevices", {}).get(entrance_direction, {})
+                    entrance_details = entrance_list.get("EntranceDetails", {})
+                    device_details = entrance_details.get("AuthenticationDevices", {}).get(entrance_direction, {})
             
             # check master password
             if pin_type in credentials and \
@@ -290,7 +292,7 @@ def reader_detects_bits(bits, value,entrance):
                 # check person cred
                 # 1 find the person
                 # 2 check if the person's access group can enter
-                for access_group in device_details.get("AccessGroups", []):
+                for access_group in entrance_details.get("AccessGroups", []):
                     # find the person
                     access_group_info = access_group.values()[0] if type(access_group) is dict and len(access_group) > 0 else {}
                     for person in access_group_info.get("Persons", []):
