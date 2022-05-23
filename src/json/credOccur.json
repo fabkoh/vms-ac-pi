@@ -13,12 +13,12 @@
             "Antipassback": "No",
             "Zone": "ZoneId",
             "AuthenticationDevices": {
-                "Device1": {
+                "IN": {
                     "Masterpassword": "666666",
                     "Direction": "IN",
                     "AuthMethod": [
                         {
-                            "Method": "Card,Pin",
+                            "Method": "Card + Pin",
                             "Schedule": {
                                 "2022-03-14": [
                                     {
@@ -35,7 +35,7 @@
                             }
                         },
                         {
-                            "Method": "Card,Pin",
+                            "Method": "Card / Pin",
                             "Schedule": {
                                 "2022-03-14": [
                                     {
@@ -53,7 +53,7 @@
                         }
                     ]
                 },
-                "Device2": {
+                "OUT": {
                     "Masterpassword": "111111",
                     "Direction": "OUT",
                     "AuthMethod": [
@@ -272,7 +272,7 @@
         "EntranceDetails": {
             "Zone": "ZoneId",
             "AuthenticationDevices": {
-                "Device1": {
+                "IN": {
                     "Direction": "IN",
                     "AuthMethod": [
                         {
@@ -303,7 +303,7 @@
                         }
                     ]
                 },
-                "Device2": {
+                "OUT": {
                     "Direction": "OUT",
                     "AuthMethod": [
                         {

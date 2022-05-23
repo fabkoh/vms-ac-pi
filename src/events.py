@@ -14,6 +14,20 @@ path = os.path.dirname(os.path.abspath(__file__))
     3. bits_reader
 '''
 
+# config
+# DO NOT CHANGE THE BELOW VALUES, the spring code generates the same names for comparison purposes
+# name of types in credTypeDescriptions
+# pin_type         = "Pin"
+# face_type        = "Face"
+# card_type        = "Card"
+# fingerprint_type = "Fingerprint"
+and_delimiter    = " + "
+or_delimiter     = " / "
+
+# bits value passed to reader_detect_bits by wiegand reader (decoder class)
+pin_bits = 4 # 1 pin number
+card_bits = 26
+# end config
 class TimerError(Exception):
     """A custom exception used to report errors in use of Timer class"""
 
@@ -170,26 +184,80 @@ def reader_detects_bits(bits, value,entrance):
     # if entrance not found
     entrance_direction = entrance.split("_")[1]
 
+    # timeout_cred is timer
+    # cred_timeout is time limit
     if entrance == "E1_IN":
         credentials = credentials_E1_IN
         pinsvalue = pinsvalue_E1_IN
-        timeout_cred = timeout_cred_E1_IN
+        timeout_cred = timeout_cred_E1_IN # this is timer
+        cred_timeout = CRED_TIMEOUT_E1
 
     if entrance == "E1_OUT":
         credentials = credentials_E1_OUT
         pinsvalue = pinsvalue_E1_OUT
         timeout_cred = timeout_cred_E1_OUT
+        cred_timeout = CRED_TIMEOUT_E1
 
     if entrance == "E2_IN":
         credentials = credentials_E2_IN
         pinsvalue = pinsvalue_E2_IN
         timeout_cred = timeout_cred_E2_IN
+        cred_timeout = CRED_TIMEOUT_E2
 
     if entrance == "E2_OUT":
         credentials = credentials_E2_OUT
         pinsvalue = pinsvalue_E2_OUT
         timeout_cred = timeout_cred_E2_OUT
+        cred_timeout = CRED_TIMEOUT_E2
 
+    # helper functions
+    def reset_cred_and_restart_timer():
+        '''resets credentials and pin values and reset_timer
+        timer will always be running after this function is called (will start if timer is not running)
+        Returns None'''
+        pinsvalue.clear()
+        credentials.clear()
+        if timeout_cred.status(): timeout_cred.stop()
+        timeout_cred.start()
+
+    # steps
+    # 1 start / restart timer
+    # 2 gather credentials
+    # 3 check credentials
+    # 4 follow up actions (open door, logs etc)
+
+    # start / restart timer
+    # if expired => clear cred and refresh timer
+    # if not started => start
+    # else do nothing
+    if timeout_cred.status():
+        if timeout_cred.check(cred_timeout):
+            reset_cred_and_restart_timer()
+    else:
+        timeout_cred.start()
+
+    # gather credentials
+    credential_added = False
+    if bits == pin_bits: # 1 number keyed in
+        if 0 <= value <= 9: # normal input
+            if len(pinsvalue) > MAX_PIN_LENGTH:
+                return 
+            pinsvalue.append(str(value))
+        elif value == 10: # clear input
+            pinsvalue.clear()
+        elif value == 11: # submit
+            credentials.append(''.join(pinsvalue))
+            pinsvalue.clear()
+            credential_added = True
+    elif bits == card_bits:
+        credentials.append(str(value))
+        credential_added = True
+
+    # test code (delete)
+    print(credentials, pinsvalue)
+    # end test code
+
+    return # temp return to try new stuff
 
     # if reader_currently_used != "" and reader_currently_used != entrance_direction:
     #     return
