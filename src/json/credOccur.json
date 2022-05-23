@@ -16,6 +16,7 @@
                 "IN": {
                     "Masterpassword": "666666",
                     "Direction": "IN",
+                    "defaultAuthMethod": "Card / Pin",
                     "AuthMethod": [
                         {
                             "Method": "Card + Pin",
@@ -56,6 +57,7 @@
                 "OUT": {
                     "Masterpassword": "111111",
                     "Direction": "OUT",
+                    "defaultAuthMethod": "Pin",
                     "AuthMethod": [
                         {
                             "Method": "Card",
@@ -274,6 +276,7 @@
             "AuthenticationDevices": {
                 "IN": {
                     "Masterpassword": "123456",
+                    "defaultAuthMethod": "Card / Pin",
                     "Direction": "IN",
                     "AuthMethod": [
                         {
@@ -306,6 +309,8 @@
                 },
                 "OUT": {
                     "Direction": "OUT",
+                    "defaultAuthMethod": "Card",
+                    "Masterpassword": "123456",
                     "AuthMethod": [
                         {
                             "Method": "Fingerprint",

@@ -261,20 +261,30 @@ def reader_detects_bits(bits, value,entrance):
         try:
             device_details = {}
             for entrance_list in credOccur:
-                if entrance_list.get("Entrance", False) == entrancename:
+                if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
                     device_details = entrance_list.get("EntranceDetails", {}).get("AuthenticationDevices", {}).get(entrance_direction, {})
-            print(device_details.get("Masterpassword", False))
-            if credentials.get(pin_type, "") == device_details.get("Masterpassword", False):
+            
+            # check master password
+            if pin_type in credentials and \
+               "Masterpassword" in device_details and \
+               credentials[pin_type] == device_details["Masterpassword"]:
                 print("open")
                 reset_cred_and_stop_timer()
                 pass # TODO: open door
+
+            # check auth method
+            auth_method_name = device_details.get("defaultAuthMethod", False)
+            for auth_method in device_details.get("AuthMethod", []):
+                if "Method" in auth_method and \
+                   verify_datetime(auth_method.get("Schedule", {})):
+                   auth_method_name = device_details.get("Method", False)
 
         except Exception as e:
             print("cannot check cred", e)
 
 
     # test code (delete)
-    print(credentials, pinsvalue)
+    print(credentials, pinsvalue, auth_method_name)
     # end test code
 
     return # temp return to try new stuff
