@@ -270,20 +270,27 @@ def reader_detects_bits(bits, value,entrance):
                credentials[pin_type] == device_details["Masterpassword"]:
                 print("open")
                 reset_cred_and_stop_timer()
-                pass # TODO: open door
+                return # TODO: open door
 
             # check auth method
             auth_method_name = device_details.get("defaultAuthMethod", False)
-            print("default", auth_method_name)
             for auth_method in device_details.get("AuthMethod", []):
                 if "Method" in auth_method and \
                    verify_datetime(auth_method.get("Schedule", {})):
                    auth_method_name = auth_method.get("Method", False)
-                   print("found", auth_method_name)
                    break
+            
+            # check if need to proceed to checking creds stage
+            auth_method_is_and = and_delimiter in auth_method_name
+            auth_method_keys = auth_method.split(and_delimiter) if auth_method_is_and else auth_method.split(or_delimiter)
+            print(auth_method_is_and, auth_method_keys)
+            if auth_method_is_and and len(credentials) < len(auth_method_keys):
+                print("Not checking")
+                return # no point checking through person creds
 
-            print(auth_method_name)
-
+            # check person creds
+            # 1 find the person
+            # 2 check if the person's access group can enter
         except Exception as e:
             print("cannot check cred", e)
 
