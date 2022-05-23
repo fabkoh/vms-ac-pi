@@ -78,8 +78,8 @@ def check_events_for(entrance):
     if timeout_cred.status(): 
             if timeout_cred.check(CRED_TIMEOUT):
                 timeout_cred.stop()
-                del credentials [:]
-                del pinsvalue[:]
+                credentials.clear()
+                pinsvalue.clear()
     
     if timeout_buzzer.status():
         if timeout_buzzer.check(BUZZER_TIMEOUT):
