@@ -17,10 +17,10 @@ path = os.path.dirname(os.path.abspath(__file__))
 # config
 # DO NOT CHANGE THE BELOW VALUES, the spring code generates the same names for comparison purposes
 # name of types in credTypeDescriptions
-# pin_type         = "Pin"
-# face_type        = "Face"
-# card_type        = "Card"
-# fingerprint_type = "Fingerprint"
+pin_type         = "Pin"
+face_type        = "Face"
+card_type        = "Card"
+fingerprint_type = "Fingerprint"
 and_delimiter    = " + "
 or_delimiter     = " / "
 
@@ -134,10 +134,10 @@ try:
 except:
     BUZZER_TIMEOUT_E2 = DEFAULT_BUZZER_TIMEOUT
 
-credentials_E1_IN = [] #array to store credentials
-credentials_E1_OUT = [] #array to store credentials
-credentials_E2_IN = [] #array to store credentials
-credentials_E2_OUT = [] #array to store credentials
+credentials_E1_IN = {} #dict to store credentials
+credentials_E1_OUT = {} #dict to store credentials
+credentials_E2_IN = {} #dict to store credentials
+credentials_E2_OUT = {} #dict to store credentials
 
 pinsvalue_E1_IN = []  #array to store pins
 pinsvalue_E1_OUT = []  #array to store pins
@@ -246,11 +246,12 @@ def reader_detects_bits(bits, value,entrance):
         elif value == 10: # clear input
             pinsvalue.clear()
         elif value == 11: # submit
-            credentials.append(''.join(pinsvalue))
-            pinsvalue.clear()
-            credential_added = True
+            if pinsvalue:
+                credentials[pin_type] = ''.join(pinsvalue)
+                pinsvalue.clear()
+                credential_added = True
     elif bits == card_bits:
-        credentials.append(str(value))
+        credentials[face_type] = str(value)
         credential_added = True
 
     # test code (delete)
