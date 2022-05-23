@@ -277,20 +277,20 @@ def reader_detects_bits(bits, value,entrance):
             for auth_method in device_details.get("AuthMethod", []):
                 if "Method" in auth_method and \
                    verify_datetime(auth_method.get("Schedule", {})):
-                   auth_method_name = auth_method.get("Method", False)
+                   auth_method_name = auth_method["Method"]
                    break
             
             # check if need to proceed to checking creds stage
             auth_method_is_and = and_delimiter in auth_method_name
             auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
-            print(auth_method_is_and, auth_method_keys)
-            if auth_method_is_and and len(credentials) < len(auth_method_keys):
-                print("Not checking")
-                return # no point checking through person creds
+            print("auth_method_is_and, auth_method_keys", auth_method_is_and, auth_method_keys)
+            if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or # AND, all auth methods present
+               ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))): # OR, 1 auth method present
+                # check person cred
+                # 1 find the person
+                # 2 check if the person's access group can enter
+                print("check")
 
-            # check person creds
-            # 1 find the person
-            # 2 check if the person's access group can enter
         except Exception as e:
             print("cannot check cred", e)
 
