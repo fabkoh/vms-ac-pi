@@ -290,9 +290,10 @@ def reader_detects_bits(bits, value,entrance):
                 # check person cred
                 # 1 find the person
                 # 2 check if the person's access group can enter
-                for access_group in device_details.get("AccessGroups", {}).values():
+                for access_group in device_details.get("AccessGroups", []):
                     # find the person
-                    for person in access_group.get("Persons", []):
+                    access_group_info = access_group.values()[0] if type(access_group) is dict and len(access_group) > 0 else {}
+                    for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
                         print(person)
                         if ((auth_method_is_and and all(map(lambda k: k in person and person[k] == credentials[k]))) or # AND, all cred types in person 
