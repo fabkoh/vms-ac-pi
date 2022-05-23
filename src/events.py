@@ -282,7 +282,7 @@ def reader_detects_bits(bits, value,entrance):
             
             # check if need to proceed to checking creds stage
             auth_method_is_and = and_delimiter in auth_method_name
-            auth_method_keys = auth_method.split(and_delimiter) if auth_method_is_and else auth_method.split(or_delimiter)
+            auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
             print(auth_method_is_and, auth_method_keys)
             if auth_method_is_and and len(credentials) < len(auth_method_keys):
                 print("Not checking")
