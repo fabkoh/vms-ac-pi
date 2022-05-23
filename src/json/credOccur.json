@@ -19,7 +19,7 @@
                     "defaultAuthMethod": "Card / Pin",
                     "AuthMethod": [
                         {
-                            "Method": "Card + Pin + Fingerprint",
+                            "Method": "Card / Pin / Fingerprint",
                             "Schedule": {
                                 "2022-03-14": [
                                     {
