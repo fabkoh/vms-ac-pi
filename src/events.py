@@ -293,8 +293,10 @@ def reader_detects_bits(bits, value,entrance):
                 # 1 find the person
                 # 2 check if the person's access group can enter
                 for access_group in entrance_details.get("AccessGroups", []):
+                    print("access_group", access_group)
                     # find the person
                     access_group_info = access_group.values()[0] if type(access_group) is dict and len(access_group) > 0 else {}
+                    print("access_group_info", access_group_info)
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
                         print(person)
