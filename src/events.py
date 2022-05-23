@@ -280,15 +280,23 @@ def reader_detects_bits(bits, value,entrance):
                    auth_method_name = auth_method["Method"]
                    break
             
-            # check if need to proceed to checking creds stage
             auth_method_is_and = and_delimiter in auth_method_name
             auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
             print("auth_method_is_and, auth_method_keys", auth_method_is_and, auth_method_keys)
+            
+            # check if need to check if cred belongs to someone           
             if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or # AND, all auth methods present
                ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))): # OR, 1 auth method present
                 # check person cred
                 # 1 find the person
                 # 2 check if the person's access group can enter
+                for access_group in device_details.get("AccessGroups", []):
+                    # find the person
+                    for person in access_group.get("Persons", []):
+                        # check if this person has the creds
+                        if ((auth_method_is_and and all(map(lambda k: k in person and person[k] == credentials[k]))) or # AND, all cred types in person 
+                           ((not auth_method_is_and) and any(map(lambda k: k in person and k in credentials and person[k] == credentials[k])))): # OR, 1 cred type in person
+                           print("person found")
                 print("check")
 
         except Exception as e:
