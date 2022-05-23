@@ -290,7 +290,7 @@ def reader_detects_bits(bits, value,entrance):
                 # check person cred
                 # 1 find the person
                 # 2 check if the person's access group can enter
-                for access_group in device_details.get("AccessGroups", []):
+                for access_group in device_details.get("AccessGroups", {}).values():
                     # find the person
                     for person in access_group.get("Persons", []):
                         # check if this person has the creds
