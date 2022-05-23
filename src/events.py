@@ -279,6 +279,8 @@ def reader_detects_bits(bits, value,entrance):
                    verify_datetime(auth_method.get("Schedule", {})):
                    auth_method_name = device_details.get("Method", False)
 
+            print(auth_method_name)
+
         except Exception as e:
             print("cannot check cred", e)
 
