@@ -293,15 +293,12 @@ def reader_detects_bits(bits, value,entrance):
                 # 1 find the person
                 # 2 check if the person's access group can enter
                 for access_group in entrance_details.get("AccessGroups", []):
-                    print("access_group", access_group)
                     # find the person
                     access_group_info = list(access_group.values())[0] if type(access_group) is dict and len(access_group) > 0 else {}
-                    print("access_group_info", access_group_info)
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
-                        print(person)
-                        if ((auth_method_is_and and all(map(lambda k: k in person and person[k] == credentials[k]))) or # AND, all cred types in person 
-                           ((not auth_method_is_and) and any(map(lambda k: k in person and k in credentials and person[k] == credentials[k])))): # OR, 1 cred type in person
+                        if ((auth_method_is_and and all(map(lambda k: k in person and person[k] == credentials[k], auth_method_keys))) or # AND, all cred types in person 
+                           ((not auth_method_is_and) and any(map(lambda k: k in person and k in credentials and person[k] == credentials[k], auth_method_keys)))): # OR, 1 cred type in person
                            print("person found")
                 print("check")
 
