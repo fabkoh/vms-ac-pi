@@ -211,14 +211,12 @@ def reader_detects_bits(bits, value,entrance):
         cred_timeout = CRED_TIMEOUT_E2
 
     # helper functions
-    def reset_cred_and_restart_timer():
-        '''resets credentials and pin values and reset_timer
-        timer will always be running after this function is called (will start if timer is not running)
+    def reset_cred_and_stop_timer():
+        '''resets credentials and pin values and stops timer
         Returns None'''
         pinsvalue.clear()
         credentials.clear()
         if timeout_cred.status(): timeout_cred.stop()
-        timeout_cred.start()
 
     # steps
     # 1 start / restart timer
@@ -232,7 +230,8 @@ def reader_detects_bits(bits, value,entrance):
     # else do nothing
     if timeout_cred.status():
         if timeout_cred.check(cred_timeout):
-            reset_cred_and_restart_timer()
+            reset_cred_and_stop_timer()
+            timeout_cred.start()
     else:
         timeout_cred.start()
 
@@ -250,9 +249,29 @@ def reader_detects_bits(bits, value,entrance):
                 credentials[pin_type] = ''.join(pinsvalue)
                 pinsvalue.clear()
                 credential_added = True
-    elif bits == card_bits:
-        credentials[face_type] = str(value)
+    elif bits == card_bits: # card
+        credentials[card_type] = str(value)
         credential_added = True
+
+    # checking for creds
+    # 1 check master password
+    # 2 check auth method
+    # 3 check person creds 
+    if credential_added:
+        try:
+            device_details = {}
+            for entrance_list in credOccur:
+                if entrance_list.get("Entrance", False) == entrancename:
+                    device_details = entrance_list.get("EntranceDetails", {}).get("AuthenticationDevices", {}).get(entrance_direction, {})
+
+            if credentials.get(pin_type, "") == device_details.get("Masterpassword", False):
+                print("open")
+                reset_cred_and_stop_timer()
+                pass # TODO: open door
+
+        except Exception as e:
+            print("cannot check cred", e)
+
 
     # test code (delete)
     print(credentials, pinsvalue)

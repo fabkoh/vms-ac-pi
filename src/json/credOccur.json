@@ -273,6 +273,7 @@
             "Zone": "ZoneId",
             "AuthenticationDevices": {
                 "IN": {
+                    "Masterpassword": "123456",
                     "Direction": "IN",
                     "AuthMethod": [
                         {
