@@ -263,7 +263,7 @@ def reader_detects_bits(bits, value,entrance):
             for entrance_list in credOccur:
                 if entrance_list.get("Entrance", False) == entrancename:
                     device_details = entrance_list.get("EntranceDetails", {}).get("AuthenticationDevices", {}).get(entrance_direction, {})
-
+            print(device_details.get("Masterpassword", False))
             if credentials.get(pin_type, "") == device_details.get("Masterpassword", False):
                 print("open")
                 reset_cred_and_stop_timer()
