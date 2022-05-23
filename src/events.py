@@ -297,7 +297,7 @@ def reader_detects_bits(bits, value,entrance):
                     access_group_info = list(access_group.values())[0] if type(access_group) is dict and len(access_group) > 0 else {}
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
-                        print(person)
+                        print(person.get('Card', ''), credentials.get('Card', ''), person.get('Card', '') == person.get('Card', False))
                         if ((auth_method_is_and and all(map(lambda k: k in person and person[k] == credentials[k], auth_method_keys))) or # AND, all cred types in person 
                            ((not auth_method_is_and) and any(map(lambda k: k in person and k in credentials and person[k] == credentials[k], auth_method_keys)))): # OR, 1 cred type in person
                            print("person found")
