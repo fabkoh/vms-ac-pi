@@ -286,7 +286,7 @@ def reader_detects_bits(bits, value,entrance):
 
 
     # test code (delete)
-    print(credentials, pinsvalue, auth_method_name)
+    print(credentials, pinsvalue)
     # end test code
 
     return # temp return to try new stuff
