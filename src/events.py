@@ -274,10 +274,13 @@ def reader_detects_bits(bits, value,entrance):
 
             # check auth method
             auth_method_name = device_details.get("defaultAuthMethod", False)
+            print("default", auth_method_name)
             for auth_method in device_details.get("AuthMethod", []):
                 if "Method" in auth_method and \
                    verify_datetime(auth_method.get("Schedule", {})):
                    auth_method_name = device_details.get("Method", False)
+                   print("found", auth_method_name)
+                   break
 
             print(auth_method_name)
 
