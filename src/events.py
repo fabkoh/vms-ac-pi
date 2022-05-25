@@ -174,15 +174,17 @@ def check_for_wiegand(value):
 # check if person allowed to enter 
 # trigger relays 
 # record Trans
+# TODO: add event logging
 def reader_detects_bits(bits, value,entrance):
     print("bits={} value={}".format(bits, value))
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
-
-    entrancename = config["EntranceName"][entrance.split("_")[0]]
+    temp = entrance.split("_")
+    entrance_prefix = temp[0]
+    entrancename = config["EntranceName"][entrance_prefix]
     # if entrance not found
-    entrance_direction = entrance.split("_")[1]
+    entrance_direction = temp[1]
 
     # timeout_cred is timer
     # cred_timeout is time limit
@@ -217,6 +219,15 @@ def reader_detects_bits(bits, value,entrance):
         pinsvalue.clear()
         credentials.clear()
         if timeout_cred.status(): timeout_cred.stop()
+
+    def open_door():
+        '''opens the door, set mags to allow open, update server events'''
+        if entrance_prefix == "E1":
+            mag_E1_allowed_to_open = True
+            relay.trigger_relay_one()
+        elif entrance_prefix == "E2":
+            mag_E2_allowed_to_open = True
+            relay.trigger_relay_two()
 
     # steps
     # 1 start / restart timer
@@ -270,9 +281,11 @@ def reader_detects_bits(bits, value,entrance):
             if pin_type in credentials and \
                "Masterpassword" in device_details and \
                credentials[pin_type] == device_details["Masterpassword"]:
-                print("open")
+                open_door()
                 reset_cred_and_stop_timer()
-                return # TODO: open door
+                # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
+                # updateserver.update_server_events()
+                return
 
             # check auth method
             auth_method_name = device_details.get("defaultAuthMethod", False)
@@ -294,22 +307,25 @@ def reader_detects_bits(bits, value,entrance):
                 # 2 check if the person's access group can enter
                 for access_group in entrance_details.get("AccessGroups", []):
                     # find the person
+                    person_found = False
                     access_group_info = list(access_group.values())[0] if type(access_group) is dict and len(access_group) > 0 else {}
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
                         person_credentials = person.get("Credentials", {})
                         if ((auth_method_is_and and all(map(lambda k: k in person_credentials and person_credentials[k] == credentials[k], auth_method_keys))) or # AND, all cred types in person 
                            ((not auth_method_is_and) and any(map(lambda k: k in person_credentials and k in credentials and person_credentials[k] == credentials[k], auth_method_keys)))): # OR, 1 cred type in person
-                           print("person found")
-                print("check")
+                            person_found = True
+                            # check if the person's access group can enter
+                            if verify_datetime(access_group_info.get('Schedule', {})):
+                                open_door()
+                                reset_cred_and_stop_timer()
+                            break
+                    if person_found: break
 
         except Exception as e:
             print("cannot check cred", e)
 
 
-    # test code (delete)
-    print(credentials, pinsvalue)
-    # end test code
 
     return # temp return to try new stuff
 
