@@ -222,6 +222,7 @@ def reader_detects_bits(bits, value,entrance):
 
     def open_door():
         '''opens the door, set mags to allow open, update server events'''
+        print("open")
         if entrance_prefix == "E1":
             mag_E1_allowed_to_open = True
             relay.trigger_relay_one()
@@ -312,6 +313,7 @@ def reader_detects_bits(bits, value,entrance):
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
                         person_credentials = person.get("Credentials", {})
+                        print(person_credentials)
                         if ((auth_method_is_and and all(map(lambda k: k in person_credentials and person_credentials[k] == credentials[k], auth_method_keys))) or # AND, all cred types in person 
                            ((not auth_method_is_and) and any(map(lambda k: k in person_credentials and k in credentials and person_credentials[k] == credentials[k], auth_method_keys)))): # OR, 1 cred type in person
                             person_found = True
