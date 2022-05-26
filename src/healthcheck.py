@@ -53,6 +53,11 @@ def check_ip_static():
         
         return any(map(lambda s: s.startswith('static ip_address'), data)) # checks if any of the strings start with 'static ip_address'
 
+def system_call(command):
+    p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
+    return p.stdout.read()
+
+
 def get_host_ip(hostIP=None):
     if hostIP is None or hostIP == 'auto':
         hostIP = 'ip'
@@ -88,11 +93,6 @@ def main(post_to_etlas=False):
 
     hostname = socket.gethostname()   
 
-
-    def system_call(command):
-        p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
-        return p.stdout.read()
-
     def get_serialnum():
         return system_call("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2")
 
@@ -102,7 +102,7 @@ def main(post_to_etlas=False):
     
 
     def post_to_etlas():
-        url = 'http://192.168.1.250:8082/api/unicon/controller'
+        url = 'http://192.168.1.185:8082/api/unicon/controller'
         
         with open(file,"r+") as outfile:
             data = json.load(outfile)

@@ -277,7 +277,9 @@ def reader_detects_bits(bits, value,entrance):
                 if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
                     entrance_details = entrance_list.get("EntranceDetails", {})
                     device_details = entrance_details.get("AuthenticationDevices", {}).get(entrance_direction, {})
-            
+            if entrance_details == {}: # entrance not found, quit
+                raise Exception
+ 
             # check master password
             if pin_type in credentials and \
                "Masterpassword" in device_details and \
@@ -289,7 +291,8 @@ def reader_detects_bits(bits, value,entrance):
                 return
 
             # check auth method
-            auth_method_name = device_details.get("defaultAuthMethod", False)
+            print(device_details)
+            auth_method_name = device_details["defaultAuthMethod"];
             for auth_method in device_details.get("AuthMethod", []):
                 if "Method" in auth_method and \
                    verify_datetime(auth_method.get("Schedule", {})):
@@ -454,7 +457,8 @@ schedule = {
 def verify_datetime(schedule):
     #print(schedule)
     #print(type(schedule))
-
+    print(str(date.today()))
+    print(datetime.now())
     for scheduledate,scheduletime in schedule.items():
         #print(scheduledate,scheduletime)
         if scheduledate == str(date.today()):

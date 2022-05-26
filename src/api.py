@@ -100,6 +100,10 @@ def post_shutdown():
     changeStatic.change_dhcp()
     os.system('sudo halt')
 
+# restarts maincontroller.service
+def restart_main_controller_service():
+    os.system('sudo systemctl restart maincontroller.service')
+
 @app.route('/api/entrance-name', methods=['POST'])
 def post_entrance_name():
     '''changes config.json
@@ -114,7 +118,7 @@ def post_entrance_name():
         code: 204
     '''
     request_body = flask.request.json
-
+    print(request_body)
     if ('E1' not in request_body) or ('E2' not in request_body) or ('controllerSerialNo' not in request_body):
         flask.abort(400)
     
@@ -122,15 +126,15 @@ def post_entrance_name():
         data = json.load(f)
         f.close()
 
-    assert(request_body['controllerSerialNo'] == data['controllerConfig']['controllerSerialNo'])
+    if(request_body['controllerSerialNo'] != data['controllerConfig']['controllerSerialNo']):
+        flask.abort(400)
 
     data['EntranceName']['E1'] = request_body['E1']
     data['EntranceName']['E2'] = request_body['E2']
-
     with open(path + '/json/config.json', 'w') as f:
-        f.writelines(data)
+        json.dump(data, f, indent=4)
         f.close()
-
+    restart_main_controller_service()
     return flask.Response({}, 204)
     
 @app.route('/api/healthcheck')
@@ -149,9 +153,9 @@ def post_credOccur():
         code: 204
     '''
     with open(path + '/json/credOccur.json', 'w+') as f:
-        f.writelines(flask.request.json)
+        json.dump(flask.request.json, f, indent=4)
         f.close()
-
+    restart_main_controller_service()
     return flask.Response({}, 204)
 
 healthcheck.main(True)
