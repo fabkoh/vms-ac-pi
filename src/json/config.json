@@ -23,14 +23,14 @@
             "E1_IN": "",
             "E2_OUT": "Connected",
             "E1_OUT": "",
-            "dateAndTime": "26-05-2022 10:08:35"
+            "dateAndTime": "26-05-2022 16:10:18"
         },
         "controllerSerialNo": "100000005a46e105",
         "controllerName": "",
         "controllerIp": "192.168.1.155"
     },
     "EntranceName": {
-        "E1": "",
+        "E1": "Abandoned Entrance",
         "E2": "Side Entrance"
     },
     "GPIOpins": {

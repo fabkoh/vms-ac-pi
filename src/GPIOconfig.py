@@ -128,7 +128,9 @@ class decoder:
     
       self.cb_0 = self.pi.callback(gpio_0, pigpio.FALLING_EDGE, self._cb)
       self.cb_1 = self.pi.callback(gpio_1, pigpio.FALLING_EDGE, self._cb)        
-            
+    
+    
+
    def _cb(self, gpio, level,tick):
 
       """

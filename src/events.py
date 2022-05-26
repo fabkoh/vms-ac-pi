@@ -145,6 +145,7 @@ pinsvalue_E2_IN = []  #array to store pins
 pinsvalue_E2_OUT = []  #array to store pins
 
 
+
 #takes in string wiegand value, return name, passwords, accessgroup and schedule 
 def check_for_wiegand(value):
     for entranceslist in credOccur:
@@ -176,7 +177,8 @@ def check_for_wiegand(value):
 # record Trans
 # TODO: add event logging
 def reader_detects_bits(bits, value,entrance):
-    print("bits={} value={}".format(bits, value))
+      
+    
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
@@ -250,6 +252,7 @@ def reader_detects_bits(bits, value,entrance):
     # gather credentials
     credential_added = False
     if bits == pin_bits: # 1 number keyed in
+        print("bits={} value={}".format(bits, value))
         if 0 <= value <= 9: # normal input
             if len(pinsvalue) > MAX_PIN_LENGTH:
                 return 
@@ -262,7 +265,8 @@ def reader_detects_bits(bits, value,entrance):
                 pinsvalue.clear()
                 credential_added = True
     elif bits == card_bits: # card
-        credentials[card_type] = str(value)
+        credentials[card_type] = "0"+str(int("{:026b}".format(value)[1:25],2))
+        print("bits={} value={}".format(bits, "0"+str(int("{:026b}".format(value)[1:25],2))))
         credential_added = True
 
     # checking for creds
@@ -291,7 +295,7 @@ def reader_detects_bits(bits, value,entrance):
                 return
 
             # check auth method
-            print(device_details)
+            # print(device_details)
             auth_method_name = device_details["defaultAuthMethod"];
             for auth_method in device_details.get("AuthMethod", []):
                 if "Method" in auth_method and \

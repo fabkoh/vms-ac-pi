@@ -23,5 +23,20 @@
         "entrance": "SideDoor",
         "eventActionType": "Security Guard Button pressed",
         "eventTime": "2022-05-26 09:06:52"
+    },
+    {
+        "entrance": "Side Entrance",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-26 10:22:36"
+    },
+    {
+        "entrance": "Side Entrance",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-26 10:36:33"
+    },
+    {
+        "entrance": "Side Entrance",
+        "eventActionType": "Security Guard Button pressed",
+        "eventTime": "2022-05-26 14:51:18"
     }
 ]
