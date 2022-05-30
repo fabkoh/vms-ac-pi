@@ -321,8 +321,8 @@ def reader_detects_bits(bits, value,entrance):
                         # check if this person has the creds
                         person_credentials = person.get("Credentials", {})
                         #print(person_credentials)
-                        if ((auth_method_is_and and all(map(lambda k: k in person_credentials and person_credentials[k] == credentials[k], auth_method_keys))) or # AND, all cred types in person 
-                           ((not auth_method_is_and) and any(map(lambda k: k in person_credentials and k in credentials and person_credentials[k] == credentials[k], auth_method_keys)))): # OR, 1 cred type in person
+                        if ((auth_method_is_and and all(map(lambda k: k in person_credentials and credentials[k] in person_credentials[k], auth_method_keys))) or # AND, all cred types in person 
+                           ((not auth_method_is_and) and any(map(lambda k: k in person_credentials and k in credentials and credentials[k] in person_credentials[k], auth_method_keys)))): # OR, 1 cred type in person
                             person_found = True
                             # check if the person's access group can enter
                             if verify_datetime(access_group_info.get('Schedule', {})):
