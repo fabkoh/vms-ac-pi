@@ -34,9 +34,7 @@ status = e.g. In
 
 #updates pendingLogs.json and send to backend 
 #updates archivedLogs.json for backup 
-def record_auth_scans(persondetails,authtype,entrance,status):
-    name = persondetails["Name"]
-    accessGroup = persondetails["AccessGroup"]
+def record_auth_scans(name, accessGroup,authtype,entrance,status):
 
     dictionary = {"name":name,"accessgroup":accessGroup, "authmethod":authtype,
                 "direction": status,"entrance":entrance,"eventActionType": "authenticated_scans", 
@@ -61,7 +59,8 @@ def record_masterpassword_used(authtype,entrancename,entrance_direction):
     
 #updates pendingTrans.json and send to backend 
 #updates archivedTrans.json for backup 
-def record_unauth_scans(authtype,entrance,status):
+# TODO include name and access group
+def record_unauth_scans(authtype,entrance,status, name=None, access_group=None):
 
     dictionary = {"authmethod":authtype,
                 "direction": status,"entrance":entrance,"eventActionType": "unauthenticated_scans", 

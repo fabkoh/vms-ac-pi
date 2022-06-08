@@ -271,7 +271,7 @@ def reader_detects_bits(bits, value,entrance):
 
     # checking for creds
     # 1 check master password
-    # 2 check auth method
+    # 2 check auth method (if cred entered not in curr cred schedule, reset)
     # 3 check person creds 
     if credential_added:
         try:
@@ -288,6 +288,7 @@ def reader_detects_bits(bits, value,entrance):
             if pin_type in credentials and \
                "Masterpassword" in device_details and \
                credentials[pin_type] == device_details["Masterpassword"]:
+                eventsMod.record_masterpassword_used("Master Pin", entrancename, entrance_direction)
                 open_door()
                 reset_cred_and_stop_timer()
                 # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
@@ -305,8 +306,14 @@ def reader_detects_bits(bits, value,entrance):
             
             auth_method_is_and = and_delimiter in auth_method_name
             auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
-            print("auth_method_is_and, auth_method_keys", auth_method_is_and, auth_method_keys)
+            #print("auth_method_is_and, auth_method_keys", auth_method_is_and, auth_method_keys)
             
+            # check for credentials not in auth_method_keys
+            if any(map(lambda k: k not in auth_method_keys, credentials)):
+                eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
+                reset_cred_and_stop_timer()
+                return
+
             # check if need to check if cred belongs to someone           
             if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or # AND, all auth methods present
                ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))): # OR, 1 auth method present
@@ -320,16 +327,26 @@ def reader_detects_bits(bits, value,entrance):
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
                         person_credentials = person.get("Credentials", {})
-                        print(person_credentials)
-                        if ((auth_method_is_and and all(map(lambda k: k in person_credentials and credentials[k] in person_credentials[k], auth_method_keys))) or # AND, all cred types in person 
-                           ((not auth_method_is_and) and any(map(lambda k: k in person_credentials and k in credentials and credentials[k] in person_credentials[k], auth_method_keys)))): # OR, 1 cred type in person
-                            person_found = True
+                        #print(person_credentials)
+                        if all(map(lambda k, v: k in person_credentials and person_credentials[k] == v, credentials.items())): # see if all credentials belong to person
                             # check if the person's access group can enter
                             if verify_datetime(access_group_info.get('Schedule', {})):
+                                # auth scan
+                                eventsMod.record_auth_scans(person.get("Name", ""), access_group.keys()[0], auth_method_name, entrancename, entrance_direction)
                                 open_door()
                                 reset_cred_and_stop_timer()
-                            break
-                    if person_found: break
+                                return
+                            # person dont have access at this time
+                            eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get("Name", ""), access_group.keys()[0])
+                            reset_cred_and_stop_timer()
+                            return
+                # cannot find person
+                eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
+                reset_cred_and_stop_timer()
+                return
+
+            
+                
 
         except Exception as e:
             #print("cannot check cred", e)
