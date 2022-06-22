@@ -4,7 +4,7 @@ import os
 path = os.path.dirname(os.path.abspath(__file__))
 
 def update_server_events():
-    url = 'http://192.168.1.250:8082/unicon/event'
+    url = 'http://192.168.1.185:8082/unicon/events'
 
     file = open(path+"/json/pendingLogs.json") 
     data = json.load(file)

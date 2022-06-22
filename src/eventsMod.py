@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 import os
+from updateserver import update_server_events
 path = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -30,13 +31,26 @@ authtype = e.g. card    Fingerprint,Pin
 
 entrance =  e.g. MainDoor
 status = e.g. In
+
+
+dictionary 
+
+direction  STRING
+eventTime  DATETIME
+person     PERSONID
+entrance   ENTRANCEID
+accessGroup   ACCESSGROUPID
+eventActionType   EVENTACTIONTYPEID
+controller         CONTROLLERID
+
+
 '''
 
 #updates pendingLogs.json and send to backend 
 #updates archivedLogs.json for backup 
 def record_auth_scans(name, accessGroup,authtype,entrance,status):
 
-    dictionary = {"name":name,"accessgroup":accessGroup, "authmethod":authtype,
+    dictionary = {"name":name,"accessGroup":accessGroup, 
                 "direction": status,"entrance":entrance,"eventActionType": "authenticated_scans", 
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -48,7 +62,7 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
 #updates archivedLogs.json for backup 
 def record_masterpassword_used(authtype,entrancename,entrance_direction):
 
-    dictionary = {"authmethod":authtype,
+    dictionary = {
                 "direction": entrance_direction,"entrance":entrancename,"eventActionType": "Masterpassword used", 
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -59,10 +73,9 @@ def record_masterpassword_used(authtype,entrancename,entrance_direction):
     
 #updates pendingTrans.json and send to backend 
 #updates archivedTrans.json for backup 
-# TODO include name and access group
 def record_unauth_scans(authtype,entrance,status, name=None, access_group=None):
 
-    dictionary = {"authmethod":authtype,
+    dictionary = {"name":name,"accessGroup":access_group, 
                 "direction": status,"entrance":entrance,"eventActionType": "unauthenticated_scans", 
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -83,7 +96,7 @@ def record_button_pressed(entrance,name_of_button):
 
 def record_antipassback(authtype,entrance,status):
 
-    dictionary = {"authmethod":authtype,
+    dictionary = {
                 "direction": status,"entrance":entrance,"eventActionType": "ANTIPASSBACK : authenticated_scan ", 
                 "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -148,6 +161,9 @@ def clear_file_storage(file):
         else:
             checkfile.close()
 
+
+
+update_server_events()
 
 def main():
     #persondetails = {"Name": "YongNing","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}

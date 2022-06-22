@@ -1,5 +1,6 @@
 
 from datetime import datetime, date
+
 import relay
 import eventsMod
 import json 
@@ -109,6 +110,20 @@ DEFAULT_BUZZER_TIMEOUT = 10
 
 MAX_PIN_LENGTH = 6
 
+E1_is_active = True
+E1_entrance_schedule = "" 
+E2_is_active = True
+E2_entrance_schedule = "" 
+
+for entrance in credOccur:
+    if entrance["Entrance"] == E1:
+        E1_is_active = entrance["isActive"]
+        E1_entrance_schedule = entrance["EntranceSchedule"]
+
+    if entrance["Entrance"] == E2:
+        E2_is_active = entrance["isActive"]
+        E2_entrance_schedule = entrance["EntranceSchedule"]
+
 try:
     CRED_TIMEOUT_E1 = int(TIMEOUT["CRED_TIMEOUT_E1"])  #number of seconds to wait before credentials arrays is cleared automaically 
 except:
@@ -143,7 +158,6 @@ pinsvalue_E1_IN = []  #array to store pins
 pinsvalue_E1_OUT = []  #array to store pins
 pinsvalue_E2_IN = []  #array to store pins
 pinsvalue_E2_OUT = []  #array to store pins
-
 
 
 #takes in string wiegand value, return name, passwords, accessgroup and schedule 

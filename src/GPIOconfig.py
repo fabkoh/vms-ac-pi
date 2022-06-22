@@ -186,25 +186,30 @@ class decoder:
 
 
 
-def activate_buzz_led() :
-   pi.write(E1_IN_Buzz,1)
-   pi.write(E1_IN_Led,1)
-   pi.write(E1_OUT_Buzz,1)
-   pi.write(E1_OUT_Led,1)
-   pi.write(E2_IN_Buzz,1)
-   pi.write(E2_IN_Led,1)
-   pi.write(E2_OUT_Buzz,1)
-   pi.write(E2_OUT_Led,1)
+def activate_buzz_led(entrance) :
+   if entrance == "E1":
+      pi.write(E1_IN_Buzz,1)
+      pi.write(E1_IN_Led,1)
+      pi.write(E1_OUT_Buzz,1)
+      pi.write(E1_OUT_Led,1)
 
-def deactivate_buzz_led() :
-   pi.write(E1_IN_Buzz,0)
-   pi.write(E1_IN_Led,0)
-   pi.write(E1_OUT_Buzz,0)
-   pi.write(E1_OUT_Led,0)
-   pi.write(E2_IN_Buzz,0)
-   pi.write(E2_IN_Led,0)
-   pi.write(E2_OUT_Buzz,0)
-   pi.write(E2_OUT_Led,0)
+   if entrance == "E2":
+      pi.write(E2_IN_Buzz,1)
+      pi.write(E2_IN_Led,1)
+      pi.write(E2_OUT_Buzz,1)
+      pi.write(E2_OUT_Led,1)
 
+def deactivate_buzz_led(entrance) :
+   if entrance == "E1":
+      pi.write(E1_IN_Buzz,0)
+      pi.write(E1_IN_Led,0)
+      pi.write(E1_OUT_Buzz,0)
+      pi.write(E1_OUT_Led,0)
+   
+   if entrance == "E2":
+      pi.write(E2_IN_Buzz,0)
+      pi.write(E2_IN_Led,0)
+      pi.write(E2_OUT_Buzz,0)
+      pi.write(E2_OUT_Led,0)
 
 

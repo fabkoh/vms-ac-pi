@@ -87,7 +87,7 @@ def check_events_for(entrance):
         
     if timeout_mag.status():
         if timeout_mag.check(MAG_TIMEOUT):
-            activate_buzz_led()
+            activate_buzz_led(entrance[:2])
             
             if not timeout_buzzer.status():
                 timeout_buzzer.start()
@@ -95,7 +95,7 @@ def check_events_for(entrance):
                 eventsMod.record_buzzer(entrancename,"Buzzer started buzzing")
                 updateserver.update_server_events()
     else:
-        deactivate_buzz_led()
+        deactivate_buzz_led(entrance[:2])
         if timeout_buzzer.status():
             timeout_buzzer.stop()
             print("Buzzer stopped buzzing")
@@ -105,12 +105,36 @@ def check_events_for(entrance):
     time.sleep(0.1)
 
 
+#E1_is_active/E2_is_active
+def check_entrance_E1():
+    if not E1_is_active: 
+        relay.unlock_entrance_one()
+    else:
+        relay.lock_entrance_one()
+        if verify_datetime(E1_entrance_schedule):
+            relay.unlock_entrance_one()
+        else:
+            relay.lock_entrance_one()
+
+#E1_is_active/E2_is_active
+def check_entrance_E2():
+    if not E2_is_active: 
+        relay.unlock_entrance_two()
+    else:
+        relay.lock_entrance_two()
+        if verify_datetime(E2_entrance_schedule):
+            relay.unlock_entrance_two()
+        else:
+            relay.lock_entrance_two()
+    
 def check_events_timer():
     while True:
         check_events_for("E1_IN")
         check_events_for("E1_OUT")
         check_events_for("E2_IN")
         check_events_for("E2_OUT")
+        check_entrance_E1()
+        check_entrance_E2()
         
 t1 = threading.Thread(target=mag_and_button)
 t2 = threading.Thread(target=check_events_timer)
