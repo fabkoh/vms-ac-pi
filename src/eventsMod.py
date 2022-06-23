@@ -49,10 +49,14 @@ controller         CONTROLLERID
 #updates pendingLogs.json and send to backend 
 #updates archivedLogs.json for backup 
 def record_auth_scans(name, accessGroup,authtype,entrance,status):
-    dictionary = {"person":name,"accessGroup":accessGroup, 
-                "direction": status,"entrance":entrance,"eventActionType": 1, 
-                "controller":controllerSerial,
-                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    dictionary = {
+                    "person":{"personId":name},
+                    "accessGroup":{"accessGroupId":accessGroup}, 
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": 1, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
     
     update("json/archivedLogs.json",dictionary)
@@ -60,12 +64,15 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
 
 #updates pendingLogs.json and send to backend 
 #updates archivedLogs.json for backup 
-def record_masterpassword_used(authtype,entrancename,entrance_direction):
-
+def record_masterpassword_used(authtype,entrance,status):
     dictionary = {
-                "direction": entrance_direction,"entrance":entrancename,"eventActionType": 2, 
-                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": 2, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
+
     
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
@@ -74,19 +81,27 @@ def record_masterpassword_used(authtype,entrancename,entrance_direction):
 #updates pendingTrans.json and send to backend 
 #updates archivedTrans.json for backup 
 def record_unauth_scans(authtype,entrance,status, name=None, access_group=None):
-
-    dictionary = {"person":name,"accessGroup":access_group, "controller":controllerSerial,
-                "direction": status,"entrance":entrance,"eventActionType": 3, 
-                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    dictionary = {
+                    "person":{"personId":name},
+                    "accessGroup":{"accessGroupId":access_group}, 
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": 2, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
+
     
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
 
 def record_button_pressed(entrance,name_of_button):
 
-    dictionary = {"entrance":entrance,"eventActionType": name_of_button+" pressed", 
-                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    dictionary = {
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": 9, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
     update(path +"/json/archivedLogs.json",dictionary)
@@ -95,6 +110,16 @@ def record_button_pressed(entrance,name_of_button):
 
 
 def record_antipassback(authtype,entrance,status):
+
+    dictionary = {
+                    "person":{"personId":name},
+                    "accessGroup":{"accessGroupId":accessGroup}, 
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": 1, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    }
 
     dictionary = {
                 "direction": status,"entrance":entrance,"eventActionType": "ANTIPASSBACK : authenticated_scan ", 
@@ -106,8 +131,11 @@ def record_antipassback(authtype,entrance,status):
 
 def record_mag_opened(entrance):
 
-    dictionary = {"entrance":entrance,"eventActionType": 4, 
-                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    dictionary = {
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": 4, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
     update(path +"/json/archivedLogs.json",dictionary)
@@ -115,8 +143,11 @@ def record_mag_opened(entrance):
 
 def record_mag_closed(entrance):
 
-    dictionary = {"entrance":entrance,"eventActionType": 5, 
-                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    dictionary = {
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": 5, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
     update(path +"/json/archivedLogs.json",dictionary)
@@ -124,8 +155,11 @@ def record_mag_closed(entrance):
 
 def record_mag_opened_warning(entrance):
 
-    dictionary = {"entrance":entrance,"eventActionType": 6, 
-                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    dictionary = {
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": 6, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
 
     update(path +"/json/archivedLogs.json",dictionary)
@@ -134,18 +168,24 @@ def record_mag_opened_warning(entrance):
 # status = started buzzing/ stopped buzzing 
 def record_buzzer_start(entrance):
 
-    dictionary = {"entrance":entrance,"eventActionType":7, 
-                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
-    }
+    dictionary = {
+                        "entrance": {"entranceId":entrance},
+                        "eventActionType": 7, 
+                        "controller":{"controllerSerialNo":controllerSerial},
+                        "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+        }
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
 
 def record_buzzer_end(entrance):
 
-    dictionary = {"entrance":entrance,"eventActionType":8, 
-                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
-    }
+    dictionary = {
+                        "entrance": {"entranceId":entrance},
+                        "eventActionType": 8, 
+                        "controller":{"controllerSerialNo":controllerSerial},
+                        "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+        }
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
