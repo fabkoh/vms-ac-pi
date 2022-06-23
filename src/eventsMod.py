@@ -54,7 +54,7 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
                     "accessGroup":{"accessGroupId":accessGroup}, 
                     "direction": status,
                     "entrance": {"entranceId":entrance},
-                    "eventActionType": 1, 
+                    "eventActionType": {"eventActionTypeId":1}, 
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -68,7 +68,7 @@ def record_masterpassword_used(authtype,entrance,status):
     dictionary = {
                     "direction": status,
                     "entrance": {"entranceId":entrance},
-                    "eventActionType": 2, 
+                    "eventActionType": {"eventActionTypeId":2}, 
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -86,7 +86,7 @@ def record_unauth_scans(authtype,entrance,status, name=None, access_group=None):
                     "accessGroup":{"accessGroupId":access_group}, 
                     "direction": status,
                     "entrance": {"entranceId":entrance},
-                    "eventActionType": 2, 
+                    "eventActionType": {"eventActionTypeId":3}, 
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -99,7 +99,7 @@ def record_button_pressed(entrance,name_of_button):
 
     dictionary = {
                     "entrance": {"entranceId":entrance},
-                    "eventActionType": 9, 
+                    "eventActionType": {"eventActionTypeId":9}, 
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -116,7 +116,7 @@ def record_antipassback(authtype,entrance,status):
                     "accessGroup":{"accessGroupId":accessGroup}, 
                     "direction": status,
                     "entrance": {"entranceId":entrance},
-                    "eventActionType": 1, 
+                    "eventActionType": {"eventActionTypeId":2}, 
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -133,7 +133,7 @@ def record_mag_opened(entrance):
 
     dictionary = {
                     "entrance": {"entranceId":entrance},
-                    "eventActionType": 4, 
+                    "eventActionType": {"eventActionTypeId":4}, 
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -145,7 +145,7 @@ def record_mag_closed(entrance):
 
     dictionary = {
                     "entrance": {"entranceId":entrance},
-                    "eventActionType": 5, 
+                    "eventActionType": {"eventActionTypeId":5}, 
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -157,7 +157,7 @@ def record_mag_opened_warning(entrance):
 
     dictionary = {
                     "entrance": {"entranceId":entrance},
-                    "eventActionType": 6, 
+                    "eventActionType": {"eventActionTypeId":6}, 
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
     }
@@ -170,7 +170,7 @@ def record_buzzer_start(entrance):
 
     dictionary = {
                         "entrance": {"entranceId":entrance},
-                        "eventActionType": 7, 
+                        "eventActionType": {"eventActionTypeId":7}, 
                         "controller":{"controllerSerialNo":controllerSerial},
                         "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
         }
@@ -182,7 +182,7 @@ def record_buzzer_end(entrance):
 
     dictionary = {
                         "entrance": {"entranceId":entrance},
-                        "eventActionType": 8, 
+                        "eventActionType": {"eventActionTypeId":8}, 
                         "controller":{"controllerSerialNo":controllerSerial},
                         "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
         }
