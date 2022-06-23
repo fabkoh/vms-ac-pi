@@ -668,18 +668,18 @@ def mag_detects_rising(gpio, level, tick):
         timeout_mag_E1.start()
         print(f"{E1} is opened at " + str(datetime.now()))
         if mag_E1_allowed_to_open:
-            eventsMod.record_mag_changes(E1,"opened")
+            eventsMod.record_mag_opened(E1)
         else:
-            eventsMod.record_mag_changes(E1,"WARNING : opened without authentication")
+            eventsMod.record_mag_opened_warning(E1)
         updateserver.update_server_events()
 
     if gpio == E2_Mag:
         timeout_mag_E2.start()
         print(f"{E2} is opened at " + str(datetime.now()))
         if mag_E2_allowed_to_open:
-            eventsMod.record_mag_changes(E2,"opened")
+            eventsMod.record_mag_opened(E2)
         else:
-            eventsMod.record_mag_changes(E2,"WARNING : opened without authentication")
+            eventsMod.record_mag_opened_warning(E2)
         updateserver.update_server_events()
 
     
@@ -691,14 +691,14 @@ def mag_detects_falling(gpio, level, tick):
         timeout_mag_E1.stop()
         print(f"{E1} is closed at " + str(datetime.now()))
         mag_E1_allowed_to_open = False
-        eventsMod.record_mag_changes(E1,"closed")
+        eventsMod.record_mag_closed(E1)
         updateserver.update_server_events()
 
     if gpio == E2_Mag:
         timeout_mag_E2.stop()
         print(f"{E2} is closed at " + str(datetime.now()))
         mag_E2_allowed_to_open = False
-        eventsMod.record_mag_changes(E2,"closed")
+        eventsMod.record_mag_closed(E2)
         updateserver.update_server_events()
 
 
