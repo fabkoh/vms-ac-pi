@@ -21,17 +21,17 @@
         "readersConnection": {
             "E2_IN": "Connected",
             "E1_IN": "",
-            "E2_OUT": "Connected",
+            "E2_OUT": "",
             "E1_OUT": "",
-            "dateAndTime": "26-05-2022 16:10:18"
+            "dateAndTime": "24-06-2022 09:18:27"
         },
         "controllerSerialNo": "100000005a46e105",
         "controllerName": "",
         "controllerIp": "192.168.1.155"
     },
     "EntranceName": {
-        "E1": "Abandoned Entrance",
-        "E2": "Side Entrance"
+        "E1": 1,
+        "E2": 2
     },
     "GPIOpins": {
         "Gen_Out_3": "",

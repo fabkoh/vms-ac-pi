@@ -132,8 +132,8 @@ def check_events_timer():
         check_events_for("E1_OUT")
         check_events_for("E2_IN")
         check_events_for("E2_OUT")
-        check_entrance_E1()
-        check_entrance_E2()
+        #check_entrance_E1()
+        #check_entrance_E2()
         
 t1 = threading.Thread(target=mag_and_button)
 t2 = threading.Thread(target=check_events_timer)

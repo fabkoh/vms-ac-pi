@@ -4,7 +4,7 @@ import os
 path = os.path.dirname(os.path.abspath(__file__))
 
 def update_server_events():
-    url = 'http://192.168.1.185:8082/unicon/events'
+    url = 'http://192.168.1.185:8082/api/unicon/events'
 
     file = open(path+"/json/pendingLogs.json") 
     data = json.load(file)
@@ -18,6 +18,7 @@ def update_server_events():
         if r.status_code == 201 or r.status_code == 200:
             print("SUCCESS")
             fileclear = open(path+'/json/pendingLogs.json', 'w')
+            json.dump([],fileclear,indent=4) 
             fileclear.close()
     except:
         print("No connection to ",url)
