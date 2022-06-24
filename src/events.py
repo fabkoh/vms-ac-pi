@@ -711,14 +711,12 @@ def button_detects_change(gpio, level, tick):
         mag_E1_allowed_to_open = True
         relay.trigger_relay_one()
         eventsMod.record_button_pressed(E1,"Security Guard Button")
-        updateserver.update_server_events()
 
     if gpio == E2_Button:
         print(f"{E2} push button is pressed at " + str(datetime.now()))
         mag_E2_allowed_to_open = True
         relay.trigger_relay_two()
         eventsMod.record_button_pressed(E2,"Security Guard Button")
-        updateserver.update_server_events()
 
 
 
