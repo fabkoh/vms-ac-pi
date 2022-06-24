@@ -61,6 +61,7 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
     
     update("json/archivedLogs.json",dictionary)
     update("json/pendingLogs.json",dictionary)
+    update_server_events()
 
 #updates pendingLogs.json and send to backend 
 #updates archivedLogs.json for backup 
@@ -76,7 +77,7 @@ def record_masterpassword_used(authtype,entrance,status):
     
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
-    
+    update_server_events()
     
 #updates pendingTrans.json and send to backend 
 #updates archivedTrans.json for backup 
@@ -94,6 +95,7 @@ def record_unauth_scans(authtype,entrance,status, name=None, access_group=None):
     
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 
 def record_button_pressed(entrance,name_of_button):
 
@@ -106,6 +108,7 @@ def record_button_pressed(entrance,name_of_button):
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 # status = opened/ closed
 
 
@@ -128,6 +131,7 @@ def record_antipassback(authtype,entrance,status):
     
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 
 def record_mag_opened(entrance):
 
@@ -140,6 +144,7 @@ def record_mag_opened(entrance):
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 
 def record_mag_closed(entrance):
 
@@ -152,6 +157,7 @@ def record_mag_closed(entrance):
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 
 def record_mag_opened_warning(entrance):
 
@@ -164,6 +170,7 @@ def record_mag_opened_warning(entrance):
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 
 # status = started buzzing/ stopped buzzing 
 def record_buzzer_start(entrance):
@@ -177,6 +184,7 @@ def record_buzzer_start(entrance):
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 
 def record_buzzer_end(entrance):
 
@@ -189,6 +197,7 @@ def record_buzzer_end(entrance):
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
     
 #update to update json files
 def update(file,dictionary):
@@ -230,7 +239,7 @@ def clear_file_storage(file):
 
 
 
-update_server_events()
+
 
 def main():
     #persondetails = {"Name": "YongNing","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}
