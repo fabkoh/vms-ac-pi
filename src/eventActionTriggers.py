@@ -1,7 +1,8 @@
 import json
 import time
-
-file = open("json/eventActionTriggers.json")
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+file = open(path+"/json/eventActionTriggers.json")
 data = json.load(file)
 
 class TimerError(Exception):
@@ -160,7 +161,8 @@ def check_for_EventTrigger_and_EventAction(EventTrigger):
             
             if command_to_check_and_execute != "":
                 command_to_check_and_execute += f": \n{command_to_execute}"
-            exec(command_to_check_and_execute)
+            print(command_to_check_and_execute)
+            # exec(command_to_check_and_execute)
                                         
                 # check for previous events with timer
 
@@ -209,7 +211,8 @@ def check_for_EventsWithTimerOnly():
             
         #print(command_to_check_and_execute)
         # while True():
-        exec(command_to_check_and_execute)
+        print(command_to_check_and_execute)
+        # exec(command_to_check_and_execute)
 
 
 '''
