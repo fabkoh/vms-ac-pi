@@ -56,7 +56,7 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
                     "entrance": {"entranceId":entrance},
                     "eventActionType": {"eventActionTypeId":1}, 
                     "controller":{"controllerSerialNo":controllerSerial},
-                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
     
     update("json/archivedLogs.json",dictionary)
@@ -71,7 +71,7 @@ def record_masterpassword_used(authtype,entrance,status):
                     "entrance": {"entranceId":entrance},
                     "eventActionType": {"eventActionTypeId":2}, 
                     "controller":{"controllerSerialNo":controllerSerial},
-                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
     
@@ -89,7 +89,7 @@ def record_unauth_scans(authtype,entrance,status, name=None, access_group=None):
                     "entrance": {"entranceId":entrance},
                     "eventActionType": {"eventActionTypeId":3}, 
                     "controller":{"controllerSerialNo":controllerSerial},
-                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
     
@@ -103,7 +103,7 @@ def record_button_pressed(entrance,name_of_button):
                     "entrance": {"entranceId":entrance},
                     "eventActionType": {"eventActionTypeId":9}, 
                     "controller":{"controllerSerialNo":controllerSerial},
-                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
     update(path +"/json/archivedLogs.json",dictionary)
@@ -121,12 +121,12 @@ def record_antipassback(authtype,entrance,status):
                     "entrance": {"entranceId":entrance},
                     "eventActionType": {"eventActionTypeId":2}, 
                     "controller":{"controllerSerialNo":controllerSerial},
-                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
     dictionary = {
                 "direction": status,"entrance":entrance,"eventActionType": "ANTIPASSBACK : authenticated_scan ", 
-                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
     
     update(path +"/json/archivedLogs.json",dictionary)
@@ -139,7 +139,7 @@ def record_mag_opened(entrance):
                     "entrance": {"entranceId":entrance},
                     "eventActionType": {"eventActionTypeId":4}, 
                     "controller":{"controllerSerialNo":controllerSerial},
-                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
     update(path +"/json/archivedLogs.json",dictionary)
@@ -152,7 +152,7 @@ def record_mag_closed(entrance):
                     "entrance": {"entranceId":entrance},
                     "eventActionType": {"eventActionTypeId":5}, 
                     "controller":{"controllerSerialNo":controllerSerial},
-                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
     update(path +"/json/archivedLogs.json",dictionary)
@@ -165,7 +165,7 @@ def record_mag_opened_warning(entrance):
                     "entrance": {"entranceId":entrance},
                     "eventActionType": {"eventActionTypeId":6}, 
                     "controller":{"controllerSerialNo":controllerSerial},
-                    "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
     update(path +"/json/archivedLogs.json",dictionary)
@@ -179,7 +179,7 @@ def record_buzzer_start(entrance):
                         "entrance": {"entranceId":entrance},
                         "eventActionType": {"eventActionTypeId":7}, 
                         "controller":{"controllerSerialNo":controllerSerial},
-                        "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                        "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
         }
 
     update(path +"/json/archivedLogs.json",dictionary)
@@ -192,7 +192,7 @@ def record_buzzer_end(entrance):
                         "entrance": {"entranceId":entrance},
                         "eventActionType": {"eventActionTypeId":8}, 
                         "controller":{"controllerSerialNo":controllerSerial},
-                        "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                        "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
         }
 
     update(path +"/json/archivedLogs.json",dictionary)
