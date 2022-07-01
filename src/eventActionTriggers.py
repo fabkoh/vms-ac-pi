@@ -1,54 +1,12 @@
 import json
 import time
 import os
+from eventActionTriggerConstants import *
+
 path = os.path.dirname(os.path.abspath(__file__))
 file = open(path+"/json/eventActionTriggers.json")
-data = json.load(file)
-
-class TimerError(Exception):
-    """A custom exception used to report errors in use of Timer class"""
-
-class Timer:
-    def __init__(self):
-        self._start_time = None
-
-    def start(self):
-        """Start a new timer"""
-        if self._start_time is not None:
-            print("Timer is running. Use .stop() to stop it")
-            return 
-            raise TimerError(f"Timer is running. Use .stop() to stop it")
-
-        self._start_time = time.perf_counter()
-
-    def stop(self):
-        """Stop the timer, and report the elapsed time"""
-        if self._start_time is None:
-            print("Timer is not running. Use .start() to start it")
-            return 
-            raise TimerError(f"Timer is not running. Use .start() to start it")
-            
-        elapsed_time = time.perf_counter() - self._start_time
-        self._start_time = None
-        print(f"Elapsed time: {elapsed_time:0.4f} seconds")
-    
-    def check(self,TIME):
-        """return True if current_elapsed_time exceeds TIME"""
-        if self._start_time is None:
-            print("Timer is not running. Use .start() to start it")
-            return 
-            
-        current_elapsed_time = time.perf_counter() - self._start_time
-        if current_elapsed_time > TIME:
-            return True
-        
-        return False
-
-    def status(self):
-        """return True if timing has started"""
-        if self._start_time:
-            return True 
-        return False
+EVENT_ACTION_TRIGGERS_DATA = json.load(file)
+file.close()
 
 def GEN_OUT_4_function():
     print("GEN_OUT_4")
@@ -82,155 +40,88 @@ def external_alarm_function():
 def notification_function():
     pass
 
-timeout_buzzer = Timer()
-timeout_mag = Timer()
-
-# for eventActionTriggers in data:
-#     trigger = []
-#     action = []
-#     for dictkey, dictvalue in eventActionTriggers.items():
-
-#         if dictkey == "EventTrigger":
-#             for eventrigger in dictvalue:
-#                 trigger.append(eventrigger)
-#         if dictkey == "EventAction":
-#             for eventaction in dictvalue:
-#                 action = eventaction
-#     #print(trigger,action)
-#     exec(f"if {trigger[0]} and {trigger[1]} and {trigger[2]}: {action}_function()")
-
-
-# takes in eventtrigger and calls event actions 
-def check_for_EventTrigger_and_EventAction(EventTrigger):
-    for eventActionTriggers in data["EventsIncludingSingleEvent"]:
-        trigger = []
-        action = []
-        external = []
-        for dictkey, dictvalue in eventActionTriggers.items():
-
-            if dictkey == "EventTrigger":
-                for eventrigger in dictvalue:
-                    trigger.append(eventrigger)
-            if dictkey == "EventAction":
-                for eventaction in dictvalue:
-                    action.append(eventaction)
-            if dictkey == "ExternalControllerAction":
-                for externalactions in dictvalue:
-                    external.append(externalactions)
-        
-        #print(trigger,action)
-        
-
-        if len(trigger) == 1 and trigger[0] == EventTrigger:
-
-            command_to_execute = ""
-            for i in action:
-                command_to_execute += f"{i}_function() \n"  
-            
-            if len(external)>0:
-                for controlleraction in external:
-                    command_to_execute += f"external_controller_GEN_OUT_function{controlleraction['controllerId'],controlleraction['EventAction']}\n"  
-            
-            exec(command_to_execute)
-            print(command_to_execute)
-
-        elif trigger[-1] == EventTrigger:
-            command_to_check_and_execute = ""
-            for j in range(len(trigger)):
-                #print(trigger[j])
-                #has timer 
-                if type(trigger[j]) == list and len(trigger[j])>1:
-                    # print(trigger[j],type(trigger[j]))
-                    if command_to_check_and_execute == "":
-                        command_to_check_and_execute += f"if {trigger[j][0]}.check({trigger[j][1]}) "
-                    else:
-                        command_to_check_and_execute += f"and {trigger[j][0]}.check({trigger[j][1]}) "
-            
-                # no timer
-                # last trigger def no timer cos will only be executed when the event is triggered 
-                else:
-                    pass
-                    
-            command_to_execute = ""
-            for i in action:
-                command_to_execute += f"    {i}_function() \n"  
-
-            if len(external)>0:
-                for controlleraction in external:
-                    command_to_execute += f"    external_controller_GEN_OUT_function{controlleraction['controllerId'],controlleraction['EventAction']}\n"  
-            
-            if command_to_check_and_execute != "":
-                command_to_check_and_execute += f": \n{command_to_execute}"
-            print(command_to_check_and_execute)
-            # exec(command_to_check_and_execute)
-                                        
-                # check for previous events with timer
-
-
-def check_for_EventsWithTimerOnly():
-    for EventsWithTimerOnly in data["EventsWithTimerOnly"]:
-        trigger = []
-        action = []
-        external = []
-        for dictkey, dictvalue in EventsWithTimerOnly.items():
-
-            if dictkey == "EventTrigger":
-                for eventrigger in dictvalue:
-                    trigger.append(eventrigger)
-            if dictkey == "EventAction":
-                for eventaction in dictvalue:
-                    action.append(eventaction)
-            if dictkey == "ExternalControllerAction":
-                for externalactions in dictvalue:
-                    external.append(externalactions)
-        
-        #print(trigger,action)
-        
-            command_to_check_and_execute = ""
-            for j in range(len(trigger)):
-                #print(trigger[j])
-                #has timer 
-                # print(trigger[j],type(trigger[j]))
-                if command_to_check_and_execute == "":
-                    command_to_check_and_execute += f"if {trigger[j][0]}.check({trigger[j][1]}) "
-                else:
-                    command_to_check_and_execute += f"and {trigger[j][0]}.check({trigger[j][1]}) "
-
-                    
-            command_to_execute = ""
-            for i in action:
-                command_to_execute += f"    {i}_function() \n"  
-
-            if len(external)>0:
-                for controlleraction in external:
-                    command_to_execute += f"    external_controller_GEN_OUT_function{controlleraction['controllerId'],controlleraction['EventAction']}\n"  
-            
-            if command_to_check_and_execute != "":
-                command_to_check_and_execute += f": \n{command_to_execute}"
-
-            
-        #print(command_to_check_and_execute)
-        # while True():
-        print(command_to_check_and_execute)
-        # exec(command_to_check_and_execute)
-
 
 '''
-timeout_buzzer.start()
-time.sleep(1)
-test1 = "GEN_IN_1"
-test2 = "GEN_IN_2"
-check_for_EventTrigger_and_EventAction(test1)
-check_for_EventTrigger_and_EventAction(test2)
+EVENT ACTION TRIGGERS
+Main idea: check through each trigger repeatedy, activate output if trigger conditions are all active
+
+Can be split into 2 parts: finding out if trigger is activated and activating output
+
+FINDING OUT IF TRIGGER IS ACTIVATED
+there are 2 kinds of triggers, event based trigger and timer based trigger
+
+time based trigger include "door open for more than 10s"
+non timer based triggers include "authenticated scan"
+
+for event management with only timer based triggers, continuously check if all conditions are active to activate output
+for event management with a non timer based trigger, check if all timer based triggers are active during the non timer based trigger activation to activate output
+
+and check if the current time is in the trigger schedule
+
+ACTIVATING OUTPUT
+check for each output, and call the appropriate functions to activate the output
+to prevent multiple activations of triggers with a time based component, have a dict mapping eventManagementId to activation status.
+Upon reset of timer based condition, set all eventManagementId with that timer based condition to be able to activate again
 '''
-timeout_buzzer.start()
-timeout_mag.start()
 
-while True:
-    check_for_EventsWithTimerOnly()
-    time.sleep(0.1)
+# maps eventManagementId to boolean, True means has been activated, False means has not been activated
+activated={}
 
+# maps time based eventTriggerId to time (time.time())
+eventTriggerTime={}
 
+def activate_output(output):
+    '''Helper function to activate output events
+    '''
+    for event in output:
+        print(event["eventActionOutputType"]["eventActionOutputTypeName"])
+
+#TODO: implement checking of schedule
+def event_trigger_cb(event_trigger_id):
+    ''' function hook to call everytime an event trigger occurs
+    
+    Args:
+        event_trigger_id (check eventActionTriggerConstants.py): event_trigger which occurred
+    '''
+    # if event is timed, activate timer and return, while true loop will handle the rest
+    if input_is_timed(event_trigger_id):
+        eventTriggerTime[event_trigger_id] = time.time()
+        return
+
+    # if event is not timed, check for all events
+    # first filter events by if they have event_trigger_id in them
+    for event in filter(
+        lambda eventManagement: any(
+            lambda inputEvent: inputEvent.get("eventActionInputType",{})
+                .get("eventActionInputId",None) == event_trigger_id,
+            eventManagement.get("inputEvents",[])
+            ),
+        EVENT_ACTION_TRIGGERS_DATA): 
+
+        event_management_id = event.get("eventManagementId",None)
+
+        # check if event has been activated before
+        if activated.get(event_management_id,False):
+            continue
+
+        valid=True
+        # check if all time based trigger is valid
+        for inputEvent in event.get("inputEvents",[]):
+            # each eventManagement has max 1 event based trigger
+            # if the event is different, it must be a timer based trigger
+            if inputEvent.get("inputEventId",None) != event_trigger_id: 
+                t = eventTriggerTime.get(event_management_id,None)
+                d = inputEvent.get("timerDuration",None)
+                # t is None means trigger has not been active so do not activate
+                # time.time()-t is the time elasped, if less than d, the time elapsed is not long enough, so do not activate
+                if (t==None) or (d==None) or (time.time()-t<d):
+                    valid=False
+                    break
+        
+        if valid:
+            activated[event_management_id]=True
+            activate_output(event.get("outputActions",[]))
+                    
 
 # need to write all possible output 
 # write dynamic input functions to check if true or false
