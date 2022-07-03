@@ -118,7 +118,7 @@ def post_entrance_name():
         code: 204
     '''
     request_body = flask.request.json
-    print(request_body)
+    # print(request_body)
     if ('E1' not in request_body) or ('E2' not in request_body) or ('controllerSerialNo' not in request_body):
         flask.abort(400)
     
