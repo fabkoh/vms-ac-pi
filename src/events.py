@@ -288,6 +288,7 @@ def reader_detects_bits(bits, value,entrance):
     # 2 check auth method (if cred entered not in curr cred schedule, reset)
     # 3 check person creds 
     if credential_added:
+        print(credentials)
         try:
             device_details = {}
             entrance_details = {}
@@ -302,6 +303,7 @@ def reader_detects_bits(bits, value,entrance):
             if pin_type in credentials and \
                "Masterpassword" in device_details and \
                credentials[pin_type] == device_details["Masterpassword"]:
+                print("masterpassword used")
                 eventsMod.record_masterpassword_used("Master Pin", entrancename, entrance_direction)
                 open_door()
                 reset_cred_and_stop_timer()
@@ -320,20 +322,26 @@ def reader_detects_bits(bits, value,entrance):
             
             auth_method_is_and = and_delimiter in auth_method_name
             auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
-            #print("auth_method_is_and, auth_method_keys", auth_method_is_and, auth_method_keys)
-            
+            print("auth_method_is_and, auth_method_keys", auth_method_is_and, auth_method_keys)
+
             # check for credentials not in auth_method_keys
             if any(map(lambda k: k not in auth_method_keys, credentials)):
+                print("auth method not allowed at this timing ")
                 eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
                 reset_cred_and_stop_timer()
                 return
-
+            # have some crendetials but need more 
+            if ((auth_method_is_and and any(map(lambda k: k in credentials, auth_method_keys)))
+                and not all(map(lambda k: k in credentials, auth_method_keys))):
+                print("requires more credentials")
+                return
             # check if need to check if cred belongs to someone           
             if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or # AND, all auth methods present
                ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))): # OR, 1 auth method present
                 # check person cred
                 # 1 find the person
                 # 2 check if the person's access group can enter
+                print("trying to find person")
                 for access_group in entrance_details.get("AccessGroups", []):
                     # find the person
                     person_found = False
@@ -341,20 +349,30 @@ def reader_detects_bits(bits, value,entrance):
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
                         person_credentials = person.get("Credentials", {})
-                        #print(person_credentials)
-                        if all(map(lambda k, v: k in person_credentials and person_credentials[k] == v, credentials.items())): # see if all credentials belong to person
+                        print(person_credentials)
+                        
+                        def checkcred(k):
+                            #print(k,k[0],k[1])
+                            #print(person_credentials,k[0] in person_credentials)
+                            #print(person_credentials[k[0]],k[1] in person_credentials[k[0]])
+                            return k[0] in person_credentials and k[1] in person_credentials[k[0]]
+                        # k[0] refers to credType, k[1] refers to value of corresponding cred 
+                        if all(map(checkcred, credentials.items())): # see if all credentials belong to person
                             # check if the person's access group can enter
                             if verify_datetime(access_group_info.get('Schedule', {})):
                                 # auth scan
-                                eventsMod.record_auth_scans(person.get("Name", ""), access_group.keys()[0], auth_method_name, entrancename, entrance_direction)
+                                print("found person, allowed to enter")
+                                eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[0], auth_method_name, entrancename, entrance_direction)
                                 open_door()
                                 reset_cred_and_stop_timer()
                                 return
                             # person dont have access at this time
+                            print("found person, but not allowed to enter at this timing")
                             eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get("Name", ""), access_group.keys()[0])
                             reset_cred_and_stop_timer()
                             return
                 # cannot find person
+                print("cannot find person")
                 eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
                 reset_cred_and_stop_timer()
                 return
@@ -363,7 +381,7 @@ def reader_detects_bits(bits, value,entrance):
                 
 
         except Exception as e:
-            #print("cannot check cred", e)
+            print("cannot check cred", e)
             pass
 
 
