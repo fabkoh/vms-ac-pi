@@ -10,8 +10,7 @@ import healthcheck # runs heathcheck main()
     2. when detects any events, imports events.py
     3. checks for API calls
 '''
-healthcheck.main(False)
-
+healthcheck.main(True)
 
 E1_IN = None
 E1_OUT = None

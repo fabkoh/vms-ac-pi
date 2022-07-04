@@ -176,6 +176,4 @@ def post_credOccur():
     update_credOccur()
     return flask.Response({}, 204)
 
-healthcheck.main(True)
-
 app.run(host='0.0.0.0',port=5000,debug = True )
