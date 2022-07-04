@@ -4,9 +4,15 @@ import os
 from eventActionTriggerConstants import *
 
 path = os.path.dirname(os.path.abspath(__file__))
-file = open(path+"/json/eventActionTriggers.json")
-EVENT_ACTION_TRIGGERS_DATA = json.load(file)
-file.close()
+EVENT_ACTION_TRIGGERS_DATA = None
+
+def update_event_action_triggers():
+    global EVENT_ACTION_TRIGGERS_DATA
+    f=open(path+"/json/eventActionTriggers.json")
+    EVENT_ACTION_TRIGGERS_DATA=json.load(f)
+    f.close()
+
+update_event_action_triggers()
 
 def GEN_OUT_4_function():
     print("GEN_OUT_4")

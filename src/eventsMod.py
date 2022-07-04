@@ -8,9 +8,18 @@ path = os.path.dirname(os.path.abspath(__file__))
     1. record_auth and record_button to record transLogs in archivedTrans.json and pendingTrans.json
 '''
 
-fileconfig = open(path +'/json/config.json')
-config = json.load(fileconfig)
-controllerSerial = config["controllerConfig"]["controllerSerialNo"]
+config =None
+controllerSerial = None
+MAX_JSON_LENGTH=None
+
+def update_config():
+    global config, controllerSerial, MAX_JSON_LENGTH
+    f=open(path+'/json/config.json')
+    config=json.load(f)
+    f.close()
+
+    controllerSerial=config['controllerConfig']['controllerSerialNo']
+    MAX_JSON_LENGTH=int(config.get("archivedMAXlength", 10))
 
 try:
     MAX_JSON_LENGTH = int(config["archivedMAXlength"]) # max length before first half of jsons get deleted 

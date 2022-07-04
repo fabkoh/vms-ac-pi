@@ -10,13 +10,23 @@ path = os.path.dirname(os.path.abspath(__file__))
 #everytime relay triggers, mag_status_open = True 
 # if mag_contact opened but mag_status_open = False, TRIGGER ALARM 
 
-fileconfig = open(path+'/json/config.json')
-config = json.load(fileconfig)
-GPIOpins = config["GPIOpins"]
+config = None
+GPIOpins = None
 
-Relay_1 = int(GPIOpins["Relay_1"])
-Relay_2 = int(GPIOpins["Relay_2"])
+Relay_1 = None
+Relay_2 = None
 
+def update_config():
+    global config, GPIOpins, Relay_1, Relay_2
+    f=open(path+'/json/config.json')
+    config=json.load(f)
+    f.close()
+
+    GPIOpins=config["GPIOpins"]
+    Relay_1=int(GPIOpins["Relay_1"])
+    Relay_2=int(GPIOpins["Relay_2"])
+
+update_config()
 # *** GPIO Setp/Cleanup ***
 
 def setGpioMode():

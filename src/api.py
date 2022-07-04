@@ -4,6 +4,13 @@ import json
 from werkzeug.exceptions import BadRequest
 import changeStatic
 import os
+import events
+import eventsMod
+import GPIOconfig
+import healthcheck
+import relay
+import program
+import eventActionTriggers
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -48,6 +55,15 @@ def get_status():
 
     return flask.Response(json.dumps(body), headers={ 'Content-type': 'application/json' })
 
+def update_config():
+    '''helper method to update config'''
+    events.update_config()
+    eventsMod.update_config()
+    GPIOconfig.update_config()
+    healthcheck.update_config()
+    relay.update_config()
+    program.update_config()
+
 @app.route('/api/config', methods=['POST'])
 def post_config():
     '''changes config.json and post changes to etlas, 
@@ -76,6 +92,7 @@ def post_config():
 
     changeStatic.change_ip(request_body['controllerIPStatic'], request_body['controllerIP'])
     healthcheck.main(True) # post new config to etlas
+    update_config()
     return flask.Response({}, 204)
 
 @app.route('/api/reset', methods=['POST'])
@@ -99,10 +116,6 @@ def post_shutdown():
     '''shutdowns the controller'''
     changeStatic.change_dhcp()
     os.system('sudo halt')
-
-# restarts maincontroller.service
-def restart_main_controller_service():
-    os.system('sudo systemctl restart maincontroller.service')
 
 @app.route('/api/entrance-name', methods=['POST'])
 def post_entrance_name():
@@ -134,13 +147,17 @@ def post_entrance_name():
     with open(path + '/json/config.json', 'w') as f:
         json.dump(data, f, indent=4)
         f.close()
-    restart_main_controller_service()
+    update_config()
     return flask.Response({}, 204)
     
 @app.route('/api/healthcheck')
 def get_check():
     healthcheck.main(True)
     return flask.Response({}, 204)
+
+def update_credOccur():
+    '''helper method to update credOccur'''
+    events.update_credOccur()
 
 @app.route('/api/credOccur', methods=['POST'])
 def post_credOccur():
@@ -155,7 +172,8 @@ def post_credOccur():
     with open(path + '/json/credOccur.json', 'w+') as f:
         json.dump(flask.request.json, f, indent=4)
         f.close()
-    restart_main_controller_service()
+    
+    update_credOccur()
     return flask.Response({}, 204)
 
 healthcheck.main(True)

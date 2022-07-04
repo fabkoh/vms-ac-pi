@@ -18,10 +18,15 @@ path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
 
 pi = pigpio.pi()
-fileconfig = open(file)
-config = json.load(fileconfig)
-fileconfig.close()
+config = None
 
+def update_config():
+    global config
+    fileconfig=open(file)
+    config=json.load(fileconfig)
+    fileconfig.close()
+
+update_config() # initial load of file
 
 GPIOpins = config["GPIOpins"]
 

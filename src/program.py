@@ -1,5 +1,5 @@
-from GPIOconfig import *
-from events import *
+import GPIOconfig
+import events
 import threading
 import pigpio 
 import eventsMod
@@ -13,67 +13,77 @@ import healthcheck # runs heathcheck main()
 healthcheck.main(False)
 
 
-E1_IN = decoder(pi, E1_IN_D0, E1_IN_D1, reader_detects_bits,"E1_IN") 
-E1_OUT = decoder(pi, E1_OUT_D0, E1_OUT_D1, reader_detects_bits,"E1_OUT")
+E1_IN = None
+E1_OUT = None
 
 
-E2_IN = decoder(pi, E2_IN_D0, E2_IN_D1, reader_detects_bits,"E2_IN") 
-E2_OUT = decoder(pi, E2_OUT_D0, E2_OUT_D1, reader_detects_bits,"E2_OUT")
+E2_IN = None
+E2_OUT = None
 
+def update_config():
+    '''call this after calling GPIOconfig.update_config(), events.update_config() and events.update_credOccur()'''
+    global E1_IN, E1_OUT, E2_IN, E2_OUT
+    E1_IN = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E1_IN_D0, GPIOconfig.E1_IN_D1, events.reader_detects_bits,"E1_IN") 
+    E1_OUT = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E1_OUT_D0, GPIOconfig.E1_OUT_D1, events.reader_detects_bits,"E1_OUT")
+
+    E2_IN = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E2_IN_D0, GPIOconfig.E2_IN_D1, events.reader_detects_bits,"E2_IN") 
+    E2_OUT = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E2_OUT_D0, GPIOconfig.E2_OUT_D1, events.reader_detects_bits,"E2_OUT")
+
+update_config()
 
 def mag_and_button():
-    cb1 = pi.callback(E1_Mag, pigpio.RISING_EDGE, mag_detects_rising)
-    cb2 = pi.callback(E1_Mag, pigpio.FALLING_EDGE, mag_detects_falling)
-    cb3 = pi.callback(E2_Mag, pigpio.RISING_EDGE, mag_detects_rising)
-    cb4 = pi.callback(E2_Mag, pigpio.FALLING_EDGE, mag_detects_falling)
-    cb5 = pi.callback(E1_Button, pigpio.FALLING_EDGE, button_detects_change)
-    cb6 = pi.callback(E2_Button, pigpio.FALLING_EDGE, button_detects_change)
+    cb1 = GPIOconfig.pi.callback(events.E1_Mag, pigpio.RISING_EDGE, events.mag_detects_rising)
+    cb2 = GPIOconfig.pi.callback(events.E1_Mag, pigpio.FALLING_EDGE, events.mag_detects_falling)
+    cb3 = GPIOconfig.pi.callback(events.E2_Mag, pigpio.RISING_EDGE, events.mag_detects_rising)
+    cb4 = GPIOconfig.pi.callback(events.E2_Mag, pigpio.FALLING_EDGE, events.mag_detects_falling)
+    cb5 = GPIOconfig.pi.callback(events.E1_Button, pigpio.FALLING_EDGE, events.button_detects_change)
+    cb6 = GPIOconfig.pi.callback(events.E2_Button, pigpio.FALLING_EDGE, events.button_detects_change)
 
 def check_events_for(entrance):
     if entrance.split("_")[0] == "E1":
-        entrancename = E1
+        entrancename = events.E1
     if entrance.split("_")[0] == "E2":
-        entrancename = E2
+        entrancename = events.E2
     
     if entrance == "E1_IN":
-        credentials = credentials_E1_IN
-        pinsvalue = pinsvalue_E1_IN
-        timeout_cred = timeout_cred_E1_IN
-        timeout_mag = timeout_mag_E1
-        timeout_buzzer = timeout_buzzer_E1
-        CRED_TIMEOUT = CRED_TIMEOUT_E1
-        MAG_TIMEOUT = MAG_TIMEOUT_E1
-        BUZZER_TIMEOUT = BUZZER_TIMEOUT_E1
+        credentials = events.credentials_E1_IN
+        pinsvalue = events.pinsvalue_E1_IN
+        timeout_cred = events.timeout_cred_E1_IN
+        timeout_mag = events.timeout_mag_E1
+        timeout_buzzer = events.timeout_buzzer_E1
+        CRED_TIMEOUT = events.CRED_TIMEOUT_E1
+        MAG_TIMEOUT = events.MAG_TIMEOUT_E1
+        BUZZER_TIMEOUT = events.BUZZER_TIMEOUT_E1
 
     if entrance == "E1_OUT":
-        credentials = credentials_E1_OUT
-        pinsvalue = pinsvalue_E1_OUT
-        timeout_cred = timeout_cred_E1_OUT
-        timeout_mag = timeout_mag_E1
-        timeout_buzzer = timeout_buzzer_E1
-        CRED_TIMEOUT = CRED_TIMEOUT_E1
-        MAG_TIMEOUT = MAG_TIMEOUT_E1
-        BUZZER_TIMEOUT = BUZZER_TIMEOUT_E1
+        credentials = events.credentials_E1_OUT
+        pinsvalue = events.pinsvalue_E1_OUT
+        timeout_cred = events.timeout_cred_E1_OUT
+        timeout_mag = events.timeout_mag_E1
+        timeout_buzzer = events.timeout_buzzer_E1
+        CRED_TIMEOUT = events.CRED_TIMEOUT_E1
+        MAG_TIMEOUT = events.MAG_TIMEOUT_E1
+        BUZZER_TIMEOUT = events.BUZZER_TIMEOUT_E1
 
     if entrance == "E2_IN":
-        credentials = credentials_E2_IN
-        pinsvalue = pinsvalue_E2_IN
-        timeout_cred = timeout_cred_E2_IN
-        timeout_mag = timeout_mag_E2
-        timeout_buzzer = timeout_buzzer_E2
-        CRED_TIMEOUT = CRED_TIMEOUT_E2
-        MAG_TIMEOUT = MAG_TIMEOUT_E2
-        BUZZER_TIMEOUT = BUZZER_TIMEOUT_E2
+        credentials = events.credentials_E2_IN
+        pinsvalue = events.pinsvalue_E2_IN
+        timeout_cred = events.timeout_cred_E2_IN
+        timeout_mag = events.timeout_mag_E2
+        timeout_buzzer = events.timeout_buzzer_E2
+        CRED_TIMEOUT = events.CRED_TIMEOUT_E2
+        MAG_TIMEOUT = events.MAG_TIMEOUT_E2
+        BUZZER_TIMEOUT = events.BUZZER_TIMEOUT_E2
 
     if entrance == "E2_OUT":
-        credentials = credentials_E2_OUT
-        pinsvalue = pinsvalue_E2_OUT
-        timeout_cred = timeout_cred_E2_OUT
-        timeout_mag = timeout_mag_E2
-        timeout_buzzer = timeout_buzzer_E2
-        CRED_TIMEOUT = CRED_TIMEOUT_E2
-        MAG_TIMEOUT = MAG_TIMEOUT_E2
-        BUZZER_TIMEOUT = BUZZER_TIMEOUT_E2
+        credentials = events.credentials_E2_OUT
+        pinsvalue = events.pinsvalue_E2_OUT
+        timeout_cred = events.timeout_cred_E2_OUT
+        timeout_mag = events.timeout_mag_E2
+        timeout_buzzer = events.timeout_buzzer_E2
+        CRED_TIMEOUT = events.CRED_TIMEOUT_E2
+        MAG_TIMEOUT = events.MAG_TIMEOUT_E2
+        BUZZER_TIMEOUT = events.BUZZER_TIMEOUT_E2
     
     if timeout_cred.status(): 
             if timeout_cred.check(CRED_TIMEOUT):
@@ -87,44 +97,44 @@ def check_events_for(entrance):
         
     if timeout_mag.status():
         if timeout_mag.check(MAG_TIMEOUT):
-            activate_buzz_led(entrance[:2])
+            GPIOconfig.activate_buzz_led(entrance[:2])
             
             if not timeout_buzzer.status():
                 timeout_buzzer.start()
                 print("Buzzer started buzzing")
                 eventsMod.record_buzzer_start(entrancename)
-                updateserver.update_server_events()
+                events.updateserver.update_server_events()
     else:
-        deactivate_buzz_led(entrance[:2])
+        GPIOconfig.deactivate_buzz_led(entrance[:2])
         if timeout_buzzer.status():
             timeout_buzzer.stop()
             print("Buzzer stopped buzzing")
             eventsMod.record_buzzer_end(entrancename)
 
-    time.sleep(0.1)
+    events.time.sleep(0.1)
 
 
 #E1_is_active/E2_is_active
 def check_entrance_E1():
-    if not E1_is_active: 
-        relay.unlock_entrance_one()
+    if not events.E1_is_active: 
+        events.relay.unlock_entrance_one()
     else:
-        relay.lock_entrance_one()
-        if verify_datetime(E1_entrance_schedule):
-            relay.unlock_entrance_one()
+        events.relay.lock_entrance_one()
+        if events.verify_datetime(events.E1_entrance_schedule):
+            events.relay.unlock_entrance_one()
         else:
-            relay.lock_entrance_one()
+            events.relay.lock_entrance_one()
 
 #E1_is_active/E2_is_active
 def check_entrance_E2():
-    if not E2_is_active: 
-        relay.unlock_entrance_two()
+    if not events.E2_is_active: 
+        events.relay.unlock_entrance_two()
     else:
-        relay.lock_entrance_two()
-        if verify_datetime(E2_entrance_schedule):
-            relay.unlock_entrance_two()
+        events.relay.lock_entrance_two()
+        if events.verify_datetime(events.E2_entrance_schedule):
+            events.relay.unlock_entrance_two()
         else:
-            relay.lock_entrance_two()
+            events.relay.lock_entrance_two()
     
 def check_events_timer():
     while True:
