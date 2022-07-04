@@ -68,8 +68,8 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
                     "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
     
-    update("json/archivedLogs.json",dictionary)
-    update("json/pendingLogs.json",dictionary)
+    update(path+"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
 
 #updates pendingLogs.json and send to backend 
