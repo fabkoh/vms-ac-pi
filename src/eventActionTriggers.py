@@ -1,4 +1,5 @@
 import json
+import threading
 import time
 import os
 from eventActionTriggerConstants import *
@@ -76,37 +77,65 @@ activated={}
 # maps time based eventTriggerId to time (time.time())
 eventTriggerTime={}
 
+# store output events
+output_events=[]
+
+def flush_output():
+    '''Activates output'''
+    for output in output_events:
+        print(output)
+    
+    output_events.clear()
+
 def activate_output(output):
-    '''Helper function to activate output events
+    '''Helper function to store output events to activate
+    DOES NOT ACTIVATE OUTPUT, CALL flush_output() TO ACTIVATE
+
+    Args: list of output actions
     '''
-    for event in output:
-        print(event["eventActionOutputType"]["eventActionOutputTypeName"])
+    output_events.extend(output)
 
 #TODO: implement checking of schedule
-def event_trigger_cb(event_trigger_id):
+def event_trigger_cb(event_trigger):
     ''' function hook to call everytime an event trigger occurs
     
     Args:
-        event_trigger_id (check eventActionTriggerConstants.py): event_trigger which occurred
+        event_trigger (check eventActionTriggerConstants.py): event_trigger which occurred
     '''
     # if event is timed, activate timer and return, while true loop will handle the rest
-    if input_is_timed(event_trigger_id):
-        eventTriggerTime[event_trigger_id] = time.time()
-        return
+    if input_is_timed(event_trigger):
+        timer_action = get_timer_event_timer_action(event_trigger)
+        event_trigger_type = get_timer_event_event_action_trigger(event_trigger)
+        if timer_action == START_TIMER:
+            eventTriggerTime[event_trigger_type] = time.time()
+        elif timer_action == STOP_TIMER:
+            eventTriggerTime[event_trigger_type] = None
+            # need to reset all events with this event_trigger_type
+            # first filter all events with this event_trigger_type
+            for event in filter( # filter events with this event_trigger_type
+                lambda eventManagement: any(
+                    lambda inputEvent: inputEvent.get("eventActionInputType",{})
+                        .get("eventActionInputId",None) == event_trigger_type,
+                    eventManagement.get("inputEvents",[])
+                    ),
+                EVENT_ACTION_TRIGGERS_DATA
+            ):
+                activated[event.get("eventManagementId",None)] = False # allow these events to activate again
+        return 
 
     # if event is not timed, check for all events
-    # first filter events by if they have event_trigger_id in them
-    for event in filter(
-        lambda eventManagement: any(
+    # first filter events by if they have event_trigger in them
+    for event in filter( # filter events by if they have event_trigger in them
+        lambda eventManagement: any( # finds if any inputEvent (in events) have event_trigger
             lambda inputEvent: inputEvent.get("eventActionInputType",{})
-                .get("eventActionInputId",None) == event_trigger_id,
+                .get("eventActionInputId",None) == event_trigger,
             eventManagement.get("inputEvents",[])
             ),
         EVENT_ACTION_TRIGGERS_DATA): 
 
         event_management_id = event.get("eventManagementId",None)
 
-        # check if event has been activated before
+        # check if event has been activated before, if so skip this event
         if activated.get(event_management_id,False):
             continue
 
@@ -115,7 +144,7 @@ def event_trigger_cb(event_trigger_id):
         for inputEvent in event.get("inputEvents",[]):
             # each eventManagement has max 1 event based trigger
             # if the event is different, it must be a timer based trigger
-            if inputEvent.get("inputEventId",None) != event_trigger_id: 
+            if inputEvent.get("inputEventId",None) != event_trigger: 
                 t = eventTriggerTime.get(event_management_id,None)
                 d = inputEvent.get("timerDuration",None)
                 # t is None means trigger has not been active so do not activate
@@ -125,9 +154,36 @@ def event_trigger_cb(event_trigger_id):
                     break
         
         if valid:
-            activated[event_management_id]=True
+            # if there are more than 1 inputEvent, there is a timer based trigger
+            # thus, need to set this to prevent repeats
+            # ex. door opened more than 10s and unauthenticated scan
+            # if 2 unauthenicated scans, should only trigger at the first scan
+            if len(event.get("inputEvent", [])) > 1:
+                activated[event_management_id]=True
             activate_output(event.get("outputActions",[]))
+            
+    flush_output()
                     
+def check_for_only_timer_based_events():
+    for event in EVENT_ACTION_TRIGGERS_DATA:
+        event_management_id = event.get("eventManagementId",None)
+        if activated.get(event_management_id,False):
+            continue # already activated
+        valid=True
+        for inputEvent in event.get("inputEvents",[]):
+            d = inputEvent.get("timerDuration",None)
+            t = eventTriggerTime.get(event_management_id,None)
+            if (t==None) or (d==None) or (time.time()-t<d): # event is not to be activated
+                valid=False
+                break
+        if valid:
+            activated[event_management_id] = True # timer based must have activated
+            activate_output(event.get("outputActions",[]))
+            
+    flush_output()
+    time.sleep(0.1) # throttle
+
+threading.Thread(target=check_for_only_timer_based_events)
 
 # need to write all possible output 
 # write dynamic input functions to check if true or false
