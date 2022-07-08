@@ -385,7 +385,7 @@ def reader_detects_bits(bits, value,entrance):
                                 return
                             # person dont have access at this time
                             print("found person, but not allowed to enter at this timing")
-                            eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get("Name", ""), access_group.keys()[0])
+                            eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get("Name", ""), list(access_group.keys())[0])
                             reset_cred_and_stop_timer()
                             return
                 # cannot find person
