@@ -1,482 +1,190 @@
 [
     {
         "entrance": {
-            "entranceId": ""
+            "entranceId": 2
         },
         "eventActionType": {
-            "eventActionTypeId": 5
+            "eventActionTypeId": 8
         },
         "controller": {
-            "controllerSerialNo": "100000005a46e105"
+            "controllerSerialNo": null
         },
-        "eventTime": "07-02-2022 15:26:52"
+        "eventTime": "07-08-2022 11:13:13"
     },
     {
         "entrance": {
-            "entranceId": ""
+            "entranceId": 2
         },
         "eventActionType": {
-            "eventActionTypeId": 6
+            "eventActionTypeId": 8
         },
         "controller": {
-            "controllerSerialNo": "100000005a46e105"
+            "controllerSerialNo": null
         },
-        "eventTime": "07-02-2022 15:26:53"
+        "eventTime": "07-08-2022 11:13:14"
+    },
+    {
+        "person": {
+            "personId": null
+        },
+        "accessGroup": {
+            "accessGroupId": null
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 2
+        },
+        "eventActionType": {
+            "eventActionTypeId": 3
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-08-2022 11:18:34"
+    },
+    {
+        "person": {
+            "personId": null
+        },
+        "accessGroup": {
+            "accessGroupId": null
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 2
+        },
+        "eventActionType": {
+            "eventActionTypeId": 3
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-08-2022 11:18:49"
+    },
+    {
+        "person": {
+            "personId": null
+        },
+        "accessGroup": {
+            "accessGroupId": null
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 2
+        },
+        "eventActionType": {
+            "eventActionTypeId": 3
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-08-2022 11:19:03"
+    },
+    {
+        "person": {
+            "personId": 2
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 2
+        },
+        "eventActionType": {
+            "eventActionTypeId": 3
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-08-2022 11:19:12"
+    },
+    {
+        "person": {
+            "personId": null
+        },
+        "accessGroup": {
+            "accessGroupId": null
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 2
+        },
+        "eventActionType": {
+            "eventActionTypeId": 3
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-08-2022 11:24:53"
+    },
+    {
+        "person": {
+            "personId": 2
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 2
+        },
+        "eventActionType": {
+            "eventActionTypeId": 3
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-08-2022 11:24:57"
+    },
+    {
+        "person": {
+            "personId": null
+        },
+        "accessGroup": {
+            "accessGroupId": null
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 2
+        },
+        "eventActionType": {
+            "eventActionTypeId": 3
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-08-2022 11:28:28"
+    },
+    {
+        "person": {
+            "personId": 2
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 2
+        },
+        "eventActionType": {
+            "eventActionTypeId": 3
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-08-2022 11:28:46"
     },
     {
         "entrance": {
-            "entranceId": ""
-        },
-        "eventActionType": {
-            "eventActionTypeId": 5
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-02-2022 15:26:55"
-    },
-    {
-        "entrance": {
-            "entranceId": 3
+            "entranceId": 1
         },
         "eventActionType": {
             "eventActionTypeId": 9
         },
         "controller": {
-            "controllerSerialNo": "100000005a46e105"
+            "controllerSerialNo": null
         },
-        "eventTime": "07-02-2022 15:52:20"
-    },
-    {
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 2
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 11:51:04"
-    },
-    {
-        "person": {
-            "personId": null
-        },
-        "accessGroup": {
-            "accessGroupId": null
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 3
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 12:14:42"
-    },
-    {
-        "person": {
-            "personId": 1
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 12:39:38"
-    },
-    {
-        "person": {
-            "personId": 1
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 12:41:01"
-    },
-    {
-        "person": {
-            "personId": null
-        },
-        "accessGroup": {
-            "accessGroupId": null
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 3
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:06:52"
-    },
-    {
-        "person": {
-            "personId": null
-        },
-        "accessGroup": {
-            "accessGroupId": null
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 3
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:07:00"
-    },
-    {
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 2
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:07:03"
-    },
-    {
-        "person": {
-            "personId": null
-        },
-        "accessGroup": {
-            "accessGroupId": null
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 3
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:07:13"
-    },
-    {
-        "person": {
-            "personId": 1
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:10:10"
-    },
-    {
-        "person": {
-            "personId": null
-        },
-        "accessGroup": {
-            "accessGroupId": null
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 3
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:10:16"
-    },
-    {
-        "person": {
-            "personId": 2
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:10:18"
-    },
-    {
-        "person": {
-            "personId": null
-        },
-        "accessGroup": {
-            "accessGroupId": null
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 3
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:11:41"
-    },
-    {
-        "person": {
-            "personId": 1
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:18:53"
-    },
-    {
-        "person": {
-            "personId": null
-        },
-        "accessGroup": {
-            "accessGroupId": null
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 3
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:18:59"
-    },
-    {
-        "person": {
-            "personId": 2
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:19:01"
-    },
-    {
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 2
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:19:09"
-    },
-    {
-        "person": {
-            "personId": 1
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:20:47"
-    },
-    {
-        "person": {
-            "personId": 1
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:21:26"
-    },
-    {
-        "person": {
-            "personId": 2
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:21:35"
-    },
-    {
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 2
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:22:15"
-    },
-    {
-        "person": {
-            "personId": 2
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:22:27"
-    },
-    {
-        "person": {
-            "personId": null
-        },
-        "accessGroup": {
-            "accessGroupId": null
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 3
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:22:33"
-    },
-    {
-        "person": {
-            "personId": 1
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:22:36"
-    },
-    {
-        "person": {
-            "personId": 2
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
-        "entrance": {
-            "entranceId": 2
-        },
-        "eventActionType": {
-            "eventActionTypeId": 1
-        },
-        "controller": {
-            "controllerSerialNo": "100000005a46e105"
-        },
-        "eventTime": "07-03-2022 13:26:25"
+        "eventTime": "07-08-2022 11:32:31"
     }
 ]

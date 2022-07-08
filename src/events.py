@@ -376,6 +376,7 @@ def reader_detects_bits(bits, value,entrance):
                         # k[0] refers to credType, k[1] refers to value of corresponding cred 
                         if all(map(checkcred, list(credentials.items()))): # see if all credentials belong to person
                             # check if the person's access group can enter
+                            print(verify_datetime(access_group_info.get('Schedule', {})))
                             if verify_datetime(access_group_info.get('Schedule', {})):
                                 # auth scan
                                 print("found person, allowed to enter")
@@ -436,7 +437,7 @@ schedule = {
 '''
 
 def verify_datetime(schedule):
-    #print(schedule)
+    print(schedule)
     #print(type(schedule))
     print(str(date.today()))
     print(datetime.now())
