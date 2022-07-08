@@ -10,10 +10,10 @@ UNAUTHENTICATED_SCAN=2 # check eventsMod.py record_unauth_scans
 EXIT_BUTTON_PRESSED=3 # check eventsMod.py record_button_pressed
 CONTACT_OPEN_WITHOUT_AUTHENTICATION=4 # check eventsMod.py record_mag_opened_warning
 CONTACT_OPEN_WITH_AUTHENTICATION=5 # check eventsMod.py record_mag_opened
-EXTERNAL_ALARM=6
-GEN_IN_1=7 # check program.py check_gen_pins
-GEN_IN_2=8 # check program.py check_gen_pins
-GEN_IN_3=9 # check program.py check_gen_pins
+FIRE=6 # fire pin, check program.py check_gen_and_fire_pins
+GEN_IN_1=7 # check program.py check_gen_and_fire_pins
+GEN_IN_2=8 # check program.py check_gen_and_fire_pins
+GEN_IN_3=9 # check program.py check_gen_and_fire_pins
 
 # timer (timer ADTs will have 2 fields, id and start/stop timer)
 CONTACT_OPEN=10 # check eventMod.py record_mag_opened, record_mag_opened_warning, record_mag_closed
