@@ -374,7 +374,7 @@ def reader_detects_bits(bits, value,entrance):
                             #print(person_credentials[k[0]],k[1] in person_credentials[k[0]])
                             return k[0] in person_credentials and k[1] in person_credentials[k[0]]
                         # k[0] refers to credType, k[1] refers to value of corresponding cred 
-                        if all(map(checkcred, credentials.items())): # see if all credentials belong to person
+                        if all(map(checkcred, list(credentials.items()))): # see if all credentials belong to person
                             # check if the person's access group can enter
                             if verify_datetime(access_group_info.get('Schedule', {})):
                                 # auth scan
