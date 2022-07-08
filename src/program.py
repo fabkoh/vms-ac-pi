@@ -157,11 +157,12 @@ def check_gen_pins_and_alarm():
     cb4=GPIOconfig.pi.callback(GPIOconfig.Fire,pigpio.RISING_EDGE,lambda: eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.FIRE))
     
 
-t1 = threading.Thread(target=mag_and_button)
+#t1 = threading.Thread(target=mag_and_button)
 t2 = threading.Thread(target=check_events_timer)
 t3=threading.Thread(target=check_gen_pins_and_alarm)
 
-t1.start()
+#t1.start()
 t2.start()
 t3.start()
+mag_and_button()
 print("prorgam.py")

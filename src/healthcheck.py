@@ -12,12 +12,13 @@ import requests
 import time
 import gc
 from changeStatic import *
+import GPIOconfig
 #change_static_ip, get_default_gateway_windows
 
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
 
-pi = pigpio.pi()
+pi = GPIOconfig.pi
 config = None
 
 def update_config():
