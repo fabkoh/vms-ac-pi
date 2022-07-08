@@ -161,3 +161,4 @@ t3=threading.Thread(target=check_gen_pins)
 
 t1.start()
 t2.start()
+t3.start()
