@@ -144,8 +144,20 @@ def check_events_timer():
         #check_entrance_E1()
         #check_entrance_E2()
         
+def check_gen_pins():
+    import eventActionTriggers
+    import eventActionTriggerConstants
+
+    if GPIOconfig.Gen_In_1 != None:
+        cb1 = GPIOconfig.pi.callback(GPIOconfig.Gen_In_1, pigpio.RISING_EDGE, lambda: eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.GEN_IN_1))
+    if GPIOconfig.Gen_In_2 != None:
+        cb2 = GPIOconfig.pi.callback(GPIOconfig.Gen_in_2,pigpio.RISING_EDGE, lambda: eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.GEN_IN_2))
+    if GPIOconfig.Gen_In_2 != None:
+        cb3 = GPIOconfig.pi.callback(GPIOconfig.Gen_In_3,pigpio.RISING_EDGE,lambda: eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.GEN_IN_3))
+
 t1 = threading.Thread(target=mag_and_button)
 t2 = threading.Thread(target=check_events_timer)
+t3=threading.Thread(target=check_gen_pins)
 
 t1.start()
 t2.start()

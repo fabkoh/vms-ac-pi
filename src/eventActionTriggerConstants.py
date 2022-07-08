@@ -11,9 +11,10 @@ EXIT_BUTTON_PRESSED=3 # check eventsMod.py record_button_pressed
 CONTACT_OPEN_WITHOUT_AUTHENTICATION=4 # check eventsMod.py record_mag_opened_warning
 CONTACT_OPEN_WITH_AUTHENTICATION=5 # check eventsMod.py record_mag_opened
 EXTERNAL_ALARM=6
-GEN_IN_1=7
-GEN_IN_2=8
-GEN_IN_3=9
+GEN_IN_1=7 # check program.py check_gen_pins
+GEN_IN_2=8 # check program.py check_gen_pins
+GEN_IN_3=9 # check program.py check_gen_pins
+
 # timer (timer ADTs will have 2 fields, id and start/stop timer)
 CONTACT_OPEN=10 # check eventMod.py record_mag_opened, record_mag_opened_warning, record_mag_closed
 
@@ -21,7 +22,11 @@ START_TIMER=True
 STOP_TIMER=False
 
 # output
-
+GEN_OUT_1=1
+GEN_OUT_2=2
+GEN_OUT_3=3
+EMLOCK_1=4
+EMLOCK_2=5
 
 # # id of timer based input events
 # TIMED_EVENTS={CONTACT_OPEN} # set for better performance
