@@ -4,12 +4,12 @@ import json
 from werkzeug.exceptions import BadRequest
 import changeStatic
 import os
+import program
 import events
 import eventsMod
 import GPIOconfig
 import healthcheck
 import relay
-import program
 import eventActionTriggers
 
 app = flask.Flask(__name__)
