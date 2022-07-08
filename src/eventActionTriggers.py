@@ -113,11 +113,11 @@ def event_trigger_cb(event_trigger):
             # need to reset all events with this event_trigger_type
             # first filter all events with this event_trigger_type
             for event in filter( # filter events with this event_trigger_type
-                lambda eventManagement: any(
+                lambda eventManagement: any(map(
                     lambda inputEvent: inputEvent.get("eventActionInputType",{})
                         .get("eventActionInputId",None) == event_trigger_type,
                     eventManagement.get("inputEvents",[])
-                    ),
+                    )),
                 EVENT_ACTION_TRIGGERS_DATA
             ):
                 activated[event.get("eventManagementId",None)] = False # allow these events to activate again
@@ -126,11 +126,11 @@ def event_trigger_cb(event_trigger):
     # if event is not timed, check for all events
     # first filter events by if they have event_trigger in them
     for event in filter( # filter events by if they have event_trigger in them
-        lambda eventManagement: any( # finds if any inputEvent (in events) have event_trigger
+        lambda eventManagement: any(map( # finds if any inputEvent (in events) have event_trigger
             lambda inputEvent: inputEvent.get("eventActionInputType",{})
                 .get("eventActionInputId",None) == event_trigger,
             eventManagement.get("inputEvents",[])
-            ),
+            )),
         EVENT_ACTION_TRIGGERS_DATA): 
 
         event_management_id = event.get("eventManagementId",None)
