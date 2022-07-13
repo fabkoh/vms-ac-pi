@@ -165,7 +165,7 @@ def event_trigger_cb(event_trigger):
                     lambda inputEvent: inputEvent.get("eventActionInputType",{})
                         .get("eventActionInputId",None) == event_trigger_type,
                     eventManagement.get("inputEvents",[])
-                    )) and get_entrance_from_event_management(eventManagement)==entrance, # check if this event management entrance is the same as the event
+                    )) and (entrance is BOTH_ENTRANCE or get_entrance_from_event_management(eventManagement)==entrance), # check if this event management entrance is the same as the event
                 EVENT_ACTION_TRIGGERS_DATA
             ):
                 activated[event.get("eventManagementId",None)] = False # allow these events to activate again
@@ -193,8 +193,11 @@ def event_trigger_cb(event_trigger):
         for inputEvent in event.get("inputEvents",[]):
             # each eventManagement has max 1 event based trigger
             # if the event is different, it must be a timer based trigger
-            if inputEvent.get("inputEventId",None) != event_trigger: 
-                t = eventTriggerTime.get((event_management_id,entrance),None)
+            input_id = inputEvent.get("inputEventId",None)
+            if input_id != event_trigger: 
+                t = eventTriggerTime.get((input_id,entrance),None)
+                if t == None:
+                    t = eventTriggerTime.get((input_id,BOTH_ENTRANCE),None)
                 d = inputEvent.get("timerDuration",None)
                 # t is None means trigger has not been active so do not activate
                 # time.time()-t is the time elasped, if less than d, the time elapsed is not long enough, so do not activate
@@ -224,8 +227,11 @@ def check_for_only_timer_based_events():
         valid=True
         entrance=get_entrance_from_event_management(event)
         for inputEvent in event.get("inputEvents",[]):
+            input_id = inputEvent.get("inputEventId",None)
             d = inputEvent.get("timerDuration",None)
-            t = eventTriggerTime.get((event_management_id,entrance),None)
+            t = eventTriggerTime.get((input_id,entrance),None)
+            if t == None:
+                t = eventTriggerTime.get((input_id,BOTH_ENTRANCE),None)
             if (t==None) or (d==None) or (time.time()-t<d): # event is not to be activated
                 valid=False
                 break
