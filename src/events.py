@@ -200,6 +200,21 @@ def check_for_wiegand(value):
                     if authmethod:
                         return {"Name": personName,"diffpassword" : diffpassword, "AccessGroup": groupName,"Schedule":groupdetails["Schedule"]}
 
+def open_door(entrance_prefix):
+    '''Helper function for eventActionTriggers.py
+    
+    Args:
+    entrance_prefix(string): "E1" | "E2"
+    '''
+    global mag_E1_allowed_to_open,mag_E2_allowed_to_open
+    if entrance_prefix == "E1":
+        mag_E1_allowed_to_open = True
+        relay.trigger_relay_one()
+    elif entrance_prefix == "E2":
+        mag_E2_allowed_to_open = True
+        relay.trigger_relay_two()
+
+
 
 # keep track of wiegand values and pins 
 # check if person allowed to enter 
@@ -256,6 +271,8 @@ def reader_detects_bits(bits, value,entrance):
     def open_door():
         '''opens the door, set mags to allow open, update server events'''
         #print("open")
+        global mag_E1_allowed_to_open
+        global mag_E2_allowed_to_open
         if entrance_prefix == "E1":
             mag_E1_allowed_to_open = True
             relay.trigger_relay_one()

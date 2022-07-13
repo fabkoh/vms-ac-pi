@@ -69,7 +69,11 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.AUTHENTICATED_SCAN)
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.AUTHENTICATED_SCAN,entrance)
+    )
+
+
     update(path+"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
@@ -103,7 +107,9 @@ def record_unauth_scans(authtype,entrance,status, name=None, access_group=None):
                     "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.UNAUTHENTICATED_SCAN)
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.UNAUTHENTICATED_SCAN,entrance)
+    )
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
@@ -116,7 +122,9 @@ def record_button_pressed(entrance,name_of_button):
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.EXIT_BUTTON_PRESSED)
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.EXIT_BUTTON_PRESSED,entrance)
+    )
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
@@ -153,8 +161,11 @@ def record_mag_opened(entrance):
                     "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
     eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-                                                                                        eventActionTriggerConstants.START_TIMER))
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION)
+                                                                                        eventActionTriggerConstants.START_TIMER,
+                                                                                        entrance))
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION,entrance)
+    )
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
@@ -168,7 +179,8 @@ def record_mag_closed(entrance):
                     "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
     eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-                                                                                        eventActionTriggerConstants.STOP_TIMER))
+                                                                                        eventActionTriggerConstants.STOP_TIMER,
+                                                                                        entrance))
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
@@ -183,8 +195,11 @@ def record_mag_opened_warning(entrance):
     }
 
     eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-                                                                                        eventActionTriggerConstants.START_TIMER))
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION)
+                                                                                        eventActionTriggerConstants.START_TIMER,
+                                                                                        entrance))
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION,entrance)
+    )
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)

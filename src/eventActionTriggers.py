@@ -1,11 +1,13 @@
+import datetime
 import json
 import threading
 import time
 import os
 from eventActionTriggerConstants import *
+import relay
 
 path = os.path.dirname(os.path.abspath(__file__))
-EVENT_ACTION_TRIGGERS_DATA = None
+EVENT_ACTION_TRIGGERS_DATA = []
 
 def update_event_action_triggers():
     global EVENT_ACTION_TRIGGERS_DATA
@@ -74,20 +76,48 @@ Upon reset of timer based condition, set all eventManagementId with that timer b
 # maps eventManagementId to boolean, True means has been activated, False means has not been activated
 activated={}
 
-# maps time based eventTriggerId to time (time.time())
+# maps time based (eventTriggerId,entranceId) to time (time.time())
 eventTriggerTime={}
 
 # store output events
 output_events=[]
 
+def check_datetime(schedule):
+    '''Helper function to check if schedule is currently active
+    
+    Args:
+        schedule: schedule adt (cdict mapping date to list of { starttime, endtime }, time is in hh:mm format. Check docs for more info
+        
+    Returns:
+        active: if the schedule is current active
+    '''
+    time_array = schedule.get(str(datetime.date.today()),None)
+    if time_array == None: return False 
+
+    curr_datetime = datetime.datetime.now()
+    curr_time = curr_datetime.stftime("%H") + ":" + curr_datetime("%M") # "HH:MM"
+    for timing in time_array:
+        start_time = timing.get("starttime","24:00")
+        end_time = timing.get("endtime","00:00")
+        if start_time <= curr_time <= end_time:
+            return True
+    return False
+    
+
 def flush_output():
     '''Activates output'''
+    import events
     for output in output_events:
         print(output)
+        id = output.get("eventActionOutputType",{}).get("eventActionOutputId",None)
+        if id == EMLOCK_1:
+            events.open_door("E1")
+        elif id == EMLOCK_2:
+            events.open_door("E2")
     
     output_events.clear()
 
-def activate_output(output):
+def queue_output(output):
     '''Helper function to store output events to activate
     DOES NOT ACTIVATE OUTPUT, CALL flush_output() TO ACTIVATE
 
@@ -95,7 +125,24 @@ def activate_output(output):
     '''
     output_events.extend(output)
 
-#TODO: implement checking of schedule
+def get_entrance_from_event_management(event_management):
+    '''Helper function to return entrance_id from event_management object
+
+    Args:
+        event_management (dict): event_management object from eventActionTrigger.json
+
+    Returns:
+        entrance_id (int): entrance id
+    '''
+    entrance = event_management.get("entrance",None)
+    if entrance != None:
+        return entrance.get("entranceId",None)
+
+    # if its controller, it works for both entrances
+    return BOTH_ENTRANCE
+
+
+
 def event_trigger_cb(event_trigger):
     ''' function hook to call everytime an event trigger occurs
     
@@ -106,10 +153,11 @@ def event_trigger_cb(event_trigger):
     if input_is_timed(event_trigger):
         timer_action = get_timer_event_timer_action(event_trigger)
         event_trigger_type = get_timer_event_event_action_trigger(event_trigger)
+        entrance = get_event_entrance(event_trigger)
         if timer_action == START_TIMER:
-            eventTriggerTime[event_trigger_type] = time.time()
+            eventTriggerTime[(event_trigger_type,entrance)] = time.time()
         elif timer_action == STOP_TIMER:
-            eventTriggerTime[event_trigger_type] = None
+            eventTriggerTime[(event_trigger_type,entrance)] = None
             # need to reset all events with this event_trigger_type
             # first filter all events with this event_trigger_type
             for event in filter( # filter events with this event_trigger_type
@@ -117,7 +165,7 @@ def event_trigger_cb(event_trigger):
                     lambda inputEvent: inputEvent.get("eventActionInputType",{})
                         .get("eventActionInputId",None) == event_trigger_type,
                     eventManagement.get("inputEvents",[])
-                    )),
+                    )) and get_entrance_from_event_management(eventManagement)==entrance, # check if this event management entrance is the same as the event
                 EVENT_ACTION_TRIGGERS_DATA
             ):
                 activated[event.get("eventManagementId",None)] = False # allow these events to activate again
@@ -130,7 +178,7 @@ def event_trigger_cb(event_trigger):
             lambda inputEvent: inputEvent.get("eventActionInputType",{})
                 .get("eventActionInputId",None) == event_trigger,
             eventManagement.get("inputEvents",[])
-            )),
+            )) and check_datetime(eventManagement.get("triggerSchedule",{})), # check if trigger is currently active
         EVENT_ACTION_TRIGGERS_DATA): 
 
         event_management_id = event.get("eventManagementId",None)
@@ -140,12 +188,13 @@ def event_trigger_cb(event_trigger):
             continue
 
         valid=True
+        entrance=get_entrance_from_event_management(event)
         # check if all time based trigger is valid
         for inputEvent in event.get("inputEvents",[]):
             # each eventManagement has max 1 event based trigger
             # if the event is different, it must be a timer based trigger
             if inputEvent.get("inputEventId",None) != event_trigger: 
-                t = eventTriggerTime.get(event_management_id,None)
+                t = eventTriggerTime.get((event_management_id,entrance),None)
                 d = inputEvent.get("timerDuration",None)
                 # t is None means trigger has not been active so do not activate
                 # time.time()-t is the time elasped, if less than d, the time elapsed is not long enough, so do not activate
@@ -160,25 +209,29 @@ def event_trigger_cb(event_trigger):
             # if 2 unauthenicated scans, should only trigger at the first scan
             if len(event.get("inputEvent", [])) > 1:
                 activated[event_management_id]=True
-            activate_output(event.get("outputActions",[]))
+            queue_output(event.get("outputActions",[]))
             
     flush_output()
                     
 def check_for_only_timer_based_events():
-    for event in EVENT_ACTION_TRIGGERS_DATA:
+    for event in filter( # filter by currently active
+        lambda eventManagement: check_datetime(eventManagement.get("triggerSchedule",{})),
+        EVENT_ACTION_TRIGGERS_DATA
+        ):
         event_management_id = event.get("eventManagementId",None)
         if activated.get(event_management_id,False):
             continue # already activated
         valid=True
+        entrance=get_entrance_from_event_management(event)
         for inputEvent in event.get("inputEvents",[]):
             d = inputEvent.get("timerDuration",None)
-            t = eventTriggerTime.get(event_management_id,None)
+            t = eventTriggerTime.get((event_management_id,entrance),None)
             if (t==None) or (d==None) or (time.time()-t<d): # event is not to be activated
                 valid=False
                 break
         if valid:
             activated[event_management_id] = True # timer based must have activated
-            activate_output(event.get("outputActions",[]))
+            queue_output(event.get("outputActions",[]))
             
     flush_output()
     time.sleep(0.1) # throttle

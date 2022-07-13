@@ -28,8 +28,12 @@ GEN_OUT_3=3
 EMLOCK_1=4
 EMLOCK_2=5
 
-# # id of timer based input events
-# TIMED_EVENTS={CONTACT_OPEN} # set for better performance
+# entrance numbers
+BOTH_ENTRANCE = False
+def is_both_entrance(trigger):
+    '''helper function to return if trigger is constant BOTH_ENTRANCE'''
+    return trigger is BOTH_ENTRANCE
+
 def input_is_timed(event_action_trigger):
     '''return if input is timed (ie contact open)
     
@@ -40,19 +44,31 @@ def input_is_timed(event_action_trigger):
         is_timed (bool): if the event_action_trigger is timed
     '''
 
-    return type(event_action_trigger) == tuple
+    return type(event_action_trigger) == tuple and len(event_action_trigger) == 3
 
-def create_timer_event(event_action_trigger,timer_action):
+def create_event(event_action_trigger,entrance):
+    '''Creates an event ADT (event_action_trigger,entrance)
+    Args:
+        event_action_trigger (check eventActionTriggerConstants.py): event_action_trigger
+        entrance (int): entrance id
+
+    Returns:
+        event ADT (a tuple (event_action_trigger,entrance) )
+    '''
+    return (event_action_trigger,entrance)
+
+def create_timer_event(event_action_trigger,timer_action,entrance):
     '''To create timer events (they require 2 states, start and stop timer)
     
     Args:
         event_action_trigger (check eventActionTriggerConstants.py): event_action id
         timer_action: eventActionTriggerConstants.START_TIMER or eventActionTriggerConstants.STOP_TIMER
+        entrance (int): entrance id
         
     Returns:
         timer event ADT (a tuple (event_action_trigger,timer_action) )
     '''
-    return (event_action_trigger,timer_action)
+    return (event_action_trigger,timer_action,entrance)
 
 def get_timer_event_event_action_trigger(timer_event):
     '''Returns timer_event event_action_trigger (timer_event[0])
@@ -76,3 +92,14 @@ def get_timer_event_timer_action(timer_event):
     '''
 
     return timer_event[1]
+
+def get_event_entrance(event):
+    '''Returns the entrance id
+    
+    Args:
+        event: either an event ADT or timer event ADT
+        
+    Returns:
+        entrance (int): entrance id
+    '''
+    return event[-1]

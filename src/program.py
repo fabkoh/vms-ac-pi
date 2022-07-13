@@ -145,7 +145,7 @@ def check_gen_pins_and_alarm():
         '''
         def f(gpio,level,tick):
             if gpio==pin:
-                eventActionTriggers.event_trigger_cb(event_trigger)
+                eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_event(event_trigger,eventActionTriggerConstants.BOTH_ENTRANCE))
 
         return f
 
