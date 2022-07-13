@@ -1,68 +1,84 @@
 [
-{
-"eventsManagementId":2,
-"eventsManagementName":"Events 2",
-"inputEvents":[
-{
-"inputEventId":4,
-"timerDuration":null,
-"eventActionInputType":{
-"eventActionInputId":4,
-"eventActionInputTypeName":"Authenticated Scan for controller",
-"timerEnabled":false
-}
-},
-{
-"inputEventId":5,
-"timerDuration":30,
-"eventActionInputType":{
-"eventActionInputId":5,
-"eventActionInputTypeName":"Door Opened",
-"timerEnabled":true
-}
-}
-],
-"outputActions":[
-{
-"outputEventId":4,
-"timerDuration":null,
-"eventActionOutputType":{
-"eventActionOutputId":4,
-"eventActionOutputTypeName":"Authenticated Scan for controller",
-"timerEnabled":false
-}
-},
-{
-"outputEventId":5,
-"timerDuration":30,
-"eventActionOutputType":{
-"eventActionOutputId":5,
-"eventActionOutputTypeName":"Buzzer buzzing for controller",
-"timerEnabled":true
-}
-},
-{
-"outputEventId":6,
-"timerDuration":null,
-"eventActionOutputType":{
-"eventActionOutputId":6,
-"eventActionOutputTypeName":"LED light for controller",
-"timerEnabled":true
-}
-}
-],
-"triggerSchedule":{
-"triggerScheduleId":2,
-"rrule":"DTSTART:20220701T000000ZRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO", 
-"timeStart":"00:00",
-"timeEnd":"12:00"
-},
-"entrance":null,
-"controller":{
-"controllerId": 2,
-"controllerName": "100000005a46e105",
-"deleted": false,
-"controllerSerialNo": "100000005a46e105"
-}}
+    {
+        "eventsManagementId":2,
+        "eventsManagementName":"Events 2",
+        "inputEvents":[
+            {
+                "inputEventId":4,
+                "timerDuration":null,
+                "eventActionInputType":{
+                    "eventActionInputId":4,
+                    "eventActionInputTypeName":"Authenticated Scan for controller",
+                    "timerEnabled":false
+                }
+            },
+            {
+                "inputEventId":5,
+                "timerDuration":30,
+                "eventActionInputType":{
+                    "eventActionInputId":5,
+                    "eventActionInputTypeName":"Door Opened",
+                    "timerEnabled":true
+                }
+            }
+        ],
+        "outputActions":[
+            {
+                "outputEventId":4,
+                "timerDuration":null,
+                "eventActionOutputType":{
+                    "eventActionOutputId":4,
+                    "eventActionOutputTypeName":"Authenticated Scan for controller",
+                    "timerEnabled":false
+                }
+            },
+            {
+                "outputEventId":5,
+                "timerDuration":30,
+                "eventActionOutputType":{
+                    "eventActionOutputId":5,
+                    "eventActionOutputTypeName":"Buzzer buzzing for controller",
+                    "timerEnabled":true
+                }
+            },
+            {
+                "outputEventId":6,
+                "timerDuration":null,
+                "eventActionOutputType":{
+                    "eventActionOutputId":6,
+                    "eventActionOutputTypeName":"LED light for controller",
+                    "timerEnabled":true
+                }
+            }
+        ],
+        "triggerSchedule":{
+            "2023-05-29":[
+                {
+                    "endtime":"23:59",
+                    "starttime":"23:58"
+                },
+                {
+                    "endtime":"12:00",
+                    "starttime":"11:59"
+                }
+            ],
+            "2023-05-30":[
+                {
+                    "endtime":"23:57",
+                    "starttime":"22:56"
+                },
+                {
+                    "endtime":"11:56",
+                    "starttime":"11:55"
+                }
+            ]
+        },
+        "entrance":null,
+        "controller":{
+            "controllerId":2,
+            "controllerName":"100000005a46e105",
+            "deleted":false,
+            "controllerSerialNo":"100000005a46e105"
+        }
+    }
 ]
-    
