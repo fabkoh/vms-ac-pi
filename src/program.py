@@ -167,11 +167,12 @@ def update_config():
     E2_IN = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E2_IN_D0, GPIOconfig.E2_IN_D1, events.reader_detects_bits,"E2_IN") 
     E2_OUT = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E2_OUT_D0, GPIOconfig.E2_OUT_D1, events.reader_detects_bits,"E2_OUT")
 
-    # including these as need to update the listeners to hear for the new pins
-    mag_and_button()
-    check_gen_pins_and_alarm()
 
 update_config()
 
 t1 = threading.Thread(target=check_events_timer)
+t2=threading.Thread(target=mag_and_button)
+t3=threading.Thread(target=check_gen_pins_and_alarm)
 t1.start()
+t2.start()
+t3.start()

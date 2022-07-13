@@ -13,7 +13,7 @@ import relay
 import eventActionTriggers
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 path = os.path.dirname(os.path.abspath(__file__))
 
 @app.route('/api/status')
@@ -176,4 +176,4 @@ def post_credOccur():
     update_credOccur()
     return flask.Response({}, 204)
 
-app.run(host='0.0.0.0',port=5000,debug = True )
+app.run(host='0.0.0.0',port=5000,debug = False)
