@@ -62,7 +62,7 @@ def update_config():
     GPIOconfig.update_config()
     healthcheck.update_config()
     relay.update_config()
-    program.update_config()
+    #program.update_config()
 
 @app.route('/api/config', methods=['POST'])
 def post_config():

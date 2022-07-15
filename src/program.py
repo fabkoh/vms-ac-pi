@@ -157,9 +157,11 @@ def check_gen_pins_and_alarm():
         cb3 = GPIOconfig.pi.callback(GPIOconfig.Gen_In_3,pigpio.RISING_EDGE,helper(GPIOconfig.Gen_In_3,eventActionTriggerConstants.GEN_IN_3))
     cb4=GPIOconfig.pi.callback(GPIOconfig.Fire,pigpio.RISING_EDGE,helper(GPIOconfig.Fire,eventActionTriggerConstants.FIRE))
     
-
+# WARNING READ DESCRIPTION
 def update_config():
-    '''call this after calling GPIOconfig.update_config(), events.update_config() and events.update_credOccur()'''
+    '''call this after calling GPIOconfig.update_config(), events.update_config() and events.update_credOccur()
+WARNING THIS FUNCTION DOES NOT WORK
+it adds an addtion detect_bits call, so multiple detect_bits are called after card scan'''
     global E1_IN, E1_OUT, E2_IN, E2_OUT
     E1_IN = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E1_IN_D0, GPIOconfig.E1_IN_D1, events.reader_detects_bits,"E1_IN") 
     E1_OUT = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E1_OUT_D0, GPIOconfig.E1_OUT_D1, events.reader_detects_bits,"E1_OUT")

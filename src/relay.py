@@ -96,7 +96,7 @@ def trigger_relay_one():
         cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
-
+    print("test")
     return
 
 @multitasking.task

@@ -1,25 +1,27 @@
 [
     {
+        "person": {
+            "personId": 1
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "OUT",
         "entrance": {
             "entranceId": 1
         },
         "eventActionType": {
-            "eventActionTypeId": 9
+            "eventActionTypeId": 1
         },
         "controller": {
             "controllerSerialNo": null
         },
-        "eventTime": "07-08-2022 14:18:12"
+        "eventTime": "07-15-2022 16:58:14"
     }
-]    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": null
+]42:33"
+    }
+] }
+]      "controllerSerialNo": null
         },
         "eventTime": "07-08-2022 11:40:56"
     },

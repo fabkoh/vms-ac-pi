@@ -1,1 +1,114 @@
-[]
+[
+    {
+        "entrance": {
+            "entranceId": ""
+        },
+        "eventActionType": {
+            "eventActionTypeId": 9
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-15-2022 16:45:40"
+    },
+    {
+        "entrance": {
+            "entranceId": ""
+        },
+        "eventActionType": {
+            "eventActionTypeId": 9
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-15-2022 16:45:40"
+    },
+    {
+        "person": {
+            "personId": 1
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 1
+        },
+        "eventActionType": {
+            "eventActionTypeId": 1
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-15-2022 16:45:54"
+    },
+    {
+        "person": {
+            "personId": 1
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 1
+        },
+        "eventActionType": {
+            "eventActionTypeId": 1
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-15-2022 16:46:08"
+    },
+    {
+        "entrance": {
+            "entranceId": ""
+        },
+        "eventActionType": {
+            "eventActionTypeId": 9
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-15-2022 16:46:11"
+    },
+    {
+        "person": {
+            "personId": 1
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 1
+        },
+        "eventActionType": {
+            "eventActionTypeId": 1
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-15-2022 16:56:42"
+    },
+    {
+        "person": {
+            "personId": 1
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 1
+        },
+        "eventActionType": {
+            "eventActionTypeId": 1
+        },
+        "controller": {
+            "controllerSerialNo": null
+        },
+        "eventTime": "07-15-2022 16:58:14"
+    }
+]

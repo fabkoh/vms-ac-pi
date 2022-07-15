@@ -95,7 +95,7 @@ def check_datetime(schedule):
     if time_array == None: return False 
 
     curr_datetime = datetime.datetime.now()
-    curr_time = curr_datetime.stftime("%H") + ":" + curr_datetime("%M") # "HH:MM"
+    curr_time = curr_datetime.strftime("%H") + ":" + curr_datetime.strftime("%M") # "HH:MM"
     for timing in time_array:
         start_time = timing.get("starttime","24:00")
         end_time = timing.get("endtime","00:00")
