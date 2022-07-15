@@ -181,7 +181,7 @@ def event_trigger_cb(event_trigger):
             lambda inputEvent: inputEvent.get("eventActionInputType",{})
                 .get("eventActionInputId",None) == event_trigger_id,
             eventManagement.get("inputEvents",[])
-            )),# and check_datetime(eventManagement.get("triggerSchedule",{}))
+            )) and check_datetime(eventManagement.get("triggerSchedule",{})),
                #and (get_entrance_from_event_management(event_trigger) is BOTH_ENTRANCE or
                #     get_entrance_from_event_management(event_trigger) == entrance), # check if trigger is currently active
         EVENT_ACTION_TRIGGERS_DATA): 
