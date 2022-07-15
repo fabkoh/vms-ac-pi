@@ -199,11 +199,11 @@ def event_trigger_cb(event_trigger):
         for inputEvent in event.get("inputEvents",[]):
             # each eventManagement has max 1 event based trigger
             # if the event is different, it must be a timer based trigger
-            input_id = inputEvent.get("inputEventId",None)
-            if input_id != event_trigger_id: 
-                t = eventTriggerTime.get((input_id,entrance),None)
+            input_event_id = inputEvent.get("eventActionInputType",{}).get("eventActionInputId",None)
+            if input_event_id != event_trigger_id: 
+                t = eventTriggerTime.get((input_event_id,entrance),None)
                 if t == None:
-                    t = eventTriggerTime.get((input_id,BOTH_ENTRANCE),None)
+                    t = eventTriggerTime.get((input_event_id,BOTH_ENTRANCE),None)
                 d = inputEvent.get("timerDuration",None)
                 # t is None means trigger has not been active so do not activate
                 # time.time()-t is the time elasped, if less than d, the time elapsed is not long enough, so do not activate
@@ -236,7 +236,7 @@ def check_for_only_timer_based_events():
         valid=True
         entrance=get_entrance_from_event_management(event)
         for inputEvent in event.get("inputEvents",[]):
-            input_id = inputEvent.get("inputEventId",None)
+            input_id = inputEvent.get("eventActionInputType",{}).get("eventActionInputId",None)
             d = inputEvent.get("timerDuration",None)
             t = eventTriggerTime.get((input_id,entrance),None)
             if t == None:
