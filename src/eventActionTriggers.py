@@ -175,6 +175,7 @@ def event_trigger_cb(event_trigger):
     # first filter events by if they have event_trigger in them
     event_trigger_id = get_event_trigger_from_event(event_trigger)
     entrance = get_event_entrance(event_trigger)
+    print("178 here")
     for event in filter( # filter events by if they have event_trigger in them
         lambda eventManagement: any(map( # finds if any inputEvent (in events) have event_trigger
             lambda inputEvent: inputEvent.get("eventActionInputType",{})
@@ -184,7 +185,7 @@ def event_trigger_cb(event_trigger):
                and (get_entrance_from_event_management(event_trigger) is BOTH_ENTRANCE or
                     get_entrance_from_event_management(event_trigger) == entrance), # check if trigger is currently active
         EVENT_ACTION_TRIGGERS_DATA): 
-
+        print("188 here")
         event_management_id = event.get("eventManagementId",None)
         print(event_management_id, 'no problem with event filter')
 
