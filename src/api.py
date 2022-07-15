@@ -176,4 +176,27 @@ def post_credOccur():
     update_credOccur()
     return flask.Response({}, 204)
 
+def update_eventActionTriggers():
+    '''helper function to store all script updates'''
+    eventActionTriggers.update_event_action_triggers()
+
+@app.route('/api/eventActionTriggers',methods=['POST'])
+def post_eventActionTriggers():
+    '''changes eventActionTriggers
+    
+    Check for format
+    
+    Returns (response):
+        code: 204
+    '''
+    with open(path + '/json/eventACtionTriggers.json') as f:
+        json.dump(flask.request.json, f, indent=4)
+        f.close()
+    
+    update_eventActionTriggers()
+    return flask.Response({},204)
+
+    
+
+
 app.run(host='0.0.0.0',port=5000,debug = False)
