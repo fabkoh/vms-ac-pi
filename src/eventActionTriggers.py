@@ -185,8 +185,8 @@ def event_trigger_cb(event_trigger):
                and (get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
                     get_entrance_from_event_management(eventManagement) == entrance), # check if trigger is currently active
         EVENT_ACTION_TRIGGERS_DATA): 
-        print("188 here")
-        event_management_id = event.get("eventManagementId",None)
+
+        event_management_id = event.get("eventsManagementId",None)
         print(event_management_id, 'no problem with event filter')
 
         # check if event has been activated before, if so skip this event
@@ -200,7 +200,7 @@ def event_trigger_cb(event_trigger):
             # each eventManagement has max 1 event based trigger
             # if the event is different, it must be a timer based trigger
             input_id = inputEvent.get("inputEventId",None)
-            if input_id != event_trigger: 
+            if input_id != event_trigger_id: 
                 t = eventTriggerTime.get((input_id,entrance),None)
                 if t == None:
                     t = eventTriggerTime.get((input_id,BOTH_ENTRANCE),None)
