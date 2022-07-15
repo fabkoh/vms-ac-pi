@@ -28,7 +28,7 @@ try:
 except:
     MAX_JSON_LENGTH = 10
 
-
+update_config()
 '''
 persondetails = {   "Name": personName,
                     "diffpassword" : [cardwiegandvalue,fingerwiegandvalue,pin], #everything besides the initial wiegand value used to identify personName  
