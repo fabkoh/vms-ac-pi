@@ -173,6 +173,8 @@ def event_trigger_cb(event_trigger):
 
     # if event is not timed, check for all events
     # first filter events by if they have event_trigger in them
+    
+    print(event_trigger, 'should be here')
     for event in filter( # filter events by if they have event_trigger in them
         lambda eventManagement: any(map( # finds if any inputEvent (in events) have event_trigger
             lambda inputEvent: inputEvent.get("eventActionInputType",{})
@@ -182,6 +184,7 @@ def event_trigger_cb(event_trigger):
         EVENT_ACTION_TRIGGERS_DATA): 
 
         event_management_id = event.get("eventManagementId",None)
+        print(event_management_id, 'no problem with event filter')
 
         # check if event has been activated before, if so skip this event
         if activated.get(event_management_id,False):
@@ -210,6 +213,7 @@ def event_trigger_cb(event_trigger):
             # thus, need to set this to prevent repeats
             # ex. door opened more than 10s and unauthenticated scan
             # if 2 unauthenicated scans, should only trigger at the first scan
+            print('here no problem with input action filter')
             if len(event.get("inputEvent", [])) > 1:
                 activated[event_management_id]=True
             queue_output(event.get("outputActions",[]))
@@ -225,7 +229,7 @@ def check_for_only_timer_based_events():
 
         if activated.get(event_management_id,False):
             continue # already activated
-        
+
         valid=True
         entrance=get_entrance_from_event_management(event)
         for inputEvent in event.get("inputEvents",[]):
