@@ -213,7 +213,7 @@ def event_trigger_cb(event_trigger):
                     valid=False
                     break
         
-        print("214",valid))
+        print("214",valid)
         if valid:
             # if there are more than 1 inputEvent, there is a timer based trigger
             # thus, need to set this to prevent repeats
