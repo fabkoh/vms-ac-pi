@@ -7,18 +7,9 @@
                 "inputEventId":4,
                 "timerDuration":null,
                 "eventActionInputType":{
-                    "eventActionInputId":4,
+                    "eventActionInputId":1,
                     "eventActionInputTypeName":"Authenticated Scan for controller",
                     "timerEnabled":false
-                }
-            },
-            {
-                "inputEventId":5,
-                "timerDuration":30,
-                "eventActionInputType":{
-                    "eventActionInputId":5,
-                    "eventActionInputTypeName":"Door Opened",
-                    "timerEnabled":true
                 }
             }
         ],
@@ -52,10 +43,10 @@
             }
         ],
         "triggerSchedule":{
-            "2023-05-29":[
+            "2022-07-15":[
                 {
                     "endtime":"23:59",
-                    "starttime":"23:58"
+                    "starttime":"00:00"
                 },
                 {
                     "endtime":"12:00",
@@ -73,7 +64,9 @@
                 }
             ]
         },
-        "entrance":null,
+        "entrance":{
+            "entranceId": 1
+        },
         "controller":{
             "controllerId":2,
             "controllerName":"100000005a46e105",

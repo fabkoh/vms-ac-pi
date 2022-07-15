@@ -222,8 +222,10 @@ def check_for_only_timer_based_events():
         EVENT_ACTION_TRIGGERS_DATA
         ):
         event_management_id = event.get("eventManagementId",None)
+
         if activated.get(event_management_id,False):
             continue # already activated
+        
         valid=True
         entrance=get_entrance_from_event_management(event)
         for inputEvent in event.get("inputEvents",[]):
@@ -242,7 +244,8 @@ def check_for_only_timer_based_events():
     flush_output()
     time.sleep(0.1) # throttle
 
-threading.Thread(target=check_for_only_timer_based_events)
+t1 = threading.Thread(target=check_for_only_timer_based_events)
+t1.start()
 
 # need to write all possible output 
 # write dynamic input functions to check if true or false
