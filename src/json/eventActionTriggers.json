@@ -45,10 +45,6 @@
         "triggerSchedule":{
             "2022-07-15":[
                 {
-                    "endtime":"23:59",
-                    "starttime":"00:00"
-                },
-                {
                     "endtime":"12:00",
                     "starttime":"11:59"
                 }
@@ -67,11 +63,6 @@
         "entrance":{
             "entranceId": 1
         },
-        "controller":{
-            "controllerId":2,
-            "controllerName":"100000005a46e105",
-            "deleted":false,
-            "controllerSerialNo":"100000005a46e105"
-        }
+        "controller":null
     }
 ]
