@@ -195,14 +195,12 @@ def event_trigger_cb(event_trigger):
 
         valid=True
         entrance=get_entrance_from_event_management(event)
-        print("198")
         # check if all time based trigger is valid
         for inputEvent in event.get("inputEvents",[]):
             # each eventManagement has max 1 event based trigger
             # if the event is different, it must be a timer based trigger
             input_event_id = inputEvent.get("eventActionInputType",{}).get("eventActionInputId",None)
             if input_event_id != event_trigger_id: 
-                print(input_event_id)
                 t = eventTriggerTime.get((input_event_id,entrance),None)
                 if t == None:
                     t = eventTriggerTime.get((input_event_id,BOTH_ENTRANCE),None)
@@ -213,7 +211,6 @@ def event_trigger_cb(event_trigger):
                     valid=False
                     break
         
-        print("214",valid)
         if valid:
             # if there are more than 1 inputEvent, there is a timer based trigger
             # thus, need to set this to prevent repeats
