@@ -7,7 +7,7 @@
                 "inputEventId":4,
                 "timerDuration":null,
                 "eventActionInputType":{
-                    "eventActionInputId":1,
+                    "eventActionInputId":2,
                     "eventActionInputTypeName":"Authenticated Scan for controller",
                     "timerEnabled":false
                 }
