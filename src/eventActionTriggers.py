@@ -112,6 +112,7 @@ def flush_output():
         id = output.get("eventActionOutputType",{}).get("eventActionOutputId",None)
         if id == EMLOCK_1:
             events.open_door("E1")
+            time.sleep(20)
         elif id == EMLOCK_2:
             events.open_door("E2")
     
@@ -175,7 +176,7 @@ def event_trigger_cb(event_trigger):
     # first filter events by if they have event_trigger in them
     event_trigger_id = get_event_trigger_from_event(event_trigger)
     entrance = get_event_entrance(event_trigger)
-    print("178 here")
+
     for event in filter( # filter events by if they have event_trigger in them
         lambda eventManagement: any(map( # finds if any inputEvent (in events) have event_trigger
             lambda inputEvent: inputEvent.get("eventActionInputType",{})
@@ -187,7 +188,6 @@ def event_trigger_cb(event_trigger):
         EVENT_ACTION_TRIGGERS_DATA): 
 
         event_management_id = event.get("eventsManagementId",None)
-        print(event_management_id, 'no problem with event filter')
 
         # check if event has been activated before, if so skip this event
         if activated.get(event_management_id,False):
@@ -216,7 +216,6 @@ def event_trigger_cb(event_trigger):
             # thus, need to set this to prevent repeats
             # ex. door opened more than 10s and unauthenticated scan
             # if 2 unauthenicated scans, should only trigger at the first scan
-            print('here no problem with input action filter')
             if len(event.get("inputEvent", [])) > 1:
                 activated[event_management_id]=True
             queue_output(event.get("outputActions",[]))
