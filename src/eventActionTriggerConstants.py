@@ -103,3 +103,14 @@ def get_event_entrance(event):
         entrance (int): entrance id
     '''
     return event[-1]
+
+def get_event_trigger_from_event(event):
+    '''returns the event trigger
+    
+    Args:
+        event: either an event adt or timer event adt
+        
+    Returns:
+        event (check eventActionTriggerConstants.py)
+    '''
+    return event[0]

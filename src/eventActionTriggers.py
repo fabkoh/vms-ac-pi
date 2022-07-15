@@ -173,14 +173,16 @@ def event_trigger_cb(event_trigger):
 
     # if event is not timed, check for all events
     # first filter events by if they have event_trigger in them
-    
-    print(event_trigger, 'should be here')
+    event_trigger_id = get_event_trigger_from_event(event_trigger)
+    entrance = get_event_entrance(event_trigger)
     for event in filter( # filter events by if they have event_trigger in them
         lambda eventManagement: any(map( # finds if any inputEvent (in events) have event_trigger
             lambda inputEvent: inputEvent.get("eventActionInputType",{})
-                .get("eventActionInputId",None) == event_trigger,
+                .get("eventActionInputId",None) == event_trigger_id,
             eventManagement.get("inputEvents",[])
-            )) and check_datetime(eventManagement.get("triggerSchedule",{})), # check if trigger is currently active
+            )) and check_datetime(eventManagement.get("triggerSchedule",{}))
+               and (get_entrance_from_event_management(event_trigger) is BOTH_ENTRANCE or
+                    get_entrance_from_event_management(event_trigger) == entrance), # check if trigger is currently active
         EVENT_ACTION_TRIGGERS_DATA): 
 
         event_management_id = event.get("eventManagementId",None)
