@@ -112,7 +112,6 @@ def flush_output():
         id = output.get("eventActionOutputType",{}).get("eventActionOutputId",None)
         if id == EMLOCK_1:
             events.open_door("E1")
-            time.sleep(20)
         elif id == EMLOCK_2:
             events.open_door("E2")
     
