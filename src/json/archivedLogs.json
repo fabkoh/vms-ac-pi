@@ -1,22 +1,22 @@
 [
     {
         "entrance": {
-            "entranceId": 1
+            "entranceId": ""
         },
         "eventActionType": {
-            "eventActionTypeId": 8
+            "eventActionTypeId": 9
         },
         "controller": {
             "controllerSerialNo": "100000005a46e105"
         },
-        "eventTime": "07-18-2022 10:20:04"
+        "eventTime": "07-18-2022 14:50:11"
     }
-]": 1
+]: 1
         },
         "controller": {
             "controllerSerialNo": "100000005a46e105"
         },
-        "eventTime": "07-18-2022 10:17:27"
+        "eventTime": "07-18-2022 10:47:00"
     }
 ] }
 ]      "controllerSerialNo": null
