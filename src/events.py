@@ -74,22 +74,81 @@ class Timer:
             return True 
         return False
 
-filerules = open(path+'/json/credOccur.json') 
-credOccur = json.load(filerules)
 
-fileconfig = open(path+'/json/config.json')
-config = json.load(fileconfig)
-GPIOpins = config["GPIOpins"]
-TIMEOUT = config["TIMEOUT"]
+config = None
+GPIOpins = None
+TIMEOUT = None
+E1 = None
+E2 = None
 
-E1 = config["EntranceName"]["E1"]
-E2 = config["EntranceName"]["E2"]
+E1_Mag= None
+E1_Button= None
 
-E1_Mag= int(GPIOpins["E1_Mag"])
-E1_Button= int(GPIOpins["E1_Button"])
+E2_Mag= None
+E2_Button= None
 
-E2_Mag= int(GPIOpins["E2_Mag"])
-E2_Button= int(GPIOpins["E2_Button"])
+DEFAULT_CRED_TIMEOUT = 20
+DEFAULT_MAG_TIMEOUT = 10
+DEFAULT_BUZZER_TIMEOUT = 10
+
+CRED_TIMEOUT_E1=None
+CRED_TIMEOUT_E2=None
+MAG_TIMEOUT_E1=None
+MAG_TIMEOUT_E2=None
+BUZZER_TIMEOUT_E1=None
+BUZZER_TIMEOUT_E2=None
+
+def update_config():
+    '''Call this before events.update_credOccur'''
+    global config, GPIOpins, E1, E2, E1_Mag, E1_Button, E2_Mag, E2_Button, TIMEOUT, \
+        CRED_TIMEOUT_E1, CRED_TIMEOUT_E2, MAG_TIMEOUT_E1, MAG_TIMEOUT_E2, BUZZER_TIMEOUT_E1, BUZZER_TIMEOUT_E2
+    f=open(path+'/json/config.json')
+    config=json.load(f)
+    f.close()
+    
+    E1 = config["EntranceName"]["E1"]
+    E2 = config["EntranceName"]["E2"]
+
+    GPIOpins = config["GPIOpins"]
+    TIMEOUT = config["TIMEOUT"]
+
+    E1_Mag= int(GPIOpins["E1_Mag"])
+    E1_Button= int(GPIOpins["E1_Button"])
+
+    E2_Mag= int(GPIOpins["E2_Mag"])
+    E2_Button= int(GPIOpins["E2_Button"])
+
+    CRED_TIMEOUT_E1=int(TIMEOUT.get("CRED_TIMEOUT_E1",DEFAULT_CRED_TIMEOUT))
+    CRED_TIMEOUT_E2=int(TIMEOUT.get("CRED_TIMEOUT_E2",DEFAULT_CRED_TIMEOUT))
+    MAG_TIMEOUT_E1=int(TIMEOUT.get("MAG_TIMEOUT_E1",DEFAULT_MAG_TIMEOUT))
+    MAG_TIMEOUT_E2=int(TIMEOUT.get("MAG_TIMEOUT_E2",DEFAULT_MAG_TIMEOUT))
+    BUZZER_TIMEOUT_E1=int(TIMEOUT.get("BUZZER_TIMEOUT_E1",DEFAULT_BUZZER_TIMEOUT))
+    BUZZER_TIMEOUT_E2=int(TIMEOUT.get("BUZZRE_TIMEOUT_E2",DEFAULT_BUZZER_TIMEOUT))
+
+credOccur = None
+
+E1_is_active = True
+E1_entrance_schedule = "" 
+E2_is_active = True
+E2_entrance_schedule = "" 
+
+def update_credOccur():
+    '''Call this after events.update_config'''
+    global credOccur, E1_is_active, E1_entrance_schedule, E2_is_active, E2_entrance_schedule
+    f=open(path+'/json/credOccur.json')
+    credOccur = json.load(f)
+    f.close()
+    for entrance in credOccur:
+        if entrance["Entrance"] == E1:
+            E1_is_active = entrance["isActive"]
+            E1_entrance_schedule = entrance["EntranceSchedule"]
+
+        if entrance["Entrance"] == E2:
+            E2_is_active = entrance["isActive"]
+            E2_entrance_schedule = entrance["EntranceSchedule"]
+# initialise
+update_config()
+update_credOccur()
 
 mag_E1_allowed_to_open = False
 mag_E2_allowed_to_open = False
@@ -104,50 +163,7 @@ timeout_cred_E2_OUT = Timer()
 timeout_mag_E2 = Timer()
 timeout_buzzer_E2 = Timer()
 
-DEFAULT_CRED_TIMEOUT = 20
-DEFAULT_MAG_TIMEOUT = 10
-DEFAULT_BUZZER_TIMEOUT = 10
-
 MAX_PIN_LENGTH = 6
-
-E1_is_active = True
-E1_entrance_schedule = "" 
-E2_is_active = True
-E2_entrance_schedule = "" 
-
-for entrance in credOccur:
-    if entrance["Entrance"] == E1:
-        E1_is_active = entrance["isActive"]
-        E1_entrance_schedule = entrance["EntranceSchedule"]
-
-    if entrance["Entrance"] == E2:
-        E2_is_active = entrance["isActive"]
-        E2_entrance_schedule = entrance["EntranceSchedule"]
-
-try:
-    CRED_TIMEOUT_E1 = int(TIMEOUT["CRED_TIMEOUT_E1"])  #number of seconds to wait before credentials arrays is cleared automaically 
-except:
-    CRED_TIMEOUT_E1 = DEFAULT_CRED_TIMEOUT
-try:
-    CRED_TIMEOUT_E2 = int(TIMEOUT["CRED_TIMEOUT_E2"])  #number of seconds to wait before credentials arrays is cleared automaically 
-except:
-    CRED_TIMEOUT_E2 = DEFAULT_CRED_TIMEOUT
-try:
-    MAG_TIMEOUT_E1 = int(TIMEOUT["MAG_TIMEOUT_E1"])  #number of seconds to wait before credentials arrays is cleared automaically 
-except:
-    MAG_TIMEOUT_E1 = DEFAULT_MAG_TIMEOUT
-try:
-    MAG_TIMEOUT_E2 = int(TIMEOUT["MAG_TIMEOUT_E2"])  #number of seconds to wait before credentials arrays is cleared automaically 
-except:
-    MAG_TIMEOUT_E2 = DEFAULT_MAG_TIMEOUT
-try:
-    BUZZER_TIMEOUT_E1 = int(TIMEOUT["BUZZER_TIMEOUT_E1"])  #number of seconds to wait before buzzer is triggered automaically 
-except:
-    BUZZER_TIMEOUT_E1 = DEFAULT_BUZZER_TIMEOUT
-try:
-    BUZZER_TIMEOUT_E2 = int(TIMEOUT["BUZZER_TIMEOUT_E2"])
-except:
-    BUZZER_TIMEOUT_E2 = DEFAULT_BUZZER_TIMEOUT
 
 credentials_E1_IN = {} #dict to store credentials
 credentials_E1_OUT = {} #dict to store credentials
@@ -183,6 +199,21 @@ def check_for_wiegand(value):
                     # once done, return the data
                     if authmethod:
                         return {"Name": personName,"diffpassword" : diffpassword, "AccessGroup": groupName,"Schedule":groupdetails["Schedule"]}
+
+def open_door(entrance_prefix):
+    '''Helper function for eventActionTriggers.py
+    
+    Args:
+    entrance_prefix(string): "E1" | "E2"
+    '''
+    global mag_E1_allowed_to_open,mag_E2_allowed_to_open
+    if entrance_prefix == "E1":
+        mag_E1_allowed_to_open = True
+        relay.trigger_relay_one()
+    elif entrance_prefix == "E2":
+        mag_E2_allowed_to_open = True
+        relay.trigger_relay_two()
+
 
 
 # keep track of wiegand values and pins 
@@ -231,6 +262,7 @@ def reader_detects_bits(bits, value,entrance):
     # helper functions
     def reset_cred_and_stop_timer():
         '''resets credentials and pin values and stops timer
+
         Returns None'''
         pinsvalue.clear()
         credentials.clear()
@@ -239,6 +271,8 @@ def reader_detects_bits(bits, value,entrance):
     def open_door():
         '''opens the door, set mags to allow open, update server events'''
         #print("open")
+        global mag_E1_allowed_to_open
+        global mag_E2_allowed_to_open
         if entrance_prefix == "E1":
             mag_E1_allowed_to_open = True
             relay.trigger_relay_one()
@@ -288,6 +322,7 @@ def reader_detects_bits(bits, value,entrance):
     # 2 check auth method (if cred entered not in curr cred schedule, reset)
     # 3 check person creds 
     if credential_added:
+        print(credentials)
         try:
             device_details = {}
             entrance_details = {}
@@ -302,6 +337,7 @@ def reader_detects_bits(bits, value,entrance):
             if pin_type in credentials and \
                "Masterpassword" in device_details and \
                credentials[pin_type] == device_details["Masterpassword"]:
+                print("masterpassword used")
                 eventsMod.record_masterpassword_used("Master Pin", entrancename, entrance_direction)
                 open_door()
                 reset_cred_and_stop_timer()
@@ -320,20 +356,26 @@ def reader_detects_bits(bits, value,entrance):
             
             auth_method_is_and = and_delimiter in auth_method_name
             auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
-            #print("auth_method_is_and, auth_method_keys", auth_method_is_and, auth_method_keys)
-            
+            print("auth_method_is_and, auth_method_keys", auth_method_is_and, auth_method_keys)
+
             # check for credentials not in auth_method_keys
             if any(map(lambda k: k not in auth_method_keys, credentials)):
+                print("auth method not allowed at this timing ")
                 eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
                 reset_cred_and_stop_timer()
                 return
-
+            # have some crendetials but need more 
+            if ((auth_method_is_and and any(map(lambda k: k in credentials, auth_method_keys)))
+                and not all(map(lambda k: k in credentials, auth_method_keys))):
+                print("requires more credentials")
+                return
             # check if need to check if cred belongs to someone           
             if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or # AND, all auth methods present
                ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))): # OR, 1 auth method present
                 # check person cred
                 # 1 find the person
                 # 2 check if the person's access group can enter
+                print("trying to find person")
                 for access_group in entrance_details.get("AccessGroups", []):
                     # find the person
                     person_found = False
@@ -341,20 +383,31 @@ def reader_detects_bits(bits, value,entrance):
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
                         person_credentials = person.get("Credentials", {})
-                        #print(person_credentials)
-                        if all(map(lambda k, v: k in person_credentials and person_credentials[k] == v, credentials.items())): # see if all credentials belong to person
+                        print(person_credentials)
+                        
+                        def checkcred(k):
+                            #print(k,k[0],k[1])
+                            #print(person_credentials,k[0] in person_credentials)
+                            #print(person_credentials[k[0]],k[1] in person_credentials[k[0]])
+                            return k[0] in person_credentials and k[1] in person_credentials[k[0]]
+                        # k[0] refers to credType, k[1] refers to value of corresponding cred 
+                        if all(map(checkcred, list(credentials.items()))): # see if all credentials belong to person
                             # check if the person's access group can enter
+                            print(verify_datetime(access_group_info.get('Schedule', {})))
                             if verify_datetime(access_group_info.get('Schedule', {})):
                                 # auth scan
-                                eventsMod.record_auth_scans(person.get("Name", ""), access_group.keys()[0], auth_method_name, entrancename, entrance_direction)
+                                print("found person, allowed to enter")
+                                eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[0], auth_method_name, entrancename, entrance_direction)
                                 open_door()
                                 reset_cred_and_stop_timer()
                                 return
                             # person dont have access at this time
-                            eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get("Name", ""), access_group.keys()[0])
+                            print("found person, but not allowed to enter at this timing")
+                            eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get("Name", ""), list(access_group.keys())[0])
                             reset_cred_and_stop_timer()
                             return
                 # cannot find person
+                print("cannot find person")
                 eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
                 reset_cred_and_stop_timer()
                 return
@@ -363,102 +416,12 @@ def reader_detects_bits(bits, value,entrance):
                 
 
         except Exception as e:
-            #print("cannot check cred", e)
+            print("cannot check cred", e)
             pass
 
 
 
-    return # temp return to try new stuff
-
-    # if reader_currently_used != "" and reader_currently_used != entrance_direction:
-    #     return
-
-    # reader_currently_used = entrance_direction
-    if bits == 4:
-        if not timeout_cred.status():
-            timeout_cred.start()
-        if len(pinsvalue) <= MAX_PIN_LENGTH: #unable to type pin before detecting wiegand values
-            pincollector(credentials,pinsvalue,value,timeout_cred)
-        else:
-            del pinsvalue[:]
-
-    if bits == 26:
-        credcollector(credentials,str(value),timeout_cred)
-
-        # name, passwords, accessgroup and schedule
-    try:
-        persondetails = check_for_wiegand(credentials[0])
-    except:
-        persondetails = {}
-
-
-
-
-    authtype = verify_authtype(entrancename,entrance_direction)
-    print(entrancename, entrance_direction, authtype)
-    try:
-        authlength = len(authtype.split(","))
-    except:
-        authlength = 1
-    
-    if len(credentials) == 1:
-        if check_for_masterpassword(credentials,entrancename,entrance_direction):
-            print("Authenticated")
-            if entrance.split("_")[0] == "E1":
-                mag_E1_allowed_to_open = True
-                relay.trigger_relay_one()
-            if entrance.split("_")[0] == "E2":
-                mag_E2_allowed_to_open = True
-                relay.trigger_relay_two()
-            
-            timeout_cred.stop()
-            del pinsvalue[:]
-            del credentials[:]       
-            eventsMod.record_masterpassword_used(authtype,entrancename,entrance_direction)
-            updateserver.update_server_events()
-        
-    '''
-    if value == 36443438 or value == 36443419:
-        print("Authenticated")
-        relay.trigger_relay_one()
-        update_zone_status(entrance,entrance_direction,persondetails)
-        eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrance_direction)
-    '''
-    if authlength == len(credentials):
-        timeout_cred.stop()
-        if verify_credentials(authlength,credentials,persondetails):
-            if verify_antipassback(entrancename):
-                if verify_zone_status(entrance,entrance_direction,persondetails):
-                    print("Authenticated")
-                    if entrance.split("_")[0] == "E1":
-                        mag_E1_allowed_to_open = True
-                        relay.trigger_relay_one()
-                    if entrance.split("_")[0] == "E2":
-                        mag_E2_allowed_to_open = True
-                        relay.trigger_relay_two()
-                    
-                    update_zone_status(entrance,entrance_direction,persondetails)
-                    eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrance_direction)
-                    updateserver.update_server_events()
-                else:
-                    print("Denied, antipassback")
-                    eventsMod.record_antipassback(authtype,entrancename,entrance_direction)
-                    updateserver.update_server_events()
-            else:
-                print("Authenticated")
-                if entrance.split("_")[0] == "E1":
-                    mag_E1_allowed_to_open = True
-                    relay.trigger_relay_one()
-                if entrance.split("_")[0] == "E2":
-                    mag_E2_allowed_to_open = True
-                    relay.trigger_relay_two()
-                eventsMod.record_auth_scans(persondetails,authtype,entrancename,entrance_direction)
-                updateserver.update_server_events()
-        else:
-            print("Denied")
-            eventsMod.record_unauth_scans(authtype,entrancename,entrance_direction)
-            updateserver.update_server_events()
-
+    return
 
 def check_for_masterpassword(credentials,entrancename,entrance_direction):
     for entranceslist in credOccur:
@@ -491,7 +454,7 @@ schedule = {
 '''
 
 def verify_datetime(schedule):
-    #print(schedule)
+    print(schedule)
     #print(type(schedule))
     print(str(date.today()))
     print(datetime.now())
@@ -518,62 +481,6 @@ def verify_datetime(schedule):
 
     return False 
 
-
-# takes in wiegand value in strings and add to credentials list 
-def credcollector(credentials,cred,timeout_cred):
-    credentials.append(cred)
-    # if it is the first wiegand value, start timing 
-    if len(credentials) == 1:
-        #if timing has started, stop and restart
-        if timeout_cred.status(): 
-            timeout_cred.stop()
-        timeout_cred.start()
-        print("started")
-
-    print(credentials)
-
-# takes in pin values and add to pinsvalue list 
-def pincollector(credentials,pinsvalue,pin,timeout_cred):
-    
-    if pin >= 0 and pin <= 9:
-        pinsvalue.append(str(pin))
-    elif pin == 10: #               * means CLEAR pinvalue list
-        del pinsvalue [:]
-        
-    elif pin == 11: #               # means ADD pinvalue string to credentials and CLEAR list
-        credcollector(credentials,"".join(pinsvalue),timeout_cred)
-        del pinsvalue [:]    
-
-    print(pinsvalue)
-
-
-# return True if person is allowed to enter 
-# check if all wiegand values and pins are correct 
-#check if person's Accessgroup is allowed to enter 
-def verify_credentials(num,credentials,persondetails):
-
-    if len(credentials) == 1 and num == 1 :
-
-        if persondetails and verify_datetime(persondetails["Schedule"]): 
-            del credentials [:]
-            return True
-        else:
-            del credentials [:]
-            return False
-    
-    elif len(credentials) == 2 and num == 2:
-        try:
-            if credentials[1] in persondetails["diffpassword"] and verify_datetime(persondetails["Schedule"]):
-                del credentials [:]
-                return True
-            else:
-                del credentials [:]
-                return False
-        except:
-            del credentials [:]
-            return False
-
-    return False
 
 #check if person has entered the zone
 # entrance = e.g. "E1R1"
@@ -707,7 +614,7 @@ def button_detects_change(gpio, level, tick):
     global mag_E2_allowed_to_open
 
     if gpio == E1_Button:
-        print(f"{E1} push button is pressed at " + str(datetime.now()))
+        print(f"{E1} push button1 is pressed at " + str(datetime.now()))
         mag_E1_allowed_to_open = True
         relay.trigger_relay_one()
         eventsMod.record_button_pressed(E1,"Security Guard Button")

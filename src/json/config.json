@@ -19,19 +19,19 @@
         "controllerMAC": "e4:5f:01:25:85:f3",
         "controllerIpStatic": "",
         "readersConnection": {
-            "E2_IN": "Connected",
+            "E2_IN": "",
             "E1_IN": "",
-            "E2_OUT": "",
+            "E2_OUT": "Connected",
             "E1_OUT": "",
-            "dateAndTime": "24-06-2022 09:18:27"
+            "dateAndTime": "18-07-2022 10:19:48"
         },
         "controllerSerialNo": "100000005a46e105",
         "controllerName": "",
         "controllerIp": "192.168.1.155"
     },
     "EntranceName": {
-        "E1": 1,
-        "E2": 2
+        "E1": "",
+        "E2": 1
     },
     "GPIOpins": {
         "Gen_Out_3": "21",

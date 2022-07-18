@@ -4,9 +4,16 @@ import json
 from werkzeug.exceptions import BadRequest
 import changeStatic
 import os
+import program
+import events
+import eventsMod
+import GPIOconfig
+import healthcheck
+import relay
+import eventActionTriggers
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 path = os.path.dirname(os.path.abspath(__file__))
 
 @app.route('/api/status')
@@ -48,6 +55,15 @@ def get_status():
 
     return flask.Response(json.dumps(body), headers={ 'Content-type': 'application/json' })
 
+def update_config():
+    '''helper method to update config'''
+    events.update_config()
+    eventsMod.update_config()
+    GPIOconfig.update_config()
+    healthcheck.update_config()
+    relay.update_config()
+    #program.update_config()
+
 @app.route('/api/config', methods=['POST'])
 def post_config():
     '''changes config.json and post changes to etlas, 
@@ -76,6 +92,7 @@ def post_config():
 
     changeStatic.change_ip(request_body['controllerIPStatic'], request_body['controllerIP'])
     healthcheck.main(True) # post new config to etlas
+    update_config()
     return flask.Response({}, 204)
 
 @app.route('/api/reset', methods=['POST'])
@@ -100,10 +117,6 @@ def post_shutdown():
     changeStatic.change_dhcp()
     os.system('sudo halt')
 
-# restarts maincontroller.service
-def restart_main_controller_service():
-    os.system('sudo systemctl restart maincontroller.service')
-
 @app.route('/api/entrance-name', methods=['POST'])
 def post_entrance_name():
     '''changes config.json
@@ -118,7 +131,7 @@ def post_entrance_name():
         code: 204
     '''
     request_body = flask.request.json
-    print(request_body)
+    # print(request_body)
     if ('E1' not in request_body) or ('E2' not in request_body) or ('controllerSerialNo' not in request_body):
         flask.abort(400)
     
@@ -134,13 +147,17 @@ def post_entrance_name():
     with open(path + '/json/config.json', 'w') as f:
         json.dump(data, f, indent=4)
         f.close()
-    restart_main_controller_service()
+    update_config()
     return flask.Response({}, 204)
     
 @app.route('/api/healthcheck')
 def get_check():
     healthcheck.main(True)
     return flask.Response({}, 204)
+
+def update_credOccur():
+    '''helper method to update credOccur'''
+    events.update_credOccur()
 
 @app.route('/api/credOccur', methods=['POST'])
 def post_credOccur():
@@ -155,9 +172,31 @@ def post_credOccur():
     with open(path + '/json/credOccur.json', 'w+') as f:
         json.dump(flask.request.json, f, indent=4)
         f.close()
-    restart_main_controller_service()
+    
+    update_credOccur()
     return flask.Response({}, 204)
 
-healthcheck.main(True)
+def update_eventActionTriggers():
+    '''helper function to store all script updates'''
+    eventActionTriggers.update_event_action_triggers()
 
-app.run(host='0.0.0.0',port=5000,debug = True )
+@app.route('/api/eventActionTriggers',methods=['POST'])
+def post_eventActionTriggers():
+    '''changes eventActionTriggers
+    
+    Check for format
+    
+    Returns (response):
+        code: 204
+    '''
+    with open(path + '/json/eventACtionTriggers.json') as f:
+        json.dump(flask.request.json, f, indent=4)
+        f.close()
+    
+    update_eventActionTriggers()
+    return flask.Response({},204)
+
+    
+
+
+app.run(host='0.0.0.0',port=5000,debug = False)

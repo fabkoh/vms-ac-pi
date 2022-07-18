@@ -1,63 +1,63 @@
-{"EventsIncludingSingleEvent":
 [
     {
-        "EventTrigger":["GEN_IN_1"],
-        "EventAction":["GEN_OUT_4","GEN_OUT_2"],
-        "ExternalControllerAction":
-                                    [{"controllerId":"1",
-                                        "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
-
-                                        {"controllerId":"2",
-                                        "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
-                                    ]
-    },
-
-    {
-        "EventTrigger":[["timeout_buzzer","0.5"],"GEN_IN_1"],
-        "EventAction":["sendEmail","sendSMS"],
-        "ExternalControllerAction":
-                                    [{"controllerId":"1",
-                                        "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
-
-                                        {"controllerId":"2",
-                                        "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
-                                    ]
-    },
-
-    {
-        "EventTrigger":["GEN_IN_1","GEN_IN_2"],
-        "EventAction":["GEN_OUT_3"],
-        "ExternalControllerAction":[]
+        "eventsManagementId":2,
+        "eventsManagementName":"Events 2",
+        "inputEvents":[
+            {
+                "inputEventId":4,
+                "timerDuration":2,
+                "eventActionInputType":{
+                    "eventActionInputId":10,
+                    "eventActionInputTypeName":"Authenticated Scan for controller",
+                    "timerEnabled":false
+                }
+            }
+        ],
+        "outputActions":[
+            {
+                "outputEventId":4,
+                "timerDuration":null,
+                "eventActionOutputType":{
+                    "eventActionOutputId":4,
+                    "eventActionOutputTypeName":"Authenticated Scan for controller",
+                    "timerEnabled":false
+                }
+            },
+            {
+                "outputEventId":5,
+                "timerDuration":30,
+                "eventActionOutputType":{
+                    "eventActionOutputId":5,
+                    "eventActionOutputTypeName":"Buzzer buzzing for controller",
+                    "timerEnabled":true
+                }
+            }
+        ],
+        "triggerSchedule":{
+            "2022-07-18":[
+                {
+                    "endtime":"23:59",
+                    "starttime":"00:00"
+                },
+                {
+                    "endtime":"12:00",
+                    "starttime":"11:59"
+                }
+            ],
+            "2023-05-30":[
+                {
+                    "endtime":"23:57",
+                    "starttime":"22:56"
+                },
+                {
+                    "endtime":"11:56",
+                    "starttime":"11:55"
+                }
+            ]
+        },
+        "entrance":{
+            "entranceId": 1
+        },
+        "controller":null
     }
-
-],
-
-"EventsWithTimerOnly":
-[
-    {
-        "EventTrigger":[["timeout_buzzer","0.5"],["timeout_mag","0.5"]],
-        "EventAction":["GEN_OUT_4","GEN_OUT_2"],
-        "ExternalControllerAction":
-                                    [{"controllerId":"1",
-                                        "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
-
-                                        {"controllerId":"2",
-                                        "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
-                                    ]
-    },
-
-    {
-        "EventTrigger":[["timeout_buzzer","0.5"]],
-        "EventAction":["sendEmail","sendSMS"],
-        "ExternalControllerAction":
-                                    [{"controllerId":"1",
-                                        "EventAction":["GEN_OUT_4","GEN_OUT_2"]},
-
-                                        {"controllerId":"2",
-                                        "EventAction":["GEN_OUT_1","GEN_OUT_3"]}
-                                    ]
-    }
-
 ]
-
-}
