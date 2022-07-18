@@ -27,6 +27,8 @@ GEN_OUT_2=2
 GEN_OUT_3=3
 EMLOCK_1=4
 EMLOCK_2=5
+BUZZER=6
+LED=7
 
 # entrance numbers
 BOTH_ENTRANCE = False

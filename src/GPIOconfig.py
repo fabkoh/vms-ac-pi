@@ -1,3 +1,5 @@
+import threading
+import time
 import pigpio 
 import json
 from datetime import datetime
@@ -231,32 +233,121 @@ class decoder:
       self.cb_0.cancel()
       self.cb_1.cancel()
 
+'''
+Buzzer / led will ring if
+their variable == True or time.now() <= their_variable_time
+this allows for perpetual buzzing (mag contact open) or timed buzzing (eventAction)
+'''
 
+E1_buzzer=False
+E1_led=False
+E2_buzzer=False
+E2_led=False
+
+# initialise to 0 ie 1 Jan 1970
+E1_buzzer_time=0
+E1_led_time=0
+E2_buzzer_time=0
+E2_led_time=0
 
 def activate_buzz_led(entrance) :
+   global E1_buzzer,E1_led,E2_buzzer,E2_led
    if entrance == "E1":
-      pi.write(E1_IN_Buzz,1)
-      pi.write(E1_IN_Led,1)
-      pi.write(E1_OUT_Buzz,1)
-      pi.write(E1_OUT_Led,1)
+      E1_buzzer=True
+      E1_led=True
 
    if entrance == "E2":
-      pi.write(E2_IN_Buzz,1)
-      pi.write(E2_IN_Led,1)
-      pi.write(E2_OUT_Buzz,1)
-      pi.write(E2_OUT_Led,1)
+      E2_buzzer=True
+      E2_led=True
 
 def deactivate_buzz_led(entrance) :
+   global E1_buzzer,E1_led,E2_buzzer,E2_led
    if entrance == "E1":
-      pi.write(E1_IN_Buzz,0)
-      pi.write(E1_IN_Led,0)
-      pi.write(E1_OUT_Buzz,0)
-      pi.write(E1_OUT_Led,0)
+      E1_buzzer=False
+      E1_led=False
    
    if entrance == "E2":
-      pi.write(E2_IN_Buzz,0)
-      pi.write(E2_IN_Led,0)
-      pi.write(E2_OUT_Buzz,0)
-      pi.write(E2_OUT_Led,0)
+      E2_buzzer=False
+      E2_led=False
 
+def entrace_id_to_entrance(entrance_id):
+   '''Helper function to convert entrance_id to "E1" | "E2"
+   
+   Args:
+      entrance_id: int
+
+   Returns:
+      "E1" | "E2"
+   '''
+   entrance_name = config.get("entranceName",{})
+   if entrance_name.get("E1",None) == entrance_id:
+      return "E1"
+   if entrance_name.get("E2",None) == entrance_id:
+      return "E2"
+   # implicit None
+
+def activate_buzz(entrance,t):
+   '''Helper function for eventActionTriggers
+
+   entrance: entrance to activate buzzer (either BOTH_ENTRANCES or entrance_id)
+   t: time to run buzzer in seconds (int)
+   '''
+   import eventActionTriggerConstants
+   global E1_buzzer_time,E2_buzzer_time
+
+   if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+      end_time=time.time()+t
+      E1_buzzer_time=max(E1_buzzer_time,end_time)
+      E2_buzzer_time=max(E2_buzzer_time,end_time)
+      return
+
+   ent = entrace_id_to_entrance(entrance)
+   if ent == "E1":
+      E1_buzzer_time=max(E1_buzzer_time,time.time()+t)
+   elif ent == "E2":
+      E2_buzzer_time=max(E2_buzzer_time,time.time()+t)
+
+def activate_led(entrance,t):
+   '''Helper function for eventActionTriggers
+
+   entrance: entrance to activate led (either BOTH_ENTRANCE or entrance_id)
+   t: time to run buzzer in seconds(int)
+   '''
+   import eventActionTriggerConstants
+   global E1_led_time,E2_led_time
+
+   if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+      end_time=time.time()+t
+      E1_led_time=max(E1_led_time,end_time)
+      E2_led_time=max(E2_led_time,end_time)
+      return
+
+   ent=entrace_id_to_entrance(entrance)
+   if ent == "E1":
+      E1_led_time=max(E1_led_time,time.time()+t)
+   elif ent == "E2":
+      E2_led_time=max(E2_led_time,time.time()+t)
+
+
+def check_for_led_and_buzzer():
+   '''Continuous checks the variables above to see if to activate/deactivate buzzer/led'''
+   while True:
+      mapping = { # maps variables to pins to write
+         (E1_buzzer,E1_buzzer_time): (E1_IN_Buzz,E1_OUT_Buzz),
+         (E1_led,E1_led_time): (E1_IN_Led,E1_OUT_Led),
+         (E2_buzzer,E2_buzzer_time): (E2_IN_Buzz,E2_OUT_Buzz),
+         (E2_led,E2_led_time): (E2_IN_Led,E2_OUT_Led)
+      }
+      for k,v in mapping.items():
+         # ex. if E1_buzzer == True or curr time <= E1_buzzer_time
+         if k[0] or (k[1] != None and time.time() <= k[1]):
+            pi.write(v[0],1)
+            pi.write(v[1],1)
+         else:
+            pi.write(v[0],0)
+            pi.write(v[1],0)
+      time.sleep(1)
+
+t1=threading.Thread(target=check_for_led_and_buzzer)
+t1.start()
 
