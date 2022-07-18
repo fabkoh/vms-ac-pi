@@ -72,6 +72,41 @@ def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSe
 
 # *** Toggle Relay ***
 
+
+# # insert a parameter to determine whether to use GEN_OUT_1/2/3 
+# # third_party_option -> null, GEN_OUT_1/2/3
+# def trigger_relay_one(third_party_options):
+
+#     if third_party_options:
+#         setGpioMode()
+#         setupRelayPin(third_party_options)
+    
+#         try:
+#             toggleRelay(relayPin = third_party_options, activateLevel = 'High', \
+#                     activateMilliSeconds = 5000, deActivateMilliSeconds = 1000, \
+#                     toggleCount = 1)
+#             cleanupGpio()
+#         except RuntimeError:
+#             print("Entrance is still opened 'third-party-options'.")
+
+#         return
+
+
+#     setGpioMode()
+#     setupRelayPin(Relay_1)
+    
+#     print(" EM 1 unlocked at " + str(datetime.now()))
+#     try:
+#         toggleRelay(relayPin = Relay_1, activateLevel = 'High', \
+#                 activateMilliSeconds = 5000, deActivateMilliSeconds = 1000, \
+#                 toggleCount = 1)
+#         cleanupGpio()
+#     except RuntimeError:
+#         print("Entrance is still opened")
+
+#     return
+
+
 @multitasking.task
 def trigger_relay_one():
 

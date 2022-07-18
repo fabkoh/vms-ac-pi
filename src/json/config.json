@@ -34,14 +34,14 @@
         "E2": 2
     },
     "GPIOpins": {
-        "Gen_Out_3": "",
-        "Gen_Out_2": "",
-        "Gen_Out_1": "",
+        "Gen_Out_3": "21",
+        "Gen_Out_2": "20",
+        "Gen_Out_1": "16",
         "E2_IN_D0": "24",
         "E2_IN_Buzz": "7",
         "E2_OUT_Buzz": "11",
         "E1_IN_Buzz": "23",
-        "E2_Mag": "26",
+        "E2_Mag": "19",
         "E2_IN_Led": "8",
         "Fire": "26",
         "E1_IN_Led": "18",
