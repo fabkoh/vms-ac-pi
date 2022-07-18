@@ -7,7 +7,7 @@
                 "inputEventId":4,
                 "timerDuration":null,
                 "eventActionInputType":{
-                    "eventActionInputId":2,
+                    "eventActionInputId":3,
                     "eventActionInputTypeName":"Authenticated Scan for controller",
                     "timerEnabled":false
                 }
@@ -43,7 +43,7 @@
             }
         ],
         "triggerSchedule":{
-            "2022-07-15":[
+            "2022-07-18":[
                 {
                     "endtime":"23:59",
                     "starttime":"00:00"
