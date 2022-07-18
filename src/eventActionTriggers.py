@@ -183,7 +183,8 @@ def event_trigger_cb(event_trigger):
                 .get("eventActionInputId",None) == event_trigger_id,
             eventManagement.get("inputEvents",[])
             )) and check_datetime(eventManagement.get("triggerSchedule",{}))
-               and (get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
+               and (entrance is BOTH_ENTRANCE or
+                    get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
                     get_entrance_from_event_management(eventManagement) == entrance), # check if trigger is currently active
         EVENT_ACTION_TRIGGERS_DATA): 
 
