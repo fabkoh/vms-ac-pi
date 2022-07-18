@@ -223,32 +223,33 @@ def event_trigger_cb(event_trigger):
     flush_output()
                     
 def check_for_only_timer_based_events():
-    for event in filter( # filter by currently active
-        lambda eventManagement: check_datetime(eventManagement.get("triggerSchedule",{})),
-        EVENT_ACTION_TRIGGERS_DATA
-        ):
-        event_management_id = event.get("eventManagementId",None)
+    while True:
+        for event in filter( # filter by currently active
+            lambda eventManagement: check_datetime(eventManagement.get("triggerSchedule",{})),
+            EVENT_ACTION_TRIGGERS_DATA
+            ):
+            event_management_id = event.get("eventManagementId",None)
 
-        if activated.get(event_management_id,False):
-            continue # already activated
+            if activated.get(event_management_id,False):
+                continue # already activated
 
-        valid=True
-        entrance=get_entrance_from_event_management(event)
-        for inputEvent in event.get("inputEvents",[]):
-            input_id = inputEvent.get("eventActionInputType",{}).get("eventActionInputId",None)
-            d = inputEvent.get("timerDuration",None)
-            t = eventTriggerTime.get((input_id,entrance),None)
-            if t == None:
-                t = eventTriggerTime.get((input_id,BOTH_ENTRANCE),None)
-            if (t==None) or (d==None) or (time.time()-t<d): # event is not to be activated
-                valid=False
-                break
-        if valid:
-            activated[event_management_id] = True # timer based must have activated
-            queue_output(event.get("outputActions",[]))
-            
-    flush_output()
-    time.sleep(0.1) # throttle
+            valid=True
+            entrance=get_entrance_from_event_management(event)
+            for inputEvent in event.get("inputEvents",[]):
+                input_id = inputEvent.get("eventActionInputType",{}).get("eventActionInputId",None)
+                d = inputEvent.get("timerDuration",None)
+                t = eventTriggerTime.get((input_id,entrance),None)
+                if t == None:
+                    t = eventTriggerTime.get((input_id,BOTH_ENTRANCE),None)
+                if (t==None) or (d==None) or (time.time()-t<d): # event is not to be activated
+                    valid=False
+                    break
+            if valid:
+                activated[event_management_id] = True # timer based must have activated
+                queue_output(event.get("outputActions",[]))
+                
+        flush_output()
+        time.sleep(0.1) # throttle
 
 t1 = threading.Thread(target=check_for_only_timer_based_events)
 t1.start()
