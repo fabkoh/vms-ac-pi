@@ -1,24 +1,22 @@
 [
     {
-        "person": {
-            "personId": 1
-        },
-        "accessGroup": {
-            "accessGroupId": "1"
-        },
-        "direction": "OUT",
         "entrance": {
             "entranceId": 1
         },
         "eventActionType": {
-            "eventActionTypeId": 1
+            "eventActionTypeId": 8
         },
         "controller": {
-            "controllerSerialNo": null
+            "controllerSerialNo": "100000005a46e105"
         },
-        "eventTime": "07-15-2022 16:58:14"
+        "eventTime": "07-18-2022 10:20:04"
     }
-]42:33"
+]": 1
+        },
+        "controller": {
+            "controllerSerialNo": "100000005a46e105"
+        },
+        "eventTime": "07-18-2022 10:17:27"
     }
 ] }
 ]      "controllerSerialNo": null

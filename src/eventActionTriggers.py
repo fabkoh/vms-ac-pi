@@ -108,7 +108,6 @@ def flush_output():
     '''Activates output'''
     import events
     for output in output_events:
-        print(output)
         id = output.get("eventActionOutputType",{}).get("eventActionOutputId",None)
         if id == EMLOCK_1:
             events.open_door("E1")
