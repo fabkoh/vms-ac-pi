@@ -18,7 +18,7 @@
                 "outputEventId":4,
                 "timerDuration":null,
                 "eventActionOutputType":{
-                    "eventActionOutputId":4,
+                    "eventActionOutputId":2,
                     "eventActionOutputTypeName":"Authenticated Scan for controller",
                     "timerEnabled":false
                 }

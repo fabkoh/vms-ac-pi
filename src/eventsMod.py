@@ -122,8 +122,11 @@ def record_button_pressed(entrance,name_of_button):
                     "controller":{"controllerSerialNo":controllerSerial},
                     "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
+    e=entrance
+    if e == '': # no entrance assigned to this push button
+        e=eventActionTriggerConstants.BOTH_ENTRANCE
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(eventActionTriggerConstants.EXIT_BUTTON_PRESSED,entrance)
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.EXIT_BUTTON_PRESSED,e)
     )
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
