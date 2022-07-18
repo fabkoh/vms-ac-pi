@@ -18,7 +18,7 @@
                 "outputEventId":4,
                 "timerDuration":null,
                 "eventActionOutputType":{
-                    "eventActionOutputId":2,
+                    "eventActionOutputId":4,
                     "eventActionOutputTypeName":"Authenticated Scan for controller",
                     "timerEnabled":false
                 }
@@ -29,15 +29,6 @@
                 "eventActionOutputType":{
                     "eventActionOutputId":5,
                     "eventActionOutputTypeName":"Buzzer buzzing for controller",
-                    "timerEnabled":true
-                }
-            },
-            {
-                "outputEventId":6,
-                "timerDuration":null,
-                "eventActionOutputType":{
-                    "eventActionOutputId":6,
-                    "eventActionOutputTypeName":"LED light for controller",
                     "timerEnabled":true
                 }
             }
