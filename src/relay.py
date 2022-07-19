@@ -118,7 +118,7 @@ def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSe
 
 
 @multitasking.task
-def trigger_relay_one():
+def trigger_relay_one(thirdPartyOption = None):
 
     setGpioMode()
     setupRelayPin(Relay_1)

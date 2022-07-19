@@ -189,7 +189,7 @@ def post_eventActionTriggers():
     Returns (response):
         code: 204
     '''
-    with open(path + '/json/eventACtionTriggers.json') as f:
+    with open(path + '/json/eventActionTriggers.json') as f:
         json.dump(flask.request.json, f, indent=4)
         f.close()
     
