@@ -107,22 +107,35 @@ def check_datetime(schedule):
 def flush_output():
     '''Activates output'''
     import events
-    for output in output_events:
-        id = output.get("eventActionOutputType",{}).get("eventActionOutputId",None)
-        if id == EMLOCK_1:
-            events.open_door("E1")
-        elif id == EMLOCK_2:
-            events.open_door("E2")
-    
+    import GPIOconfig
+    for event in output_events:
+        entrance = event.get("entrance",{}).get("entranceId",None)
+        if entrance == None:
+            if event.get("controller",None) != None:
+                entrance=BOTH_ENTRANCE
+            else:
+                continue # ignore, malformed json
+
+        for output in event.get("outputActions",[]):
+            id = output.get("eventActionOutputType",{}).get("eventActionOutputId",None)
+            if id == EMLOCK_1:
+                events.open_door("E1")
+            elif id == EMLOCK_2:
+                events.open_door("E2")
+            elif id == BUZZER:
+                GPIOconfig.activate_buzz(entrance,output.get("timerDuration",0))
+            elif id == LED:
+                GPIOconfig.activate_led(entrance,output.get("timerDuration",0))
+
     output_events.clear()
 
-def queue_output(output):
+def queue_output(event):
     '''Helper function to store output events to activate
     DOES NOT ACTIVATE OUTPUT, CALL flush_output() TO ACTIVATE
 
-    Args: list of output actions
+    Args: eventManagement object
     '''
-    output_events.extend(output)
+    output_events.append(event)
 
 def get_entrance_from_event_management(event_management):
     '''Helper function to return entrance_id from event_management object
@@ -218,7 +231,7 @@ def event_trigger_cb(event_trigger):
             # if 2 unauthenicated scans, should only trigger at the first scan
             if len(event.get("inputEvent", [])) > 1:
                 activated[event_management_id]=True
-            queue_output(event.get("outputActions",[]))
+            queue_output(event)
             
     flush_output()
                     
@@ -246,7 +259,7 @@ def check_for_only_timer_based_events():
                     break
             if valid:
                 activated[event_management_id] = True # timer based must have activated
-                queue_output(event.get("outputActions",[]))
+                queue_output(event)
                 
         flush_output()
         time.sleep(0.1) # throttle
