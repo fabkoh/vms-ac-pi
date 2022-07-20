@@ -1,7 +1,7 @@
 [
     {
         "entrance": {
-            "entranceId": ""
+            "entranceId": 1
         },
         "eventActionType": {
             "eventActionTypeId": 9
@@ -9,17 +9,17 @@
         "controller": {
             "controllerSerialNo": "100000005a46e105"
         },
-        "eventTime": "07-18-2022 14:50:11"
+        "eventTime": "07-20-2022 13:23:45"
     }
-]: 1
+]peId": 3
         },
         "controller": {
             "controllerSerialNo": "100000005a46e105"
         },
-        "eventTime": "07-18-2022 10:47:00"
+        "eventTime": "07-20-2022 13:23:15"
     }
-] }
-]      "controllerSerialNo": null
+]}
+]   "controllerSerialNo": null
         },
         "eventTime": "07-08-2022 11:40:56"
     },

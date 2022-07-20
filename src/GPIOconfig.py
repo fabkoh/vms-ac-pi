@@ -328,25 +328,29 @@ def activate_led(entrance,t):
    elif ent == "E2":
       E2_led_time=max(E2_led_time,time.time()+t)
 
-
 def check_for_led_and_buzzer():
-   '''Continuous checks the variables above to see if to activate/deactivate buzzer/led'''
-   while True:
-      mapping = { # maps variables to pins to write
-         (E1_buzzer,E1_buzzer_time): (E1_IN_Buzz,E1_OUT_Buzz),
-         (E1_led,E1_led_time): (E1_IN_Led,E1_OUT_Led),
-         (E2_buzzer,E2_buzzer_time): (E2_IN_Buzz,E2_OUT_Buzz),
-         (E2_led,E2_led_time): (E2_IN_Led,E2_OUT_Led)
-      }
-      for k,v in mapping.items():
-         # ex. if E1_buzzer == True or curr time <= E1_buzzer_time
-         if k[0] or (k[1] != None and time.time() <= k[1]):
-            pi.write(v[0],1)
-            pi.write(v[1],1)
-         else:
-            pi.write(v[0],0)
-            pi.write(v[1],0)
-      time.sleep(1)
+    '''Continuous checks the variables above to see if to activate/deactivate buzzer/led'''
+    def helper(active,t,pin1,pin2):
+        '''helper function to activate pins
+
+            Args: (example)
+                active: E1_buzzer
+                t: E1_buzzer_time
+                pin1: E1_IN_Buzz
+                pin2: E1_OUT_Buzz
+        '''
+        if active or time.time() <= t:
+            pi.write(pin1,1)
+            pi.write(pin2,1)
+        else:
+            pi.write(pin1,0)
+            pi.write(pin2,0)
+    while True:            
+        helper(E1_buzzer,E1_buzzer_time,E1_IN_Buzz,E1_OUT_Buzz)
+        helper(E1_led,E1_led_time,E1_IN_Led,E2_OUT_Led)
+        helper(E2_buzzer,E2_buzzer_time,E2_IN_Buzz,E2_OUT_Buzz)
+        helper(E2_led,E2_led_time,E2_IN_Led,E2_OUT_Led)
+        time.sleep(1)
 
 t1=threading.Thread(target=check_for_led_and_buzzer)
 t1.start()
