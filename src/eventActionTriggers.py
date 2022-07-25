@@ -126,6 +126,13 @@ def flush_output():
             elif id == LED:
                 print("led")
                 GPIOconfig.activate_led(entrance,output.get("timerDuration",0))
+            elif id == GEN_OUT_1:
+                events.open_GEN_OUT("GEN_OUT_1",output.get("timerDuration",0))
+            elif id == GEN_OUT_2:
+                events.open_GEN_OUT("GEN_OUT_2",output.get("timerDuration",0))
+            elif id == GEN_OUT_3:
+                events.open_GEN_OUT("GEN_OUT_3",output.get("timerDuration",0))
+
 
     output_events.clear()
 

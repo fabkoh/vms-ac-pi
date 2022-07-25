@@ -227,7 +227,8 @@ def open_door_using_entrance_id(entrance_id):
     elif entrance_id and entrance_id == config.get("EntranceName",{}).get("E2",None):
         open_door("E2")
 
-
+def open_GEN_OUT(GEN_OUT_PIN,timer):
+    relay.open_GEN_OUT(GEN_OUT_PIN,timer)
 # keep track of wiegand values and pins 
 # check if person allowed to enter 
 # trigger relays 

@@ -190,6 +190,39 @@ def trigger_relay_two(thirdPartyOption = None):
         print("Entrance is still opened")
     return
 
+
+
+@multitasking.task
+def open_GEN_OUT(GEN_OUT_PIN = None, timer = 4000):
+        
+    outputPin = None
+
+    if GEN_OUT_PIN == "GEN_OUT_1":
+        outputPin = GEN_OUT_1
+        print(GEN_OUT_PIN,outputPin)
+    
+    if GEN_OUT_PIN == "GEN_OUT_2":
+        outputPin = GEN_OUT_2
+        print(GEN_OUT_PIN,outputPin)
+
+    if GEN_OUT_PIN == "GEN_OUT_3":
+        outputPin = GEN_OUT_3
+        print(GEN_OUT_PIN,outputPin)
+
+
+    setGpioMode()
+    setupRelayPin(outputPin)
+    
+    print(f" {GEN_OUT_PIN}  unlocked")
+    try:
+        toggleRelay(relayPin = outputPin, activateLevel = 'High', \
+                activateMilliSeconds = timer, deActivateMilliSeconds = 1000, \
+                toggleCount = 1)
+        cleanupGpio()
+    except RuntimeError:
+        print(f" {GEN_OUT_PIN} still opened")
+    return
+
 @multitasking.task
 def unlock_entrance_one():
 
