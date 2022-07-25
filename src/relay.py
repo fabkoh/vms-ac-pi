@@ -120,6 +120,10 @@ def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSe
 @multitasking.task
 def trigger_relay_one(thirdPartyOption = None):
 
+    if thirdPartyOption in ["GEN_OUT_1","GEN_OUT_2","GEN_OUT_3"]:
+        print(thirdPartyOption)
+        return 
+    
     setGpioMode()
     setupRelayPin(Relay_1)
     
@@ -135,7 +139,11 @@ def trigger_relay_one(thirdPartyOption = None):
     return
 
 @multitasking.task
-def trigger_relay_two():
+def trigger_relay_two(thirdPartyOption = None):
+
+    if thirdPartyOption in ["GEN_OUT_1","GEN_OUT_2","GEN_OUT_3"]:
+        print(thirdPartyOption)
+        return 
 
     setGpioMode()
     setupRelayPin(Relay_2)
