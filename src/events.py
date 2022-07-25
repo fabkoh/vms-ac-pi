@@ -467,13 +467,14 @@ schedule = {
 '''
 
 def verify_datetime(schedule):
-    print(schedule)
+    #print(schedule)
     #print(type(schedule))
-    print(str(date.today()))
+    #print(str(date.today()))
     print(datetime.now())
     for scheduledate,scheduletime in schedule.items():
         #print(scheduledate,scheduletime)
         if scheduledate == str(date.today()):
+            print("today in schedule")
             for timing in scheduletime:
                 now_hour = datetime.now().strftime(("%H"))
                 now_min = datetime.now().strftime(("%M"))
@@ -484,13 +485,21 @@ def verify_datetime(schedule):
                 end_hour = end.split(":")[0]
                 end_min = end.split(":")[1]
 
-                
-                if now_hour > start_hour and now_hour < end_hour: # strictly within
+                    
+                if now_hour > start_hour and now_hour < end_hour:
+                    print("now in schedule") # strictly within
                     return True
                 
-                if now_hour == start_hour:
-                    if now_min >= start_min and now_min <= end_min:
+                if now_hour == start_hour and now_hour != end_hour:
+                    if now_min >= start_min:
+                        print("now in schedule") 
                         return True
+                
+                if now_hour != start_hour and now_hour == end_hour:
+                    if now_min <= end_min:
+                        print("now in schedule") 
+                        return True
+                    
 
     return False 
 
