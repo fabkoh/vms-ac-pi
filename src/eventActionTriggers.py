@@ -118,13 +118,13 @@ def flush_output():
 
         for output in event.get("outputActions",[]):
             id = output.get("eventActionOutputType",{}).get("eventActionOutputId",None)
-            if id == EMLOCK_1:
-                events.open_door("E1")
-            elif id == EMLOCK_2:
-                events.open_door("E2")
+            if id == DOOR_OPEN:
+                events.open_door_using_entrance_id(entrance)
             elif id == BUZZER:
+                print("buzzer")
                 GPIOconfig.activate_buzz(entrance,output.get("timerDuration",0))
             elif id == LED:
+                print("led")
                 GPIOconfig.activate_led(entrance,output.get("timerDuration",0))
 
     output_events.clear()

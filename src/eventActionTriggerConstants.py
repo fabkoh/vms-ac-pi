@@ -22,13 +22,14 @@ START_TIMER=True
 STOP_TIMER=False
 
 # output
+# check flush_output function in eventActionTriggers.py
 GEN_OUT_1=1
 GEN_OUT_2=2
 GEN_OUT_3=3
-EMLOCK_1=4
-EMLOCK_2=5
-BUZZER=6
-LED=7
+DOOR_OPEN=4
+BUZZER=5
+LED=6
+NOTIFICATION=7
 
 # entrance numbers
 BOTH_ENTRANCE = False

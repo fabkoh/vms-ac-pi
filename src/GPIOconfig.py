@@ -270,7 +270,7 @@ def deactivate_buzz_led(entrance) :
       E2_buzzer=False
       E2_led=False
 
-def entrace_id_to_entrance(entrance_id):
+def entrance_id_to_entrance(entrance_id):
    '''Helper function to convert entrance_id to "E1" | "E2"
    
    Args:
@@ -279,7 +279,7 @@ def entrace_id_to_entrance(entrance_id):
    Returns:
       "E1" | "E2"
    '''
-   entrance_name = config.get("entranceName",{})
+   entrance_name = config.get("EntranceName",{})
    if entrance_name.get("E1",None) == entrance_id:
       return "E1"
    if entrance_name.get("E2",None) == entrance_id:
@@ -301,7 +301,7 @@ def activate_buzz(entrance,t):
       E2_buzzer_time=max(E2_buzzer_time,end_time)
       return
 
-   ent = entrace_id_to_entrance(entrance)
+   ent = entrance_id_to_entrance(entrance)
    if ent == "E1":
       E1_buzzer_time=max(E1_buzzer_time,time.time()+t)
    elif ent == "E2":
@@ -322,7 +322,7 @@ def activate_led(entrance,t):
       E2_led_time=max(E2_led_time,end_time)
       return
 
-   ent=entrace_id_to_entrance(entrance)
+   ent=entrance_id_to_entrance(entrance)
    if ent == "E1":
       E1_led_time=max(E1_led_time,time.time()+t)
    elif ent == "E2":

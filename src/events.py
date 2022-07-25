@@ -214,6 +214,16 @@ def open_door(entrance_prefix):
         mag_E2_allowed_to_open = True
         relay.trigger_relay_two()
 
+def open_door_using_entrance_id(entrance_id):
+    '''same as open_door (see above) but with entrance_id
+       Does nothing if entrance_id is not the same as in config.json
+       
+       entrance_id (int): entrance id
+    '''
+    if entrance_id and entrance_id == config.get("EntranceName",{}).get("E1",None):
+        open_door("E1")
+    elif entrance_id and entrance_id == config.get("EntranceName",{}).get("E2",None):
+        open_door("E2")
 
 
 # keep track of wiegand values and pins 
