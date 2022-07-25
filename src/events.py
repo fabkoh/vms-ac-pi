@@ -333,7 +333,8 @@ def reader_detects_bits(bits, value,entrance):
                     entrance_details = entrance_list.get("EntranceDetails", {})
                     device_details = entrance_details.get("AuthenticationDevices", {}).get(entrance_direction, {})
             if entrance_details == {}: # entrance not found, quit
-                raise Exception
+                eventsMod.record_unauth_scans(None, None, entrance_direction)
+                return
  
             # check master password
             if pin_type in credentials and \
@@ -418,7 +419,7 @@ def reader_detects_bits(bits, value,entrance):
                 
 
         except Exception as e:
-            print("cannot check cred", e)
+            print("cannot check cred", str(e))
             pass
 
 
