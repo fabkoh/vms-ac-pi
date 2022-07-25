@@ -134,7 +134,7 @@ E2_entrance_schedule = ""
 
 def update_credOccur():
     '''Call this after events.update_config'''
-    global credOccur, E1_is_active, E1_entrance_schedule, E2_is_active, E2_entrance_schedule
+    global credOccur, E1_is_active, E1_entrance_schedule, E2_is_active, E2_entrance_schedule, E1_thirdPartyOption, E2_thirdPartyOption
     f=open(path+'/json/credOccur.json')
     credOccur = json.load(f)
     f.close()
@@ -142,10 +142,12 @@ def update_credOccur():
         if entrance["Entrance"] == E1:
             E1_is_active = entrance["isActive"]
             E1_entrance_schedule = entrance["EntranceSchedule"]
+            E1_thirdPartyOption = entrance["ThirdPartyOptions"]
 
         if entrance["Entrance"] == E2:
             E2_is_active = entrance["isActive"]
             E2_entrance_schedule = entrance["EntranceSchedule"]
+            E2_thirdPartyOption = entrance["ThirdPartyOptions"]
 # initialise
 update_config()
 update_credOccur()
@@ -209,10 +211,10 @@ def open_door(entrance_prefix):
     global mag_E1_allowed_to_open,mag_E2_allowed_to_open
     if entrance_prefix == "E1":
         mag_E1_allowed_to_open = True
-        relay.trigger_relay_one()
+        relay.trigger_relay_one(E1_thirdPartyOption)
     elif entrance_prefix == "E2":
         mag_E2_allowed_to_open = True
-        relay.trigger_relay_two()
+        relay.trigger_relay_two(E2_thirdPartyOption)
 
 def open_door_using_entrance_id(entrance_id):
     '''same as open_door (see above) but with entrance_id
@@ -285,10 +287,10 @@ def reader_detects_bits(bits, value,entrance):
         global mag_E2_allowed_to_open
         if entrance_prefix == "E1":
             mag_E1_allowed_to_open = True
-            relay.trigger_relay_one()
+            relay.trigger_relay_one(E1_thirdPartyOption)
         elif entrance_prefix == "E2":
             mag_E2_allowed_to_open = True
-            relay.trigger_relay_two()
+            relay.trigger_relay_two(E2_thirdPartyOption)
 
     # steps
     # 1 start / restart timer
@@ -429,6 +431,10 @@ def reader_detects_bits(bits, value,entrance):
         except Exception as e:
             print("cannot check cred", str(e))
             pass
+
+
+
+    return
 
 def check_for_masterpassword(credentials,entrancename,entrance_direction):
     for entranceslist in credOccur:
@@ -623,13 +629,13 @@ def button_detects_change(gpio, level, tick):
     if gpio == E1_Button:
         print(f"{E1} push button1 is pressed at " + str(datetime.now()))
         mag_E1_allowed_to_open = True
-        relay.trigger_relay_one()
+        relay.trigger_relay_one(E1_thirdPartyOption)
         eventsMod.record_button_pressed(E1,"Security Guard Button")
 
     if gpio == E2_Button:
         print(f"{E2} push button is pressed at " + str(datetime.now()))
         mag_E2_allowed_to_open = True
-        relay.trigger_relay_two()
+        relay.trigger_relay_two(E2_thirdPartyOption)
         eventsMod.record_button_pressed(E2,"Security Guard Button")
 
 
