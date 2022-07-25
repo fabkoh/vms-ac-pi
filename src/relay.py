@@ -4,6 +4,8 @@ from datetime import datetime
 import multitasking
 import json
 import os
+
+from eventActionTriggerConstants import GEN_OUT_1
 path = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -17,7 +19,7 @@ Relay_1 = None
 Relay_2 = None
 
 def update_config():
-    global config, GPIOpins, Relay_1, Relay_2
+    global config, GPIOpins, Relay_1, Relay_2, GEN_OUT_1, GEN_OUT_2, GEN_OUT_3
     f=open(path+'/json/config.json')
     config=json.load(f)
     f.close()
@@ -25,6 +27,9 @@ def update_config():
     GPIOpins=config["GPIOpins"]
     Relay_1=int(GPIOpins["Relay_1"])
     Relay_2=int(GPIOpins["Relay_2"])
+    GEN_OUT_1=int(GPIOpins["Gen_Out_1"])
+    GEN_OUT_2=int(GPIOpins["Gen_Out_2"])
+    GEN_OUT_3=int(GPIOpins["Gen_Out_3"])
 
 update_config()
 # *** GPIO Setp/Cleanup ***
@@ -119,19 +124,27 @@ def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSe
 
 @multitasking.task
 def trigger_relay_one(thirdPartyOption = None):
-    if thirdPartyOption != "N.A.":
-        print("THIRD PARTY OPTION")
 
-    if thirdPartyOption in ["GEN_OUT_1","GEN_OUT_2","GEN_OUT_3"]:
-        print(thirdPartyOption)
-        return 
+    outputPin = Relay_1
+
+    if thirdPartyOption == "GEN_OUT_1":
+        outputPin = GEN_OUT_1
+        print(thirdPartyOption,outputPin)
     
+    if thirdPartyOption == "GEN_OUT_2":
+        outputPin = GEN_OUT_2
+        print(thirdPartyOption,outputPin)
+
+    if thirdPartyOption == "GEN_OUT_3":
+        outputPin = GEN_OUT_3
+        print(thirdPartyOption,outputPin)
+
     setGpioMode()
-    setupRelayPin(Relay_1)
+    setupRelayPin(outputPin)
     
     print(" EM 1 unlocked at " + str(datetime.now()))
     try:
-        toggleRelay(relayPin = Relay_1, activateLevel = 'High', \
+        toggleRelay(relayPin = outputPin, activateLevel = 'High', \
                 activateMilliSeconds = 5000, deActivateMilliSeconds = 1000, \
                 toggleCount = 1)
         cleanupGpio()
@@ -143,7 +156,7 @@ def trigger_relay_one(thirdPartyOption = None):
 @multitasking.task
 def trigger_relay_two(thirdPartyOption = None):
 
-    if thirdPartyOption in ["GEN_OUT_1","GEN_OUT_2","GEN_OUT_3"]:
+    if thirdPartyOption == ["GEN_OUT_1","GEN_OUT_2","GEN_OUT_3"]:
         print(thirdPartyOption)
         return 
 
