@@ -8,6 +8,7 @@ def update_server_events():
 
     file = open(path+"/json/pendingLogs.json") 
     data = json.load(file)
+    print("11-here")
     
     try:
         headers = {'Content-type': 'application/json'}

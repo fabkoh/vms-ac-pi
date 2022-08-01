@@ -397,17 +397,27 @@ def reader_detects_bits(bits, value,entrance):
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
                         person_credentials = person.get("Credentials", {})
-                        print(person_credentials)
-                        
+                        #print(person_credentials)
+                        #print("person_credentials",person_credentials)
+                        #print("credentials",credentials)
                         def checkcred(k):
-                            #print(k,k[0],k[1])
-                            #print(person_credentials,k[0] in person_credentials)
-                            #print(person_credentials[k[0]],k[1] in person_credentials[k[0]])
-                            return k[0] in person_credentials and k[1] in person_credentials[k[0]]
+                            listOfCred = person_credentials.get(k[0])
+                            if listOfCred is None:
+                                return False
+                            for singleCred in listOfCred:
+                                if singleCred.get("Value") == k[1]:
+                                    print(datetime.now().date() <= datetime.strptime(singleCred.get("EndDate"),'%Y-%m-%d').date())
+                                    if singleCred.get("IsPerm"):
+                                        return True
+                                    
+                                    return datetime.now().date() <= datetime.strptime(singleCred.get("EndDate"),'%Y-%m-%d').date()
+
+                            
+                            return False
                         # k[0] refers to credType, k[1] refers to value of corresponding cred 
                         if all(map(checkcred, list(credentials.items()))): # see if all credentials belong to person
                             # check if the person's access group can enter
-                            print(verify_datetime(access_group_info.get('Schedule', {})))
+                            # print(verify_datetime(access_group_info.get('Schedule', {})))
                             if verify_datetime(access_group_info.get('Schedule', {})):
                                 # auth scan
                                 print("found person, allowed to enter")
