@@ -419,9 +419,13 @@ def reader_detects_bits(bits, value,entrance):
                             # check if the person's access group can enter
                             # print(verify_datetime(access_group_info.get('Schedule', {})))
                             if verify_datetime(access_group_info.get('Schedule', {})):
+
                                 # auth scan
-                                print("found person, allowed to enter")
-                                eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[0], auth_method_name, entrancename, entrance_direction)
+                                print("found person, allowed to enter",auth_method_name,type(auth_method_name))
+                                if auth_method_name == ["PIN"]:
+                                    eventsMod.record_auth_scans(entrancename, entrance_direction)
+                                else:
+                                    eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[0], auth_method_name, entrancename, entrance_direction)
                                 open_door()
                                 reset_cred_and_stop_timer()
                                 return

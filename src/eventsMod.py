@@ -78,6 +78,23 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
     update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
 
+def pin_only_used(entrance,status):
+    dictionary = {
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":13}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+    }
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.AUTHENTICATED_SCAN,entrance)
+    )
+
+
+    update(path+"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
+
 #updates pendingLogs.json and send to backend 
 #updates archivedLogs.json for backup 
 def record_masterpassword_used(authtype,entrance,status):
