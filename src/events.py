@@ -128,10 +128,24 @@ def update_config():
 credOccur = None
 
 E1_is_active = True
-E1_entrance_schedule = "" 
+E1_entrance_schedule = ""
+E1_thirdPartyOption = "N.A."
 E2_is_active = True
-E2_entrance_schedule = "" 
+E2_entrance_schedule = ""
+E2_thirdPartyOption = "N.A."
 
+            
+def check_entrance_status():
+    print(E1_is_active,E2_is_active)
+    if E1_is_active :
+        relay.lock_unlock_entrance_one(E1_thirdPartyOption,False)
+    else:  
+        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
+    if E2_is_active :
+        relay.lock_unlock_entrance_two(E2_thirdPartyOption,False)
+    else:  
+        relay.lock_unlock_entrance_two(E2_thirdPartyOption,True)
+        
 def update_credOccur():
     '''Call this after events.update_config'''
     global credOccur, E1_is_active, E1_entrance_schedule, E2_is_active, E2_entrance_schedule, E1_thirdPartyOption, E2_thirdPartyOption
@@ -148,9 +162,13 @@ def update_credOccur():
             E2_is_active = entrance["isActive"]
             E2_entrance_schedule = entrance["EntranceSchedule"]
             E2_thirdPartyOption = entrance["ThirdPartyOptions"]
+    
+
 # initialise
 update_config()
 update_credOccur()
+
+
 
 mag_E1_allowed_to_open = False
 mag_E2_allowed_to_open = False
@@ -176,6 +194,7 @@ pinsvalue_E1_IN = []  #array to store pins
 pinsvalue_E1_OUT = []  #array to store pins
 pinsvalue_E2_IN = []  #array to store pins
 pinsvalue_E2_OUT = []  #array to store pins
+
 
 
 #takes in string wiegand value, return name, passwords, accessgroup and schedule 
@@ -422,8 +441,9 @@ def reader_detects_bits(bits, value,entrance):
 
                                 # auth scan
                                 print("found person, allowed to enter",auth_method_name,type(auth_method_name))
-                                if auth_method_name == ["PIN"]:
-                                    eventsMod.record_auth_scans(entrancename, entrance_direction)
+                                print(auth_method_name)
+                                if "Pin" == auth_method_name :
+                                    eventsMod.pin_only_used(entrancename, entrance_direction)
                                 else:
                                     eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[0], auth_method_name, entrancename, entrance_direction)
                                 open_door()
@@ -491,29 +511,13 @@ def verify_datetime(schedule):
         if scheduledate == str(date.today()):
             print("today in schedule")
             for timing in scheduletime:
-                now_hour = datetime.now().strftime(("%H"))
-                now_min = datetime.now().strftime(("%M"))
-                start = timing["starttime"]
-                end = timing["endtime"]
-                start_hour = start.split(":")[0]
-                start_min = start.split(":")[1]
-                end_hour = end.split(":")[0]
-                end_min = end.split(":")[1]
-
+                now = datetime.now().time()
+                start = datetime.strptime(timing["starttime"], "%H:%M").time()
+                end = datetime.strptime(timing["endtime"], "%H:%M").time()
                     
-                if now_hour > start_hour and now_hour < end_hour:
+                if now >= start and now < end:
                     print("now in schedule") # strictly within
                     return True
-                
-                if now_hour == start_hour and now_hour != end_hour:
-                    if now_min >= start_min:
-                        print("now in schedule") 
-                        return True
-                
-                if now_hour != start_hour and now_hour == end_hour:
-                    if now_min <= end_min:
-                        print("now in schedule") 
-                        return True
                     
 
     return False 

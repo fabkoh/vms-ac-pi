@@ -124,10 +124,7 @@ def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSe
 
 @multitasking.task
 def trigger_relay_one(thirdPartyOption = None):
-    print(thirdPartyOption)
-    if thirdPartyOption == ["GEN_OUT_1","GEN_OUT_2","GEN_OUT_3"]:
-        print(thirdPartyOption)
-        
+
     outputPin = Relay_1
 
     if thirdPartyOption == "GEN_OUT_1":
@@ -159,9 +156,6 @@ def trigger_relay_one(thirdPartyOption = None):
 @multitasking.task
 def trigger_relay_two(thirdPartyOption = None):
 
-    if thirdPartyOption == ["GEN_OUT_1","GEN_OUT_2","GEN_OUT_3"]:
-        print(thirdPartyOption)
-        
     outputPin = Relay_2
 
     if thirdPartyOption == "GEN_OUT_1":
@@ -190,7 +184,73 @@ def trigger_relay_two(thirdPartyOption = None):
         print("Entrance is still opened")
     return
 
+@multitasking.task
+def lock_unlock_entrance_one(thirdPartyOption = None,unlock=False):
 
+    outputPin = Relay_1
+
+    if thirdPartyOption == "GEN_OUT_1":
+        outputPin = GEN_OUT_1
+        print(thirdPartyOption,outputPin)
+    
+    if thirdPartyOption == "GEN_OUT_2":
+        outputPin = GEN_OUT_2
+        print(thirdPartyOption,outputPin)
+
+    if thirdPartyOption == "GEN_OUT_3":
+        outputPin = GEN_OUT_3
+        print(thirdPartyOption,outputPin)
+
+    setGpioMode()
+    setupRelayPin(outputPin)
+    
+    print(" EM 1 unlocked at " + str(datetime.now()))
+    if unlock:
+        try:
+            activateRelay(outputPin, 'High')
+        except RuntimeError:
+            print("Entrance is still opened")
+    else:
+        try:
+            deActivateRelay(outputPin, 'High')
+        except RuntimeError:
+            print("Entrance is still closed")
+    print("test")
+    return
+
+@multitasking.task
+def lock_unlock_entrance_two(thirdPartyOption = None,unlock=False):
+
+    outputPin = Relay_2
+
+    if thirdPartyOption == "GEN_OUT_1":
+        outputPin = GEN_OUT_1
+        print(thirdPartyOption,outputPin)
+    
+    if thirdPartyOption == "GEN_OUT_2":
+        outputPin = GEN_OUT_2
+        print(thirdPartyOption,outputPin)
+
+    if thirdPartyOption == "GEN_OUT_3":
+        outputPin = GEN_OUT_3
+        print(thirdPartyOption,outputPin)
+
+    setGpioMode()
+    setupRelayPin(outputPin)
+    
+    print(" EM 2 unlocked at " + str(datetime.now()))
+    if unlock:
+        try:
+            activateRelay(outputPin, 'High')
+        except RuntimeError:
+            print("Entrance is still opened")
+    else:
+        try:
+            deActivateRelay(outputPin, 'High')
+        except RuntimeError:
+            print("Entrance is still closed")
+    print("test")
+    return
 
 @multitasking.task
 def open_GEN_OUT(GEN_OUT_PIN = None, timer = 4000):
@@ -223,6 +283,7 @@ def open_GEN_OUT(GEN_OUT_PIN = None, timer = 4000):
         print(f" {GEN_OUT_PIN} still opened")
     return
 
+# not used
 @multitasking.task
 def unlock_entrance_one():
 

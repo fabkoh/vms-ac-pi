@@ -1,74 +1,40 @@
 [
     {
         "person": {
-            "personId": null
+            "personId": 1
         },
         "accessGroup": {
-            "accessGroupId": null
+            "accessGroupId": "1"
         },
         "direction": "OUT",
         "entrance": {
-            "entranceId": 2
+            "entranceId": 1
         },
         "eventActionType": {
-            "eventActionTypeId": 3
+            "eventActionTypeId": 1
         },
         "controller": {
             "controllerSerialNo": "100000005a46e105"
         },
-        "eventTime": "08-01-2022 14:38:13"
-    }
-]}
-]   "controllerSerialNo": null
-        },
-        "eventTime": "07-08-2022 11:40:56"
+        "eventTime": "08-19-2022 17:58:07"
     },
     {
+        "person": {
+            "personId": 1
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "OUT",
         "entrance": {
             "entranceId": 1
         },
         "eventActionType": {
-            "eventActionTypeId": 9
+            "eventActionTypeId": 1
         },
         "controller": {
-            "controllerSerialNo": null
+            "controllerSerialNo": "100000005a46e105"
         },
-        "eventTime": "07-08-2022 11:42:17"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": null
-        },
-        "eventTime": "07-08-2022 11:45:44"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": null
-        },
-        "eventTime": "07-08-2022 11:48:44"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": null
-        },
-        "eventTime": "07-08-2022 11:52:44"
+        "eventTime": "08-19-2022 17:58:16"
     }
 ]

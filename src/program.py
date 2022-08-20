@@ -163,6 +163,16 @@ def update_config():
 WARNING THIS FUNCTION DOES NOT WORK
 it adds an addtion detect_bits call, so multiple detect_bits are called after card scan'''
     global E1_IN, E1_OUT, E2_IN, E2_OUT
+    ''' check if decoders are enabled, cancel if true '''
+    if E1_IN:
+        E1_IN.cancel()
+    if E1_OUT:
+        E1_OUT.cancel()
+    if E2_IN:
+        E2_IN.cancel()
+    if E2_OUT:
+        E2_OUT.cancel()
+    
     E1_IN = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E1_IN_D0, GPIOconfig.E1_IN_D1, events.reader_detects_bits,"E1_IN") 
     E1_OUT = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E1_OUT_D0, GPIOconfig.E1_OUT_D1, events.reader_detects_bits,"E1_OUT")
 
@@ -171,6 +181,8 @@ it adds an addtion detect_bits call, so multiple detect_bits are called after ca
 
 
 update_config()
+#update_config()
+#update_config()
 
 t1 = threading.Thread(target=check_events_timer)
 t2=threading.Thread(target=mag_and_button)

@@ -53,7 +53,7 @@ def get_status():
         'E2_OUT': readers_config['E2_OUT'] == 'Connected'
     }
 
-    return flask.Response(json.dumps(body), headers={ 'Content-type': 'application/json' })
+    return flask.Response(json.dumps(body), headers={ 'Content-type': 'application/json' }, status=200)
 
 def update_config():
     '''helper method to update config'''
@@ -158,6 +158,7 @@ def get_check():
 def update_credOccur():
     '''helper method to update credOccur'''
     events.update_credOccur()
+    events.check_entrance_status()
 
 @app.route('/api/credOccur', methods=['POST'])
 def post_credOccur():
