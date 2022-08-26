@@ -252,5 +252,24 @@
             "controllerSerialNo": "100000005a46e105"
         },
         "eventTime": "08-26-2022 10:21:15"
+    },
+    {
+        "person": {
+            "personId": null
+        },
+        "accessGroup": {
+            "accessGroupId": null
+        },
+        "direction": "OUT",
+        "entrance": {
+            "entranceId": 2
+        },
+        "eventActionType": {
+            "eventActionTypeId": 3
+        },
+        "controller": {
+            "controllerSerialNo": "100000005a46e105"
+        },
+        "eventTime": "08-26-2022 11:58:54"
     }
 ]

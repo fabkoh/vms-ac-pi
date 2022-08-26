@@ -138,7 +138,8 @@ E1_auth_unlocked = False
 E1_non_auth_unlocked = False
 E2_auth_unlocked = False
 E2_non_auth_unlocked = False
-            
+          
+'''
 def check_entrance_status():
     print(E1_is_active,E2_is_active)
     
@@ -154,10 +155,15 @@ def check_entrance_status():
         
     # door locked, but should be unlocked ( unlock as non auth ) 
     # door auth unlocked and non auth unlocked, but should be unlocked ( ignore )
-    # door auth unlocked and non auth unlocked, but should be locked ( ??? ) 
-    # door auth unlocked and non auth locked, but should be unlocked ( unlock as non auth )
+    # door auth unlocked and non auth unlocked, but should be locked ( set non auth to false ) 
+    # door auth unlocked and non auth locked, but should be unlocked ( set non auth to false  )
     # door auth unlocked and non auth locked, but should be locked ( ignore )
 
+    # door auth locked and non auth unlocked, but should be unlocked ( ignore )
+    # door auth locked and non auth unlocked, but should be locked ( lock as non auth ) 
+    # door auth locked and non auth locked, but should be unlocked ( unlock as non auth )
+    # door auth locked and non auth locked, but should be locked ( ignore )
+    
     elif (not ( E1_auth_unlocked and E1_non_auth_unlocked)) and ( not E1_is_active or checkforSch ):
         relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
         
@@ -169,6 +175,7 @@ def check_entrance_status():
         relay.lock_unlock_entrance_two(E2_thirdPartyOption,False)
     else:  
         relay.lock_unlock_entrance_two(E2_thirdPartyOption,True)
+''
         
 def update_credOccur():
     '''Call this after events.update_config'''
