@@ -134,9 +134,33 @@ E2_is_active = True
 E2_entrance_schedule = ""
 E2_thirdPartyOption = "N.A."
 
+E1_auth_unlocked = False
+E1_non_auth_unlocked = False
+E2_auth_unlocked = False
+E2_non_auth_unlocked = False
             
 def check_entrance_status():
     print(E1_is_active,E2_is_active)
+    
+    # if door unlocked ( due to auth ) but supposed to be locked, ignore
+    # if door unlocked ( due to non auth ) but not supposed to, lock it
+    # if door locked but supposed to be unlocked, unlock it
+    
+    if E1_auth_unlocked and ( not E1_is_active or checkforSch ):
+        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
+    
+    elif E1_non_auth_unlocked and ( not E1_is_active or checkforSch ):
+        pass
+        
+    # door locked, but should be unlocked ( unlock as non auth ) 
+    # door auth unlocked and non auth unlocked, but should be unlocked ( ignore )
+    # door auth unlocked and non auth unlocked, but should be locked ( ??? ) 
+    # door auth unlocked and non auth locked, but should be unlocked ( unlock as non auth )
+    # door auth unlocked and non auth locked, but should be locked ( ignore )
+
+    elif (not ( E1_auth_unlocked and E1_non_auth_unlocked)) and ( not E1_is_active or checkforSch ):
+        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
+        
     if E1_is_active :
         relay.lock_unlock_entrance_one(E1_thirdPartyOption,False)
     else:  
