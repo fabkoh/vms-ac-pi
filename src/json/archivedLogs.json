@@ -9,7 +9,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:04:16"
+        "eventTime": "10-14-2022 12:34:39"
     },
     {
         "entrance": {
@@ -21,7 +21,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:04:17"
+        "eventTime": "10-14-2022 12:34:39"
     },
     {
         "entrance": {
@@ -33,7 +33,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:04:17"
+        "eventTime": "10-14-2022 12:34:41"
     },
     {
         "entrance": {
@@ -45,7 +45,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:04:17"
+        "eventTime": "10-14-2022 12:34:41"
     },
     {
         "entrance": {
@@ -57,7 +57,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:04:17"
+        "eventTime": "10-14-2022 12:36:32"
     },
     {
         "entrance": {
@@ -69,7 +69,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:04:17"
+        "eventTime": "10-14-2022 12:36:32"
     },
     {
         "entrance": {
@@ -81,7 +81,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:04:18"
+        "eventTime": "10-14-2022 12:36:34"
     },
     {
         "entrance": {
@@ -93,7 +93,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:04:18"
+        "eventTime": "10-14-2022 12:36:34"
     },
     {
         "entrance": {
@@ -105,7 +105,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:05:59"
+        "eventTime": "10-14-2022 12:36:42"
     },
     {
         "entrance": {
@@ -117,7 +117,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:05:59"
+        "eventTime": "10-14-2022 12:36:42"
     },
     {
         "entrance": {
@@ -129,7 +129,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:06:53"
+        "eventTime": "10-14-2022 12:37:39"
     },
     {
         "entrance": {
@@ -141,7 +141,26 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:06:53"
+        "eventTime": "10-14-2022 12:37:39"
+    },
+    {
+        "person": {
+            "personId": 1
+        },
+        "accessGroup": {
+            "accessGroupId": "1"
+        },
+        "direction": "IN",
+        "entrance": {
+            "entranceId": 1
+        },
+        "eventActionType": {
+            "eventActionTypeId": 1
+        },
+        "controller": {
+            "controllerSerialNo": "100000005f34ee9d"
+        },
+        "eventTime": "10-14-2022 12:37:45"
     },
     {
         "entrance": {
@@ -153,7 +172,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:07:33"
+        "eventTime": "10-14-2022 12:37:47"
     },
     {
         "entrance": {
@@ -165,7 +184,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:07:33"
+        "eventTime": "10-14-2022 12:37:47"
     },
     {
         "entrance": {
@@ -177,7 +196,7 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:07:35"
+        "eventTime": "10-14-2022 12:37:48"
     },
     {
         "entrance": {
@@ -189,102 +208,6 @@
         "controller": {
             "controllerSerialNo": "100000005f34ee9d"
         },
-        "eventTime": "10-14-2022 12:07:35"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": "100000005f34ee9d"
-        },
-        "eventTime": "10-14-2022 12:07:40"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": "100000005f34ee9d"
-        },
-        "eventTime": "10-14-2022 12:07:40"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": "100000005f34ee9d"
-        },
-        "eventTime": "10-14-2022 12:08:12"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": "100000005f34ee9d"
-        },
-        "eventTime": "10-14-2022 12:08:12"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": "100000005f34ee9d"
-        },
-        "eventTime": "10-14-2022 12:10:04"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": "100000005f34ee9d"
-        },
-        "eventTime": "10-14-2022 12:10:04"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": "100000005f34ee9d"
-        },
-        "eventTime": "10-14-2022 12:10:13"
-    },
-    {
-        "entrance": {
-            "entranceId": 1
-        },
-        "eventActionType": {
-            "eventActionTypeId": 9
-        },
-        "controller": {
-            "controllerSerialNo": "100000005f34ee9d"
-        },
-        "eventTime": "10-14-2022 12:10:13"
+        "eventTime": "10-14-2022 12:37:48"
     }
 ]
