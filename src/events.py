@@ -137,23 +137,16 @@ E2_thirdPartyOption = "N.A."
 E1_auth_unlocked = False
 E1_non_auth_unlocked = False
 E2_auth_unlocked = False
-E2_non_auth_unlocked = False
-          
-'''
+E2_non_auth_unlocked = False 
+
 def check_entrance_status():
-    print(E1_is_active,E2_is_active)
-    
-    # if door unlocked ( due to auth ) but supposed to be locked, ignore
-    # if door unlocked ( due to non auth ) but not supposed to, lock it
-    # if door locked but supposed to be unlocked, unlock it
-    
-    if E1_auth_unlocked and ( not E1_is_active or checkforSch ):
-        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
-    
-    elif E1_non_auth_unlocked and ( not E1_is_active or checkforSch ):
-        pass
         
     # door locked, but should be unlocked ( unlock as non auth ) 
+    if (not E1_auth_unlocked and not E1_non_auth_unlocked) and \
+        (not E1_is_active or verify_datetime(E1_entrance_schedule)):
+        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
+    elif :
+
     # door auth unlocked and non auth unlocked, but should be unlocked ( ignore )
     # door auth unlocked and non auth unlocked, but should be locked ( set non auth to false ) 
     # door auth unlocked and non auth locked, but should be unlocked ( set non auth to false  )
@@ -164,6 +157,7 @@ def check_entrance_status():
     # door auth locked and non auth locked, but should be unlocked ( unlock as non auth )
     # door auth locked and non auth locked, but should be locked ( ignore )
     
+
     elif (not ( E1_auth_unlocked and E1_non_auth_unlocked)) and ( not E1_is_active or checkforSch ):
         relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
         
@@ -175,11 +169,13 @@ def check_entrance_status():
         relay.lock_unlock_entrance_two(E2_thirdPartyOption,False)
     else:  
         relay.lock_unlock_entrance_two(E2_thirdPartyOption,True)
-''
+
         
 def update_credOccur():
     '''Call this after events.update_config'''
-    global credOccur, E1_is_active, E1_entrance_schedule, E2_is_active, E2_entrance_schedule, E1_thirdPartyOption, E2_thirdPartyOption
+    global credOccur, E1_is_active, E1_entrance_schedule, E2_is_active, \
+        E2_entrance_schedule, E1_thirdPartyOption, E2_thirdPartyOption
+
     f=open(path+'/json/credOccur.json')
     credOccur = json.load(f)
     f.close()
