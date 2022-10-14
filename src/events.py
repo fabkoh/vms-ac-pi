@@ -134,22 +134,8 @@ E1_thirdPartyOption = "N.A."
 E2_entrance_schedule = ""
 E2_thirdPartyOption = "N.A."
 
-E1_auth_unlocked = False
-E1_non_auth_unlocked = False
-E2_auth_unlocked = False
-<<<<<<< HEAD
-E2_non_auth_unlocked = False 
-
-def check_entrance_status():
-=======
-E2_non_auth_unlocked = False
-
-
 def verify_datetime(schedule):
-    #print(schedule)
-    #print(type(schedule))
-    #print(str(date.today()))
-    #print(datetime.now())
+
     try:
         for scheduledate,scheduletime in schedule.items():
             #print(scheduledate,scheduletime)
@@ -191,63 +177,10 @@ def check_entrance_status():
             relay.lock_unlock_entrance_two(E2_thirdPartyOption,False)
         
 
-'''
-    
-    # if door unlocked ( due to auth ) but supposed to be locked, ignore
-    # if door unlocked ( due to non auth ) but not supposed to, lock it
-    # if door locked but supposed to be unlocked, unlock it
-    
-    if E1_auth_unlocked and ( not E1_is_active or checkforSch ):
-        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
-    
-    elif E1_non_auth_unlocked and ( not E1_is_active or checkforSch ):
-        pass
->>>>>>> e02394f802179ae99dabde228f33a95686eaa1aa
-        
-    # door locked, but should be unlocked ( unlock as non auth ) 
-    if (not E1_auth_unlocked and not E1_non_auth_unlocked) and \
-        (not E1_is_active or verify_datetime(E1_entrance_schedule)):
-        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
-    elif :
-
-    # door auth unlocked and non auth unlocked, but should be unlocked ( ignore )
-    # door auth unlocked and non auth unlocked, but should be locked ( set non auth to false ) 
-    # door auth unlocked and non auth locked, but should be unlocked ( set non auth to false  )
-    # door auth unlocked and non auth locked, but should be locked ( ignore )
-
-    # door auth locked and non auth unlocked, but should be unlocked ( ignore )
-    # door auth locked and non auth unlocked, but should be locked ( lock as non auth ) 
-    # door auth locked and non auth locked, but should be unlocked ( unlock as non auth )
-    # door auth locked and non auth locked, but should be locked ( ignore )
-    
-
-    elif (not ( E1_auth_unlocked and E1_non_auth_unlocked)) and ( not E1_is_active or checkforSch ):
-        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
-        
-<<<<<<< HEAD
-    if E1_is_active :
-        relay.lock_unlock_entrance_one(E1_thirdPartyOption,False)
-    else:  
-        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
-    if E2_is_active :
-        relay.lock_unlock_entrance_two(E2_thirdPartyOption,False)
-    else:  
-        relay.lock_unlock_entrance_two(E2_thirdPartyOption,True)
-
-        
-def update_credOccur():
-    '''Call this after events.update_config'''
-    global credOccur, E1_is_active, E1_entrance_schedule, E2_is_active, \
-        E2_entrance_schedule, E1_thirdPartyOption, E2_thirdPartyOption
-
-=======
-    
-'''
         
 def update_credOccur():
     '''Call this after events.update_config'''
     global credOccur, E1_entrance_schedule, E2_entrance_schedule, E1_thirdPartyOption, E2_thirdPartyOption
->>>>>>> e02394f802179ae99dabde228f33a95686eaa1aa
     f=open(path+'/json/credOccur.json')
     credOccur = json.load(f)
     f.close()
@@ -266,8 +199,6 @@ def update_credOccur():
 update_config()
 update_credOccur()
 check_entrance_status()
-
-
 
 mag_E1_allowed_to_open = False
 mag_E2_allowed_to_open = False

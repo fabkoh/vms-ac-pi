@@ -167,11 +167,12 @@ def trigger_relay_one(thirdPartyOption = None):
         outputPin = GEN_OUT_3
         #print(thirdPartyOption,outputPin)
 
-    setGpioMode()
-    setupRelayPin(outputPin)
+    
     
     #print(" EM 1 unlocked at " + str(datetime.now()))
     try:
+        setGpioMode()
+        setupRelayPin(outputPin)
         print("opening")
         toggleRelay1(relayPin = outputPin, activateLevel = 'High', \
                 activateMilliSeconds = 5000, deActivateMilliSeconds = 1000, \
