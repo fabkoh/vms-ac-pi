@@ -124,13 +124,13 @@ def update_config():
     MAG_TIMEOUT_E2=int(TIMEOUT.get("MAG_TIMEOUT_E2",DEFAULT_MAG_TIMEOUT))
     BUZZER_TIMEOUT_E1=int(TIMEOUT.get("BUZZER_TIMEOUT_E1",DEFAULT_BUZZER_TIMEOUT))
     BUZZER_TIMEOUT_E2=int(TIMEOUT.get("BUZZRE_TIMEOUT_E2",DEFAULT_BUZZER_TIMEOUT))
-
+    
+    check_entrance_status()
+    
 credOccur = None
 
-E1_is_active = True
 E1_entrance_schedule = ""
 E1_thirdPartyOption = "N.A."
-E2_is_active = True
 E2_entrance_schedule = ""
 E2_thirdPartyOption = "N.A."
 
@@ -138,10 +138,55 @@ E1_auth_unlocked = False
 E1_non_auth_unlocked = False
 E2_auth_unlocked = False
 E2_non_auth_unlocked = False
-          
-'''
+
+
+def verify_datetime(schedule):
+    #print(schedule)
+    #print(type(schedule))
+    #print(str(date.today()))
+    #print(datetime.now())
+    try:
+        for scheduledate,scheduletime in schedule.items():
+            #print(scheduledate,scheduletime)
+            if scheduledate == str(date.today()):
+                #print("today in schedule")
+                for timing in scheduletime:
+                    now = datetime.now().time()
+                    start = datetime.strptime(timing["starttime"], "%H:%M").time()
+                    if timing["endtime"] != "24:00":
+                        end = datetime.strptime(timing["endtime"], "%H:%M").time()
+                            
+                        if now >= start and now < end:
+                            #print("now in schedule") # strictly within
+                            return True
+                    else:
+                        if now >= start:
+                            #print("now in schedule") # strictly within
+                            return True
+    except:
+        pass
+
+    return False 
+
+
 def check_entrance_status():
-    print(E1_is_active,E2_is_active)
+    
+        if verify_datetime(E1_entrance_schedule) :
+            #print("unlock E1")
+            relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
+        else:
+            #print("lock E1")
+            relay.lock_unlock_entrance_one(E1_thirdPartyOption,False)
+            
+        if verify_datetime(E2_entrance_schedule) :
+            #print("unlock E2")
+            relay.lock_unlock_entrance_two(E2_thirdPartyOption,True)
+        else:
+            #print("lock E2")
+            relay.lock_unlock_entrance_two(E2_thirdPartyOption,False)
+        
+
+'''
     
     # if door unlocked ( due to auth ) but supposed to be locked, ignore
     # if door unlocked ( due to non auth ) but not supposed to, lock it
@@ -167,30 +212,22 @@ def check_entrance_status():
     elif (not ( E1_auth_unlocked and E1_non_auth_unlocked)) and ( not E1_is_active or checkforSch ):
         relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
         
-    if E1_is_active :
-        relay.lock_unlock_entrance_one(E1_thirdPartyOption,False)
-    else:  
-        relay.lock_unlock_entrance_one(E1_thirdPartyOption,True)
-    if E2_is_active :
-        relay.lock_unlock_entrance_two(E2_thirdPartyOption,False)
-    else:  
-        relay.lock_unlock_entrance_two(E2_thirdPartyOption,True)
-''
+    
+'''
         
 def update_credOccur():
     '''Call this after events.update_config'''
-    global credOccur, E1_is_active, E1_entrance_schedule, E2_is_active, E2_entrance_schedule, E1_thirdPartyOption, E2_thirdPartyOption
+    global credOccur, E1_entrance_schedule, E2_entrance_schedule, E1_thirdPartyOption, E2_thirdPartyOption
     f=open(path+'/json/credOccur.json')
     credOccur = json.load(f)
     f.close()
     for entrance in credOccur:
         if entrance["Entrance"] == E1:
-            E1_is_active = entrance["isActive"]
             E1_entrance_schedule = entrance["EntranceSchedule"]
             E1_thirdPartyOption = entrance["ThirdPartyOptions"]
 
         if entrance["Entrance"] == E2:
-            E2_is_active = entrance["isActive"]
+
             E2_entrance_schedule = entrance["EntranceSchedule"]
             E2_thirdPartyOption = entrance["ThirdPartyOptions"]
     
@@ -198,6 +235,7 @@ def update_credOccur():
 # initialise
 update_config()
 update_credOccur()
+check_entrance_status()
 
 
 
@@ -272,7 +310,9 @@ def open_door_using_entrance_id(entrance_id):
        
        entrance_id (int): entrance id
     '''
+    #print("here",config.get("EntranceName",{}).get("E1",None) == entrance_id)
     if entrance_id and entrance_id == config.get("EntranceName",{}).get("E1",None):
+        #print("here")
         open_door("E1")
     elif entrance_id and entrance_id == config.get("EntranceName",{}).get("E2",None):
         open_door("E2")
@@ -482,12 +522,18 @@ def reader_detects_bits(bits, value,entrance):
                                 return
                             # person dont have access at this time
                             print("found person, but not allowed to enter at this timing")
-                            eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get("Name", ""), list(access_group.keys())[0])
+                            if "Pin" == auth_method_name :
+                                eventsMod.invalid_pin_used(entrancename, entrance_direction)
+                            else:
+                                eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get("Name", ""), list(access_group.keys())[0])
                             reset_cred_and_stop_timer()
                             return
                 # cannot find person
                 print("cannot find person")
-                eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
+                if "Pin" == auth_method_name :
+                    eventsMod.invalid_pin_used(entrancename, entrance_direction)
+                else:
+                    eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
                 reset_cred_and_stop_timer()
                 return
 
@@ -531,7 +577,7 @@ schedule = {
                 "2022-03-15": {"starttime":"18:00","endtime":"23:00"}
               }
 '''
-
+'''
 def verify_datetime(schedule):
     #print(schedule)
     #print(type(schedule))
@@ -544,15 +590,19 @@ def verify_datetime(schedule):
             for timing in scheduletime:
                 now = datetime.now().time()
                 start = datetime.strptime(timing["starttime"], "%H:%M").time()
-                end = datetime.strptime(timing["endtime"], "%H:%M").time()
-                    
-                if now >= start and now < end:
-                    print("now in schedule") # strictly within
-                    return True
-                    
+                if timing["endtime"] != "24:00":
+                    end = datetime.strptime(timing["endtime"], "%H:%M").time()
+                        
+                    if now >= start and now < end:
+                        print("now in schedule") # strictly within
+                        return True
+                else:
+                    if now >= start:
+                        print("now in schedule") # strictly within
+                        return True
 
     return False 
-
+'''
 
 #check if person has entered the zone
 # entrance = e.g. "E1R1"

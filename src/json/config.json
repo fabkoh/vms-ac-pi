@@ -16,18 +16,18 @@
     },
     "controllerConfig": {
         "controllerId": "",
-        "controllerMAC": "e4:5f:01:25:85:f3",
+        "controllerMAC": "dc:a6:32:64:54:59",
         "controllerIpStatic": "",
         "readersConnection": {
             "E2_IN": "",
             "E1_IN": "Connected",
             "E2_OUT": "Connected",
             "E1_OUT": "",
-            "dateAndTime": "26-08-2022 12:00:13"
+            "dateAndTime": "14-10-2022 12:11:01"
         },
-        "controllerSerialNo": "100000005a46e105",
+        "controllerSerialNo": "100000005f34ee9d",
         "controllerName": "",
-        "controllerIp": "192.168.1.127"
+        "controllerIp": "192.168.1.155"
     },
     "EntranceName": {
         "E1": 1,

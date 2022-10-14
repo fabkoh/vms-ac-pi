@@ -78,6 +78,22 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
     update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
 
+def invalid_pin_used(entrance,status):
+    dictionary = {
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":14}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+    }
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.UNAUTHENTICATED_SCAN,entrance)
+    )
+
+    update(path+"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
+
 def pin_only_used(entrance,status):
     dictionary = {
                     "direction": status,

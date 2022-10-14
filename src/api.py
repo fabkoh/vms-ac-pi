@@ -16,7 +16,7 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = False
 path = os.path.dirname(os.path.abspath(__file__))
 
-@app.route('/api/status')
+@app.route('/api/status', methods=['GET'])
 def get_status():
     '''returns healthcheck info
     
@@ -54,6 +54,11 @@ def get_status():
     }
 
     return flask.Response(json.dumps(body), headers={ 'Content-type': 'application/json' }, status=200)
+
+@app.route('/api/unlock/entrance/<entrance_id>', methods=['GET'])
+def unlock_entrance_unicon(entrance_id):
+    events.open_door_using_entrance_id(int(entrance_id))
+    return flask.Response({},status=200)
 
 def update_config():
     '''helper method to update config'''

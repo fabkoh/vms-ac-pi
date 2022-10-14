@@ -130,6 +130,8 @@ def check_events_timer():
         check_events_for("E1_OUT")
         check_events_for("E2_IN")
         check_events_for("E2_OUT")
+        events.check_entrance_status()
+        
         #check_entrance_E1()
         #check_entrance_E2()
         
