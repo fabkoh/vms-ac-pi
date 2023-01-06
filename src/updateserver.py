@@ -2,9 +2,10 @@ import json
 import requests
 import os
 path = os.path.dirname(os.path.abspath(__file__))
+from var import server_url
 
 def update_server_events():
-    url = 'http://192.168.1.250:8082/api/unicon/events'
+    url = server_url+'/api/unicon/events'
 
     file = open(path+"/json/pendingLogs.json") 
     data = json.load(file)

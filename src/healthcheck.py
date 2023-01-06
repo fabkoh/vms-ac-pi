@@ -13,6 +13,7 @@ import time
 import gc
 from changeStatic import *
 import GPIOconfig
+from var import server_url
 #change_static_ip, get_default_gateway_windows
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -108,7 +109,7 @@ def main(post_to_etlas=False):
     
 
     def post_to_etlas():
-        url = 'http://192.168.1.250:8082/api/unicon/controller'
+        url = server_url+'/api/unicon/controller'
         
         with open(file,"r+") as outfile:
             data = json.load(outfile)
