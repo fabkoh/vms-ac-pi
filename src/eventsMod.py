@@ -58,7 +58,7 @@ controller         CONTROLLERID
 '''
 
 #updates pendingLogs.json and send to backend 
-#updates archivedLogs.json for backup 
+#updates archivedLogs.json for local backup 
 def record_auth_scans(name, accessGroup,authtype,entrance,status):
     dictionary = {
                     "person":{"personId":name},
@@ -78,6 +78,7 @@ def record_auth_scans(name, accessGroup,authtype,entrance,status):
     update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
 
+#UNAUTHENTICATED_SCAN event for wrong pin
 def invalid_pin_used(entrance,status):
     dictionary = {
                     "direction": status,
