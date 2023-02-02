@@ -386,6 +386,7 @@ def reader_detects_bits(bits, value,entrance):
     # 2 check auth method (if cred entered not in curr cred schedule, reset)
     # 3 check person creds 
     if credential_added:
+        print("check credentials")
         print(credentials)
         try:
             device_details = {}
