@@ -405,13 +405,14 @@ def reader_detects_bits(bits, value, entrance):
         try:
             device_details = {}
             entrance_details = {}
-            # for entrance_list in credOccur:
-            #     if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
-            #         entrance_details = entrance_list.get("EntranceDetails", {})
-            #         device_details = entrance_details.get("AuthenticationDevices", {}).get(entrance_direction, {})
-            # if entrance_details == {}: # entrance not found, quit
-            #     eventsMod.record_unauth_scans(None, None, entrance_direction)
-            #     return
+            for entrance_list in credOccur:
+                if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
+                    entrance_details = entrance_list.get("EntranceDetails", {})
+                    device_details = entrance_details.get(
+                        "AuthenticationDevices", {}).get(entrance_direction, {})
+            if entrance_details == {}:  # entrance not found, quit
+                eventsMod.record_unauth_scans(None, None, entrance_direction)
+                return
 
             # check master password
             if pin_type in credentials and \
