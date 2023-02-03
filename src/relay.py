@@ -131,7 +131,7 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         if E2_perm_opened:
             pass
         else:
-            print("togglerelay1 DEactivate")
+            print("togglerelay2 DEactivate")
             E2_opened = False
             deActivateRelay(relayPin, activateLevel)
             sleep(deActivateMilliSeconds / 1000)
@@ -142,11 +142,10 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     for i in range(toggleCount):
         activateRelay(relayPin, activateLevel)
+        print(f"activate {relayPin}")
         sleep(activateMilliSeconds)
-    # if left_opened:
-    #     return
-    # else:
         deActivateRelay(relayPin, activateLevel)
+        print(f"deactivate {relayPin}")
         sleep(deActivateMilliSeconds)
     return
 # *** Tests ***
