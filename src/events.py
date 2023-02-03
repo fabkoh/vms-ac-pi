@@ -1,6 +1,6 @@
 
 from datetime import datetime, date
-from GPIOconfig import Gen_Out_1
+# from GPIOconfig import Gen_Out_1
 
 import relay
 import eventsMod
@@ -85,6 +85,7 @@ TIMEOUT = None
 E1 = None
 E2 = None
 
+Gen_Out_1 = None
 E1_Mag = None
 E1_Button = None
 
@@ -105,7 +106,7 @@ BUZZER_TIMEOUT_E2 = None
 
 def update_config():
     '''Call this before events.update_credOccur'''
-    global config, GPIOpins, E1, E2, E1_Mag, E1_Button, E2_Mag, E2_Button, TIMEOUT, \
+    global config, GPIOpins, E1, E2, E1_Mag, Gen_Out_1, E1_Button, E2_Mag, E2_Button, TIMEOUT, \
         CRED_TIMEOUT_E1, CRED_TIMEOUT_E2, MAG_TIMEOUT_E1, MAG_TIMEOUT_E2, BUZZER_TIMEOUT_E1, BUZZER_TIMEOUT_E2
     f = open(path+'/json/config.json')
     config = json.load(f)
@@ -117,6 +118,7 @@ def update_config():
     GPIOpins = config["GPIOpins"]
     TIMEOUT = config["TIMEOUT"]
 
+    Gen_Out_1 = int(GPIOpins["Gen_Out_1"])
     E1_Mag = int(GPIOpins["E1_Mag"])
     E1_Button = int(GPIOpins["E1_Button"])
 
