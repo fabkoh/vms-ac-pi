@@ -140,7 +140,7 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 
 
 def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
-    print(f"toggleRelayGen activated for {relayPin}")
+    # print(f"toggleRelayGen activated for {relayPin}")
     # for i in range(toggleCount):
     activateRelay(relayPin, activateLevel)
     print(f"activate {relayPin}")
@@ -340,7 +340,7 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
 
 @multitasking.task
 def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000):
-    print("open_GEN_OUT activated")
+    # print("open_GEN_OUT activated")
     # doesnt get run on second scan
 
     outputPin = None
