@@ -139,16 +139,6 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
     return
 
 
-# def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
-#     for i in range(toggleCount):
-#         activateRelay(relayPin, activateLevel)
-#         print(f"activate {relayPin}")
-#         sleep(activateMilliSeconds)
-#         deActivateRelay(relayPin, activateLevel)
-#         print(f"deactivate {relayPin}")
-#         # sleep(1000)
-#     return
-
 def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     for i in range(toggleCount):
         activateRelay(relayPin, activateLevel)
@@ -156,13 +146,8 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, deActivateMill
         sleep(activateMilliSeconds)
         deActivateRelay(relayPin, activateLevel)
         print(f"deactivate {relayPin}")
-
-
-def startToggleRelayThread(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
-    toggleThread = threading.Thread(target=toggleRelayGen, args=(
-        relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount))
-    toggleThread.start()
-
+        sleep(deActivateMilliSeconds)
+    return
 # *** Tests ***
 
 # *** Toggle Relay ***
@@ -374,9 +359,9 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=4000):
 
     # print(f" {GEN_OUT_PIN}  unlocked")
     try:
-        startToggleRelayThread(relayPin=outputPin, activateLevel='High',
-                               activateMilliSeconds=timer, deActivateMilliSeconds=1000,
-                               toggleCount=1)
+        toggleRelayGen(relayPin=outputPin, activateLevel='High',
+                       activateMilliSeconds=timer, deActivateMilliSeconds=1000,
+                       toggleCount=1)
         cleanupGpio()
     except RuntimeError:
         print(f" {GEN_OUT_PIN} still opened")
