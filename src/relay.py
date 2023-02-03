@@ -102,8 +102,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
             activateRelay(relayPin, activateLevel)
 
             E1_opened = True
-            sleep(3000)
-            # sleep(activateMilliSeconds)
+            sleep(activateMilliSeconds / 1000)
             # print(E1_perm_opened)
         if E1_perm_opened:
             pass
@@ -111,8 +110,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
             print("togglerelay1 DEactivate")
             E1_opened = False
             deActivateRelay(relayPin, activateLevel)
-            # sleep(1000)
-            # sleep(deActivateMilliSeconds)
+            sleep(deActivateMilliSeconds / 1000)
 
     return
 
@@ -141,15 +139,15 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
     return
 
 
-def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     for i in range(toggleCount):
         activateRelay(relayPin, activateLevel)
-        sleep(activateMilliSeconds / 1000)
+        sleep(activateMilliSeconds)
     # if left_opened:
     #     return
     # else:
         deActivateRelay(relayPin, activateLevel)
-        sleep(deActivateMilliSeconds / 1000)
+        sleep(deActivateMilliSeconds)
     return
 # *** Tests ***
 
@@ -362,9 +360,9 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=4000):
 
     # print(f" {GEN_OUT_PIN}  unlocked")
     try:
-        toggleRelay(relayPin=outputPin, activateLevel='High',
-                    activateMilliSeconds=timer, deActivateMilliSeconds=4000,
-                    toggleCount=1)
+        toggleRelayGen(relayPin=outputPin, activateLevel='High',
+                       activateMilliSeconds=timer, deActivateMilliSeconds=4000,
+                       toggleCount=1)
         cleanupGpio()
     except RuntimeError:
         print(f" {GEN_OUT_PIN} still opened")
