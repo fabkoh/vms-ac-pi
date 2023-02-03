@@ -340,6 +340,7 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
 
 @multitasking.task
 def open_GEN_OUT(GEN_OUT_PIN=None, timer=4000):
+    print("open_GEN_OUT activated")
 
     outputPin = None
 
