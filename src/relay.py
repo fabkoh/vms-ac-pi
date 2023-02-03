@@ -143,7 +143,7 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, deActivateMill
     # print(f"toggleRelayGen activated for {relayPin}")
     # for i in range(toggleCount):
     activateRelay(relayPin, activateLevel)
-    print(f"activate {relayPin}")
+    print(f"activate {relayPin} for {activateMilliSeconds}")
     sleep(activateMilliSeconds)
     deActivateRelay(relayPin, activateLevel)
     print(f"deactivate {relayPin}")
