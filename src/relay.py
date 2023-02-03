@@ -365,8 +365,8 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000):
         toggleRelayGen(relayPin=outputPin, activateLevel='High',
                        activateMilliSeconds=timer, deActivateMilliSeconds=1000,
                        toggleCount=1)
-        cleanupGpio()
         print(f"finish open_GEN_OUT {outputPin}")
+        cleanupGpio()
     except RuntimeError:
         print(f" {GEN_OUT_PIN} still opened")
     return
