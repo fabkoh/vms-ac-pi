@@ -139,13 +139,13 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
     return
 
 
-def toggleRelay(left_opened, relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+def toggleRelay(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     for i in range(toggleCount):
         activateRelay(relayPin, activateLevel)
         sleep(activateMilliSeconds / 1000)
-    if left_opened:
-        return
-    else:
+    # if left_opened:
+    #     return
+    # else:
         deActivateRelay(relayPin, activateLevel)
         sleep(deActivateMilliSeconds / 1000)
     return
