@@ -132,6 +132,7 @@ def flush_output():
                 continue  # ignore, malformed json
 
         for output in event.get("outputActions", []):
+            print(output)
             id = output.get("eventActionOutputType", {}).get(
                 "eventActionOutputId", None)
             if id == DOOR_OPEN:
