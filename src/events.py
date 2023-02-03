@@ -1,5 +1,6 @@
 
 from datetime import datetime, date
+from GPIOconfig import Gen_Out_1
 
 import relay
 import eventsMod
@@ -680,6 +681,11 @@ def verify_antipassback(entrancename):
                 return True
 
     return False
+
+
+def gen_check(gpio):
+    if gpio == Gen_Out_1:
+        print("Gen out 1 ")
 
 
 def mag_detects_rising(gpio, level, tick):
