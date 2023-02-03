@@ -293,6 +293,7 @@ def open_door_using_entrance_id(entrance_id):
 
 
 def open_GEN_OUT(GEN_OUT_PIN, timer):
+    print(f"open_GEN_OUT {GEN_OUT_PIN}")
     relay.open_GEN_OUT(GEN_OUT_PIN, timer)
 # keep track of wiegand values and pins
 # check if person allowed to enter
