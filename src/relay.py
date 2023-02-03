@@ -339,8 +339,9 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
 
 
 @multitasking.task
-def open_GEN_OUT(GEN_OUT_PIN=None, timer=4000):
+def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000):
     print("open_GEN_OUT activated")
+    # doesnt get run on second scan
 
     outputPin = None
 
@@ -365,6 +366,7 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=4000):
                        activateMilliSeconds=timer, deActivateMilliSeconds=1000,
                        toggleCount=1)
         cleanupGpio()
+        print(f"finish open_GEN_OUT {outputPin}")
     except RuntimeError:
         print(f" {GEN_OUT_PIN} still opened")
     return
