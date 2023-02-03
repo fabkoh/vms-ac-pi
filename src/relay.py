@@ -147,7 +147,7 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, deActivateMill
     #     return
     # else:
         deActivateRelay(relayPin, activateLevel)
-        sleep(deActivateMilliSeconds)
+        # sleep(deActivateMilliSeconds)
     return
 # *** Tests ***
 
