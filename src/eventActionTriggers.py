@@ -146,15 +146,17 @@ def flush_output():
                     entrance, output.get("timerDuration", 0))
             elif id == GEN_OUT_1:
                 timer1 = output.get("timerDuration", 0)
-                print(f"Gen Out 1, timer {timer1}")
+                print(f"Gen Out 1, timer {timer1} seconds")
                 events.open_GEN_OUT(
                     "GEN_OUT_1", output.get("timerDuration", 0))
             elif id == GEN_OUT_2:
-                print("Gen Out 2")
+                timer2 = output.get("timerDuration", 0)
+                print(f"Gen Out 2, timer {timer2} seconds")
                 events.open_GEN_OUT(
                     "GEN_OUT_2", output.get("timerDuration", 0))
             elif id == GEN_OUT_3:
-                print("Gen Out 3")
+                timer3 = output.get("timerDuration", 0)
+                print(f"Gen Out 3, timer {timer3} seconds")
                 events.open_GEN_OUT(
                     "GEN_OUT_3", output.get("timerDuration", 0))
 
