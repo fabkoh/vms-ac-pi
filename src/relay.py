@@ -102,7 +102,8 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
             activateRelay(relayPin, activateLevel)
 
             E1_opened = True
-            sleep(activateMilliSeconds)
+            sleep(3000)
+            # sleep(activateMilliSeconds)
             # print(E1_perm_opened)
         if E1_perm_opened:
             pass
@@ -110,7 +111,8 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
             print("togglerelay1 DEactivate")
             E1_opened = False
             deActivateRelay(relayPin, activateLevel)
-            sleep(deActivateMilliSeconds)
+            # sleep(1000)
+            # sleep(deActivateMilliSeconds)
 
     return
 
