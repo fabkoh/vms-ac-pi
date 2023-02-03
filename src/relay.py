@@ -139,7 +139,7 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
     return
 
 
-def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds):
     # print(f"toggleRelayGen activated for {relayPin}")
     # for i in range(toggleCount):
     activateRelay(relayPin, activateLevel)
@@ -363,8 +363,8 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000):
     # print(f" {GEN_OUT_PIN}  unlocked")
     try:
         toggleRelayGen(relayPin=outputPin, activateLevel='High',
-                       activateMilliSeconds=timer, deActivateMilliSeconds=1000,
-                       toggleCount=1)
+                       activateMilliSeconds=timer,
+                       )
         print(f"finish open_GEN_OUT {outputPin}")
         cleanupGpio()
     except RuntimeError:
