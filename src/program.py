@@ -171,6 +171,7 @@ def check_gen_pins_and_alarm():
         cb2 = GPIOconfig.pi.callback(GPIOconfig.Gen_In_2, pigpio.RISING_EDGE, helper(
             GPIOconfig.Gen_In_2, eventActionTriggerConstants.GEN_IN_2))
     if GPIOconfig.Gen_In_3 != None:
+        print("gen in 3")
         cb3 = GPIOconfig.pi.callback(GPIOconfig.Gen_In_3, pigpio.RISING_EDGE, helper(
             GPIOconfig.Gen_In_3, eventActionTriggerConstants.GEN_IN_3))
     cb4 = GPIOconfig.pi.callback(GPIOconfig.Fire, pigpio.RISING_EDGE, helper(
