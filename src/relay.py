@@ -150,11 +150,19 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
     activateRelay(relayPin, activateLevel)
     if (GenNo == 1):
         GEN_1_OPEN = True
+    elif (GenNo == 2):
+        GEN_2_OPEN = True
+    elif (GenNo == 3):
+        GEN_3_OPEN = True
     print(f"activate {relayPin} for {activateMilliSeconds}")
     sleep(activateMilliSeconds)
     deActivateRelay(relayPin, activateLevel)
     if (GenNo == 1):
         GEN_1_OPEN = False
+    elif (GenNo == 2):
+        GEN_2_OPEN = False
+    elif (GenNo == 3):
+        GEN_3_OPEN = False
     while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN):
         sleep(1)
     print(f"deactivate {relayPin}")
@@ -374,7 +382,7 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000):
     # print(f" {GEN_OUT_PIN}  unlocked")
     try:
         toggleRelayGen(relayPin=outputPin, activateLevel='High',
-                       activateMilliSeconds=timer, GenNo=1
+                       activateMilliSeconds=timer, GenNo=2
                        )
         print(f"finish open_GEN_OUT {outputPin}")
         cleanupGpio()
