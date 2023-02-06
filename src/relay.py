@@ -25,6 +25,8 @@ E2_perm_opened = False
 E1_previous = None
 E2_previous = None
 
+GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN = False, False, False
+
 
 def update_config():
     global config, GPIOpins, Relay_1, Relay_2, GEN_OUT_1, GEN_OUT_2, GEN_OUT_3
@@ -138,15 +140,11 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 
     return
 
-
-GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN = False, False, False
+# Events Management: Output actions timer for GENOUT_1/2/3
 
 
 def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
     global GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN
-
-    # print(f"toggleRelayGen activated for {relayPin}")
-    # for i in range(toggleCount):
     activateRelay(relayPin, activateLevel)
     if (GenNo == 1):
         GEN_1_OPEN = True
@@ -154,8 +152,7 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
         GEN_2_OPEN = True
     elif (GenNo == 3):
         GEN_3_OPEN = True
-    print(f"gen1 {GEN_1_OPEN}, gen2 {GEN_2_OPEN}, gen3 {GEN_3_OPEN},")
-    print(f"activate {relayPin} for {activateMilliSeconds}")
+    print(f"activate gen {GenNo} for {activateMilliSeconds} seconds")
     sleep(activateMilliSeconds)
     deActivateRelay(relayPin, activateLevel)
     if (GenNo == 1):
@@ -166,9 +163,7 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
         GEN_3_OPEN = False
     while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN):
         sleep(1)
-
-    print(f"deactivate {relayPin}")
-    # sleep(10)
+    print(f"deactivate gen {GenNo}")
     return
 # *** Tests ***
 
