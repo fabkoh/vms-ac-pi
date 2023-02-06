@@ -384,7 +384,7 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
     # print(f" {GEN_OUT_PIN}  unlocked")
     try:
         toggleRelayGen(relayPin=outputPin, activateLevel='High',
-                       activateMilliSeconds=timer, GenNo
+                       activateMilliSeconds=timer, GenNo=GenNo
                        )
         print(f"finish open_GEN_OUT {outputPin}")
         cleanupGpio()
