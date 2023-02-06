@@ -166,6 +166,7 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
         GEN_3_OPEN = False
     while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN):
         sleep(1)
+
     print(f"deactivate {relayPin}")
     # sleep(10)
     return
