@@ -164,9 +164,7 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
         GEN_2_OPEN = False
     elif (GenNo == 3):
         GEN_3_OPEN = False
-
-
-while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN):
+    while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN):
         sleep(1)
 
     print(f"deactivate {relayPin}")
@@ -362,7 +360,7 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
 
 
 @multitasking.task
-def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000):
+def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo):
     # print("open_GEN_OUT activated")
     # doesnt get run on second scan
 
@@ -386,7 +384,7 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000):
     # print(f" {GEN_OUT_PIN}  unlocked")
     try:
         toggleRelayGen(relayPin=outputPin, activateLevel='High',
-                       activateMilliSeconds=timer, GenNo=2
+                       activateMilliSeconds=timer, GenNo
                        )
         print(f"finish open_GEN_OUT {outputPin}")
         cleanupGpio()
