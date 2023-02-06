@@ -360,7 +360,7 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
 
 
 @multitasking.task
-def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo):
+def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
     # print("open_GEN_OUT activated")
     # doesnt get run on second scan
 
