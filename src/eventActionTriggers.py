@@ -124,7 +124,7 @@ def flush_output():
     import events
     import GPIOconfig
     for event in output_events:
-        print(event)
+        # print(event)
         entrance = event.get("entrance", {}).get("entranceId", None)
         if entrance == None:
             if event.get("controller", None) != None:
@@ -135,6 +135,7 @@ def flush_output():
         for output in event.get("outputActions", []):
             id = output.get("eventActionOutputType", {}).get(
                 "eventActionOutputId", None)
+            print(id)
             if id == DOOR_OPEN:
                 events.open_door_using_entrance_id(entrance)
             elif id == BUZZER:
