@@ -137,18 +137,19 @@ def main(post_to_etlas=False):
         }
         r = requests.post(url, data=json.dumps(
             body), headers=headers, verify=False)
+
+        print(r)
+        print(r.status_code)
+
+        if r.status_code == 201 or r.status_code == 200:
+            print("SUCCESS")
+
         try:
             r2 = requests.post(url, data=json.dumps(
                 body), headers=headers, verify=False)
             r2.raise_for_status()  # raise an HTTPError if status code is not 200
         except requests.exceptions.RequestException as e:
             print("Error:", e)
-
-    print(r)
-    print(r.status_code)
-
-    if r.status_code == 201 or r.status_code == 200:
-        print("SUCCESS")
 
     def test_for_connection(D0, D1, reader):
         if pi.read(D0) == 1 and pi.read(D1) == 1:
