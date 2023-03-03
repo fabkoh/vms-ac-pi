@@ -124,6 +124,7 @@ def flush_output():
     import events
     import GPIOconfig
     for event in output_events:
+        print(event)
         entrance = event.get("entrance", {}).get("entranceId", None)
         if entrance == None:
             if event.get("controller", None) != None:
