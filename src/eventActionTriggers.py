@@ -135,7 +135,7 @@ def flush_output():
         for output in event.get("outputActions", []):
             id = output.get("eventActionOutputType", {}).get(
                 "eventActionOutputId", None)
-            print(id)
+            print(f"id is {id}")
             if id == DOOR_OPEN:
                 events.open_door_using_entrance_id(entrance)
             elif id == BUZZER:
