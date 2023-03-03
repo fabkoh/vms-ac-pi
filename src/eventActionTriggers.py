@@ -145,6 +145,14 @@ def flush_output():
                 print("led")
                 GPIOconfig.activate_led(
                     entrance, output.get("timerDuration", 0))
+            elif id == "NOTIFICATION (EMAIL)":
+                sendEmail_function()
+                print("email activate")
+
+            elif id == "NOTIFICATION (SMS)":
+                sendSMS_function()
+                print("sms activate")
+
             elif id == GEN_OUT_1:
                 timer1 = output.get("timerDuration", 0)
                 print(f"Gen Out 1, timer {timer1} seconds")
