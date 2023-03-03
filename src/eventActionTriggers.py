@@ -133,9 +133,10 @@ def flush_output():
                 continue  # ignore, malformed json
 
         for output in event.get("outputActions", []):
+            print(output)
             id = output.get("eventActionOutputType", {}).get(
                 "eventActionOutputId", None)
-            print(f"id is {id}")
+            # print(f"id is {id}")
             if id == DOOR_OPEN:
                 events.open_door_using_entrance_id(entrance)
             elif id == BUZZER:
@@ -146,7 +147,6 @@ def flush_output():
                 print("led")
                 GPIOconfig.activate_led(
                     entrance, output.get("timerDuration", 0))
-
             elif id == GEN_OUT_1:
                 timer1 = output.get("timerDuration", 0)
                 print(f"Gen Out 1, timer {timer1} seconds")
