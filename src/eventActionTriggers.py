@@ -1,10 +1,13 @@
 import datetime
 import json
+import requests
 import threading
 import time
 import os
 from eventActionTriggerConstants import *
 import relay
+from var import server_url
+
 
 path = os.path.dirname(os.path.abspath(__file__))
 EVENT_ACTION_TRIGGERS_DATA = []
@@ -36,11 +39,33 @@ def GEN_OUT_1_function():
     print("GEN_OUT_2")
 
 
-def sendEmail_function(entrance):
+def sendEmail_function(event):
+    entrance = event.get("entrance", {}).get("entranceId", None)
     print(f"sendEmail to entrance {entrance}")
+    url = server_url+'/api/notification/eventsSMTP'
+
+    # file = open(path+"/json/pendingLogs.json")
+    data = event
+    # print("11-here")
+
+    try:
+        headers = {'Content-type': 'application/json'}
+        r = requests.post(url, data=json.dumps(
+            data), headers=headers, verify=False, timeout=0.5)
+        print(r)
+        print(r.status_code)
+
+        if r.status_code == 201 or r.status_code == 200:
+            print("SUCCESS")
+            fileclear = open(path+'/json/pendingLogs.json', 'w')
+            json.dump([], fileclear, indent=4)
+            fileclear.close()
+    except:
+        print("No connection to ", url)
 
 
-def sendSMS_function(entrance):
+def sendSMS_function(event):
+    entrance = event.get("entrance", {}).get("entranceId", None)
     print(f"sendSMS to entrance {entrance}")
 
 # controllerId in string
@@ -164,10 +189,10 @@ def flush_output():
                 events.open_GEN_OUT(
                     "GEN_OUT_3", output.get("timerDuration", 0), 3)
             elif id == SMSNOTIFICATION:
-                sendSMS_function(entrance)
+                sendSMS_function(event)
                 print("sms activate")
             elif id == EMAILNOTIFICATION:
-                sendEmail_function(entrance)
+                sendEmail_function(event)
                 print("email activate")
 
     output_events.clear()
