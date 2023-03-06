@@ -48,6 +48,7 @@ def sendEmail_function(event):
     data = json.dumps(
         event)
     print(data)
+    print(f"url is {url}")
 
     try:
         headers = {'Content-type': 'application/json'}
@@ -61,6 +62,8 @@ def sendEmail_function(event):
             fileclear = open(path+'/json/pendingLogs.json', 'w')
             json.dump([], fileclear, indent=4)
             fileclear.close()
+        else:
+            print("Fail to send")
     except:
         print("No connection to ", url)
 
