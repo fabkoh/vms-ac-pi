@@ -43,7 +43,11 @@ def sendEmail_function(event):
     entrance = event.get("entrance", {}).get("entranceId", None)
     print(f"sendEmail to entrance {entrance}")
     url = server_url+'/api/notification/eventsSMTP'
-    print(event["inputEvents"])
+    event["inputEvents"] = event["inputEvents"]["inputEventId"]
+    event["outputActions"] = event["outputActions"]["outputEventId"]
+    event["triggerSchedule"] = event["triggerSchedule"][0]
+    event["entrance"] = event["entrance"]["entranceId"]
+    # print(event)
     data = json.dumps(
         event)
     print(data)
