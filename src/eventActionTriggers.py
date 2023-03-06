@@ -126,6 +126,7 @@ def flush_output():
     for event in output_events:
         print(event)
         entrance = event.get("entrance", {}).get("entranceId", None)
+        print(entrance)
         if entrance == None:
             if event.get("controller", None) != None:
                 entrance = BOTH_ENTRANCE
