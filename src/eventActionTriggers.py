@@ -124,7 +124,7 @@ def flush_output():
     import events
     import GPIOconfig
     for event in output_events:
-        # print(event)
+        print(event)
         entrance = event.get("entrance", {}).get("entranceId", None)
         if entrance == None:
             if event.get("controller", None) != None:
@@ -133,7 +133,7 @@ def flush_output():
                 continue  # ignore, malformed json
 
         for output in event.get("outputActions", []):
-            print(output)
+            # print(output)
             id = output.get("eventActionOutputType", {}).get(
                 "eventActionOutputId", None)
             # print(f"id is {id}")
