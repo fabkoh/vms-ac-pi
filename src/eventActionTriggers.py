@@ -48,8 +48,8 @@ def sendEmail_function(event):
     newevent.update(event)
 
     # Modify the necessary keys in the newevent object
-    newevent["inputEvents"] = [event["inputEvents"][0]["inputEventId"]]
-    newevent["outputActions"] = [event["outputActions"][0]["outputEventId"]]
+    newevent["inputEventsId"] = [event["inputEvents"][0]["inputEventId"]]
+    newevent["outputActionsId"] = [event["outputActions"][0]["outputEventId"]]
     newevent["entrance"] = event.get("entrance", {}).get("entranceId", None)
 
     # event["inputEvents"] = event["inputEvents"][0]
