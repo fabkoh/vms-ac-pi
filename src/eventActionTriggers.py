@@ -46,7 +46,7 @@ def sendEmail_function(event):
     newevent = event
     newevent["inputEvents"] = event["inputEvents"][0]["inputEventId"]
     newevent["outputActions"] = event["outputActions"][0]["outputEventId"]
-    newevent["triggerSchedule"] = newevent["outputActions"]
+    # newevent["triggerSchedule"] = newevent["outputActions"]
     newevent["entrance"] = event["entrance"][0]["entranceId"]
 
     # event["inputEvents"] = event["inputEvents"][0]
