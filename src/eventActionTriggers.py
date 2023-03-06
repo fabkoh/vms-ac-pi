@@ -43,11 +43,13 @@ def sendEmail_function(event):
     entrance = event.get("entrance", {}).get("entranceId", None)
     print(f"sendEmail to entrance {entrance}")
     url = server_url+'/api/notification/eventsSMTP'
+     # Create a new event object and copy all the key-value pairs from the original event object
     newevent = {}
     newevent.update(event)
+
+    # Modify the necessary keys in the newevent object
     newevent["inputEvents"] = event["inputEvents"][0]["inputEventId"]
     newevent["outputActions"] = event["outputActions"][0]["outputEventId"]
-    # # newevent["triggerSchedule"] = newevent["outputActions"]
     newevent["entrance"] = event["entrance"][0]["entranceId"]
 
     # event["inputEvents"] = event["inputEvents"][0]
