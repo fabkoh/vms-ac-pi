@@ -50,7 +50,7 @@ def sendEmail_function(event):
     # Modify the necessary keys in the newevent object
     newevent["inputEventsId"] = [event["inputEvents"][0]["inputEventId"]]
     newevent["outputActionsId"] = [event["outputActions"][0]["outputEventId"]]
-    newevent["entranceid"] = event.get("entrance", {}).get("entranceId", None)
+    newevent["entrance"] = event.get("entrance", {}).get("entranceId", None)
 
     # event["inputEvents"] = event["inputEvents"][0]
     # event["outputActions"] = event["outputActions"][0]
