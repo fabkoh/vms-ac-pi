@@ -56,10 +56,10 @@ def sendEmail_function(event):
     # event["outputActions"] = event["outputActions"][0]
     # event["triggerSchedule"] = event["triggerSchedule"][0]
     # event["entrance"] = event["entrance"][0]
-    print(newevent)
+    # print(newevent)
     data = json.dumps(
         newevent)
-    # print(data)
+    print(data)
     print(f"url is {url}")
 
     try:
