@@ -44,6 +44,9 @@ def sendEmail_function(event):
     print(f"sendEmail to entrance {entrance}")
     url = server_url+'/api/notification/eventsSMTP'
     event["inputEvents"] = event["inputEvents"][0]["inputEventId"]
+    event["outputActions"] = event["outputActions"][0]["outputActions"]
+    event["triggerSchedule"] = event["triggerSchedule"][0]["triggerSchedule"]
+    event["entrance"] = event["entrance"][0]["entrance"]
 
     # event["inputEvents"] = event["inputEvents"][0]
     # event["outputActions"] = event["outputActions"][0]
