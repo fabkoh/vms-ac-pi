@@ -37,11 +37,11 @@ def GEN_OUT_1_function():
 
 
 def sendEmail_function(entrance):
-    print(f"sendEmail to entrance ${entrance}")
+    print(f"sendEmail to entrance {entrance}")
 
 
 def sendSMS_function(entrance):
-    print(f"sendSMS to entrance ${entrance}")
+    print(f"sendSMS to entrance {entrance}")
 
 # controllerId in string
 # eventaction in list
@@ -124,9 +124,9 @@ def flush_output():
     import events
     import GPIOconfig
     for event in output_events:
-        # print(event)
+        print(event)
         entrance = event.get("entrance", {}).get("entranceId", None)
-        print(entrance)
+        # print(entrance)
         if entrance == None:
             if event.get("controller", None) != None:
                 entrance = BOTH_ENTRANCE
