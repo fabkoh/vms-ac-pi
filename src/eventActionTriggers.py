@@ -43,8 +43,7 @@ def sendEmail_function(event):
     entrance = event.get("entrance", {}).get("entranceId", None)
     print(f"sendEmail to entrance {entrance}")
     url = server_url+'/api/notification/eventsSMTP'
-
-    # file = open(path+"/json/pendingLogs.json")
+    print(event["inputEvents"])
     data = json.dumps(
         event)
     print(data)
