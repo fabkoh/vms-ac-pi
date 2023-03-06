@@ -45,13 +45,14 @@ def sendEmail_function(event):
     url = server_url+'/api/notification/eventsSMTP'
 
     # file = open(path+"/json/pendingLogs.json")
-    data = event
-    # print("11-here")
+    data = json.dumps(
+        event)
+    print(data)
 
     try:
         headers = {'Content-type': 'application/json'}
-        r = requests.post(url, data=json.dumps(
-            data), headers=headers, verify=False, timeout=0.5)
+        r = requests.post(url, data=data, headers=headers,
+                          verify=False, timeout=0.5)
         print(r)
         print(r.status_code)
 
@@ -227,7 +228,7 @@ def get_entrance_from_event_management(event_management):
 def event_trigger_cb(event_trigger):
     print(event_trigger)
     ''' function hook to call everytime an event trigger occurs
-    
+
     Args:
         event_trigger (check eventActionTriggerConstants.py): event_trigger which occurred
     '''
@@ -358,34 +359,34 @@ t1.start()
 # multiple unauth scans within a period of time ( use a script to monitor event logs )
 
 
-''' 
+'''
 POSSIBLE EVENTTRIGGER
 
 ( WITHOUT TIMER ) SINGLE
 ----------------------------------------------
-Authenticated credential scan 
+Authenticated credential scan
 
-Un-authenticated credential scan 
+Un-authenticated credential scan
 
 Exit push button pressed
 
-Door (magnetic contact) closed 
+Door (magnetic contact) closed
 
-Door (magnetic contact) opened without authentication 
+Door (magnetic contact) opened without authentication
 
-Door (magnetic contact) opened with authentication 
+Door (magnetic contact) opened with authentication
 
-External alarm (coming into our in/out alarm pin) 
+External alarm (coming into our in/out alarm pin)
 
-General input pins 
+General input pins
 
 ( TIMER ) ALLOW FOR MULTIPLE
 ----------------------------------------------
-Magnetic contact opened 
+Magnetic contact opened
 
-Reader buzzer 
+Reader buzzer
 
-LED (buzz stop / LED flash ) 
+LED (buzz stop / LED flash )
 
 '''
 
@@ -393,7 +394,7 @@ LED (buzz stop / LED flash )
 '''
 POSSIBLE EVENTACTION
 -----------------------------------------------------------------
-External alarm (coming into our in/out alarm pin) 
+External alarm (coming into our in/out alarm pin)
 
 General output pins (both local and on another controller node) ???????????????????????
 
