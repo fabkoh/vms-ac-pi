@@ -42,7 +42,7 @@ def GEN_OUT_1_function():
 def sendEmail_function(event):
     entrance = event.get("entrance", {}).get("entranceId", None)
     print(f"sendEmail to entrance {entrance}")
-    url = server_url+'/api/notification/eventsSMTP'
+    url = server_url+'/api/events/eventsSMTP'
     # Create a new event object and copy all the key-value pairs from the original event object
     newevent = {}
     newevent.update(event)
