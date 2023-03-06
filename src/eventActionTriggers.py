@@ -36,12 +36,12 @@ def GEN_OUT_1_function():
     print("GEN_OUT_2")
 
 
-def sendEmail_function():
-    print("sendEmail")
+def sendEmail_function(entrance):
+    print(f"sendEmail to entrance ${entrance}")
 
 
-def sendSMS_function():
-    print("sendSMS")
+def sendSMS_function(entrance):
+    print(f"sendSMS to entrance ${entrance}")
 
 # controllerId in string
 # eventaction in list
@@ -124,7 +124,7 @@ def flush_output():
     import events
     import GPIOconfig
     for event in output_events:
-        print(event)
+        # print(event)
         entrance = event.get("entrance", {}).get("entranceId", None)
         print(entrance)
         if entrance == None:
@@ -164,10 +164,10 @@ def flush_output():
                 events.open_GEN_OUT(
                     "GEN_OUT_3", output.get("timerDuration", 0), 3)
             elif id == SMSNOTIFICATION:
-                sendSMS_function()
+                sendSMS_function(entrance)
                 print("sms activate")
             elif id == EMAILNOTIFICATION:
-                sendEmail_function()
+                sendEmail_function(entrance)
                 print("email activate")
 
     output_events.clear()
