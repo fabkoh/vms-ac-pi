@@ -201,7 +201,7 @@ def flush_output():
                 continue  # ignore, malformed json
 
         for output in event.get("outputActions", []):
-            # print(output)
+            print(output)
             id = output.get("eventActionOutputType", {}).get(
                 "eventActionOutputId", None)
             # print(f"id is {id}")
