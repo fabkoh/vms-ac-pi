@@ -52,11 +52,6 @@ def sendEmail_function(event):
     newevent["outputActionsId"] = [event["outputActions"][0]["outputEventId"]]
     newevent["entrance"] = event.get("entrance", {}).get("entranceId", None)
 
-    # event["inputEvents"] = event["inputEvents"][0]
-    # event["outputActions"] = event["outputActions"][0]
-    # event["triggerSchedule"] = event["triggerSchedule"][0]
-    # event["entrance"] = event["entrance"][0]
-    # print(newevent)
     data = json.dumps(
         newevent)
     print(data)
@@ -83,6 +78,37 @@ def sendEmail_function(event):
 def sendSMS_function(event):
     entrance = event.get("entrance", {}).get("entranceId", None)
     print(f"sendSMS to entrance {entrance}")
+    url = server_url+'/api/events/eventsSMS'
+    # Create a new event object and copy all the key-value pairs from the original event object
+    newevent = {}
+    newevent.update(event)
+
+    # Modify the necessary keys in the newevent object
+    newevent["inputEventsId"] = [event["inputEvents"][0]["inputEventId"]]
+    newevent["outputActionsId"] = [event["outputActions"][0]["outputEventId"]]
+    newevent["entrance"] = event.get("entrance", {}).get("entranceId", None)
+
+    data = json.dumps(
+        newevent)
+    print(data)
+    print(f"url is {url}")
+
+    try:
+        headers = {'Content-type': 'application/json'}
+        r = requests.post(url, data=data, headers=headers,
+                          verify=False, timeout=0.5)
+        print(r)
+        print(r.status_code)
+
+        if r.status_code == 201 or r.status_code == 200:
+            print("SUCCESS")
+            fileclear = open(path+'/json/pendingLogs.json', 'w')
+            json.dump([], fileclear, indent=4)
+            fileclear.close()
+        else:
+            print("Fail to send")
+    except:
+        print("No connection to ", url)
 
 # controllerId in string
 # eventaction in list
