@@ -373,12 +373,12 @@ def check_for_only_timer_based_events():
                 t = eventTriggerTime.get((input_id, entrance), None)
                 if t == None:
                     t = eventTriggerTime.get((input_id, BOTH_ENTRANCE), None)
-                print(d)
-                print(t)
                 if (t == None) or (d == None) or (time.time()-t < d):  # event is not to be activated
                     valid = False
                     break
             if valid:
+                print(d)
+                print(t)
                 # timer based must have activated
                 activated[event_management_id] = True
                 queue_output(event)
