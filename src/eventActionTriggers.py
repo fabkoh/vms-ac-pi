@@ -377,12 +377,12 @@ def check_for_only_timer_based_events():
                     valid = False
                     break
             if valid:
-                print(d)
-                print(t)
+                
                 # timer based must have activated
                 activated[event_management_id] = True
                 queue_output(event)
-
+        print(d)
+        print(t)
         flush_output()
         time.sleep(0.1)  # throttle
 
