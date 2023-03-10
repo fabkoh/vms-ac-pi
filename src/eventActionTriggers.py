@@ -381,10 +381,8 @@ def check_for_only_timer_based_events():
                 # timer based must have activated
                 activated[event_management_id] = True
                 queue_output(event)
-        print(d)
-        print(t)
-        flush_output()
-        time.sleep(0.1)  # throttle
+                flush_output()
+                time.sleep(0.1)  # throttle
 
 
 t1 = threading.Thread(target=check_for_only_timer_based_events)
