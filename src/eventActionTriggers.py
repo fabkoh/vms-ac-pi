@@ -381,7 +381,7 @@ def check_for_only_timer_based_events():
                 activated[event_management_id] = True
                 queue_output(event)
 
-        # flush_output()
+        flush_output()
         time.sleep(0.1)  # throttle
 
 
