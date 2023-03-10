@@ -54,7 +54,7 @@ def sendEmail_function(event):
 
     data = json.dumps(
         newevent)
-    print(data)
+    # print(data)
     print(f"url is {url}")
 
     try:
@@ -90,7 +90,7 @@ def sendSMS_function(event):
 
     data = json.dumps(
         newevent)
-    print(data)
+    # print(data)
     print(f"url is {url}")
 
     try:
