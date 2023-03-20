@@ -21,6 +21,7 @@ E2_OUT = None
 
 
 def mag_and_button():
+    print(f"edge activated")
     cb1 = GPIOconfig.pi.callback(
         events.E1_Mag, pigpio.RISING_EDGE, events.mag_detects_rising)
     cb2 = GPIOconfig.pi.callback(
