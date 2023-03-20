@@ -267,7 +267,7 @@ def get_entrance_from_event_management(event_management):
 
 
 def event_trigger_cb(event_trigger):
-    print(event_trigger)
+    print(f"even trigger is ${event_trigger}")
     ''' function hook to call everytime an event trigger occurs
 
     Args:
