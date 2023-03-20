@@ -346,6 +346,9 @@ def reader_detects_bits(bits, value, entrance):
         '''resets credentials and pin values and stops timer
 
         Returns None'''
+        # add unauth scan function call
+        # eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction,  "", list(access_group.keys())[0])
+        
         pinsvalue.clear()
         credentials.clear()
         if timeout_cred.status():
