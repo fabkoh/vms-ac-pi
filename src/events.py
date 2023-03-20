@@ -734,22 +734,51 @@ def mag_detects_falling(gpio, level, tick):
         eventsMod.record_mag_closed(E2)
         updateserver.update_server_events()
 
+debounce_delay = 0.05 # 50ms debounce delay
 
 def button_detects_change(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
+    # debounce logic
+    if time.time() - button_detects_change.last_call_time < debounce_delay:
+        return
+
+    # handle button press
     if gpio == E1_Button:
         print(f"{E1} push button1 is pressed at " + str(datetime.now()))
         mag_E1_allowed_to_open = True
         relay.trigger_relay_one(E1_thirdPartyOption)
         eventsMod.record_button_pressed(E1, "Security Guard Button")
 
-    if gpio == E2_Button:
-        print(f"{E2} push button is pressed at " + str(datetime.now()))
+    elif gpio == E2_Button:
+        print(f"{E2} push button2 is pressed at " + str(datetime.now()))
         mag_E2_allowed_to_open = True
         relay.trigger_relay_two(E2_thirdPartyOption)
         eventsMod.record_button_pressed(E2, "Security Guard Button")
+
+    # update last call time
+    button_detects_change.last_call_time = time.time()
+
+# initialize the last call time
+button_detects_change.last_call_time = 0
+
+
+# def button_detects_change(gpio, level, tick):
+#     global mag_E1_allowed_to_open
+#     global mag_E2_allowed_to_open
+
+#     if gpio == E1_Button:
+#         print(f"{E1} push button1 is pressed at " + str(datetime.now()))
+#         mag_E1_allowed_to_open = True
+#         relay.trigger_relay_one(E1_thirdPartyOption)
+#         eventsMod.record_button_pressed(E1, "Security Guard Button")
+
+#     if gpio == E2_Button:
+#         print(f"{E2} push button2 is pressed at " + str(datetime.now()))
+#         mag_E2_allowed_to_open = True
+#         relay.trigger_relay_two(E2_thirdPartyOption)
+#         eventsMod.record_button_pressed(E2, "Security Guard Button")
 
 
 # 1st person going in
