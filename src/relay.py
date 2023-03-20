@@ -144,7 +144,7 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 
 
 def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
-    global GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN
+    global GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN, E1_opened, E2_opened
     activateRelay(relayPin, activateLevel)
     if (GenNo == 1):
         GEN_1_OPEN = True
@@ -161,7 +161,7 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
         GEN_2_OPEN = False
     elif (GenNo == 3):
         GEN_3_OPEN = False
-    while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN):
+    while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN or E1_opened or E2_opened):
         sleep(1)
     print(f"deactivate gen {GenNo}")
     return
@@ -387,7 +387,6 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
         print(f" {GEN_OUT_PIN} still opened")
     return
 
-# not used
 
 
 @multitasking.task
