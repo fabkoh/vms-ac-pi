@@ -265,7 +265,7 @@ def get_entrance_from_event_management(event_management):
     # if its controller, it works for both entrances
     return BOTH_ENTRANCE
 
-debounce_delay = 0.05 # 50ms debounce delay
+debounce_delay = 0.1 # 50ms debounce delay
 
 def event_trigger_cb(event_trigger):
      # debounce logic
