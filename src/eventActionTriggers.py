@@ -265,12 +265,13 @@ def get_entrance_from_event_management(event_management):
     # if its controller, it works for both entrances
     return BOTH_ENTRANCE
 
-debounce_delay = 0.1 # 50ms debounce delay
+debounce_delay = 1 # 50ms debounce delay
 
 def event_trigger_cb(event_trigger):
      # debounce logic
     if time.time() - event_trigger_cb.last_call_time < debounce_delay:
         return
+    
     print(f"even trigger is {event_trigger}")
     ''' function hook to call everytime an event trigger occurs
 
