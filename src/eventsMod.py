@@ -143,6 +143,7 @@ def record_unauth_scans(authtype,entrance,status, name=None, access_group=None):
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(eventActionTriggerConstants.UNAUTHENTICATED_SCAN,entrance)
     )
+    print(f"Recorded unauth scan at {entrance}")
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
     update_server_events()
