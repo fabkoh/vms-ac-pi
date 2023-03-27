@@ -347,6 +347,7 @@ def reader_detects_bits(bits, value, entrance):
 
         Returns None'''
         # add unauth scan function call
+        print(f"recording {auth_method_name} at {entrancename}")
         eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction,  "", list(access_group.keys())[0])
         
         pinsvalue.clear()
