@@ -347,8 +347,8 @@ def reader_detects_bits(bits, value, entrance):
 
         Returns None'''
         # add unauth scan function call
-        print(f"recording {auth_method_name} at {entrancename}")
-        eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction,  "", list(access_group.keys())[0])
+        # print(f"recording {auth_method_name} at {entrancename}")
+        # eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction,  "", list(access_group.keys())[0])
         
         pinsvalue.clear()
         credentials.clear()
@@ -459,11 +459,15 @@ def reader_detects_bits(bits, value, entrance):
                     auth_method_name, entrancename, entrance_direction)
                 reset_cred_and_stop_timer()
                 return
+            
             # have some crendetials but need more
             if ((auth_method_is_and and any(map(lambda k: k in credentials, auth_method_keys)))
                     and not all(map(lambda k: k in credentials, auth_method_keys))):
                 print("requires more credentials")
+                eventsMod.record_unauth_scans(
+                    auth_method_name, entrancename, entrance_direction)
                 return
+            
             # check if need to check if cred belongs to someone
             if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or  # AND, all auth methods present
                ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))):  # OR, 1 auth method present
