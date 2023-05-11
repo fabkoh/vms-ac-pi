@@ -51,12 +51,16 @@ def restart_eth0():
 
 def get_default_gateway_windows():
     """Use netifaces module to get the default gateway."""
-    try:
-        import netifaces
-        gws = netifaces.gateways()
-        return gws['default'][netifaces.AF_INET][0]
-    except:
-        return None
+    result = None
+    while result == None:
+        result = netifaces.gateways().get('default', {}).get(netifaces.AF_INET, [None])[0]
+    return result   
+    #try:
+    #    import netifaces
+    #    gws = netifaces.gateways()
+    #    return gws['default'][netifaces.AF_INET][0]
+   # except:
+   #     return None
     
 def change_dhcp():
     '''changes /etc/dhcpcd.conf to use dhcp'''

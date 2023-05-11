@@ -1,22 +1,34 @@
 import json
 from datetime import datetime
 import os
+from updateserver import update_server_events
+import eventActionTriggerConstants
+import eventActionTriggers
 path = os.path.dirname(os.path.abspath(__file__))
-
 
 '''
     1. record_auth and record_button to record transLogs in archivedTrans.json and pendingTrans.json
 '''
 
-fileconfig = open(path +'/json/config.json')
-config = json.load(fileconfig)
+config =None
+controllerSerial = None
+MAX_JSON_LENGTH=None
+
+def update_config():
+    global config, controllerSerial, MAX_JSON_LENGTH
+    f=open(path+'/json/config.json')
+    config=json.load(f)
+    f.close()
+
+    controllerSerial=config['controllerConfig']['controllerSerialNo']
+    MAX_JSON_LENGTH=int(config.get("archivedMAXlength", 10))
 
 try:
     MAX_JSON_LENGTH = int(config["archivedMAXlength"]) # max length before first half of jsons get deleted 
 except:
     MAX_JSON_LENGTH = 10
 
-
+update_config()
 '''
 persondetails = {   "Name": personName,
                     "diffpassword" : [cardwiegandvalue,fingerwiegandvalue,pin], #everything besides the initial wiegand value used to identify personName  
@@ -30,86 +42,232 @@ authtype = e.g. card    Fingerprint,Pin
 
 entrance =  e.g. MainDoor
 status = e.g. In
+
+
+dictionary 
+
+direction  STRING
+eventTime  DATETIME
+person     PERSONID
+entrance   ENTRANCEID
+accessGroup   ACCESSGROUPID
+eventActionType   EVENTACTIONTYPEID
+controller         CONTROLLERID
+
+
 '''
 
 #updates pendingLogs.json and send to backend 
 #updates archivedLogs.json for backup 
-def record_auth_scans(persondetails,authtype,entrance,status):
-    name = persondetails["Name"]
-    accessGroup = persondetails["AccessGroup"]
-
-    dictionary = {"name":name,"accessgroup":accessGroup, "authmethod":authtype,
-                "direction": status,"entrance":entrance,"eventActionType": "authenticated_scans", 
-                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+def record_auth_scans(name, accessGroup,authtype,entrance,status):
+    dictionary = {
+                    "person":{"personId":name},
+                    "accessGroup":{"accessGroupId":accessGroup}, 
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":1}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    
-    update("json/archivedLogs.json",dictionary)
-    update("json/pendingLogs.json",dictionary)
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.AUTHENTICATED_SCAN,entrance)
+    )
+
+
+    update(path+"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
+
+def invalid_pin_used(entrance,status):
+    dictionary = {
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":14}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+    }
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.UNAUTHENTICATED_SCAN,entrance)
+    )
+
+    update(path+"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
+
+def pin_only_used(entrance,status):
+    dictionary = {
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":13}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+    }
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.AUTHENTICATED_SCAN,entrance)
+    )
+
+
+    update(path+"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 
 #updates pendingLogs.json and send to backend 
 #updates archivedLogs.json for backup 
-def record_masterpassword_used(authtype,entrancename,entrance_direction):
-
-    dictionary = {"authmethod":authtype,
-                "direction": entrance_direction,"entrance":entrancename,"eventActionType": "Masterpassword used", 
-                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+def record_masterpassword_used(authtype,entrance,status):
+    dictionary = {
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":2}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
+
     
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
-    
+    update_server_events()
     
 #updates pendingTrans.json and send to backend 
 #updates archivedTrans.json for backup 
-def record_unauth_scans(authtype,entrance,status):
-
-    dictionary = {"authmethod":authtype,
-                "direction": status,"entrance":entrance,"eventActionType": "unauthenticated_scans", 
-                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+def record_unauth_scans(authtype,entrance,status, name=None, access_group=None):
+    dictionary = {
+                    "person":{"personId":name},
+                    "accessGroup":{"accessGroupId":access_group}, 
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":3}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    
+
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.UNAUTHENTICATED_SCAN,entrance)
+    )
+    print(f"Recorded unauth scan at {entrance}")
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 
 def record_button_pressed(entrance,name_of_button):
 
-    dictionary = {"entrance":entrance,"eventActionType": name_of_button+" pressed", 
-                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+    dictionary = {
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":9}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-
+    e=entrance
+    if e == '': # no entrance assigned to this push button
+        e=eventActionTriggerConstants.BOTH_ENTRANCE
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.EXIT_BUTTON_PRESSED,e)
+    )
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 # status = opened/ closed
 
 
 def record_antipassback(authtype,entrance,status):
 
-    dictionary = {"authmethod":authtype,
+    dictionary = {
+                    "person":{"personId":name},
+                    "accessGroup":{"accessGroupId":accessGroup}, 
+                    "direction": status,
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":2}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+    }
+
+    dictionary = {
                 "direction": status,"entrance":entrance,"eventActionType": "ANTIPASSBACK : authenticated_scan ", 
-                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+                "controller":controllerSerial,"eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
     
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
-    
-def record_mag_changes(entrance,status):
+    update_server_events()
 
-    dictionary = {"entrance":entrance,"eventActionType": status, 
-                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
+def record_mag_opened(entrance):
+
+    dictionary = {
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":4}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
+                                                                                        eventActionTriggerConstants.START_TIMER,
+                                                                                        entrance))
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION,entrance)
+    )
+    update(path +"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
+
+def record_mag_closed(entrance):
+
+    dictionary = {
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":5}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+    }
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
+                                                                                        eventActionTriggerConstants.STOP_TIMER,
+                                                                                        entrance))
+    update(path +"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
+
+def record_mag_opened_warning(entrance):
+
+    dictionary = {
+                    "entrance": {"entranceId":entrance},
+                    "eventActionType": {"eventActionTypeId":6}, 
+                    "controller":{"controllerSerialNo":controllerSerial},
+                    "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+    }
+
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
+                                                                                        eventActionTriggerConstants.START_TIMER,
+                                                                                        entrance))
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION,entrance)
+    )
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
 
 # status = started buzzing/ stopped buzzing 
-def record_buzzer(entrance,status):
+def record_buzzer_start(entrance):
 
-    dictionary = {"entrance":entrance,"eventActionType":status, 
-                "eventTime":datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
-    }
+    dictionary = {
+                        "entrance": {"entranceId":entrance},
+                        "eventActionType": {"eventActionTypeId":7}, 
+                        "controller":{"controllerSerialNo":controllerSerial},
+                        "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+        }
 
     update(path +"/json/archivedLogs.json",dictionary)
     update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
+
+def record_buzzer_end(entrance):
+
+    dictionary = {
+                        "entrance": {"entranceId":entrance},
+                        "eventActionType": {"eventActionTypeId":8}, 
+                        "controller":{"controllerSerialNo":controllerSerial},
+                        "eventTime":datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+        }
+
+    update(path +"/json/archivedLogs.json",dictionary)
+    update(path+"/json/pendingLogs.json",dictionary)
+    update_server_events()
     
 #update to update json files
 def update(file,dictionary):
@@ -148,6 +306,9 @@ def clear_file_storage(file):
                 json.dump(checkdata,outfile,indent=4) 
         else:
             checkfile.close()
+
+
+
 
 
 def main():
