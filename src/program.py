@@ -10,14 +10,6 @@ import healthcheck
     2. when detects any events, imports events.py
     3. checks for API calls
 '''
-
-t1 = threading.Thread(target=check_events_timer)
-t2 = threading.Thread(target=mag_and_button)
-t3 = threading.Thread(target=check_gen_pins_and_alarm)
-t1.start()
-t2.start()
-t3.start()
-
 healthcheck.main(True)
 
 E1_IN = None
@@ -220,9 +212,10 @@ update_config()
 # update_config()
 # update_config()
 
-# t1 = threading.Thread(target=check_events_timer)
-# t2 = threading.Thread(target=mag_and_button)
-# t3 = threading.Thread(target=check_gen_pins_and_alarm)
-# t1.start()
-# t2.start()
-# t3.start()
+print("threads starting")
+t1 = threading.Thread(target=check_events_timer)
+t2 = threading.Thread(target=mag_and_button)
+t3 = threading.Thread(target=check_gen_pins_and_alarm)
+t1.start()
+t2.start()
+t3.start()
