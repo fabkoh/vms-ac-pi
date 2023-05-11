@@ -136,6 +136,7 @@ def check_entrance_E2():
 
 
 def check_events_timer():
+    print("check_events_timer starting")
     while True:
         check_events_for("E1_IN")
         check_events_for("E1_OUT")
