@@ -148,6 +148,7 @@ def check_events_timer():
 
 
 def check_gen_pins_and_alarm():
+    print("check_gen_pins_and_alarm starting")
     import eventActionTriggers
     import eventActionTriggerConstants
 
