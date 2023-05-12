@@ -72,7 +72,8 @@ def sendEmail_function(event):
             fileclear.close()
         else:
             print("Fail to send")
-    except:
+    except Exception as e:
+
         print("Exception:", str(e))
         print("No connection to ", url)
 
