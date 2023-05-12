@@ -312,17 +312,40 @@ def event_trigger_cb(event_trigger):
     event_trigger_id = get_event_trigger_from_event(event_trigger)
     entrance = get_event_entrance(event_trigger)
 
-    for event in filter(  # filter events by if they have event_trigger in them
-            # print(f"event is {event}")
-            lambda eventManagement: any(map(  # finds if any inputEvent (in events) have event_trigger
-                lambda inputEvent: inputEvent.get("eventActionInputType", {})
-                .get("eventActionInputId", None) == event_trigger_id,
+    # for event in filter(  # filter events by if they have event_trigger in them
+    #         # print(f"event is {event}")
+    #         lambda eventManagement: any(map(  # finds if any inputEvent (in events) have event_trigger
+    #             lambda inputEvent: inputEvent.get("eventActionInputType", {})
+    #             .get("eventActionInputId", None) == event_trigger_id,
+    #             eventManagement.get("inputEvents", [])
+    #         )) and check_datetime(eventManagement.get("triggerSchedule", {}))
+    #         and (entrance is BOTH_ENTRANCE or
+    #              get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
+    #              get_entrance_from_event_management(eventManagement) == entrance),  # check if trigger is currently active
+    #         EVENT_ACTION_TRIGGERS_DATA):
+
+    for event in filter(
+    lambda eventManagement: (
+        any(
+            map(
+                lambda inputEvent: inputEvent.get("eventActionInputType", {}).get("eventActionInputId", None) == event_trigger_id,
                 eventManagement.get("inputEvents", [])
-            )) and check_datetime(eventManagement.get("triggerSchedule", {}))
-            and (entrance is BOTH_ENTRANCE or
-                 get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
-                 get_entrance_from_event_management(eventManagement) == entrance),  # check if trigger is currently active
-            EVENT_ACTION_TRIGGERS_DATA):
+            )
+        )
+        and check_datetime(eventManagement.get("triggerSchedule", {}))
+        and (
+            entrance is BOTH_ENTRANCE
+            or get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE
+            or get_entrance_from_event_management(eventManagement) == entrance
+        )
+    ),
+    EVENT_ACTION_TRIGGERS_DATA
+):
+    print(f"event is {event}")
+
+    for inputEvent in event.get("inputEvents", []):
+        print(f"inputEvent is {inputEvent}")
+
         print(f"event is {event}")
 
         event_management_id = event.get("eventsManagementId", None)
