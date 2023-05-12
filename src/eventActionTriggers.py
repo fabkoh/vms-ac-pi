@@ -325,28 +325,28 @@ def event_trigger_cb(event_trigger):
     #         EVENT_ACTION_TRIGGERS_DATA):
 
     for event in filter(
-    lambda eventManagement: (
-        any(
-            map(
-                lambda inputEvent: inputEvent.get("eventActionInputType", {}).get("eventActionInputId", None) == event_trigger_id,
-                eventManagement.get("inputEvents", [])
-            )
-        )
-        and check_datetime(eventManagement.get("triggerSchedule", {}))
-        and (
-            entrance is BOTH_ENTRANCE
-            or get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE
-            or get_entrance_from_event_management(eventManagement) == entrance
-        )
-    ),
-    EVENT_ACTION_TRIGGERS_DATA
-):
-    print(f"event is {event}")
+            lambda eventManagement: (
+                any(
+                    map(
+                        lambda inputEvent: inputEvent.get("eventActionInputType", {}).get(
+                            "eventActionInputId", None) == event_trigger_id,
+                        eventManagement.get("inputEvents", [])
+                    )
+                )
+                and check_datetime(eventManagement.get("triggerSchedule", {}))
+                and (
+                    entrance is BOTH_ENTRANCE
+                    or get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE
+                    or get_entrance_from_event_management(eventManagement) == entrance
+                )
+            ),
+            EVENT_ACTION_TRIGGERS_DATA):
+        print(f"event is {event}")
 
     for inputEvent in event.get("inputEvents", []):
         print(f"inputEvent is {inputEvent}")
 
-        print(f"event is {event}")
+        # print(f"event is {event}")
 
         event_management_id = event.get("eventsManagementId", None)
 
