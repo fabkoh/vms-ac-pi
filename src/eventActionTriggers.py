@@ -275,6 +275,7 @@ def event_trigger_cb(event_trigger):
     if time.time() - event_trigger_cb.last_call_time < debounce_delay:
         return
 
+    print("event trigger cb")
     ''' function hook to call everytime an event trigger occurs
 
     Args:
