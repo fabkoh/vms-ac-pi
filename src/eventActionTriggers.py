@@ -322,6 +322,7 @@ def event_trigger_cb(event_trigger):
                  get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
                  get_entrance_from_event_management(eventManagement) == entrance),  # check if trigger is currently active
             EVENT_ACTION_TRIGGERS_DATA):
+        print(f"event is {event}")
 
         event_management_id = event.get("eventsManagementId", None)
 
