@@ -325,6 +325,8 @@ def event_trigger_cb(event_trigger):
     #         EVENT_ACTION_TRIGGERS_DATA):
 
     for event in filter(
+            print(f"event is {event}")
+
             lambda eventManagement: (
                 any(
                     map(
@@ -341,10 +343,9 @@ def event_trigger_cb(event_trigger):
                 )
             ),
             EVENT_ACTION_TRIGGERS_DATA):
-        print(f"event is {event}")
 
-    for inputEvent in event.get("inputEvents", []):
-        print(f"inputEvent is {inputEvent}")
+    # for inputEvent in event.get("inputEvents", []):
+    #     print(f"inputEvent is {inputEvent}")
 
         # print(f"event is {event}")
 
