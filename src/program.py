@@ -161,6 +161,7 @@ def check_gen_pins_and_alarm():
             event_trigger: input_event_trigger from eventTriggerConstants
         '''
         def f(gpio, level, tick):
+            print("helper called")
             if gpio == pin:
                 eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_event(
                     event_trigger, eventActionTriggerConstants.BOTH_ENTRANCE))
