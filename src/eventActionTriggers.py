@@ -174,7 +174,10 @@ def check_datetime(schedule):
     # print(f"schedule is {schedule}")
     # time_array = schedule.get(str(datetime.date.today()), None)
     today = datetime.date.today().strftime("%Y-%m-%d")
+    print("Today:", today)
+
     time_array = schedule.get(today, None)
+    print("Time Array:", time_array)
     # print(f"time array is {time_array}")
     if time_array == None:
         # print("No schedule for today")
@@ -426,7 +429,7 @@ def check_for_only_timer_based_events():
 
 
 t1 = threading.Thread(target=check_for_only_timer_based_events)
-t1.start()
+# t1.start()
 
 # need to write all possible output
 # write dynamic input functions to check if true or false
