@@ -265,14 +265,16 @@ def get_entrance_from_event_management(event_management):
     # if its controller, it works for both entrances
     return BOTH_ENTRANCE
 
-debounce_delay = 1 # 1s debounce delay
+
+debounce_delay = 1  # 1s debounce delay
+
 
 def event_trigger_cb(event_trigger):
     print(f"even trigger is {event_trigger}")
-     # debounce logic
+    # debounce logic
     if time.time() - event_trigger_cb.last_call_time < debounce_delay:
         return
-    
+
     ''' function hook to call everytime an event trigger occurs
 
     Args:
@@ -310,7 +312,7 @@ def event_trigger_cb(event_trigger):
     entrance = get_event_entrance(event_trigger)
 
     for event in filter(  # filter events by if they have event_trigger in them
-            print(f"event is {event}")
+            # print(f"event is {event}")
             lambda eventManagement: any(map(  # finds if any inputEvent (in events) have event_trigger
                 lambda inputEvent: inputEvent.get("eventActionInputType", {})
                 .get("eventActionInputId", None) == event_trigger_id,
@@ -358,8 +360,9 @@ def event_trigger_cb(event_trigger):
             queue_output(event)
 
     flush_output()
-        # update last call time
+    # update last call time
     event_trigger_cb.last_call_time = time.time()
+
 
 # initialize the last call time
 event_trigger_cb.last_call_time = 0
@@ -390,7 +393,7 @@ def check_for_only_timer_based_events():
                     valid = False
                     break
             if valid:
-                
+
                 # timer based must have activated
                 activated[event_management_id] = True
                 queue_output(event)
