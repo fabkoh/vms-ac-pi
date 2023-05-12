@@ -189,8 +189,8 @@ def check_datetime(schedule):
     for timing in time_array:
         start_time = timing.get("starttime", "24:00")
         end_time = timing.get("endtime", "00:00")
-        print(f"start time is {start_time}, end time is {end_time}")
-        print(f"curr time is {curr_time}")
+        # print(f"start time is {start_time}, end time is {end_time}")
+        # print(f"curr time is {curr_time}")
         if start_time <= curr_time <= end_time:
             return True
     return False
