@@ -171,18 +171,18 @@ def check_datetime(schedule):
     Returns:
         active: if the schedule is current active
     '''
-    print(f"schedule: {schedule}")
+    # print(f"schedule: {schedule}")
     # time_array = schedule.get(str(datetime.date.today()), None)
     today = datetime.date.today().strftime("%Y-%m-%d")
-    print("Today:", today)
+    # print("Today:", today)
 
     time_array = schedule.get(today, None)
-    print("Time Array:", time_array)
+    # print("Time Array:", time_array)
 
     if time_array == None:
         # print("No schedule for today")
         return False
-    print(f"time array is {time_array}")
+    # print(f"time array is {time_array}")
     curr_datetime = datetime.datetime.now()
     curr_time = curr_datetime.strftime(
         "%H") + ":" + curr_datetime.strftime("%M")  # "HH:MM"
@@ -429,8 +429,7 @@ def check_for_only_timer_based_events():
 
 
 t1 = threading.Thread(target=check_for_only_timer_based_events)
-# on back later on!!!
-# t1.start()
+t1.start()
 
 # need to write all possible output
 # write dynamic input functions to check if true or false
