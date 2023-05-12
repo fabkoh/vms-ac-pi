@@ -330,7 +330,11 @@ def event_trigger_cb(event_trigger):
                     "eventActionInputId", None) == event_trigger_id,
                 eventManagement.get("inputEvents", [])
             )
-        ) and check_datetime(eventManagement.get("triggerSchedule", {})),
+        ) and (
+            entrance is BOTH_ENTRANCE or
+            get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
+            get_entrance_from_event_management(eventManagement) == entrance
+        ),
         EVENT_ACTION_TRIGGERS_DATA
     ):
         print(f"event is {event}")
