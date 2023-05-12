@@ -61,7 +61,7 @@ def sendEmail_function(event):
         print("sending email")
         headers = {'Content-type': 'application/json'}
         r = requests.post(url, data=data, headers=headers,
-                          verify=False, timeout=5)
+                          verify=False, timeout=10)
         print(r)
         print(r.status_code)
 
