@@ -310,7 +310,7 @@ def event_trigger_cb(event_trigger):
     entrance = get_event_entrance(event_trigger)
 
     for event in filter(  # filter events by if they have event_trigger in them
-        print(f"event is {event}")
+            print(f"event is {event}")
             lambda eventManagement: any(map(  # finds if any inputEvent (in events) have event_trigger
                 lambda inputEvent: inputEvent.get("eventActionInputType", {})
                 .get("eventActionInputId", None) == event_trigger_id,
