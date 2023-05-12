@@ -4,6 +4,7 @@ import requests
 import threading
 import time
 import os
+import pytz
 from eventActionTriggerConstants import *
 import relay
 from var import server_url
@@ -173,7 +174,10 @@ def check_datetime(schedule):
     '''
     print(f"schedule: {schedule}")
     # time_array = schedule.get(str(datetime.date.today()), None)
-    today = datetime.date.today().strftime("%Y-%m-%d")
+    # today = datetime.date.today().strftime("%Y-%m-%d")
+    singapore_timezone = pytz.timezone('Asia/Singapore')
+    singapore_time = datetime.datetime.now(singapore_timezone)
+    today = singapore_time.strftime("%Y-%m-%d")
     print("Today:", today)
 
     time_array = schedule.get(today, None)
