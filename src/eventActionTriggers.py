@@ -173,11 +173,11 @@ def check_datetime(schedule):
     '''
     # print(f"schedule is {schedule}")
     # time_array = schedule.get(str(datetime.date.today()), None)
-    # print(f"time array is {time_array}")
     today = datetime.date.today().strftime("%Y-%m-%d")
     time_array = schedule.get(today, None)
+    print(f"time array is {time_array}")
     if time_array == None:
-        print("No schedule for today")
+        # print("No schedule for today")
         return False
 
     curr_datetime = datetime.datetime.now()
