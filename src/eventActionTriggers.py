@@ -73,6 +73,7 @@ def sendEmail_function(event):
         else:
             print("Fail to send")
     except:
+        print("Exception:", str(e))
         print("No connection to ", url)
 
 
