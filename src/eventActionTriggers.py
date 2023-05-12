@@ -312,77 +312,54 @@ def event_trigger_cb(event_trigger):
     event_trigger_id = get_event_trigger_from_event(event_trigger)
     entrance = get_event_entrance(event_trigger)
 
-    # for event in filter(  # filter events by if they have event_trigger in them
-    #         # print(f"event is {event}")
-    #         lambda eventManagement: any(map(  # finds if any inputEvent (in events) have event_trigger
-    #             lambda inputEvent: inputEvent.get("eventActionInputType", {})
-    #             .get("eventActionInputId", None) == event_trigger_id,
-    #             eventManagement.get("inputEvents", [])
-    #         )) and check_datetime(eventManagement.get("triggerSchedule", {}))
-    #         and (entrance is BOTH_ENTRANCE or
-    #              get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
-    #              get_entrance_from_event_management(eventManagement) == entrance),  # check if trigger is currently active
-    #         EVENT_ACTION_TRIGGERS_DATA):
+    for event in filter(  # filter events by if they have event_trigger in them
+            lambda eventManagement: any(map(  # finds if any inputEvent (in events) have event_trigger
+                lambda inputEvent: inputEvent.get("eventActionInputType", {})
+                .get("eventActionInputId", None) == event_trigger_id,
+                eventManagement.get("inputEvents", []),
+            # )) and check_datetime(eventManagement.get("triggerSchedule", {}))
+            # and (entrance is BOTH_ENTRANCE or
+            #      get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
+            #      get_entrance_from_event_management(eventManagement) == entrance),  # check if trigger is currently active
+            EVENT_ACTION_TRIGGERS_DATA):
 
+        print(f"event is {event}")
 
-for event in filter(
-    lambda eventManagement: (
-        any(
-            map(
-                lambda inputEvent: inputEvent.get("eventActionInputType", {}).get(
-                    "eventActionInputId", None) == event_trigger_id,
-                eventManagement.get("inputEvents", [])
-            )
-        )
-        and check_datetime(eventManagement.get("triggerSchedule", {}))
-        and (
-            entrance is BOTH_ENTRANCE
-            or get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE
-            or get_entrance_from_event_management(eventManagement) == entrance
-        )
-    ),
-    EVENT_ACTION_TRIGGERS_DATA
-):
-    print(f"event is {event}")
+        event_management_id = event.get("eventsManagementId", None)
 
-for inputEvent in event.get("inputEvents", []):
-    print(f"inputEvent is {inputEvent}")
+        # check if event has been activated before, if so skip this event
+        if activated.get(event_management_id, False):
+            continue
 
-    event_management_id = event.get("eventsManagementId", None)
+        valid = True
+        entrance = get_entrance_from_event_management(event)
+        # check if all time based trigger is valid
+        for inputEvent in event.get("inputEvents", []):
+            print(f"inputEvent is {inputEvent}")
+            # each eventManagement has max 1 event based trigger
+            # if the event is different, it must be a timer based trigger
+            input_event_id = inputEvent.get(
+                "eventActionInputType", {}).get("eventActionInputId", None)
+            if input_event_id != event_trigger_id:
+                t = eventTriggerTime.get((input_event_id, entrance), None)
+                if t == None:
+                    t = eventTriggerTime.get(
+                        (input_event_id, BOTH_ENTRANCE), None)
+                d = inputEvent.get("timerDuration", None)
+                # t is None means trigger has not been active so do not activate
+                # time.time()-t is the time elasped, if less than d, the time elapsed is not long enough, so do not activate
+                if (t == None) or (d == None) or (time.time()-t < d):
+                    valid = False
+                    break
 
-    # check if event has been activated before, if so skip this event
-    if activated.get(event_management_id, False):
-        continue
-
-    valid = True
-    entrance = get_entrance_from_event_management(event)
-    # check if all time based trigger is valid
-    for inputEvent in event.get("inputEvents", []):
-        print(f"inputEvent is {inputEvent}")
-        # each eventManagement has max 1 event based trigger
-        # if the event is different, it must be a timer based trigger
-        input_event_id = inputEvent.get(
-            "eventActionInputType", {}).get("eventActionInputId", None)
-        if input_event_id != event_trigger_id:
-            t = eventTriggerTime.get((input_event_id, entrance), None)
-            if t == None:
-                t = eventTriggerTime.get(
-                    (input_event_id, BOTH_ENTRANCE), None)
-            d = inputEvent.get("timerDuration", None)
-            # t is None means trigger has not been active so do not activate
-            # time.time()-t is the time elasped, if less than d, the time elapsed is not long enough, so do not activate
-            if (t == None) or (d == None) or (time.time()-t < d):
-                valid = False
-                break
-
-    if valid:
-        # if there are more than 1 inputEvent, there is a timer based trigger
-        # thus, need to set this to prevent repeats
-        # ex. door opened more than 10s and unauthenticated scan
-        # if 2 unauthenicated scans, should only trigger at the first scan
-        if len(event.get("inputEvent", [])) > 1:
-            activated[event_management_id] = True
-        queue_output(event)
+        if valid:
+            # if there are more than 1 inputEvent, there is a timer based trigger
+            # thus, need to set this to prevent repeats
+            # ex. door opened more than 10s and unauthenticated scan
+            # if 2 unauthenicated scans, should only trigger at the first scan
+            if len(event.get("inputEvent", [])) > 1:
+                activated[event_management_id] = True
+            queue_output(event)
 
     flush_output()
     # update last call time
