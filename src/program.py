@@ -21,6 +21,7 @@ E2_OUT = None
 
 
 def mag_and_button():
+    print("mag_and_button starting")
     cb1 = GPIOconfig.pi.callback(
         events.E1_Mag, pigpio.RISING_EDGE, events.mag_detects_rising)
     cb2 = GPIOconfig.pi.callback(
@@ -136,6 +137,7 @@ def check_entrance_E2():
 
 
 def check_events_timer():
+    print("check_events_timer starting")
     while True:
         check_events_for("E1_IN")
         check_events_for("E1_OUT")
@@ -159,6 +161,7 @@ def check_gen_pins_and_alarm():
             event_trigger: input_event_trigger from eventTriggerConstants
         '''
         def f(gpio, level, tick):
+            print("helper called")
             if gpio == pin:
                 eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_event(
                     event_trigger, eventActionTriggerConstants.BOTH_ENTRANCE))
@@ -210,6 +213,7 @@ update_config()
 # update_config()
 # update_config()
 
+print("threads starting")
 t1 = threading.Thread(target=check_events_timer)
 t2 = threading.Thread(target=mag_and_button)
 t3 = threading.Thread(target=check_gen_pins_and_alarm)

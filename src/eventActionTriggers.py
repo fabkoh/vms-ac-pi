@@ -58,9 +58,10 @@ def sendEmail_function(event):
     print(f"url is {url}")
 
     try:
+        print("sending email")
         headers = {'Content-type': 'application/json'}
         r = requests.post(url, data=data, headers=headers,
-                          verify=False, timeout=0.5)
+                          verify=False, timeout=10)
         print(r)
         print(r.status_code)
 
@@ -71,7 +72,9 @@ def sendEmail_function(event):
             fileclear.close()
         else:
             print("Fail to send")
-    except:
+    except Exception as e:
+
+        print("Exception:", str(e))
         print("No connection to ", url)
 
 
@@ -96,7 +99,7 @@ def sendSMS_function(event):
     try:
         headers = {'Content-type': 'application/json'}
         r = requests.post(url, data=data, headers=headers,
-                          verify=False, timeout=0.5)
+                          verify=False, timeout=5)
         print(r)
         print(r.status_code)
 
@@ -171,16 +174,26 @@ def check_datetime(schedule):
     Returns:
         active: if the schedule is current active
     '''
-    time_array = schedule.get(str(datetime.date.today()), None)
-    if time_array == None:
-        return False
+    # print(f"schedule: {schedule}")
+    # time_array = schedule.get(str(datetime.date.today()), None)
+    today = datetime.date.today().strftime("%Y-%m-%d")
+    # print("Today:", today)
 
+    time_array = schedule.get(today, None)
+    # print("Time Array:", time_array)
+
+    if time_array == None:
+        # print("No schedule for today")
+        return False
+    # print(f"time array is {time_array}")
     curr_datetime = datetime.datetime.now()
     curr_time = curr_datetime.strftime(
         "%H") + ":" + curr_datetime.strftime("%M")  # "HH:MM"
     for timing in time_array:
         start_time = timing.get("starttime", "24:00")
         end_time = timing.get("endtime", "00:00")
+        # print(f"start time is {start_time}, end time is {end_time}")
+        # print(f"curr time is {curr_time}")
         if start_time <= curr_time <= end_time:
             return True
     return False
@@ -265,14 +278,17 @@ def get_entrance_from_event_management(event_management):
     # if its controller, it works for both entrances
     return BOTH_ENTRANCE
 
-debounce_delay = 1 # 1s debounce delay
+
+debounce_delay = 1  # 1s debounce delay
+
 
 def event_trigger_cb(event_trigger):
     print(f"even trigger is {event_trigger}")
-     # debounce logic
+    # debounce logic
     if time.time() - event_trigger_cb.last_call_time < debounce_delay:
         return
-    
+
+    print("event trigger cb")
     ''' function hook to call everytime an event trigger occurs
 
     Args:
@@ -280,6 +296,7 @@ def event_trigger_cb(event_trigger):
     '''
     # if event is timed, activate timer and return, while true loop will handle the rest
     if input_is_timed(event_trigger):
+        print("timed event")
         timer_action = get_timer_event_timer_action(event_trigger)
         event_trigger_type = get_timer_event_event_action_trigger(
             event_trigger)
@@ -308,16 +325,33 @@ def event_trigger_cb(event_trigger):
     event_trigger_id = get_event_trigger_from_event(event_trigger)
     entrance = get_event_entrance(event_trigger)
 
-    for event in filter(  # filter events by if they have event_trigger in them
-            lambda eventManagement: any(map(  # finds if any inputEvent (in events) have event_trigger
-                lambda inputEvent: inputEvent.get("eventActionInputType", {})
-                .get("eventActionInputId", None) == event_trigger_id,
+    # for event in filter(  # filter events by if they have event_trigger in them
+    #         lambda eventManagement: any(map(  # finds if any inputEvent (in events) have event_trigger
+    #             lambda inputEvent: inputEvent.get("eventActionInputType", {})
+    #             .get("eventActionInputId", None) == event_trigger_id,
+    #             eventManagement.get("inputEvents", [])
+    #         )) and check_datetime(eventManagement.get("triggerSchedule", {}))
+    #         and (entrance is BOTH_ENTRANCE or
+    #              get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
+    #              get_entrance_from_event_management(eventManagement) == entrance),  # check if trigger is currently active
+    #         EVENT_ACTION_TRIGGERS_DATA):
+    #     print(f"event is {event}")
+    for event in filter(
+        lambda eventManagement: any(
+            map(
+                lambda inputEvent: inputEvent.get("eventActionInputType", {}).get(
+                    "eventActionInputId", None) == event_trigger_id,
                 eventManagement.get("inputEvents", [])
-            )) and check_datetime(eventManagement.get("triggerSchedule", {}))
-            and (entrance is BOTH_ENTRANCE or
-                 get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
-                 get_entrance_from_event_management(eventManagement) == entrance),  # check if trigger is currently active
-            EVENT_ACTION_TRIGGERS_DATA):
+            )
+        ) and (
+            check_datetime(eventManagement.get("triggerSchedule", {}))) and (
+            entrance is BOTH_ENTRANCE or
+            get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
+            get_entrance_from_event_management(eventManagement) == entrance
+        ),
+        EVENT_ACTION_TRIGGERS_DATA
+    ):
+        print(f"event is {event}")
 
         event_management_id = event.get("eventsManagementId", None)
 
@@ -329,6 +363,7 @@ def event_trigger_cb(event_trigger):
         entrance = get_entrance_from_event_management(event)
         # check if all time based trigger is valid
         for inputEvent in event.get("inputEvents", []):
+            print(f"inputEvent is {inputEvent}")
             # each eventManagement has max 1 event based trigger
             # if the event is different, it must be a timer based trigger
             input_event_id = inputEvent.get(
@@ -355,8 +390,9 @@ def event_trigger_cb(event_trigger):
             queue_output(event)
 
     flush_output()
-        # update last call time
+    # update last call time
     event_trigger_cb.last_call_time = time.time()
+
 
 # initialize the last call time
 event_trigger_cb.last_call_time = 0
@@ -387,7 +423,7 @@ def check_for_only_timer_based_events():
                     valid = False
                     break
             if valid:
-                
+
                 # timer based must have activated
                 activated[event_management_id] = True
                 queue_output(event)
