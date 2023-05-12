@@ -323,10 +323,11 @@ def event_trigger_cb(event_trigger):
     #              get_entrance_from_event_management(eventManagement) == entrance),  # check if trigger is currently active
     #         EVENT_ACTION_TRIGGERS_DATA):
     #     print(f"event is {event}")
-for event in filter(
+    for event in filter(
         lambda eventManagement: any(
             map(
-                lambda inputEvent: inputEvent.get("eventActionInputType", {}).get("eventActionInputId", None) == event_trigger_id,
+                lambda inputEvent: inputEvent.get("eventActionInputType", {}).get(
+                    "eventActionInputId", None) == event_trigger_id,
                 eventManagement.get("inputEvents", [])
             )
         ),
