@@ -11,6 +11,7 @@ import GPIOconfig
 import healthcheck
 import relay
 import eventActionTriggers
+import piProperty
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
@@ -202,7 +203,9 @@ def post_eventActionTriggers():
     update_eventActionTriggers()
     return flask.Response({},204)
 
-    
-
+@app.route('/api/piProperty', methods=['GET'])
+def get_piProperty():
+    data = piProperty.get_system_stats()
+    return flask.Response(json.dumps(data), headers={ 'Content-type': 'application/json' }, status=200)
 
 app.run(host='0.0.0.0',port=5000,debug = False)
