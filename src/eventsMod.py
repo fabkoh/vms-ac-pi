@@ -182,7 +182,7 @@ def record_button_pressed(entrance, name_of_button):
     update_server_events()
 # status = opened/ closed
 
-def fire_alarm_activated():
+def fire_alarm_activated(gpio, level, tick):
     entrance = ""
     dictionary = {
         "entrance": {"entranceId": entrance},
