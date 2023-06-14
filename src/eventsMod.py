@@ -186,7 +186,7 @@ def fire_alarm_activated():
     entrance = ""
     dictionary = {
         "entrance": {"entranceId": entrance},
-        "eventActionType": {"eventActionTypeId": 14},
+        "eventActionType": {"eventActionTypeId": 15},
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
