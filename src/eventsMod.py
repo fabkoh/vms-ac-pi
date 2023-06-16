@@ -182,6 +182,26 @@ def record_button_pressed(entrance, name_of_button):
     update_server_events()
 # status = opened/ closed
 
+def fire_alarm_activated(gpio, level, tick):
+    entrance = ""
+    dictionary = {
+        "entrance": {"entranceId": entrance},
+        "eventActionType": {"eventActionTypeId": 15},
+        "controller": {"controllerSerialNo": controllerSerial},
+        "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
+    }
+    e = entrance
+    if e == '':  # no entrance assigned to this push button
+        e = eventActionTriggerConstants.BOTH_ENTRANCE
+    print(f"Fire activated at {e}")
+    eventActionTriggers.event_trigger_cb(
+        eventActionTriggerConstants.create_event(
+            eventActionTriggerConstants.FIRE, e)
+    )
+    update(path + "/json/archivedLogs.json", dictionary)
+    update(path+"/json/pendingLogs.json", dictionary)
+    update_server_events()
+
 
 def record_antipassback(authtype, entrance, status):
 
