@@ -4,6 +4,7 @@ import threading
 import pigpio
 import eventsMod
 import healthcheck
+import eventsMod
 
 '''
     1. main program that runs everything, including E1
@@ -148,7 +149,6 @@ def check_events_timer():
         # check_entrance_E1()
         # check_entrance_E2()
 
-
 def check_gen_pins_and_alarm():
     print("check_gen_pins_and_alarm starting")
     import eventActionTriggers
@@ -177,8 +177,7 @@ def check_gen_pins_and_alarm():
     if GPIOconfig.Gen_In_3 != None:
         cb3 = GPIOconfig.pi.callback(GPIOconfig.Gen_In_3, pigpio.RISING_EDGE, helper(
             GPIOconfig.Gen_In_3, eventActionTriggerConstants.GEN_IN_3))
-    cb4 = GPIOconfig.pi.callback(GPIOconfig.Fire, pigpio.RISING_EDGE, helper(
-        GPIOconfig.Fire, eventActionTriggerConstants.FIRE))
+    cb4 = GPIOconfig.pi.callback(GPIOconfig.Fire, pigpio.RISING_EDGE, eventsMod.fire_alarm_activated)
 
 # WARNING READ DESCRIPTION
 
