@@ -17,8 +17,11 @@ def get_system_stats():
 
     mem_line = output[3]
     mem_info = re.findall(r'\d+\.\d+', mem_line)
-    mem_usage = float(mem_info[1])
-    ram_percentage = (mem_usage / float(mem_info[0])) * 100
+    total_mem = float(mem_info[0])
+    free_mem = float(mem_info[1])
+    used_mem = total_mem - free_mem
+    ram_percentage = (used_mem / total_mem) * 100
+
 
     return {
         'cpu_temperature': get_cpu_temperature(),
