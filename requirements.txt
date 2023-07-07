@@ -10,7 +10,6 @@ Jinja2==3.1.1
 MarkupSafe==2.1.1
 netifaces==0.11.0
 pigpio==1.78
-pkg-resources==0.0.0
 requests==2.27.1
 RPi.GPIO==0.7.1
 typing-extensions==4.2.0
