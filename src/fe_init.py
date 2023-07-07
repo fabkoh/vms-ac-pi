@@ -3,7 +3,7 @@
 import os
 
 def run_fe():
-    npmcmd = 'cd /home/pi/vms-ac-ui-next && npm run start'
+    npmcmd = 'cd /home/etlas/vms-ac-ui-next && npm run start'
     os.system(npmcmd)
 
 while True:
