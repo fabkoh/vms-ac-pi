@@ -7,6 +7,7 @@ import os
 from eventActionTriggerConstants import *
 import relay
 from var import server_url
+import gc
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -430,6 +431,7 @@ def check_for_only_timer_based_events():
                 queue_output(event)
                 flush_output()
                 time.sleep(0.1)  # throttle
+        gc.collect()
 
 
 t1 = threading.Thread(target=check_for_only_timer_based_events)

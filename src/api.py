@@ -4,7 +4,6 @@ import json
 from werkzeug.exceptions import BadRequest
 import changeStatic
 import os
-import program
 import events
 import eventsMod
 import GPIOconfig
@@ -12,6 +11,11 @@ import healthcheck
 import relay
 import eventActionTriggers
 import piProperty
+import tracemalloc
+import linecache
+import datetime
+import threading
+import time
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
@@ -207,5 +211,43 @@ def post_eventActionTriggers():
 def get_piProperty():
     data = piProperty.get_system_stats()
     return flask.Response(json.dumps(data), headers={ 'Content-type': 'application/json' }, status=200)
+
+def display_top(snapshot, key_type='lineno', limit=10):
+    snapshot = snapshot.filter_traces((
+        tracemalloc.Filter(False, "<frozen importlib._bootstrap>"),
+        tracemalloc.Filter(False, "<unknown>"),
+    ))
+    top_stats = snapshot.statistics(key_type)
+
+    print("Top displayed")
+
+    with open('memory_usage.log', 'a') as f:
+        print("Top %s lines" % limit, file=f)
+        for index, stat in enumerate(top_stats[:limit], 1):
+            frame = stat.traceback[0]
+            print("#%s: %s:%s: %.1f KiB"
+                  % (index, frame.filename, frame.lineno, stat.size / 1024), file=f)
+            line = linecache.getline(frame.filename, frame.lineno).strip()
+            if line:
+                print('    %s' % line, file=f)
+
+        other = top_stats[limit:]
+        if other:
+            size = sum(stat.size for stat in other)
+            print("%s other: %.1f KiB" % (len(other), size / 1024), file=f)
+        total = sum(stat.size for stat in top_stats)
+        print("Total allocated size: %.1f KiB" % (total / 1024), file=f)
+
+def log_memory_usage_every_hour():
+    tracemalloc.start()
+    print("Logging memory usage every hour")
+    while True:
+        snapshot = tracemalloc.take_snapshot()
+        print("Snapshot done")
+        display_top(snapshot)
+        print("Logging done")
+        time.sleep(3600)  # wait for an hour
+
+log_memory_usage_every_hour()
 
 app.run(host='0.0.0.0',port=5000,debug = False)
