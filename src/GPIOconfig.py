@@ -4,6 +4,7 @@ import pigpio
 import json
 from datetime import datetime
 import os
+import gc
 path = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -351,6 +352,7 @@ def check_for_led_and_buzzer():
         helper(E2_buzzer,E2_buzzer_time,E2_IN_Buzz,E2_OUT_Buzz)
         helper(E2_led,E2_led_time,E2_IN_Led,E2_OUT_Led)
         time.sleep(1)
+        gc.collect()
 
 t1=threading.Thread(target=check_for_led_and_buzzer)
 t1.start()

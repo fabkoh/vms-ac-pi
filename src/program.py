@@ -5,6 +5,7 @@ import pigpio
 import eventsMod
 import healthcheck
 import eventsMod
+import gc
 
 '''
     1. main program that runs everything, including E1
@@ -145,6 +146,7 @@ def check_events_timer():
         check_events_for("E2_IN")
         check_events_for("E2_OUT")
         events.check_entrance_status()
+        gc.collect()
 
         # check_entrance_E1()
         # check_entrance_E2()

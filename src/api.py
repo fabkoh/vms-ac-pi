@@ -4,7 +4,6 @@ import json
 from werkzeug.exceptions import BadRequest
 import changeStatic
 import os
-import program
 import events
 import eventsMod
 import GPIOconfig
