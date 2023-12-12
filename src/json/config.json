@@ -19,15 +19,15 @@
         "controllerMAC": "dc:a6:32:64:54:59",
         "controllerIpStatic": "",
         "readersConnection": {
-            "E2_IN": "",
+            "E2_IN": "Connected",
             "E1_IN": "Connected",
-            "E2_OUT": "Connected",
+            "E2_OUT": "",
             "E1_OUT": "",
-            "dateAndTime": "14-10-2022 12:37:38"
+            "dateAndTime": "12-12-2023 19:58:45"
         },
         "controllerSerialNo": "100000005f34ee9d",
         "controllerName": "",
-        "controllerIp": "192.168.1.155"
+        "controllerIp": "192.168.1.160"
     },
     "EntranceName": {
         "E1": 1,

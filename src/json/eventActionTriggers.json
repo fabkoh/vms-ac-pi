@@ -1,1 +1,170 @@
-[]
+[
+    {
+        "eventsManagementId": 3,
+        "eventsManagementName": "sdgs",
+        "inputEvents": [
+            {
+                "inputEventId": 3,
+                "timerDuration": null,
+                "eventActionInputType": {
+                    "eventActionInputId": 7,
+                    "eventActionInputName": "GEN_IN_1",
+                    "timerEnabled": false,
+                    "eventActionInputConfig": null
+                }
+            }
+        ],
+        "outputActions": [
+            {
+                "outputEventId": 3,
+                "timerDuration": null,
+                "eventActionOutputType": {
+                    "eventActionOutputId": 8,
+                    "eventActionOutputName": "NOTIFICATION (EMAIL)",
+                    "timerEnabled": false,
+                    "eventActionOutputConfig": null,
+                    "recipents": null,
+                    "recipentsMessage": null
+                }
+            }
+        ],
+        "triggerSchedule": {
+            "2023-12-12": [
+                {
+                    "endtime": "24:00",
+                    "starttime": "00:00"
+                }
+            ]
+        },
+        "entrance": null,
+        "controller": {
+            "controllerId": 1
+        }
+    },
+    {
+        "eventsManagementId": 4,
+        "eventsManagementName": "wgw",
+        "inputEvents": [
+            {
+                "inputEventId": 4,
+                "timerDuration": null,
+                "eventActionInputType": {
+                    "eventActionInputId": 9,
+                    "eventActionInputName": "GEN_IN_3",
+                    "timerEnabled": false,
+                    "eventActionInputConfig": null
+                }
+            }
+        ],
+        "outputActions": [
+            {
+                "outputEventId": 4,
+                "timerDuration": null,
+                "eventActionOutputType": {
+                    "eventActionOutputId": 8,
+                    "eventActionOutputName": "NOTIFICATION (EMAIL)",
+                    "timerEnabled": false,
+                    "eventActionOutputConfig": null,
+                    "recipents": null,
+                    "recipentsMessage": null
+                }
+            }
+        ],
+        "triggerSchedule": {
+            "2023-12-12": [
+                {
+                    "endtime": "24:00",
+                    "starttime": "00:00"
+                }
+            ]
+        },
+        "entrance": null,
+        "controller": {
+            "controllerId": 1
+        }
+    },
+    {
+        "eventsManagementId": 1,
+        "eventsManagementName": "af",
+        "inputEvents": [
+            {
+                "inputEventId": 1,
+                "timerDuration": null,
+                "eventActionInputType": {
+                    "eventActionInputId": 7,
+                    "eventActionInputName": "GEN_IN_1",
+                    "timerEnabled": false,
+                    "eventActionInputConfig": null
+                }
+            }
+        ],
+        "outputActions": [
+            {
+                "outputEventId": 1,
+                "timerDuration": null,
+                "eventActionOutputType": {
+                    "eventActionOutputId": 4,
+                    "eventActionOutputName": "DOOR UNLOCK",
+                    "timerEnabled": false,
+                    "eventActionOutputConfig": null,
+                    "recipents": null,
+                    "recipentsMessage": null
+                }
+            }
+        ],
+        "triggerSchedule": {
+            "2023-12-12": [
+                {
+                    "endtime": "24:00",
+                    "starttime": "00:00"
+                }
+            ]
+        },
+        "entrance": {
+            "entranceId": 1
+        },
+        "controller": null
+    },
+    {
+        "eventsManagementId": 2,
+        "eventsManagementName": "rth",
+        "inputEvents": [
+            {
+                "inputEventId": 2,
+                "timerDuration": null,
+                "eventActionInputType": {
+                    "eventActionInputId": 9,
+                    "eventActionInputName": "GEN_IN_3",
+                    "timerEnabled": false,
+                    "eventActionInputConfig": null
+                }
+            }
+        ],
+        "outputActions": [
+            {
+                "outputEventId": 2,
+                "timerDuration": null,
+                "eventActionOutputType": {
+                    "eventActionOutputId": 4,
+                    "eventActionOutputName": "DOOR UNLOCK",
+                    "timerEnabled": false,
+                    "eventActionOutputConfig": null,
+                    "recipents": null,
+                    "recipentsMessage": null
+                }
+            }
+        ],
+        "triggerSchedule": {
+            "2023-12-12": [
+                {
+                    "endtime": "24:00",
+                    "starttime": "00:00"
+                }
+            ]
+        },
+        "entrance": {
+            "entranceId": 2
+        },
+        "controller": null
+    }
+]

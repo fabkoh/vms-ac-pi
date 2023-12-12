@@ -11,6 +11,7 @@ import healthcheck
 import relay
 import eventActionTriggers
 import piProperty
+import program
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False

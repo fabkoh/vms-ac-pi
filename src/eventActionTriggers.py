@@ -41,7 +41,11 @@ def GEN_OUT_1_function():
 
 
 def sendEmail_function(event):
-    entrance = event.get("entrance", {}).get("entranceId", None)
+    entranceObj = event.get("entrance", {})
+    if entranceObj != None:
+        entrance = entranceObj.get("entranceId", None)
+    else:
+        entrance = None
     print(f"sendEmail to entrance {entrance}")
     url = server_url+'/api/events/eventsSMTP'
     # Create a new event object and copy all the key-value pairs from the original event object
@@ -51,7 +55,7 @@ def sendEmail_function(event):
     # Modify the necessary keys in the newevent object
     newevent["inputEventsId"] = [event["inputEvents"][0]["inputEventId"]]
     newevent["outputActionsId"] = [event["outputActions"][0]["outputEventId"]]
-    newevent["entrance"] = event.get("entrance", {}).get("entranceId", None)
+    newevent["entrance"] = entrance
 
     data = json.dumps(
         newevent)
@@ -207,7 +211,11 @@ def flush_output():
     for event in output_events:
         print("this is event")
         print(event)
-        entrance = event.get("entrance", {}).get("entranceId", None)
+        entranceObj = event.get("entrance", {})
+        if entranceObj != None:
+            entrance = entranceObj.get("entranceId", None)
+        else:
+            entrance = None 
         # print(entrance)
         if entrance == None:
             if event.get("controller", None) != None:
