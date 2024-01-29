@@ -99,7 +99,7 @@ def post_config():
     changeStatic.change_ip(request_body['controllerIPStatic'], request_body['controllerIP'])
     healthcheck.main(True) # post new config to etlas
     update_config()
-    return flask.Response({}, 204)
+    return flask.Response({}, 200)
 
 @app.route('/api/reset', methods=['POST'])
 def post_reset():
@@ -110,7 +110,7 @@ def post_reset():
     '''
     changeStatic.change_ip(False, '192.168.1.67')
     healthcheck.main(True) # post new config to etlas
-    return flask.Response({}, 204)
+    return flask.Response({}, 200)
 
 @app.route('/api/reboot', methods=['POST'])
 def post_reboot():
@@ -136,8 +136,9 @@ def post_entrance_name():
     Returns (response):
         code: 204
     '''
+    
     request_body = flask.request.json
-    # print(request_body)
+    print(request_body)
     if ('E1' not in request_body) or ('E2' not in request_body) or ('controllerSerialNo' not in request_body):
         flask.abort(400)
     
@@ -154,7 +155,7 @@ def post_entrance_name():
         json.dump(data, f, indent=4)
         f.close()
     update_config()
-    return flask.Response({}, 204)
+    return flask.Response({}, 200)
     
 @app.route('/api/healthcheck')
 def get_check():
@@ -181,7 +182,7 @@ def post_credOccur():
         f.close()
     
     update_credOccur()
-    return flask.Response({}, 204)
+    return flask.Response({}, 200)
 
 def update_eventActionTriggers():
     '''helper function to store all script updates'''
@@ -201,7 +202,7 @@ def post_eventActionTriggers():
         f.close()
     
     update_eventActionTriggers()
-    return flask.Response({},204)
+    return flask.Response({},200)
 
 @app.route('/api/piProperty', methods=['GET'])
 def get_piProperty():
