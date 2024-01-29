@@ -23,11 +23,11 @@
             "E1_IN": "Connected",
             "E2_OUT": "",
             "E1_OUT": "",
-            "dateAndTime": "12-12-2023 19:58:45"
+            "dateAndTime": "29-01-2024 21:09:54"
         },
         "controllerSerialNo": "100000005f34ee9d",
         "controllerName": "",
-        "controllerIp": "192.168.1.160"
+        "controllerIp": "192.168.1.250"
     },
     "EntranceName": {
         "E1": 1,
