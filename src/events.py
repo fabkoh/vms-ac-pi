@@ -748,15 +748,14 @@ debounce_delay = 0.05 # 50ms debounce delay
 
 # A wrapper to bridge the sync callback with your async function
 def sync_to_async_bridge_button_detects_change(gpio, level, tick):
-    # Get the current event loop or create a new one
-    loop = asyncio.get_event_loop()
-    if loop.is_running():
-        # If the loop is running, use create_task to schedule the coroutine
-        loop.create_task(button_detects_change(gpio, level, tick))
-    else:
-        # Handling for cases where the loop is not running, 
-        # which should be adapted based on your application's structure
-        asyncio.run(button_detects_change(gpio, level, tick))
+    # Assuming your main asyncio event loop is running in the main thread
+    loop = asyncio.new_event_loop()
+    if loop.is_closed():
+        print("Event loop is closed, cannot schedule async task.")
+        return
+
+    coroutine = button_detects_change(gpio, level, tick)
+    asyncio.run_coroutine_threadsafe(coroutine, loop)
 
 async def button_detects_change(gpio, level, tick):
     global mag_E1_allowed_to_open
