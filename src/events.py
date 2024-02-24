@@ -747,7 +747,7 @@ def mag_detects_falling(gpio, level, tick):
 debounce_delay = 0.05 # 50ms debounce delay
 
 
-async def button_detects_change(gpio, level, tick):
+def button_detects_change(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
@@ -755,18 +755,33 @@ async def button_detects_change(gpio, level, tick):
     if time.time() - button_detects_change.last_call_time < debounce_delay:
         return
 
+    loop = asyncio.get_event_loop()
+
     # handle button press
     if gpio == E1_Button:
         print(f"{E1} push button1 is pressed at " + str(datetime.now()))
         mag_E1_allowed_to_open = True
         relay.trigger_relay_one(E1_thirdPartyOption)
-        await eventsMod.record_button_pressed(E1, "Security Guard Button")
+        if loop.is_running():
+            # If the loop is running, use create_task to schedule the coroutine
+            loop.create_task(eventsMod.record_button_pressed(E1, "Security Guard Button"))
+        else:
+            # Handling for cases where the loop is not running, 
+            # which should be adapted based on your application's structure
+            asyncio.run(eventsMod.record_button_pressed(E1, "Security Guard Button"))
+
 
     elif gpio == E2_Button:
         print(f"{E2} push button2 is pressed at " + str(datetime.now()))
         mag_E2_allowed_to_open = True
         relay.trigger_relay_two(E2_thirdPartyOption)
-        await eventsMod.record_button_pressed(E2, "Security Guard Button")
+        if loop.is_running():
+            # If the loop is running, use create_task to schedule the coroutine
+            loop.create_task(eventsMod.record_button_pressed(E2, "Security Guard Button"))
+        else:
+            # Handling for cases where the loop is not running, 
+            # which should be adapted based on your application's structure
+            asyncio.run(eventsMod.record_button_pressed(E2, "Security Guard Button"))
 
     # update last call time
     button_detects_change.last_call_time = time.time()
