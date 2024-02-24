@@ -1,3 +1,4 @@
+import asyncio
 import json
 from datetime import datetime
 import os
@@ -64,7 +65,7 @@ controller         CONTROLLERID
 # updates archivedLogs.json for backup
 
 
-def record_auth_scans(name, accessGroup, authtype, entrance, status):
+async def record_auth_scans(name, accessGroup, authtype, entrance, status):
     dictionary = {
         "person": {"personId": name},
         "accessGroup": {"accessGroupId": accessGroup},
@@ -81,10 +82,9 @@ def record_auth_scans(name, accessGroup, authtype, entrance, status):
 
     update(path+"/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
-
-def invalid_pin_used(entrance, status):
+async def invalid_pin_used(entrance, status):
     dictionary = {
         "direction": status,
         "entrance": {"entranceId": entrance},
@@ -99,7 +99,7 @@ def invalid_pin_used(entrance, status):
 
     update(path+"/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 
 def pin_only_used(entrance, status):
@@ -117,7 +117,7 @@ def pin_only_used(entrance, status):
 
     update(path+"/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 # updates pendingLogs.json and send to backend
 # updates archivedLogs.json for backup
@@ -134,7 +134,7 @@ def record_masterpassword_used(authtype, entrance, status):
 
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 # updates pendingTrans.json and send to backend
 # updates archivedTrans.json for backup
@@ -158,7 +158,7 @@ def record_unauth_scans(authtype, entrance, status, name=None, access_group=None
     print(f"Recorded unauth scan at {entrance}")
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 
 def record_button_pressed(entrance, name_of_button):
@@ -179,7 +179,7 @@ def record_button_pressed(entrance, name_of_button):
     )
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 # status = opened/ closed
 
 def fire_alarm_activated(gpio, level, tick):
@@ -200,7 +200,7 @@ def fire_alarm_activated(gpio, level, tick):
     )
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 
 def record_antipassback(authtype, entrance, status):
@@ -222,7 +222,7 @@ def record_antipassback(authtype, entrance, status):
 
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 
 def record_mag_opened(entrance):
@@ -242,7 +242,7 @@ def record_mag_opened(entrance):
     )
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 
 def record_mag_closed(entrance):
@@ -258,7 +258,7 @@ def record_mag_closed(entrance):
                                                                                         entrance))
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 
 def record_mag_opened_warning(entrance):
@@ -280,7 +280,7 @@ def record_mag_opened_warning(entrance):
 
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 # status = started buzzing/ stopped buzzing
 
@@ -296,7 +296,7 @@ def record_buzzer_start(entrance):
 
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 
 def record_buzzer_end(entrance):
@@ -310,7 +310,7 @@ def record_buzzer_end(entrance):
 
     update(path + "/json/archivedLogs.json", dictionary)
     update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    asyncio.create_task(update_server_events())
 
 # update to update json files
 

@@ -1,3 +1,4 @@
+import asyncio
 import GPIOconfig
 import events
 import threading
@@ -102,7 +103,9 @@ def check_events_for(entrance):
                 timeout_buzzer.start()
                 print("Buzzer started buzzing")
                 eventsMod.record_buzzer_start(entrancename)
-                events.updateserver.update_server_events()
+                asyncio.create_task(events.updateserver.update_server_events())
+
+                
     else:
         GPIOconfig.deactivate_buzz_led(entrance[:2])
         if timeout_buzzer.status():
