@@ -161,7 +161,7 @@ def record_unauth_scans(authtype, entrance, status, name=None, access_group=None
     asyncio.create_task(update_server_events())
 
 
-def record_button_pressed(entrance, name_of_button):
+async def record_button_pressed(entrance, name_of_button):
 
     dictionary = {
         "entrance": {"entranceId": entrance},
