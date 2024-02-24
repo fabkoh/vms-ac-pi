@@ -702,7 +702,7 @@ def gen_check(gpio):
         print("Gen out 1 ")
 
 
-async def mag_detects_rising(gpio, level, tick):
+def mag_detects_rising(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
@@ -726,7 +726,7 @@ async def mag_detects_rising(gpio, level, tick):
 
 
 
-async def mag_detects_falling(gpio, level, tick):
+def mag_detects_falling(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
@@ -746,7 +746,8 @@ async def mag_detects_falling(gpio, level, tick):
 
 debounce_delay = 0.05 # 50ms debounce delay
 
-async def button_detects_change(gpio, level, tick):
+
+def button_detects_change(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
