@@ -34,9 +34,9 @@ def mag_and_button():
     cb4 = GPIOconfig.pi.callback(
         events.E2_Mag, pigpio.FALLING_EDGE, events.mag_detects_falling)
     cb5 = GPIOconfig.pi.callback(
-        events.E1_Button, pigpio.FALLING_EDGE, events.button_detects_change)
+        events.E1_Button, pigpio.FALLING_EDGE, events.sync_to_async_bridge_button_detects_change)
     cb6 = GPIOconfig.pi.callback(
-        events.E2_Button, pigpio.FALLING_EDGE, events.button_detects_change)
+        events.E2_Button, pigpio.FALLING_EDGE, events.sync_to_async_bridge_button_detects_change)
 
 
 def check_events_for(entrance):
