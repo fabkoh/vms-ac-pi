@@ -356,6 +356,12 @@ def reader_detects_bits(bits, value, entrance):
         if timeout_cred.status():
             timeout_cred.stop()
 
+
+    def greenlight_and_beep():
+        '''set wiegand reader to show green light and give a recognisaible beep, 2-3 secondas long'''
+       if entrance_prefix == "E1":
+            
+
     def open_door():
         '''opens the door, set mags to allow open, update server events'''
         # print("open")
@@ -520,6 +526,9 @@ def reader_detects_bits(bits, value, entrance):
                                     eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[
                                                                 0], auth_method_name, entrancename, entrance_direction)
                                 open_door()
+                                # set weigand reader to show green light and give a recognisaible beep, 2-3 secondas song
+                                
+
                                 reset_cred_and_stop_timer()
                                 return
                             # person dont have access at this time
