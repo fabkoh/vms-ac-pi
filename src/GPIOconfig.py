@@ -251,18 +251,24 @@ E1_led_time=0
 E2_buzzer_time=0
 E2_led_time=0
 
+gpio_pins_bcm = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
 
 def activate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
    print("buzzzzzing and led on")
-   pi.write(E1_OUT_Buzz,1)
-   pi.write(E1_IN_Buzz,1)
-   pi.write(E1_OUT_Led,1)
-   pi.write(E1_IN_Led,1)
-   pi.write(E2_OUT_Led,1)
-   pi.write(E2_IN_Led,1)
-   pi.write(Relay_1,1)
+   for pin in gpio_pins_bcm:
+      pi.set_mode(pin, pigpio.OUTPUT)
+      pi.write(pin, 1)
+   # pi.write(E1_OUT_Buzz,1)
+   # pi.write(E1_IN_Buzz,1)
+   # pi.write(E1_OUT_Buzz,1)
+   # pi.write(E1_IN_Buzz,1)
+   # pi.write(E1_OUT_Led,1)
+   # pi.write(E1_IN_Led,1)
+   # pi.write(E2_OUT_Led,1)
+   # pi.write(E2_IN_Led,1)
+   # pi.write(Relay_1,1)
    # if entrance == "E1":
    #    E1_buzzer=True
    #    E1_led=True
@@ -304,7 +310,6 @@ def test_pin(pin, duration=2):
         print(f"Error: Pin {pin} is not LOW as expected")
     print(f"Tested {pin}\n")
 
-gpio_pins_bcm = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
 # Test each pin
 # for pin in gpio_pins_bcm:
