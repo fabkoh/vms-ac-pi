@@ -255,6 +255,7 @@ E2_led_time=0
 
 def activate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
+   print("buzzzzzing and led on")
    if entrance == "E1":
       E1_buzzer=True
       E1_led=True
