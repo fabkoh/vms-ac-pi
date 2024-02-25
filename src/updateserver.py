@@ -11,21 +11,22 @@ async def update_server_events():
     file = open(path+"/json/pendingLogs.json")
     data = json.load(file)
     # print("11-here")
+    print("skip updating server")
 
-    try:
-        headers = {'Content-type': 'application/json'}
-        r = requests.post(url, data=json.dumps(
-            data), headers=headers, verify=False, timeout=0.5)
-        print(r)
-        print(r.status_code)
+    # try:
+    #     headers = {'Content-type': 'application/json'}
+    #     r = requests.post(url, data=json.dumps(
+    #         data), headers=headers, verify=False, timeout=0.5)
+    #     print(r)
+    #     print(r.status_code)
 
-        if r.status_code == 201 or r.status_code == 200:
-            print("SUCCESS")
-            fileclear = open(path+'/json/pendingLogs.json', 'w')
-            json.dump([], fileclear, indent=4)
-            fileclear.close()
-    except:
-        print("No connection to ", url)
+    #     if r.status_code == 201 or r.status_code == 200:
+    #         print("SUCCESS")
+    #         fileclear = open(path+'/json/pendingLogs.json', 'w')
+    #         json.dump([], fileclear, indent=4)
+    #         fileclear.close()
+    # except:
+    #     print("No connection to ", url)
 
 # dictionary = {"Name": "Bryan","AccessGroup": "ISS"}
 # entrance = E1/ E2
