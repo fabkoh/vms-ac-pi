@@ -251,7 +251,7 @@ E1_led_time=0
 E2_buzzer_time=0
 E2_led_time=0
 
-activate_buzz_led("E1")
+
 
 def activate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
@@ -272,6 +272,8 @@ def deactivate_buzz_led(entrance) :
    if entrance == "E2":
       E2_buzzer=False
       E2_led=False
+
+activate_buzz_led("E1")
 
 def entrance_id_to_entrance(entrance_id):
    '''Helper function to convert entrance_id to "E1" | "E2"
