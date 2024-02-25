@@ -5,6 +5,7 @@ import multitasking
 import json
 import os
 import threading
+from lock import config_lock
 
 from eventActionTriggerConstants import GEN_OUT_1
 path = os.path.dirname(os.path.abspath(__file__))
@@ -31,9 +32,10 @@ GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN = False, False, False
 
 def update_config():
     global config, GPIOpins, Relay_1, Relay_2, GEN_OUT_1, GEN_OUT_2, GEN_OUT_3
-    f = open(path+'/json/config.json')
-    config = json.load(f)
-    f.close()
+    with config_lock:
+        f = open(path+'/json/config.json')
+        config = json.load(f)
+        f.close()
 
     GPIOpins = config["GPIOpins"]
     Relay_1 = int(GPIOpins["Relay_1"])

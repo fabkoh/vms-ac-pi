@@ -9,6 +9,9 @@ import json
 import time
 import updateserver
 import os
+
+from src.lock import config_lock
+
 path = os.path.dirname(os.path.abspath(__file__))
 
 '''
@@ -109,9 +112,10 @@ def update_config():
     '''Call this before events.update_credOccur'''
     global config, GPIOpins, E1, E2, E1_Mag, Gen_Out_1, E1_Button, E2_Mag, E2_Button, TIMEOUT, \
         CRED_TIMEOUT_E1, CRED_TIMEOUT_E2, MAG_TIMEOUT_E1, MAG_TIMEOUT_E2, BUZZER_TIMEOUT_E1, BUZZER_TIMEOUT_E2
-    f = open(path+'/json/config.json')
-    config = json.load(f)
-    f.close()
+    with config_lock:
+        f = open(path+'/json/config.json')
+        config = json.load(f)
+        f.close()
 
     E1 = config["EntranceName"]["E1"]
     E2 = config["EntranceName"]["E2"]

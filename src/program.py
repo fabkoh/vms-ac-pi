@@ -214,8 +214,6 @@ it adds an addtion detect_bits call, so multiple detect_bits are called after ca
 
 
 update_config()
-# update_config()
-# update_config()
 
 print("threads starting")
 t1 = threading.Thread(target=check_events_timer)

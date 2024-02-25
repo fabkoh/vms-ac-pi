@@ -12,6 +12,7 @@ import relay
 import eventActionTriggers
 import piProperty
 import program
+from src.lock import config_lock
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
@@ -36,9 +37,10 @@ def get_status():
         }
     '''
     healthcheck.main(False)
-    with open(path + '/json/config.json', 'r') as f:
-        data = json.load(f)
-        f.close()
+    with config_lock:
+        with open(path + '/json/config.json', 'r') as f:
+            data = json.load(f)
+            f.close()
 
     controller_config = data['controllerConfig']
     readers_config = controller_config['readersConnection']
@@ -90,9 +92,10 @@ def post_config():
     if ('controllerIPStatic' not in request_body) or ('controllerIP' not in request_body) or ('controllerSerialNo' not in request_body):
         flask.abort(400)
 
-    with open(path + '/json/config.json', 'r') as f:
-        data = json.load(f)
-        f.close()
+    with config_lock:
+        with open(path + '/json/config.json', 'r') as f:
+            data = json.load(f)
+            f.close()
     # check if this is the intended controller
     assert(request_body['controllerSerialNo'] == data['controllerConfig']['controllerSerialNo'])
 
@@ -141,19 +144,21 @@ def post_entrance_name():
     print(request_body)
     if ('E1' not in request_body) or ('E2' not in request_body) or ('controllerSerialNo' not in request_body):
         flask.abort(400)
-    
-    with open(path + '/json/config.json', 'r') as f:
-        data = json.load(f)
-        f.close()
+
+    with config_lock:
+        with open(path + '/json/config.json', 'r') as f:
+            data = json.load(f)
+            f.close()
 
     if(request_body['controllerSerialNo'] != data['controllerConfig']['controllerSerialNo']):
         flask.abort(400)
 
     data['EntranceName']['E1'] = request_body['E1']
     data['EntranceName']['E2'] = request_body['E2']
-    with open(path + '/json/config.json', 'w') as f:
-        json.dump(data, f, indent=4)
-        f.close()
+    with config_lock:
+        with open(path + '/json/config.json', 'w') as f:
+            json.dump(data, f, indent=4)
+            f.close()
     update_config()
     return flask.Response({}, 200)
     

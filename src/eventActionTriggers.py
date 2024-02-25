@@ -6,6 +6,7 @@ import time
 import os
 from eventActionTriggerConstants import *
 import relay
+from src.lock import pending_logs_lock
 from var import server_url
 import gc
 
@@ -72,9 +73,10 @@ def sendEmail_function(event):
 
         if r.status_code == 201 or r.status_code == 200:
             print("SUCCESS")
-            fileclear = open(path+'/json/pendingLogs.json', 'w')
-            json.dump([], fileclear, indent=4)
-            fileclear.close()
+            with pending_logs_lock:
+                fileclear = open(path+'/json/pendingLogs.json', 'w')
+                json.dump([], fileclear, indent=4)
+                fileclear.close()
         else:
             print("Fail to send")
     except Exception as e:
@@ -110,9 +112,10 @@ def sendSMS_function(event):
 
         if r.status_code == 201 or r.status_code == 200:
             print("SUCCESS")
-            fileclear = open(path+'/json/pendingLogs.json', 'w')
-            json.dump([], fileclear, indent=4)
-            fileclear.close()
+            with pending_logs_lock:
+                fileclear = open(path+'/json/pendingLogs.json', 'w')
+                json.dump([], fileclear, indent=4)
+                fileclear.close()
         else:
             print("Fail to send")
     except:

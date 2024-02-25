@@ -5,6 +5,8 @@ import json
 from datetime import datetime
 import os
 import gc
+from lock import config_lock
+
 path = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -63,9 +65,10 @@ def update_config():
       E2_OUT_Led, E2_Mag, E2_Button, Gen_In_1, Gen_Out_1, Gen_In_2, Gen_Out_2, \
       Gen_In_3, Gen_Out_3
 
-   f=open(path+'/json/config.json')
-   config=json.load(f)
-   f.close()
+   with config_lock:
+      f=open(path+'/json/config.json')
+      config=json.load(f)
+      f.close()
 
    GPIOpins = config["GPIOpins"]
 
