@@ -257,11 +257,11 @@ gpio_pins_bcm = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 def activate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
    print("buzzzzzing and led on")
-   for pin in gpio_pins_bcm:
-      pi.set_mode(pin, pigpio.OUTPUT)
-      pi.write(pin, 0)
-   # pi.write(E1_OUT_Buzz,1)
-   # pi.write(E1_IN_Buzz,1)
+   # for pin in gpio_pins_bcm:
+   #    pi.set_mode(pin, pigpio.OUTPUT)
+   #    pi.write(pin, 0)
+   pi.write(E1_OUT_Buzz,1)
+   pi.write(E1_IN_Buzz,1)
    # pi.write(E1_OUT_Buzz,1)
    # pi.write(E1_IN_Buzz,1)
    # pi.write(E1_OUT_Led,1)
