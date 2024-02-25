@@ -256,8 +256,6 @@ E2_led_time=0
 def activate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
    print("buzzzzzing and led on")
-   pi.write(E1_IN_Buzz,1)
-   pi.write(E1_IN_Led,1)
    pi.write(E1_OUT_Buzz,1)
    pi.write(E1_OUT_Led,1)
    pi.write(Relay_1,1)
@@ -305,8 +303,8 @@ def test_pin(pin, duration=2):
 gpio_pins_bcm = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
 # Test each pin
-for pin in gpio_pins_bcm:
-    test_pin(pin)
+# for pin in gpio_pins_bcm:
+#     test_pin(pin)
 
 def entrance_id_to_entrance(entrance_id):
    '''Helper function to convert entrance_id to "E1" | "E2"
