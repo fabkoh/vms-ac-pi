@@ -258,6 +258,9 @@ def activate_buzz_led(entrance) :
    print("buzzzzzing and led on")
    pi.write(E1_OUT_Buzz,1)
    pi.write(E1_OUT_Led,1)
+   pi.write(E1_IN_Led,1)
+   pi.write(E2_OUT_Led,1)
+   pi.write(E2_IN_Led,1)
    pi.write(Relay_1,1)
    if entrance == "E1":
       E1_buzzer=True
