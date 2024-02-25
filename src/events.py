@@ -359,7 +359,7 @@ def reader_detects_bits(bits, value, entrance):
 
     def greenlight_and_beep():
         '''set wiegand reader to show green light and give a recognisaible beep, 2-3 secondas long'''
-       if entrance_prefix == "E1":
+        if entrance_prefix == "E1":
             pass
 
     def open_door():
