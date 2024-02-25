@@ -5,7 +5,7 @@ import os
 path = os.path.dirname(os.path.abspath(__file__))
 
 
-async def update_server_events():
+def update_server_events():
     url = server_url+'/api/unicon/events'
 
     file = open(path+"/json/pendingLogs.json")
