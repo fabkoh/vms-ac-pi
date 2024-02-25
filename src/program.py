@@ -103,7 +103,7 @@ def check_events_for(entrance):
                 timeout_buzzer.start()
                 print("Buzzer started buzzing")
                 eventsMod.record_buzzer_start(entrancename)
-                asyncio.create_task(events.updateserver.update_server_events())
+                events.updateserver.update_server_events()
 
                 
     else:
