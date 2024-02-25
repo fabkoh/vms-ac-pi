@@ -14,6 +14,7 @@ import gc
 from changeStatic import *
 import GPIOconfig
 from var import server_url
+from lock import config_lock
 # change_static_ip, get_default_gateway_windows
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -25,9 +26,10 @@ config = None
 
 def update_config():
     global config
-    fileconfig = open(file)
-    config = json.load(fileconfig)
-    fileconfig.close()
+    with config_lock:
+        fileconfig = open(file)
+        config = json.load(fileconfig)
+        fileconfig.close()
 
 
 update_config()  # initial load of file
