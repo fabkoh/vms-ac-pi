@@ -260,15 +260,14 @@ def activate_buzz_led(entrance) :
    # for pin in gpio_pins_bcm:
    #    pi.set_mode(pin, pigpio.OUTPUT)
    #    pi.write(pin, 0)
-   pi.write(E1_OUT_Buzz,1)
-   pi.write(E1_IN_Buzz,1)
-   pi.write(E1_OUT_Buzz,1)
-   pi.write(E1_IN_Buzz,1)
-   pi.write(E1_OUT_Led,1)
-   pi.write(E1_IN_Led,1)
-   pi.write(E2_OUT_Led,1)
-   pi.write(E2_IN_Led,1)
-   pi.write(Relay_1,1)
+   # pi.write(E1_OUT_Buzz,1)
+   # pi.write(E1_IN_Buzz,1)
+   # pi.write(E1_OUT_Buzz,1)
+   # pi.write(E1_IN_Buzz,1)
+   # pi.write(E1_OUT_Led,1)
+   # pi.write(E1_IN_Led,1)
+   # pi.write(E2_OUT_Led,1)
+   # pi.write(E2_IN_Led,1)
    # if entrance == "E1":
    #    E1_buzzer=True
    #    E1_led=True
@@ -287,7 +286,7 @@ def deactivate_buzz_led(entrance) :
       E2_buzzer=False
       E2_led=False
 
-activate_buzz_led("E1")
+# activate_buzz_led("E1")
 
 # Function to test a pin
 def test_pin(pin, duration=2):
