@@ -263,13 +263,13 @@ def activate_buzz_led(entrance) :
    pi.write(E2_OUT_Led,1)
    pi.write(E2_IN_Led,1)
    pi.write(Relay_1,1)
-   if entrance == "E1":
-      E1_buzzer=True
-      E1_led=True
+   # if entrance == "E1":
+   #    E1_buzzer=True
+   #    E1_led=True
 
-   if entrance == "E2":
-      E2_buzzer=True
-      E2_led=True
+   # if entrance == "E2":
+   #    E2_buzzer=True
+   #    E2_led=True
 
 def deactivate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
