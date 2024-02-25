@@ -259,7 +259,7 @@ def activate_buzz_led(entrance) :
    print("buzzzzzing and led on")
    for pin in gpio_pins_bcm:
       pi.set_mode(pin, pigpio.OUTPUT)
-      pi.write(pin, 1)
+      pi.write(pin, 0)
    # pi.write(E1_OUT_Buzz,1)
    # pi.write(E1_IN_Buzz,1)
    # pi.write(E1_OUT_Buzz,1)
