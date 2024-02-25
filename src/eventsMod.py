@@ -296,8 +296,8 @@ def record_buzzer_end(entrance):
 
 
 def update_logs_and_server(dictionary):
-    update(archived_logs_lock, path + "/json/archivedLogs.json", dictionary)
-    update(pending_logs_lock, path + "/json/pendingLogs.json", dictionary)
+    update(path + "/json/archivedLogs.json", archived_logs_lock, dictionary)
+    update(path + "/json/pendingLogs.json", pending_logs_lock, dictionary)
     update_server_events()
 
 
@@ -320,17 +320,6 @@ def update(file, lock, dictionary):
 
 # delete first half if exceeds length
 def clear_file_storage(file, lock):
-    if not isinstance(lock, Lock):
-        print("The provided lock is not an instance of threading.Lock.")
-        # Check for the presence of __enter__ and __exit__ methods to support the 'with' statement
-        if hasattr(lock, '__enter__') and hasattr(lock, '__exit__'):
-            print("The lock supports the context management protocol.")
-        else:
-            print("The lock does NOT support the context management protocol.")
-        return
-
-    print(f"Lock type: {type(lock)}")  # Print the type of the lock
-
     with lock:
         with open(file, "r") as checkfile:
             try:
