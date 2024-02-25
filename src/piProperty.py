@@ -42,4 +42,4 @@ def log_system_stats(interval, duration):
         time.sleep(interval)
 
 # Example usage: Log system stats every 5 seconds for 1 minute
-log_system_stats(5, 60)
+# log_system_stats(5, 60)
