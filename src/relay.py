@@ -94,6 +94,7 @@ def deActivateRelay(relayPin, activateLevel):
 
 
 def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+    
     global E1_opened
     print("Door 1 currently opened", E1_opened)
     if not E1_opened:
@@ -226,9 +227,10 @@ def trigger_relay_one(thirdPartyOption=None):
         setGpioMode()
         setupRelayPin(outputPin)
         print("opening")
-        toggleRelay1(relayPin=outputPin, activateLevel='High',
+        threading.Thread(target=toggleRelay1, args=(relayPin=outputPin, activateLevel='High',
                      activateMilliSeconds=5000, deActivateMilliSeconds=1000,
-                     toggleCount=1)
+                     toggleCount=1)).start()
+
         # cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
