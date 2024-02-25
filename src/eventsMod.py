@@ -1,4 +1,3 @@
-import asyncio
 import json
 from datetime import datetime
 import os
@@ -6,6 +5,8 @@ from updateserver import update_server_events
 import eventActionTriggerConstants
 import eventActionTriggers
 from lock import pending_logs_lock, archived_logs_lock, config_lock
+from threading import Lock
+
 
 path = os.path.dirname(os.path.abspath(__file__))
 
