@@ -293,7 +293,7 @@ debounce_delay = 1  # 1s debounce delay
 
 
 def event_trigger_cb(event_trigger):
-    print(f"even trigger is {event_trigger}")
+    print(f"event trigger is {event_trigger}")
     # debounce logic
     if time.time() - event_trigger_cb.last_call_time < debounce_delay:
         return

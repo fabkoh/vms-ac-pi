@@ -702,9 +702,16 @@ def gen_check(gpio):
         print("Gen out 1 ")
 
 
+debounce_delay = 0.05 # 50ms debounce delay
+
+
 def mag_detects_rising(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
+
+
+    if time.time() - mag_detects_rising.last_call_time < debounce_delay:
+        return
 
     if gpio == E1_Mag:
         timeout_mag_E1.start()
@@ -724,11 +731,16 @@ def mag_detects_rising(gpio, level, tick):
             eventsMod.record_mag_opened_warning(E2)
         updateserver.update_server_events()
 
+    mag_detects_rising.last_call_time = time.time()
 
+mag_detects_rising.last_call_time = 0
 
 def mag_detects_falling(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
+
+    if time.time() - mag_detects_falling.last_call_time < debounce_delay:
+        return
 
     if gpio == E1_Mag:
         timeout_mag_E1.stop()
@@ -744,7 +756,10 @@ def mag_detects_falling(gpio, level, tick):
         eventsMod.record_mag_closed(E2)
         updateserver.update_server_events()
 
-debounce_delay = 0.05 # 50ms debounce delay
+    mag_detects_falling.last_call_time = time.time()
+
+mag_detects_falling.last_call_time = 0
+
 
 def button_detects_change(gpio, level, tick):
     global mag_E1_allowed_to_open
