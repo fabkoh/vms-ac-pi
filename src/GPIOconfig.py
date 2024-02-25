@@ -257,6 +257,7 @@ def activate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
    print("buzzzzzing and led on")
    pi.write(E1_OUT_Buzz,1)
+   pi.write(E1_IN_Buzz,1)
    pi.write(E1_OUT_Led,1)
    pi.write(E1_IN_Led,1)
    pi.write(E2_OUT_Led,1)
