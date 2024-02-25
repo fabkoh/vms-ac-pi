@@ -12,7 +12,7 @@ import relay
 import eventActionTriggers
 import piProperty
 import program
-from src.lock import config_lock
+from lock import config_lock
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False

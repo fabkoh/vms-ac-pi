@@ -6,7 +6,7 @@ import time
 import os
 from eventActionTriggerConstants import *
 import relay
-from src.lock import pending_logs_lock
+from lock import pending_logs_lock
 from var import server_url
 import gc
 

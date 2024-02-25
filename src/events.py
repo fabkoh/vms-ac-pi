@@ -10,7 +10,7 @@ import time
 import updateserver
 import os
 
-from src.lock import config_lock
+from lock import config_lock
 
 path = os.path.dirname(os.path.abspath(__file__))
 
