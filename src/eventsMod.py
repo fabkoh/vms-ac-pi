@@ -4,6 +4,10 @@ import os
 from updateserver import update_server_events
 import eventActionTriggerConstants
 import eventActionTriggers
+from lock import pending_logs_lock, archived_logs_lock, config_lock
+from threading import Lock
+
+
 path = os.path.dirname(os.path.abspath(__file__))
 
 '''
@@ -17,9 +21,11 @@ MAX_JSON_LENGTH = None
 
 def update_config():
     global config, controllerSerial, MAX_JSON_LENGTH
-    f = open(path+'/json/config.json')
-    config = json.load(f)
-    f.close()
+
+    with config_lock:
+        f = open(path+'/json/config.json')
+        config = json.load(f)
+        f.close()
 
     controllerSerial = config['controllerConfig']['controllerSerialNo']
     MAX_JSON_LENGTH = int(config.get("archivedMAXlength", 10))
@@ -79,10 +85,7 @@ def record_auth_scans(name, accessGroup, authtype, entrance, status):
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
 
-    update(path+"/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
-
+    update_logs_and_server(dictionary)
 
 def invalid_pin_used(entrance, status):
     dictionary = {
@@ -97,9 +100,7 @@ def invalid_pin_used(entrance, status):
             eventActionTriggerConstants.UNAUTHENTICATED_SCAN, entrance)
     )
 
-    update(path+"/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 
 def pin_only_used(entrance, status):
@@ -115,9 +116,7 @@ def pin_only_used(entrance, status):
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
 
-    update(path+"/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 # updates pendingLogs.json and send to backend
 # updates archivedLogs.json for backup
@@ -132,9 +131,7 @@ def record_masterpassword_used(authtype, entrance, status):
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 # updates pendingTrans.json and send to backend
 # updates archivedTrans.json for backup
@@ -156,9 +153,7 @@ def record_unauth_scans(authtype, entrance, status, name=None, access_group=None
             eventActionTriggerConstants.UNAUTHENTICATED_SCAN, entrance)
     )
     print(f"Recorded unauth scan at {entrance}")
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 
 def record_button_pressed(entrance, name_of_button):
@@ -177,9 +172,7 @@ def record_button_pressed(entrance, name_of_button):
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.EXIT_BUTTON_PRESSED, e)
     )
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 # status = opened/ closed
 
 def fire_alarm_activated(gpio, level, tick):
@@ -198,9 +191,7 @@ def fire_alarm_activated(gpio, level, tick):
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.FIRE, e)
     )
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 
 def record_antipassback(authtype, entrance, status):
@@ -220,9 +211,7 @@ def record_antipassback(authtype, entrance, status):
         "controller": controllerSerial, "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 
 def record_mag_opened(entrance):
@@ -240,9 +229,7 @@ def record_mag_opened(entrance):
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION, entrance)
     )
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 
 def record_mag_closed(entrance):
@@ -256,9 +243,7 @@ def record_mag_closed(entrance):
     eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
                                                                                         eventActionTriggerConstants.STOP_TIMER,
                                                                                         entrance))
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 
 def record_mag_opened_warning(entrance):
@@ -278,9 +263,7 @@ def record_mag_opened_warning(entrance):
             eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION, entrance)
     )
 
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 # status = started buzzing/ stopped buzzing
 
@@ -294,9 +277,7 @@ def record_buzzer_start(entrance):
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
 
 
 def record_buzzer_end(entrance):
@@ -308,48 +289,51 @@ def record_buzzer_end(entrance):
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
-    update(path + "/json/archivedLogs.json", dictionary)
-    update(path+"/json/pendingLogs.json", dictionary)
-    update_server_events()
+    update_logs_and_server(dictionary)
+
 
 # update to update json files
 
 
-def update(file, dictionary):
+def update_logs_and_server(dictionary):
+    update(path + "/json/archivedLogs.json", archived_logs_lock, dictionary)
+    update(path + "/json/pendingLogs.json", pending_logs_lock, dictionary)
+    update_server_events()
 
+
+def update(file, lock, dictionary):
     # check if current json files exceed max length
-    clear_file_storage(file)
+    clear_file_storage(file, lock)
+    with lock:
+        with open(file, "r+") as outfile:
+            try:
+                data = json.load(outfile)
+            except:
+                data = []
 
-    with open(file, "r+") as outfile:
-        try:
-            data = json.load(outfile)
-        except:
-            data = []
+            data.append(dictionary)
+            outfile.seek(0)
 
-        data.append(dictionary)
-        outfile.seek(0)
-
-        json.dump(data, outfile, indent=4)
+            json.dump(data, outfile, indent=4)
     outfile.close()
 
 
 # delete first half if exceeds length
-def clear_file_storage(file):
+def clear_file_storage(file, lock):
+    with lock:
+        with open(file, "r") as checkfile:
+            try:
+                checkdata = json.load(checkfile)
+            except:
+                checkdata = []
 
-    with open(file, "r") as checkfile:
-
-        try:
-            checkdata = json.load(checkfile)
-        except:
-            checkdata = []
-
-        if len(checkdata) > MAX_JSON_LENGTH:
-            checkfile.close()
-            with open(file, "w+") as outfile:
-                del checkdata[:(int(MAX_JSON_LENGTH/2))]
-                json.dump(checkdata, outfile, indent=4)
-        else:
-            checkfile.close()
+            if len(checkdata) > MAX_JSON_LENGTH:
+                checkfile.close()
+                with open(file, "w+") as outfile:
+                    del checkdata[:(int(MAX_JSON_LENGTH/2))]
+                    json.dump(checkdata, outfile, indent=4)
+            else:
+                checkfile.close()
 
 
 def main():

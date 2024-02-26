@@ -1,4 +1,5 @@
 
+import asyncio
 from datetime import datetime, date
 # from GPIOconfig import Gen_Out_1
 
@@ -8,6 +9,9 @@ import json
 import time
 import updateserver
 import os
+
+from lock import config_lock
+
 path = os.path.dirname(os.path.abspath(__file__))
 
 '''
@@ -108,9 +112,10 @@ def update_config():
     '''Call this before events.update_credOccur'''
     global config, GPIOpins, E1, E2, E1_Mag, Gen_Out_1, E1_Button, E2_Mag, E2_Button, TIMEOUT, \
         CRED_TIMEOUT_E1, CRED_TIMEOUT_E2, MAG_TIMEOUT_E1, MAG_TIMEOUT_E2, BUZZER_TIMEOUT_E1, BUZZER_TIMEOUT_E2
-    f = open(path+'/json/config.json')
-    config = json.load(f)
-    f.close()
+    with config_lock:
+        f = open(path+'/json/config.json')
+        config = json.load(f)
+        f.close()
 
     E1 = config["EntranceName"]["E1"]
     E2 = config["EntranceName"]["E2"]
@@ -355,6 +360,12 @@ def reader_detects_bits(bits, value, entrance):
         if timeout_cred.status():
             timeout_cred.stop()
 
+
+    def greenlight_and_beep():
+        '''set wiegand reader to show green light and give a recognisaible beep, 2-3 secondas long'''
+        if entrance_prefix == "E1":
+            pass
+
     def open_door():
         '''opens the door, set mags to allow open, update server events'''
         # print("open")
@@ -519,6 +530,9 @@ def reader_detects_bits(bits, value, entrance):
                                     eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[
                                                                 0], auth_method_name, entrancename, entrance_direction)
                                 open_door()
+                                # set weigand reader to show green light and give a recognisaible beep, 2-3 secondas song
+                                
+
                                 reset_cred_and_stop_timer()
                                 return
                             # person dont have access at this time
@@ -701,9 +715,16 @@ def gen_check(gpio):
         print("Gen out 1 ")
 
 
+debounce_delay = 0.05 # 50ms debounce delay
+
+
 def mag_detects_rising(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
+
+
+    if time.time() - mag_detects_rising.last_call_time < debounce_delay:
+        return
 
     if gpio == E1_Mag:
         timeout_mag_E1.start()
@@ -723,10 +744,16 @@ def mag_detects_rising(gpio, level, tick):
             eventsMod.record_mag_opened_warning(E2)
         updateserver.update_server_events()
 
+    mag_detects_rising.last_call_time = time.time()
+
+mag_detects_rising.last_call_time = 0
 
 def mag_detects_falling(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
+
+    if time.time() - mag_detects_falling.last_call_time < debounce_delay:
+        return
 
     if gpio == E1_Mag:
         timeout_mag_E1.stop()
@@ -742,7 +769,10 @@ def mag_detects_falling(gpio, level, tick):
         eventsMod.record_mag_closed(E2)
         updateserver.update_server_events()
 
-debounce_delay = 0.05 # 50ms debounce delay
+    mag_detects_falling.last_call_time = time.time()
+
+mag_detects_falling.last_call_time = 0
+
 
 def button_detects_change(gpio, level, tick):
     global mag_E1_allowed_to_open

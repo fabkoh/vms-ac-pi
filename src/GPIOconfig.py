@@ -5,6 +5,8 @@ import json
 from datetime import datetime
 import os
 import gc
+from lock import config_lock
+
 path = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -63,9 +65,10 @@ def update_config():
       E2_OUT_Led, E2_Mag, E2_Button, Gen_In_1, Gen_Out_1, Gen_In_2, Gen_Out_2, \
       Gen_In_3, Gen_Out_3
 
-   f=open(path+'/json/config.json')
-   config=json.load(f)
-   f.close()
+   with config_lock:
+      f=open(path+'/json/config.json')
+      config=json.load(f)
+      f.close()
 
    GPIOpins = config["GPIOpins"]
 
@@ -251,15 +254,30 @@ E1_led_time=0
 E2_buzzer_time=0
 E2_led_time=0
 
+gpio_pins_bcm = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+
+
 def activate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
-   if entrance == "E1":
-      E1_buzzer=True
-      E1_led=True
+   print("buzzzzzing and led on")
+   # for pin in gpio_pins_bcm:
+   #    pi.set_mode(pin, pigpio.OUTPUT)
+   #    pi.write(pin, 0)
+   # pi.write(E1_OUT_Buzz,1)
+   # pi.write(E1_IN_Buzz,1)
+   # pi.write(E1_OUT_Buzz,1)
+   # pi.write(E1_IN_Buzz,1)
+   # pi.write(E1_OUT_Led,1)
+   # pi.write(E1_IN_Led,1)
+   # pi.write(E2_OUT_Led,1)
+   # pi.write(E2_IN_Led,1)
+   # if entrance == "E1":
+   #    E1_buzzer=True
+   #    E1_led=True
 
-   if entrance == "E2":
-      E2_buzzer=True
-      E2_led=True
+   # if entrance == "E2":
+   #    E2_buzzer=True
+   #    E2_led=True
 
 def deactivate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
@@ -270,6 +288,34 @@ def deactivate_buzz_led(entrance) :
    if entrance == "E2":
       E2_buzzer=False
       E2_led=False
+
+# activate_buzz_led("E1")
+
+# Function to test a pin
+def test_pin(pin, duration=2):
+    pi.set_mode(pin, pigpio.OUTPUT)
+    print(f"Testing {pin}")
+    pi.write(pin, 1)  # Turn on
+    time.sleep(0.1)  # Short delay before reading back the state
+    # Verify the pin is high
+    if pi.read(pin) == 1:
+        print(f"Pin {pin} is HIGH")
+    else:
+        print(f"Error: Pin {pin} is not HIGH as expected")
+    time.sleep(duration - 0.1)
+    pi.write(pin, 0)  # Turn off
+    # Verify the pin is low
+    time.sleep(0.1)
+    if pi.read(pin) == 0:
+        print(f"Pin {pin} is LOW")
+    else:
+        print(f"Error: Pin {pin} is not LOW as expected")
+    print(f"Tested {pin}\n")
+
+
+# Test each pin
+# for pin in gpio_pins_bcm:
+#     test_pin(pin)
 
 def entrance_id_to_entrance(entrance_id):
    '''Helper function to convert entrance_id to "E1" | "E2"

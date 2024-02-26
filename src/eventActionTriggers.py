@@ -6,6 +6,7 @@ import time
 import os
 from eventActionTriggerConstants import *
 import relay
+from lock import pending_logs_lock
 from var import server_url
 import gc
 
@@ -72,9 +73,10 @@ def sendEmail_function(event):
 
         if r.status_code == 201 or r.status_code == 200:
             print("SUCCESS")
-            fileclear = open(path+'/json/pendingLogs.json', 'w')
-            json.dump([], fileclear, indent=4)
-            fileclear.close()
+            with pending_logs_lock:
+                fileclear = open(path+'/json/pendingLogs.json', 'w')
+                json.dump([], fileclear, indent=4)
+                fileclear.close()
         else:
             print("Fail to send")
     except Exception as e:
@@ -110,9 +112,10 @@ def sendSMS_function(event):
 
         if r.status_code == 201 or r.status_code == 200:
             print("SUCCESS")
-            fileclear = open(path+'/json/pendingLogs.json', 'w')
-            json.dump([], fileclear, indent=4)
-            fileclear.close()
+            with pending_logs_lock:
+                fileclear = open(path+'/json/pendingLogs.json', 'w')
+                json.dump([], fileclear, indent=4)
+                fileclear.close()
         else:
             print("Fail to send")
     except:
@@ -293,7 +296,7 @@ debounce_delay = 1  # 1s debounce delay
 
 
 def event_trigger_cb(event_trigger):
-    print(f"even trigger is {event_trigger}")
+    print(f"event trigger is {event_trigger}")
     # debounce logic
     if time.time() - event_trigger_cb.last_call_time < debounce_delay:
         return
