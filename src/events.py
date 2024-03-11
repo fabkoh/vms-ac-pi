@@ -373,6 +373,7 @@ def reader_detects_bits(bits, value, entrance):
         global mag_E2_allowed_to_open
         if entrance_prefix == "E1":
             mag_E1_allowed_to_open = True
+            print("open_door_before_trigger_relay_one ", str(datetime.now()))
             relay.trigger_relay_one(E1_thirdPartyOption)
         elif entrance_prefix == "E2":
             mag_E2_allowed_to_open = True
@@ -441,8 +442,12 @@ def reader_detects_bits(bits, value, entrance):
                credentials[pin_type] == device_details["Masterpassword"]:
                 print("masterpassword used", str(datetime.now()))
 
+                print("before record event ", str(datetime.now()))
+
                 eventsMod.record_masterpassword_used(
                     "Master Pin", entrancename, entrance_direction)
+                print("after record event ", str(datetime.now()))
+
                 open_door()
                 reset_cred_and_stop_timer()
                 # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
