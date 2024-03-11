@@ -101,8 +101,13 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
     global E1_opened
     print("Door 1 currently opened", E1_opened)
     if not E1_opened:
+        # print timing before gpio set up
+        print("before setup gpio", str(datetime.now()))
         setGpioMode()
+        print("before setup relay", str(datetime.now()))
         setupRelayPin(relayPin)
+        print("after setup relay", str(datetime.now()))
+
         for i in range(toggleCount):
             print("togglerelay1 activate", str(datetime.now()))
             activateRelay(relayPin, activateLevel)
