@@ -95,23 +95,23 @@ def check_events_for(entrance):
         if timeout_buzzer.check(BUZZER_TIMEOUT):
             print("email")
 
-    if timeout_mag.status():
-        if timeout_mag.check(MAG_TIMEOUT):
-            GPIOconfig.activate_buzz_led(entrance[:2])
+    # if timeout_mag.status():
+    #     if timeout_mag.check(MAG_TIMEOUT):
+    #         GPIOconfig.activate_buzz_led(entrance[:2])
 
-            if not timeout_buzzer.status():
-                timeout_buzzer.start()
-                print("Buzzer started buzzing")
-                eventsMod.record_buzzer_start(entrancename)
-                events.updateserver.update_server_events()
+    #         if not timeout_buzzer.status():
+    #             timeout_buzzer.start()
+    #             print("Buzzer started buzzing")
+    #             eventsMod.record_buzzer_start(entrancename)
+    #             events.updateserver.update_server_events()
 
                 
-    else:
-        GPIOconfig.deactivate_buzz_led(entrance[:2])
-        if timeout_buzzer.status():
-            timeout_buzzer.stop()
-            print("Buzzer stopped buzzing")
-            eventsMod.record_buzzer_end(entrancename)
+    # else:
+    #     GPIOconfig.deactivate_buzz_led(entrance[:2])
+    #     if timeout_buzzer.status():
+    #         timeout_buzzer.stop()
+    #         print("Buzzer stopped buzzing")
+    #         eventsMod.record_buzzer_end(entrancename)
 
     events.time.sleep(0.1)
 

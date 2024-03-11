@@ -439,7 +439,8 @@ def reader_detects_bits(bits, value, entrance):
             if pin_type in credentials and \
                "Masterpassword" in device_details and \
                credentials[pin_type] == device_details["Masterpassword"]:
-                print("masterpassword used")
+                print("masterpassword used", str(datetime.now()))
+
                 eventsMod.record_masterpassword_used(
                     "Master Pin", entrancename, entrance_direction)
                 open_door()
