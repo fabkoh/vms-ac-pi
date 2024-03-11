@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from var import server_url
 import json
 import requests
