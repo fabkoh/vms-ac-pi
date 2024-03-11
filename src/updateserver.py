@@ -12,23 +12,22 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 def update_server_events():
     print("inside update_server_events ", str(datetime.now()))
+    
+    print("outside pending logs lock ", str(datetime.now()))
+    with pending_logs_lock:
+        print("inside pending logs lock ", str(datetime.now()))
+        with open(path+"/json/pendingLogs.json", 'r') as file:
+            data = json.load(file)
+        print("after pending logs lock ", str(datetime.now()))
 
+    url = server_url + '/api/unicon/events'
     # Start the send_request_to_server function in a new thread
-    thread = threading.Thread(target=send_request_to_server, args=("pendingLogs",))
+    thread = threading.Thread(target=send_request_to_server, args=(url, data))
     thread.start()
-    print("thread started ", str(datetime.now()))
+    print("inside update_server_events ", str(datetime.now()))
 
     # The function returns immediately, while the thread continues to run
 
-def send_request_to_server(type):
-    if type == "pendingLogs":
-        with pending_logs_lock:
-            with open(path+"/json/pendingLogs.json", 'r') as file:
-                data = json.load(file)
-
-        url = server_url + '/api/unicon/events'
-
-        send_request_to_server(url, data)
 
 def send_request_to_server(url, data):
     try:
