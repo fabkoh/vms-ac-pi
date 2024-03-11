@@ -13,9 +13,8 @@ path = os.path.dirname(os.path.abspath(__file__))
 def update_server_events():
     print("inside update_server_events ", str(datetime.now()))
 
-
     # Start the send_request_to_server function in a new thread
-    thread = threading.Thread(target=send_request_to_server, args=("pendingLogs"))
+    thread = threading.Thread(target=send_request_to_server, args=("pendingLogs",))
     thread.start()
     print("thread started ", str(datetime.now()))
 
