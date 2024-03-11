@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 import os
+import threading
 from updateserver import update_server_events
 import eventActionTriggerConstants
 import eventActionTriggers
@@ -296,12 +297,17 @@ def record_buzzer_end(entrance):
 
 
 def update_logs_and_server(dictionary):
-    print("before update logs", str(datetime.now()))
-    update(path + "/json/archivedLogs.json", archived_logs_lock, dictionary)
-    update(path + "/json/pendingLogs.json", pending_logs_lock, dictionary)
-    print("inside update_logs_and_server ", str(datetime.now()))
+    def thread_task():
+        print("before update logs", str(datetime.now()))
+        update(path + "/json/archivedLogs.json", archived_logs_lock, dictionary)
+        update(path + "/json/pendingLogs.json", pending_logs_lock, dictionary)
+        print("inside update_logs_and_server ", str(datetime.now()))
 
-    update_server_events()
+        update_server_events()
+
+    # create thread to implement the above 
+    thread = threading.Thread(target=thread_task)
+    thread.start()
 
 
 def update(file, lock, dictionary):
