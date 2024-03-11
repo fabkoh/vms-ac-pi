@@ -104,7 +104,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         setGpioMode()
         setupRelayPin(relayPin)
         for i in range(toggleCount):
-            print("togglerelay1 activate")
+            print("togglerelay1 activate", str(datetime.now()))
             activateRelay(relayPin, activateLevel)
 
             E1_opened = True
