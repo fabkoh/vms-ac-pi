@@ -213,7 +213,6 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
 #     return
 
 
-@multitasking.task
 def trigger_relay_one(thirdPartyOption=None):
 
     outputPin = Relay_1
@@ -245,7 +244,6 @@ def trigger_relay_one(thirdPartyOption=None):
     return
 
 
-@multitasking.task
 def trigger_relay_two(thirdPartyOption=None):
 
     outputPin = Relay_2
