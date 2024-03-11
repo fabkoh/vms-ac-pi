@@ -441,9 +441,6 @@ def reader_detects_bits(bits, value, entrance):
                "Masterpassword" in device_details and \
                credentials[pin_type] == device_details["Masterpassword"]:
                 print("masterpassword used", str(datetime.now()))
-
-                print("before record event ", str(datetime.now()))
-
                 eventsMod.record_masterpassword_used(
                     "Master Pin", entrancename, entrance_direction)
                 print("after record event ", str(datetime.now()))

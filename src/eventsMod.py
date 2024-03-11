@@ -298,6 +298,8 @@ def record_buzzer_end(entrance):
 def update_logs_and_server(dictionary):
     update(path + "/json/archivedLogs.json", archived_logs_lock, dictionary)
     update(path + "/json/pendingLogs.json", pending_logs_lock, dictionary)
+    print("inside update_logs_and_server ", str(datetime.now()))
+
     update_server_events()
 
 
