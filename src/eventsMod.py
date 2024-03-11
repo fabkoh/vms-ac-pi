@@ -296,6 +296,7 @@ def record_buzzer_end(entrance):
 
 
 def update_logs_and_server(dictionary):
+    print("before update logs", str(datetime.now()))
     update(path + "/json/archivedLogs.json", archived_logs_lock, dictionary)
     update(path + "/json/pendingLogs.json", pending_logs_lock, dictionary)
     print("inside update_logs_and_server ", str(datetime.now()))
@@ -306,6 +307,8 @@ def update_logs_and_server(dictionary):
 def update(file, lock, dictionary):
     # check if current json files exceed max length
     clear_file_storage(file, lock)
+    print("before lock", str(datetime.now()))
+
     with lock:
         with open(file, "r+") as outfile:
             try:
@@ -313,11 +316,16 @@ def update(file, lock, dictionary):
             except:
                 data = []
 
+            print("before dict append", str(datetime.now()))
+
             data.append(dictionary)
             outfile.seek(0)
+            print("after dict append", str(datetime.now()))
 
             json.dump(data, outfile, indent=4)
     outfile.close()
+    print("after lock", str(datetime.now()))
+
 
 
 # delete first half if exceeds length
