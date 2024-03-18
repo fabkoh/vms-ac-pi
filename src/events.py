@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 # Create a file handler for outputting log messages to a file
-file_handler = logging.FileHandler('logfile.log')
+file_handler = logging.FileHandler('logfileEvents.log')
 
 # Create a formatter and add it to the handler
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
