@@ -1,3 +1,5 @@
+import logging
+
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
@@ -10,6 +12,22 @@ from lock import config_lock
 from eventActionTriggerConstants import GEN_OUT_1
 path = os.path.dirname(os.path.abspath(__file__))
 
+
+# Create a logger
+logger = logging.getLogger(__name__)
+
+# Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
+logger.setLevel(logging.DEBUG)
+
+# Create a file handler for outputting log messages to a file
+file_handler = logging.FileHandler('logfile.log')
+
+# Create a formatter and add it to the handler
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+
+# Add the handler to the logger
+logger.addHandler(file_handler)
 
 # everytime relay triggers, mag_status_open = True
 # if mag_contact opened but mag_status_open = False, TRIGGER ALARM
@@ -85,6 +103,7 @@ def activateRelay(relayPin, activateLevel):
         setRelayPinHigh(relayPin)
     else:
         setRelayPinLow(relayPin)
+    logger.info("activateRelay")
     return
 
 
@@ -93,13 +112,14 @@ def deActivateRelay(relayPin, activateLevel):
         setRelayPinLow(relayPin)
     else:
         setRelayPinHigh(relayPin)
+    logger.info("deActivateRelay")
     return
 
 
 def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     
     global E1_opened
-    print("Door 1 currently opened", E1_opened)
+    logger.info("trigger toggleRelay1", E1_opened)
     if not E1_opened:
         # print timing before gpio set up
         print("before setup gpio", str(datetime.now()))
@@ -109,7 +129,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         print("after setup relay", str(datetime.now()))
 
         for i in range(toggleCount):
-            print("togglerelay1 activate", str(datetime.now()))
+            logger.info("togglerelay1 activate", str(datetime.now()))
             activateRelay(relayPin, activateLevel)
 
             E1_opened = True
@@ -118,7 +138,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         if E1_perm_opened:
             pass
         else:
-            print("togglerelay1 DEactivate")
+            logger.info("togglerelay1 DEactivate")
             E1_opened = False
             deActivateRelay(relayPin, activateLevel)
             sleep(deActivateMilliSeconds / 1000)
@@ -128,7 +148,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 
 def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     global E2_opened
-    print("Door 2 currently opened", E2_opened)
+    logger.info("trigger toggerRelay2", E2_opened)
     if not E2_opened:
         setGpioMode()
         setupRelayPin(relayPin)
@@ -214,7 +234,6 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
 
 
 def trigger_relay_one(thirdPartyOption=None):
-
     outputPin = Relay_1
 
     if thirdPartyOption == "GEN_OUT_1":

@@ -1,4 +1,4 @@
-
+import logging
 import asyncio
 from datetime import datetime, date
 # from GPIOconfig import Gen_Out_1
@@ -34,6 +34,23 @@ or_delimiter = " / "
 pin_bits = 4  # 1 pin number
 card_bits = 26
 # end config
+
+# Create a logger
+logger = logging.getLogger(__name__)
+
+# Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
+logger.setLevel(logging.DEBUG)
+
+# Create a file handler for outputting log messages to a file
+file_handler = logging.FileHandler('logfile.log')
+
+# Create a formatter and add it to the handler
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+
+# Add the handler to the logger
+logger.addHandler(file_handler)
+
 
 
 class TimerError(Exception):
@@ -369,11 +386,11 @@ def reader_detects_bits(bits, value, entrance):
     def open_door():
         '''opens the door, set mags to allow open, update server events'''
         # print("open")
+        logger.info("trigger open_door method")
         global mag_E1_allowed_to_open
         global mag_E2_allowed_to_open
         if entrance_prefix == "E1":
             mag_E1_allowed_to_open = True
-            print("open_door_before_trigger_relay_one ", str(datetime.now()))
             relay.trigger_relay_one(E1_thirdPartyOption)
         elif entrance_prefix == "E2":
             mag_E2_allowed_to_open = True
@@ -413,7 +430,8 @@ def reader_detects_bits(bits, value, entrance):
                 credential_added = True
     elif bits == card_bits:  # card
         credentials[card_type] = "0"+str(int("{:026b}".format(value)[1:25], 2))
-        print("bits={} value={}".format(
+        # print current time
+        print(str(datetime.now()) + " Card detected: bits={} value={}".format(
             bits, "0"+str(int("{:026b}".format(value)[1:25], 2))))
         credential_added = True
 
@@ -422,7 +440,7 @@ def reader_detects_bits(bits, value, entrance):
     # 2 check auth method (if cred entered not in curr cred schedule, reset)
     # 3 check person creds
     if credential_added:
-        print("check credentials")
+        logger.info("checking credentials")
         print(credentials)
         try:
             device_details = {}
@@ -440,10 +458,10 @@ def reader_detects_bits(bits, value, entrance):
             if pin_type in credentials and \
                "Masterpassword" in device_details and \
                credentials[pin_type] == device_details["Masterpassword"]:
-                print("masterpassword used", str(datetime.now()))
+                logger.info("masterpassword used", str(datetime.now()))
                 eventsMod.record_masterpassword_used(
                     "Master Pin", entrancename, entrance_direction)
-                print("after record event ", str(datetime.now()))
+                logger.info("after record event ", str(datetime.now()))
 
                 open_door()
                 reset_cred_and_stop_timer()
@@ -488,7 +506,7 @@ def reader_detects_bits(bits, value, entrance):
                 # check person cred
                 # 1 find the person
                 # 2 check if the person's access group can enter
-                print("trying to find person")
+                logger.info("trying to find person")
                 for access_group in entrance_details.get("AccessGroups", []):
                     # find the person
                     person_found = False
@@ -523,9 +541,8 @@ def reader_detects_bits(bits, value, entrance):
                             if verify_datetime(access_group_info.get('Schedule', {})):
 
                                 # auth scan
-                                print("found person, allowed to enter",
+                                logger.info("found person, allowed to enter",
                                       auth_method_name, type(auth_method_name))
-                                print(auth_method_name)
                                 if "Pin" == auth_method_name:
                                     eventsMod.pin_only_used(
                                         entrancename, entrance_direction)
@@ -539,7 +556,7 @@ def reader_detects_bits(bits, value, entrance):
                                 reset_cred_and_stop_timer()
                                 return
                             # person dont have access at this time
-                            print(
+                            logger.info(
                                 "found person, but not allowed to enter at this timing")
                             if "Pin" == auth_method_name:
                                 eventsMod.invalid_pin_used(
@@ -550,7 +567,7 @@ def reader_detects_bits(bits, value, entrance):
                             reset_cred_and_stop_timer()
                             return
                 # cannot find person
-                print("cannot find person")
+                logger.info("cannot find person")
                 if "Pin" == auth_method_name:
                     eventsMod.invalid_pin_used(
                         entrancename, entrance_direction)
@@ -787,13 +804,13 @@ def button_detects_change(gpio, level, tick):
 
     # handle button press
     if gpio == E1_Button:
-        print(f"{E1} push button1 is pressed at " + str(datetime.now()))
+        logger.info(f"{E1} push button1 is pressed at " + str(datetime.now()))
         mag_E1_allowed_to_open = True
         relay.trigger_relay_one(E1_thirdPartyOption)
         eventsMod.record_button_pressed(E1, "Security Guard Button")
 
     elif gpio == E2_Button:
-        print(f"{E2} push button2 is pressed at " + str(datetime.now()))
+        logger.info(f"{E2} push button2 is pressed at " + str(datetime.now()))
         mag_E2_allowed_to_open = True
         relay.trigger_relay_two(E2_thirdPartyOption)
         eventsMod.record_button_pressed(E2, "Security Guard Button")
