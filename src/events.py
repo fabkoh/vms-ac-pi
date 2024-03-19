@@ -386,7 +386,7 @@ def reader_detects_bits(bits, value, entrance):
     def open_door():
         '''opens the door, set mags to allow open, update server events'''
         # print("open")
-        logger.info("trigger open_door method")
+        logger.info("Trigger open_door method")
         global mag_E1_allowed_to_open
         global mag_E2_allowed_to_open
         if entrance_prefix == "E1":
@@ -440,7 +440,7 @@ def reader_detects_bits(bits, value, entrance):
     # 2 check auth method (if cred entered not in curr cred schedule, reset)
     # 3 check person creds
     if credential_added:
-        logger.info("checking credentials")
+        logger.info("Check Credentials")
         print(credentials)
         try:
             device_details = {}
@@ -458,10 +458,10 @@ def reader_detects_bits(bits, value, entrance):
             if pin_type in credentials and \
                "Masterpassword" in device_details and \
                credentials[pin_type] == device_details["Masterpassword"]:
-                logger.info("masterpassword used", str(datetime.now()))
+                logger.info("Using Master Password")
                 eventsMod.record_masterpassword_used(
                     "Master Pin", entrancename, entrance_direction)
-                logger.info("after record event ", str(datetime.now()))
+                logger.info("Updating Logs after Master Password used")
 
                 open_door()
                 reset_cred_and_stop_timer()
@@ -506,7 +506,7 @@ def reader_detects_bits(bits, value, entrance):
                 # check person cred
                 # 1 find the person
                 # 2 check if the person's access group can enter
-                logger.info("trying to find person")
+                logger.info("Finding person credentials in entrance_details")
                 for access_group in entrance_details.get("AccessGroups", []):
                     # find the person
                     person_found = False
@@ -541,8 +541,7 @@ def reader_detects_bits(bits, value, entrance):
                             if verify_datetime(access_group_info.get('Schedule', {})):
 
                                 # auth scan
-                                logger.info("found person, allowed to enter",
-                                      auth_method_name, type(auth_method_name))
+                                logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
                                 if "Pin" == auth_method_name:
                                     eventsMod.pin_only_used(
                                         entrancename, entrance_direction)
@@ -556,8 +555,7 @@ def reader_detects_bits(bits, value, entrance):
                                 reset_cred_and_stop_timer()
                                 return
                             # person dont have access at this time
-                            logger.info(
-                                "found person, but not allowed to enter at this timing")
+                            logger.info("Found person, but not allowed to enter at this timing")
                             if "Pin" == auth_method_name:
                                 eventsMod.invalid_pin_used(
                                     entrancename, entrance_direction)
@@ -567,7 +565,7 @@ def reader_detects_bits(bits, value, entrance):
                             reset_cred_and_stop_timer()
                             return
                 # cannot find person
-                logger.info("cannot find person")
+                logger.info("Cannot find person")
                 if "Pin" == auth_method_name:
                     eventsMod.invalid_pin_used(
                         entrancename, entrance_direction)
@@ -578,7 +576,6 @@ def reader_detects_bits(bits, value, entrance):
                 return
 
         except Exception as e:
-            print("cannot check cred", str(e))
             pass
 
     return

@@ -119,17 +119,14 @@ def deActivateRelay(relayPin, activateLevel):
 def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     
     global E1_opened
-    logger.info("trigger toggleRelay1", E1_opened)
+    logger.info("Trigger toggleRelay 1, E1_opened: %s", E1_opened)
     if not E1_opened:
         # print timing before gpio set up
-        print("before setup gpio", str(datetime.now()))
         setGpioMode()
-        print("before setup relay", str(datetime.now()))
         setupRelayPin(relayPin)
-        print("after setup relay", str(datetime.now()))
 
         for i in range(toggleCount):
-            logger.info("togglerelay1 activate", str(datetime.now()))
+            logger.info("toggleRelay1 Activated")
             activateRelay(relayPin, activateLevel)
 
             E1_opened = True
@@ -138,7 +135,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         if E1_perm_opened:
             pass
         else:
-            logger.info("togglerelay1 DEactivate")
+            logger.info("toggleRelay1 Deactivated")
             E1_opened = False
             deActivateRelay(relayPin, activateLevel)
             sleep(deActivateMilliSeconds / 1000)
@@ -148,12 +145,11 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 
 def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     global E2_opened
-    logger.info("trigger toggerRelay2", E2_opened)
+    logger.info("Trigger toggleRelay 2, E2_opened: %s", E2_opened)
     if not E2_opened:
         setGpioMode()
         setupRelayPin(relayPin)
         for i in range(toggleCount):
-            print("togglerelay2 activate")
             activateRelay(relayPin, activateLevel)
 
             E2_opened = True
@@ -162,7 +158,6 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         if E2_perm_opened:
             pass
         else:
-            print("togglerelay2 DEactivate")
             E2_opened = False
             deActivateRelay(relayPin, activateLevel)
             sleep(deActivateMilliSeconds / 1000)
@@ -181,7 +176,6 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
         GEN_2_OPEN = True
     elif (GenNo == 3):
         GEN_3_OPEN = True
-    print(f"activate gen {GenNo} for {activateMilliSeconds} seconds")
     sleep(activateMilliSeconds)
     deActivateRelay(relayPin, activateLevel)
     if (GenNo == 1):
@@ -192,7 +186,6 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
         GEN_3_OPEN = False
     while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN or E1_opened or E2_opened):
         sleep(1)
-    print(f"deactivate gen {GenNo}")
     return
 # *** Tests ***
 
