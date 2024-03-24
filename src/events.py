@@ -416,6 +416,7 @@ def reader_detects_bits(bits, value, entrance):
     # gather credentials
     credential_added = False
     if bits == pin_bits:  # 1 number keyed in
+        logger.info("bits={} value={}".format(bits, value))
         print("bits={} value={}".format(bits, value))
         if 0 <= value <= 9:  # normal input
             if len(pinsvalue) > MAX_PIN_LENGTH:
@@ -430,6 +431,7 @@ def reader_detects_bits(bits, value, entrance):
                 credential_added = True
     elif bits == card_bits:  # card
         credentials[card_type] = "0"+str(int("{:026b}".format(value)[1:25], 2))
+        logger.info("Card detected: bits={} value={}".format(bits, "0"+str(int("{:026b}".format(value)[1:25], 2))))
         # print current time
         print(str(datetime.now()) + " Card detected: bits={} value={}".format(
             bits, "0"+str(int("{:026b}".format(value)[1:25], 2))))
