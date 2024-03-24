@@ -548,11 +548,12 @@ def reader_detects_bits(bits, value, entrance):
                                     eventsMod.pin_only_used(
                                         entrancename, entrance_direction)
                                 else:
+                                    open_door()
+
                                     eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[
                                                                 0], auth_method_name, entrancename, entrance_direction)
+
                                 # open_door()
-                                relay.trigger_relay_one(E1_thirdPartyOption)
-                                relay.trigger_relay_two(E2_thirdPartyOption)
 
                                 # set weigand reader to show green light and give a recognisaible beep, 2-3 secondas song
                                 
