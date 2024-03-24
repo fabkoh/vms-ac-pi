@@ -421,7 +421,9 @@ def reader_detects_bits(bits, value, entrance):
         if 0 <= value <= 9:  # normal input
             if len(pinsvalue) > MAX_PIN_LENGTH:
                 return
+            print(time.time())
             pinsvalue.append(str(value))
+            print(time.time())
         elif value == 10:  # clear input
             pinsvalue.clear()
         elif value == 11:  # submit
