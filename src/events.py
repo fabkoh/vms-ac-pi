@@ -544,12 +544,12 @@ def reader_detects_bits(bits, value, entrance):
 
                                 # auth scan
                                 logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
+                                open_door()
+
                                 if "Pin" == auth_method_name:
                                     eventsMod.pin_only_used(
                                         entrancename, entrance_direction)
                                 else:
-                                    open_door()
-
                                     eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[
                                                                 0], auth_method_name, entrancename, entrance_direction)
 
