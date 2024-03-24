@@ -7,7 +7,22 @@ import eventActionTriggerConstants
 import eventActionTriggers
 from lock import pending_logs_lock, archived_logs_lock, config_lock
 from threading import Lock
+import logging
+# Create a logger
+logger = logging.getLogger(__name__)
 
+# Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
+logger.setLevel(logging.DEBUG)
+
+# Create a file handler for outputting log messages to a file
+file_handler = logging.FileHandler('/home/etlas/logfileventsMod.log')
+
+# Create a formatter and add it to the handler
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+
+# Add the handler to the logger
+logger.addHandler(file_handler)
 
 path = os.path.dirname(os.path.abspath(__file__))
 
@@ -81,12 +96,15 @@ def record_auth_scans(name, accessGroup, authtype, entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
+
+    logger.info("record auth scans, before event_trigger_cb")
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
-
+    logger.info("record auth scans, after event_trigger_cb")
     update_logs_and_server(dictionary)
+    logger.info("record auth scans, after update_logs_and_server")
 
 def invalid_pin_used(entrance, status):
     dictionary = {
@@ -112,13 +130,14 @@ def pin_only_used(entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
+    logger.info("record pin used, before event_trigger_cb")
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
-
+    logger.info("record pin used, after event_trigger_cb")
     update_logs_and_server(dictionary)
-
+    logger.info("record pin used, after update_logs_and_server")
 # updates pendingLogs.json and send to backend
 # updates archivedLogs.json for backup
 
@@ -169,11 +188,15 @@ def record_button_pressed(entrance, name_of_button):
     if e == '':  # no entrance assigned to this push button
         e = eventActionTriggerConstants.BOTH_ENTRANCE
     print(f"Recorded button pressed at {e}")
+    logger.info("push button, before event_trigger_cb")
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.EXIT_BUTTON_PRESSED, e)
     )
+    logger.info("push button, after event_trigger_cb")
     update_logs_and_server(dictionary)
+    logger.info("push button, after update_logs_and_server")
+
 # status = opened/ closed
 
 def fire_alarm_activated(gpio, level, tick):
