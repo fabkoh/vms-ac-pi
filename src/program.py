@@ -7,6 +7,7 @@ import eventsMod
 import healthcheck
 import eventsMod
 import gc
+import piProperty
 
 '''
     1. main program that runs everything, including E1
@@ -213,12 +214,18 @@ it adds an addtion detect_bits call, so multiple detect_bits are called after ca
                                 GPIOconfig.E2_OUT_D1, events.reader_detects_bits, "E2_OUT")
 
 
+def memory_checker():
+    piProperty.log_system_stats(1*60*10, 1*60*60*24*5)
+
+
 update_config()
 
 print("threads starting")
 t1 = threading.Thread(target=check_events_timer)
 t2 = threading.Thread(target=mag_and_button)
 t3 = threading.Thread(target=check_gen_pins_and_alarm)
+t4 = threading.Thread(target=memory_checker)
 t1.start()
 t2.start()
 t3.start()
+t4.start()
