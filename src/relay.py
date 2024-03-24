@@ -103,7 +103,6 @@ def activateRelay(relayPin, activateLevel):
         setRelayPinHigh(relayPin)
     else:
         setRelayPinLow(relayPin)
-    logger.info("activateRelay")
     return
 
 
@@ -112,7 +111,6 @@ def deActivateRelay(relayPin, activateLevel):
         setRelayPinLow(relayPin)
     else:
         setRelayPinHigh(relayPin)
-    logger.info("deActivateRelay")
     return
 
 
