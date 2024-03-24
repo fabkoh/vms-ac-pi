@@ -441,7 +441,7 @@ def reader_detects_bits(bits, value, entrance):
     # 1 check master password
     # 2 check auth method (if cred entered not in curr cred schedule, reset)
     # 3 check person creds
-    if credential_added:
+    # if credential_added:
         # logger.info("Check Credentials")
         # print(credentials)
         # try:
