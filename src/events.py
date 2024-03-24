@@ -413,14 +413,13 @@ def reader_detects_bits(bits, value, entrance):
     else:
         timeout_cred.start()
 
-    # gather credentials
-    credential_added = False
-    print("bits={} value={}".format(bits, value))
-    if bits == pin_bits:  # 1 number keyed in
-        logger.info("bits={} value={}".format(bits, value))
+
+    # Process the pin value inputed by user
+    def process_pin_value(value):
+        print("value={}".format(value))
         if 0 <= value <= 9:  # normal input
             if len(pinsvalue) > MAX_PIN_LENGTH:
-                return
+                return False  # Indicate processing should stop
             pinsvalue.append(str(value))
         elif value == 10:  # clear input
             pinsvalue.clear()
@@ -428,14 +427,43 @@ def reader_detects_bits(bits, value, entrance):
             if pinsvalue:
                 credentials[pin_type] = ''.join(pinsvalue)
                 pinsvalue.clear()
-                credential_added = True
+                return True  # Indicate that credential was added
+        return False  # Default case, credential not added
+
+    # credential_added means user input has ended
+    print("bits={} value={}".format(bits, value))
+
+    credential_added = False
+    if bits == pin_bits:  # 1 number keyed in
+        credential_added = process_pin_value(value)
+
     elif bits == card_bits:  # card
-        credentials[card_type] = "0"+str(int("{:026b}".format(value)[1:25], 2))
-        logger.info("Card detected: bits={} value={}".format(bits, "0"+str(int("{:026b}".format(value)[1:25], 2))))
-        # print current time
+        credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
+        logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
         print(str(datetime.now()) + " Card detected: bits={} value={}".format(
-            bits, "0"+str(int("{:026b}".format(value)[1:25], 2))))
+            bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
         credential_added = True
+
+    elif bits == 8:  # if we receive an 8-bit number, split into two 4-bit values, means user press very quickly
+        high_digit = (value >> 4) & 0xF  # Extract the high 4 bits
+        low_digit = value & 0xF  # Extract the low 4 bits
+
+        # Process each 4-bit value sequentially
+        credential_added = process_pin_value(high_digit)
+        if not credential_added:  # Only process the second value if the first one doesn't complete the credential
+            credential_added = process_pin_value(low_digit)
+
+    elif bits == 12:  # 12-bit, split into three 4-bit values, means user pressed even more quickly
+        first_digit = (value >> 8) & 0xF  # Extract the first 4 bits
+        second_digit = (value >> 4) & 0xF  # Extract the second 4 bits
+        third_digit = value & 0xF  # Extract the third 4 bits
+        credential_added = process_pin_value(first_digit)
+
+        if not credential_added:
+            credential_added = process_pin_value(second_digit)
+
+        if not credential_added:
+            credential_added = process_pin_value(third_digit)
 
     # checking for creds
     # 1 check master password
