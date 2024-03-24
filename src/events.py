@@ -442,147 +442,147 @@ def reader_detects_bits(bits, value, entrance):
     # 2 check auth method (if cred entered not in curr cred schedule, reset)
     # 3 check person creds
     if credential_added:
-        logger.info("Check Credentials")
-        print(credentials)
-        try:
-            device_details = {}
-            entrance_details = {}
-            for entrance_list in credOccur:
-                if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
-                    entrance_details = entrance_list.get("EntranceDetails", {})
-                    device_details = entrance_details.get(
-                        "AuthenticationDevices", {}).get(entrance_direction, {})
-            if entrance_details == {}:  # entrance not found, quit
-                eventsMod.record_unauth_scans(None, None, entrance_direction)
-                return
-
-            # check master password
-            if pin_type in credentials and \
-               "Masterpassword" in device_details and \
-               credentials[pin_type] == device_details["Masterpassword"]:
-                logger.info("Using Master Password")
-                eventsMod.record_masterpassword_used(
-                    "Master Pin", entrancename, entrance_direction)
-                logger.info("Updating Logs after Master Password used")
-
-                open_door()
-                reset_cred_and_stop_timer()
-                # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
-                # updateserver.update_server_events()
-                return
-
-            # check auth method
-            # print(device_details)
-            auth_method_name = device_details["defaultAuthMethod"]
-            for auth_method in device_details.get("AuthMethod", []):
-                if "Method" in auth_method and \
-                   verify_datetime(auth_method.get("Schedule", {})):
-                    auth_method_name = auth_method["Method"]
-                    break
-
-            auth_method_is_and = and_delimiter in auth_method_name
-            auth_method_keys = auth_method_name.split(
-                and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
-            print("auth_method_is_and, auth_method_keys",
-                  auth_method_is_and, auth_method_keys)
-
-            # check for credentials not in auth_method_keys
-            if any(map(lambda k: k not in auth_method_keys, credentials)):
-                print("auth method not allowed at this timing ")
-                eventsMod.record_unauth_scans(
-                    auth_method_name, entrancename, entrance_direction)
-                reset_cred_and_stop_timer()
-                return
-
-            # have some crendetials but need more
-            if ((auth_method_is_and and any(map(lambda k: k in credentials, auth_method_keys)))
-                    and not all(map(lambda k: k in credentials, auth_method_keys))):
-                print("requires more credentials")
-                eventsMod.record_unauth_scans(
-                    auth_method_name, entrancename, entrance_direction)
-                return
-
-            # check if need to check if cred belongs to someone
-            if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or  # AND, all auth methods present
-               ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))):  # OR, 1 auth method present
-                # check person cred
-                # 1 find the person
-                # 2 check if the person's access group can enter
-                logger.info("Finding person credentials in entrance_details")
-                for access_group in entrance_details.get("AccessGroups", []):
-                    # find the person
-                    person_found = False
-                    access_group_info = list(access_group.values())[0] if type(
-                        access_group) is dict and len(access_group) > 0 else {}
-                    for person in access_group_info.get("Persons", []):
-                        # check if this person has the creds
-                        person_credentials = person.get("Credentials", {})
-                        # print(person_credentials)
-                        # print("person_credentials",person_credentials)
-                        # print("credentials",credentials)
-
-                        def checkcred(k):
-                            listOfCred = person_credentials.get(k[0])
-                            if listOfCred is None:
-                                return False
-                            for singleCred in listOfCred:
-                                if singleCred.get("Value") == k[1]:
-                                    print(datetime.now().date() <= datetime.strptime(
-                                        singleCred.get("EndDate"), '%Y-%m-%d').date())
-                                    if singleCred.get("IsPerm"):
-                                        return True
-
-                                    return datetime.now().date() <= datetime.strptime(singleCred.get("EndDate"), '%Y-%m-%d').date()
-
-                            return False
-                        # k[0] refers to credType, k[1] refers to value of corresponding cred
-                        # see if all credentials belong to person
-                        if all(map(checkcred, list(credentials.items()))):
-                            # check if the person's access group can enter
-                            # print(verify_datetime(access_group_info.get('Schedule', {})))
-                            if verify_datetime(access_group_info.get('Schedule', {})):
-
-                                # auth scan
-                                logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
-                                open_door()
-
-                                if "Pin" == auth_method_name:
-                                    eventsMod.pin_only_used(
-                                        entrancename, entrance_direction)
-                                else:
-                                    eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[
-                                                                0], auth_method_name, entrancename, entrance_direction)
-
-                                # open_door()
-
-                                # set weigand reader to show green light and give a recognisaible beep, 2-3 secondas song
-
-
-                                reset_cred_and_stop_timer()
-                                return
-                            # person dont have access at this time
-                            logger.info("Found person, but not allowed to enter at this timing")
-                            if "Pin" == auth_method_name:
-                                eventsMod.invalid_pin_used(
-                                    entrancename, entrance_direction)
-                            else:
-                                eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get(
-                                    "Name", ""), list(access_group.keys())[0])
-                            reset_cred_and_stop_timer()
-                            return
-                # cannot find person
-                logger.info("Cannot find person")
-                if "Pin" == auth_method_name:
-                    eventsMod.invalid_pin_used(
-                        entrancename, entrance_direction)
-                else:
-                    eventsMod.record_unauth_scans(
-                        auth_method_name, entrancename, entrance_direction)
-                reset_cred_and_stop_timer()
-                return
-
-        except Exception as e:
-            pass
+        # logger.info("Check Credentials")
+        # print(credentials)
+        # try:
+        #     device_details = {}
+        #     entrance_details = {}
+        #     for entrance_list in credOccur:
+        #         if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
+        #             entrance_details = entrance_list.get("EntranceDetails", {})
+        #             device_details = entrance_details.get(
+        #                 "AuthenticationDevices", {}).get(entrance_direction, {})
+        #     if entrance_details == {}:  # entrance not found, quit
+        #         eventsMod.record_unauth_scans(None, None, entrance_direction)
+        #         return
+        #
+        #     # check master password
+        #     if pin_type in credentials and \
+        #        "Masterpassword" in device_details and \
+        #        credentials[pin_type] == device_details["Masterpassword"]:
+        #         logger.info("Using Master Password")
+        #         eventsMod.record_masterpassword_used(
+        #             "Master Pin", entrancename, entrance_direction)
+        #         logger.info("Updating Logs after Master Password used")
+        #
+        #         open_door()
+        #         reset_cred_and_stop_timer()
+        #         # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
+        #         # updateserver.update_server_events()
+        #         return
+        #
+        #     # check auth method
+        #     # print(device_details)
+        #     auth_method_name = device_details["defaultAuthMethod"]
+        #     for auth_method in device_details.get("AuthMethod", []):
+        #         if "Method" in auth_method and \
+        #            verify_datetime(auth_method.get("Schedule", {})):
+        #             auth_method_name = auth_method["Method"]
+        #             break
+        #
+        #     auth_method_is_and = and_delimiter in auth_method_name
+        #     auth_method_keys = auth_method_name.split(
+        #         and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
+        #     print("auth_method_is_and, auth_method_keys",
+        #           auth_method_is_and, auth_method_keys)
+        #
+        #     # check for credentials not in auth_method_keys
+        #     if any(map(lambda k: k not in auth_method_keys, credentials)):
+        #         print("auth method not allowed at this timing ")
+        #         eventsMod.record_unauth_scans(
+        #             auth_method_name, entrancename, entrance_direction)
+        #         reset_cred_and_stop_timer()
+        #         return
+        #
+        #     # have some crendetials but need more
+        #     if ((auth_method_is_and and any(map(lambda k: k in credentials, auth_method_keys)))
+        #             and not all(map(lambda k: k in credentials, auth_method_keys))):
+        #         print("requires more credentials")
+        #         eventsMod.record_unauth_scans(
+        #             auth_method_name, entrancename, entrance_direction)
+        #         return
+        #
+        #     # check if need to check if cred belongs to someone
+        #     if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or  # AND, all auth methods present
+        #        ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))):  # OR, 1 auth method present
+        #         # check person cred
+        #         # 1 find the person
+        #         # 2 check if the person's access group can enter
+        #         logger.info("Finding person credentials in entrance_details")
+        #         for access_group in entrance_details.get("AccessGroups", []):
+        #             # find the person
+        #             person_found = False
+        #             access_group_info = list(access_group.values())[0] if type(
+        #                 access_group) is dict and len(access_group) > 0 else {}
+        #             for person in access_group_info.get("Persons", []):
+        #                 # check if this person has the creds
+        #                 person_credentials = person.get("Credentials", {})
+        #                 # print(person_credentials)
+        #                 # print("person_credentials",person_credentials)
+        #                 # print("credentials",credentials)
+        #
+        #                 def checkcred(k):
+        #                     listOfCred = person_credentials.get(k[0])
+        #                     if listOfCred is None:
+        #                         return False
+        #                     for singleCred in listOfCred:
+        #                         if singleCred.get("Value") == k[1]:
+        #                             print(datetime.now().date() <= datetime.strptime(
+        #                                 singleCred.get("EndDate"), '%Y-%m-%d').date())
+        #                             if singleCred.get("IsPerm"):
+        #                                 return True
+        #
+        #                             return datetime.now().date() <= datetime.strptime(singleCred.get("EndDate"), '%Y-%m-%d').date()
+        #
+        #                     return False
+        #                 # k[0] refers to credType, k[1] refers to value of corresponding cred
+        #                 # see if all credentials belong to person
+        #                 if all(map(checkcred, list(credentials.items()))):
+        #                     # check if the person's access group can enter
+        #                     # print(verify_datetime(access_group_info.get('Schedule', {})))
+        #                     if verify_datetime(access_group_info.get('Schedule', {})):
+        #
+        #                         # auth scan
+        #                         logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
+        #                         open_door()
+        #
+        #                         if "Pin" == auth_method_name:
+        #                             eventsMod.pin_only_used(
+        #                                 entrancename, entrance_direction)
+        #                         else:
+        #                             eventsMod.record_auth_scans(person.get("Name", ""), list(access_group.keys())[
+        #                                                         0], auth_method_name, entrancename, entrance_direction)
+        #
+        #                         # open_door()
+        #
+        #                         # set weigand reader to show green light and give a recognisaible beep, 2-3 secondas song
+        #
+        #
+        #                         reset_cred_and_stop_timer()
+        #                         return
+        #                     # person dont have access at this time
+        #                     logger.info("Found person, but not allowed to enter at this timing")
+        #                     if "Pin" == auth_method_name:
+        #                         eventsMod.invalid_pin_used(
+        #                             entrancename, entrance_direction)
+        #                     else:
+        #                         eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get(
+        #                             "Name", ""), list(access_group.keys())[0])
+        #                     reset_cred_and_stop_timer()
+        #                     return
+        #         # cannot find person
+        #         logger.info("Cannot find person")
+        #         if "Pin" == auth_method_name:
+        #             eventsMod.invalid_pin_used(
+        #                 entrancename, entrance_direction)
+        #         else:
+        #             eventsMod.record_unauth_scans(
+        #                 auth_method_name, entrancename, entrance_direction)
+        #         reset_cred_and_stop_timer()
+        #         return
+        #
+        # except Exception as e:
+        #     pass
 
     return
 
