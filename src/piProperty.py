@@ -3,6 +3,7 @@ import re
 import time
 import logging
 import threading
+import psutil
 
 # Create a logger
 logger = logging.getLogger(__name__)
@@ -19,6 +20,10 @@ file_handler.setFormatter(formatter)
 
 # Add the handler to the logger
 logger.addHandler(file_handler)
+
+import gc
+
+
 
 def get_cpu_temperature():
     result = subprocess.run(['vcgencmd', 'measure_temp'], capture_output=True, text=True)
@@ -56,7 +61,28 @@ def log_system_stats(interval, duration):
         timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
         log = f'{timestamp} - CPU Temp: {stats["cpu_temperature"]}°C, RAM Usage: {stats["ram_usage_percentage"]:.2f}%, CPU Usage: {stats["cpu_usage_percentage"]:.2f}%'
         print(log)
-        logger.info(log + str(threading.activeCount()))
+        active_threads = threading.activeCount()
+        logger.info(f'{log} - Active Threads: {active_threads}')
+
+        zombie_processes = len([p for p in psutil.process_iter(['status']) if p.info['status'] == 'zombie'])
+        logger.info(f'Number of zombie processes: {zombie_processes}')
+        
+        gc_stats = gc.get_stats()
+        logger.info(f'Garbage Collector: collections={gc_stats}')
+        
+        disk_io = psutil.disk_io_counters()
+        disk_usage = psutil.disk_usage('/')
+
+        logger.info(f'Read count: {disk_io.read_count}, Write count: {disk_io.write_count}')
+        logger.info(f'Total disk space: {disk_usage.total / (1024**3):.2f} GB, Used disk space: {disk_usage.used / (1024**3):.2f} GB')
+
+        net_io = psutil.net_io_counters()
+
+        logger.info(f'Bytes Sent: {net_io.bytes_sent}, Bytes Received: {net_io.bytes_recv}')
+
+        for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent']):
+            logger.info(f'Process {proc.info["name"]} (PID: {proc.info["pid"]}) - CPU: {proc.info["cpu_percent"]}%, Memory: {proc.info["memory_percent"]:.2f}%')
+
 
         time.sleep(interval)
 
