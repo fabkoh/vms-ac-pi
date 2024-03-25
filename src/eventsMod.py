@@ -330,6 +330,7 @@ def update_logs_and_server(dictionary):
 
     # create thread to implement the above 
     thread = threading.Thread(target=thread_task)
+    thread.setDaemon(True)
     thread.start()
 
 

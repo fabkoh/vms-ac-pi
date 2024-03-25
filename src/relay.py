@@ -244,8 +244,10 @@ def trigger_relay_one(thirdPartyOption=None):
         setGpioMode()
         setupRelayPin(outputPin)
         print("opening")
-        threading.Thread(target=toggleRelay1, args=(outputPin,'High',
+        thread = threading.Thread(target=toggleRelay1, args=(outputPin,'High',
                      5000, 1000,1)).start()
+        thread.setDaemon(True)
+
 
         # cleanupGpio()
     except RuntimeError:

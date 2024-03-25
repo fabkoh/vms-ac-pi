@@ -400,6 +400,17 @@ def check_for_led_and_buzzer():
         time.sleep(1)
         gc.collect()
 
-t1=threading.Thread(target=check_for_led_and_buzzer)
-t1.start()
 
+threads_started = False
+
+def start_threads():
+    global threads_started
+    if not threads_started:
+      t1=threading.Thread(target=check_for_led_and_buzzer)
+      t1.start()
+
+        # Set the global flag to True to indicate that the threads have been started
+      threads_started = True
+
+# Call the function to start the threads
+start_threads()

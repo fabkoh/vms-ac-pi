@@ -23,6 +23,7 @@ def update_server_events():
     url = server_url + '/api/unicon/events'
     # Start the send_request_to_server function in a new thread
     thread = threading.Thread(target=send_request_to_server, args=(url, data))
+    thread.setDaemon(True)
     thread.start()
     print("inside update_server_events ", str(datetime.now()))
 

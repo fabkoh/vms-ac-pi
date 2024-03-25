@@ -445,8 +445,23 @@ def check_for_only_timer_based_events():
         gc.collect()
 
 
-t1 = threading.Thread(target=check_for_only_timer_based_events)
-t1.start()
+
+threads_started = False
+
+def start_threads():
+    global threads_started
+    if not threads_started:
+        t1 = threading.Thread(target=check_for_only_timer_based_events)
+        t1.start()
+
+        # Set the global flag to True to indicate that the threads have been started
+        threads_started = True
+
+# Call the function to start the threads
+start_threads()
+
+
+
 
 # need to write all possible output
 # write dynamic input functions to check if true or false

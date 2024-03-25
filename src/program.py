@@ -220,12 +220,23 @@ def memory_checker():
 
 update_config()
 
-print("threads starting")
-t1 = threading.Thread(target=check_events_timer)
-t2 = threading.Thread(target=mag_and_button)
-t3 = threading.Thread(target=check_gen_pins_and_alarm)
-t4 = threading.Thread(target=memory_checker)
-t1.start()
-t2.start()
-t3.start()
-t4.start()
+# ensure threads only created once 
+threads_started = False
+
+def start_threads():
+    global threads_started
+    if not threads_started:
+        t1 = threading.Thread(target=check_events_timer)
+        t2 = threading.Thread(target=mag_and_button)
+        t3 = threading.Thread(target=check_gen_pins_and_alarm)
+        t4 = threading.Thread(target=memory_checker)
+        t1.start()
+        t2.start()
+        t3.start()
+        t4.start()
+
+        # Set the global flag to True to indicate that the threads have been started
+        threads_started = True
+
+# Call the function to start the threads
+start_threads()
