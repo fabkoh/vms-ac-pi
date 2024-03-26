@@ -245,8 +245,9 @@ def trigger_relay_one(thirdPartyOption=None):
         setupRelayPin(outputPin)
         print("opening")
         thread = threading.Thread(target=toggleRelay1, args=(outputPin,'High',
-                     5000, 1000,1)).start()
+                     5000, 1000,1))
         thread.setDaemon(True)
+        thread.start()
 
 
         # cleanupGpio()
