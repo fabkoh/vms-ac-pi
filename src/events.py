@@ -126,7 +126,18 @@ BUZZER_TIMEOUT_E2 = None
 
 
 def update_config():
-    '''Call this before events.update_credOccur'''
+    """
+        Load and update the configuration from a JSON file.
+
+        This function loads the configuration from 'config.json' file,
+        updates global variables with the configuration values, and checks
+        the status of entrances.
+
+        Call this function before calling events.update_credOccur().
+
+        Raises:
+            FileNotFoundError: If the 'config.json' file is not found.
+        """
     global config, GPIOpins, E1, E2, E1_Mag, Gen_Out_1, E1_Button, E2_Mag, E2_Button, TIMEOUT, \
         CRED_TIMEOUT_E1, CRED_TIMEOUT_E2, MAG_TIMEOUT_E1, MAG_TIMEOUT_E2, BUZZER_TIMEOUT_E1, BUZZER_TIMEOUT_E2
     with config_lock:
@@ -196,6 +207,12 @@ def verify_datetime(schedule):
 
 
 def check_entrance_status():
+    """
+        Check and update the status of entrances E1 and E2 based on their schedules.
+
+        This function locks or unlocks the entrances based on the current datetime
+        and the entrance schedules defined in the configuration.
+    """
 
     if verify_datetime(E1_entrance_schedule):
         # print("unlock E1")
@@ -213,7 +230,18 @@ def check_entrance_status():
 
 
 def update_credOccur():
-    '''Call this after events.update_config'''
+    """
+    Load and update credential occurrences, i.e. access rules and schedules, from a JSON file.
+
+    This function loads the credential occurrences from 'credOccur.json' file,
+    updates global variables with the credential data, and checks the status
+    of entrances.
+
+    Call this function after calling events.update_config().
+
+    Raises:
+        FileNotFoundError: If the 'credOccur.json' file is not found.
+    """
     global credOccur, E1_entrance_schedule, E2_entrance_schedule, E1_thirdPartyOption, E2_thirdPartyOption
     f = open(path+'/json/credOccur.json')
     credOccur = json.load(f)
@@ -286,11 +314,15 @@ def check_for_wiegand(value):
 
 
 def open_door(entrance_prefix):
-    '''Helper function for eventActionTriggers.py
+    """
+    Open the door for a given entrance prefix.
 
     Args:
-    entrance_prefix(string): "E1" | "E2"
-    '''
+        entrance_prefix (str): The prefix of the entrance ("E1" or "E2").
+
+    This function sets the flag to allow the magnetic sensor to open
+    and triggers the relay for the specified entrance.
+    """
     global mag_E1_allowed_to_open, mag_E2_allowed_to_open
     if entrance_prefix == "E1":
         mag_E1_allowed_to_open = True
@@ -301,11 +333,15 @@ def open_door(entrance_prefix):
 
 
 def open_door_using_entrance_id(entrance_id):
-    '''same as open_door (see above) but with entrance_id
-       Does nothing if entrance_id is not the same as in config.json
+    """
+    Open the door for a given entrance ID.
 
-       entrance_id (int): entrance id
-    '''
+    Args:
+        entrance_id (int): The ID of the entrance to open.
+
+    This function calls `open_door` with the corresponding entrance prefix
+    if the entrance ID matches the configured entrance ID.
+    """
     # print("here",config.get("EntranceName",{}).get("E1",None) == entrance_id)
     if entrance_id and entrance_id == config.get("EntranceName", {}).get("E1", None):
         # print("here")
@@ -327,6 +363,17 @@ def open_GEN_OUT(GEN_OUT_PIN, timer, GenNo):
 
 
 def reader_detects_bits(bits, value, entrance):
+    """
+    Handle the detection of bits by the reader and perform necessary actions.
+
+    Args:
+        bits (int): The number of bits detected.
+        value (int): The value of the detected bits.
+        entrance (str): The entrance identifier ("E1_IN", "E1_OUT", "E2_IN", "E2_OUT").
+
+    This function processes the detected bits, checks for valid credentials,
+    and performs actions such as opening doors or logging events.
+    """
 
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
@@ -616,6 +663,7 @@ def reader_detects_bits(bits, value, entrance):
     return
 
 
+# Currently not used
 def check_for_masterpassword(credentials, entrancename, entrance_direction):
     for entranceslist in credOccur:
         if entranceslist["Entrance"] == entrancename:
@@ -628,6 +676,7 @@ def check_for_masterpassword(credentials, entrancename, entrance_direction):
 # take in verifydetails("MainDoor","In") return auth type
 
 
+# Currently not used
 def verify_authtype(entrance, device):
     # for data in list of entrances
     for entranceslist in credOccur:
@@ -640,50 +689,7 @@ def verify_authtype(entrance, device):
                             return methoddict["Method"]
 
 
-'''
-returns True if current moment is in schedule
-schedule = {
-                "2022-03-14":{"starttime":"18:00","endtime":"23:00"},
-                "2022-03-15": {"starttime":"18:00","endtime":"23:00"}
-              }
-'''
-'''
-def verify_datetime(schedule):
-    #print(schedule)
-    #print(type(schedule))
-    #print(str(date.today()))
-    print(datetime.now())
-    for scheduledate,scheduletime in schedule.items():
-        #print(scheduledate,scheduletime)
-        if scheduledate == str(date.today()):
-            print("today in schedule")
-            for timing in scheduletime:
-                now = datetime.now().time()
-                start = datetime.strptime(timing["starttime"], "%H:%M").time()
-                if timing["endtime"] != "24:00":
-                    end = datetime.strptime(timing["endtime"], "%H:%M").time()
-                        
-                    if now >= start and now < end:
-                        print("now in schedule") # strictly within
-                        return True
-                else:
-                    if now >= start:
-                        print("now in schedule") # strictly within
-                        return True
-
-    return False 
-'''
-
-# check if person has entered the zone
-# entrance = e.g. "E1R1"
-# - if In
-# 	- if person inside local jsons, not allowed to enter
-# 	- if person not inside local jsons, allowed to enter, add to json
-# - if out
-# 	- if person inside local json, allowed to leave and remove from json
-# 	- if person not inside local json, not allowed to leave
-
-
+# Currently not used
 def verify_zone_status(entrance, entrancestatus, persondetails):
     filename = "json/" + "status.json"
     with open(filename, "r") as checkfile:
@@ -718,6 +724,7 @@ def verify_zone_status(entrance, entrancestatus, persondetails):
     return False
 
 
+# Currently not used
 def update_zone_status(entrance, entrancestatus, persondetails):
 
     filename = "json/"+"status.json"
@@ -751,7 +758,8 @@ def update_zone_status(entrance, entrancestatus, persondetails):
 # print(verify_zone_status("E1R1","In",persondetails))
 # update_zone_status("E1R1","In",persondetails)
 
-# check if antipassback if required
+
+# Currently not used
 def verify_antipassback(entrancename):
     # read from credOccur.json
     for entrancelist in credOccur:
@@ -762,6 +770,7 @@ def verify_antipassback(entrancename):
     return False
 
 
+# Currently not used
 def gen_check(gpio):
     if gpio == Gen_Out_1:
         print("Gen out 1 ")
@@ -771,9 +780,18 @@ debounce_delay = 0.05 # 50ms debounce delay
 
 
 def mag_detects_rising(gpio, level, tick):
+    """
+    Handle the rising edge detection of the magnetic sensor.
+
+    Args:
+        gpio (int): The GPIO pin number.
+        level (int): The level of the GPIO pin.
+        tick (int): The tick count.
+
+    This function logs the opening of the entrance and updates the server events.
+    """
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
-
 
     if time.time() - mag_detects_rising.last_call_time < debounce_delay:
         return
@@ -801,6 +819,16 @@ def mag_detects_rising(gpio, level, tick):
 mag_detects_rising.last_call_time = 0
 
 def mag_detects_falling(gpio, level, tick):
+    """
+    Handle the falling edge detection of the magnetic sensor.
+
+    Args:
+        gpio (int): The GPIO pin number.
+        level (int): The level of the GPIO pin.
+        tick (int): The tick count.
+
+    This function logs the closing of the entrance and updates the server events.
+    """
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
@@ -827,6 +855,16 @@ mag_detects_falling.last_call_time = 0
 
 
 def button_detects_change(gpio, level, tick):
+    """
+    Handle the change detection of the button press.
+
+    Args:
+        gpio (int): The GPIO pin number.
+        level (int): The level of the GPIO pin.
+        tick (int): The tick count.
+
+    This function logs the button press, triggers the relay, and updates the server events.
+    """
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
@@ -854,36 +892,3 @@ def button_detects_change(gpio, level, tick):
 
 # initialize the last call time
 button_detects_change.last_call_time = 0
-
-# def button_detects_change(gpio, level, tick):
-#     global mag_E1_allowed_to_open
-#     global mag_E2_allowed_to_open
-
-#     if gpio == E1_Button:
-#         print(f"{E1} push button1 is pressed at " + str(datetime.now()))
-#         mag_E1_allowed_to_open = True
-#         relay.trigger_relay_one(E1_thirdPartyOption)
-#         eventsMod.record_button_pressed(E1, "Security Guard Button")
-
-#     if gpio == E2_Button:
-#         print(f"{E2} push button2 is pressed at " + str(datetime.now()))
-#         mag_E2_allowed_to_open = True
-#         relay.trigger_relay_two(E2_thirdPartyOption)
-#         eventsMod.record_button_pressed(E2, "Security Guard Button")
-
-
-# 1st person going in
-# reader_detects_bits(26,"s1e97ncksiu","E1_IN")
-# bits_reader(26,"696955874","E1R1")
-
-# 2nd person going in
-# bits_reader(26,"2535645","E1R1")
-# bits_reader(26,"ege56g4er","E1R1")
-
-# 2nd person going in AGAIN
-# bits_reader(26,"2535645","E1R1")
-# bits_reader(26,"ege56g4er","E1R1")
-
-# 1st person going out
-# bits_reader(26,"s1e97ncksiu","E1R2")
-# bits_reader(26,"696955874","E1R2")

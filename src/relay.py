@@ -101,7 +101,6 @@ def setRelayPinLow(relayPin):
 
 
 def activateRelay(relayPin, activateLevel):
-    print("activateRelay", activateLevel, relayPin)
     if activateLevel == 'High':
         setRelayPinHigh(relayPin)
     else:
@@ -242,13 +241,9 @@ def trigger_relay_one(thirdPartyOption=None):
         outputPin = GEN_OUT_3
         # print(thirdPartyOption,outputPin)
 
-    print(" EM 1 unlocked at " + str(datetime.now()))
     try:
         setGpioMode()
         setupRelayPin(outputPin)
-        print("opening")
-        logger.info("Before toggleRelay1")
-        # toggleRelay1(outputPin, 'High', 5000, 1000, 1)
         thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
 
         # cleanupGpio()
