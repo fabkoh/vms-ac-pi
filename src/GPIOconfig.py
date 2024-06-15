@@ -407,6 +407,7 @@ def test_buzz():
    print("Testing buzzer")
    pi.write(E1_IN_Buzz, 1)  # Turn on the buzzer connected to E2_IN_Buzz
    pi.write(E1_OUT_Buzz, 1)  # Turn on the buzzer connected to E2_OUT_Buzz
+   time.sleep(5)
    pi.write(E1_IN_Buzz, 0)  # Turn on the buzzer connected to E2_IN_Buzz
    pi.write(E1_OUT_Buzz, 0)  # Turn on the buzzer connected to E2_OUT_Buzz
    print("Buzzer test completed")
