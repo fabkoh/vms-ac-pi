@@ -663,119 +663,6 @@ def reader_detects_bits(bits, value, entrance):
     return
 
 
-# Currently not used
-def check_for_masterpassword(credentials, entrancename, entrance_direction):
-    for entranceslist in credOccur:
-        if entranceslist["Entrance"] == entrancename:
-            for devicenumber, devicedetails in entranceslist["EntranceDetails"]["AuthenticationDevices"].items():
-                if devicedetails["Direction"] == entrance_direction:
-                    if credentials[0] == devicedetails["Masterpassword"]:
-                        return True
-    return False
-
-# take in verifydetails("MainDoor","In") return auth type
-
-
-# Currently not used
-def verify_authtype(entrance, device):
-    # for data in list of entrances
-    for entranceslist in credOccur:
-        if entranceslist["Entrance"] == entrance:
-            for devicenumber, devicedetails in entranceslist["EntranceDetails"]["AuthenticationDevices"].items():
-                if devicedetails["Direction"] == device:
-                    for methoddict in devicedetails["AuthMethod"]:
-                        # check which authtype is activated for that particular schedule
-                        if verify_datetime(methoddict["Schedule"]):
-                            return methoddict["Method"]
-
-
-# Currently not used
-def verify_zone_status(entrance, entrancestatus, persondetails):
-    filename = "json/" + "status.json"
-    with open(filename, "r") as checkfile:
-        try:
-            checkdata = json.load(checkfile)
-        except:
-            checkdata = {entrance[:2]: []}
-
-        if entrancestatus == "IN":  # check if person inside
-            try:
-
-                for person in checkdata[entrance[:2]]:
-                    name = person["Name"]
-                    accessgroup = person["AccessGroup"]
-                    if persondetails['Name'] == name and persondetails["AccessGroup"] == accessgroup:
-                        return False
-            except:
-                pass
-            return True
-
-        elif entrancestatus == "OUT":
-            try:
-                for person in checkdata[entrance[:2]]:
-                    name = person["Name"]
-                    accessgroup = person["AccessGroup"]
-                    if persondetails['Name'] == name and persondetails["AccessGroup"] == accessgroup:
-                        return True
-            except:
-                pass
-            return False
-
-    return False
-
-
-# Currently not used
-def update_zone_status(entrance, entrancestatus, persondetails):
-
-    filename = "json/"+"status.json"
-    with open(filename, "r") as checkfile:
-        try:
-            checkdata = json.load(checkfile)
-        except:
-            checkdata = {"controllerId": "", "E1": [], "E2": []}
-
-    # print(verify_zone_status(entrance,entrancestatus,persondetails))
-    if verify_zone_status(entrance, entrancestatus, persondetails):
-        controllerId = config["controllerConfig"][0]["controllerId"]
-        dictionary = {"Name": persondetails["Name"],
-                      "AccessGroup": persondetails["AccessGroup"]}
-        with open(filename, "w+") as outfile:
-            updateserver.update_external_zone_status(
-                controllerId, entrance[:2], dictionary, entrancestatus)
-
-            if entrancestatus == "In":
-                checkdata[entrance[:2]].append(dictionary)
-                json.dump(checkdata, outfile, indent=4)
-
-            elif entrancestatus == "Out":
-                for person in checkdata[entrance[:2]]:
-                    if persondetails['Name'] == person["Name"] and persondetails["AccessGroup"] == person["AccessGroup"]:
-                        checkdata[entrance[:2]].remove(person)
-                json.dump(checkdata, outfile, indent=4)
-
-
-# persondetails = {"Name": "Bryan","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}
-# print(verify_zone_status("E1R1","In",persondetails))
-# update_zone_status("E1R1","In",persondetails)
-
-
-# Currently not used
-def verify_antipassback(entrancename):
-    # read from credOccur.json
-    for entrancelist in credOccur:
-        if entrancelist["Entrance"] == entrancename:
-            if entrancelist["EntranceDetails"]["Antipassback"] == "Yes":
-                return True
-
-    return False
-
-
-# Currently not used
-def gen_check(gpio):
-    if gpio == Gen_Out_1:
-        print("Gen out 1 ")
-
-
 debounce_delay = 0.05 # 50ms debounce delay
 
 
@@ -792,6 +679,8 @@ def mag_detects_rising(gpio, level, tick):
     """
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
+
+    print(f"Mag Detects Rising {mag_E1_allowed_to_open} {mag_E2_allowed_to_open}")
 
     if time.time() - mag_detects_rising.last_call_time < debounce_delay:
         return
@@ -831,6 +720,8 @@ def mag_detects_falling(gpio, level, tick):
     """
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
+
+    print(f"Mag Detects Falling {mag_E1_allowed_to_open} {mag_E2_allowed_to_open}")
 
     if time.time() - mag_detects_falling.last_call_time < debounce_delay:
         return
