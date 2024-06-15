@@ -343,6 +343,8 @@ def activate_buzz(entrance,t):
    import eventActionTriggerConstants
    global E1_buzzer_time,E2_buzzer_time
 
+   print("buzzzzzing")
+
    if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
       end_time=time.time()+t
       E1_buzzer_time=max(E1_buzzer_time,end_time)
@@ -354,6 +356,8 @@ def activate_buzz(entrance,t):
       E1_buzzer_time=max(E1_buzzer_time,time.time()+t)
    elif ent == "E2":
       E2_buzzer_time=max(E2_buzzer_time,time.time()+t)
+
+activate_buzz("E1",30)
 
 def activate_led(entrance,t):
    '''Helper function for eventActionTriggers
