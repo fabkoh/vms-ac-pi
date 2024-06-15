@@ -301,8 +301,6 @@ def event_trigger_cb(event_trigger):
     # debounce logic
     if time.time() - event_trigger_cb.last_call_time < debounce_delay:
         return
-
-    print("event trigger cb")
     ''' function hook to call everytime an event trigger occurs
 
     Args:
@@ -310,7 +308,6 @@ def event_trigger_cb(event_trigger):
     '''
     # if event is timed, activate timer and return, while true loop will handle the rest
     if input_is_timed(event_trigger):
-        print("timed event")
         timer_action = get_timer_event_timer_action(event_trigger)
         event_trigger_type = get_timer_event_event_action_trigger(
             event_trigger)
