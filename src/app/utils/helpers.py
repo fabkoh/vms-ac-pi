@@ -1,8 +1,7 @@
 import json
 import linecache
-import os
 import tracemalloc
-from app.config import Config
+from src.app.config import Config
 
 
 def load_json(filename: str) -> dict:
