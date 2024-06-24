@@ -98,6 +98,7 @@ def get_host_ip(hostIP=None):
                     time.sleep(0.1)
 
         if str(hostIP).startswith('169.254') and (not check_ip_static()):  # apipa, use static ip
+            # just to check, why is the changing of static IP to 230, and not to 160 or 250?
             change_static_ip(
                 '192.168.1.230', get_default_gateway_windows(), '8.8.8.8')
             return get_host_ip('ip')
