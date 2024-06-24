@@ -1,12 +1,12 @@
 from flask import Blueprint, request, abort, Response
 from src.app.utils.helpers import load_json, save_json
 from src.app.utils.locks import config_lock
-import src.healthcheck
-import src.changeStatic
-import src.events
-import src.eventsMod
-import src.GPIOconfig
-import src.relay
+import src.healthcheck as healthcheck
+import src.changeStatic as changeStatic
+import src.events as events
+import src.eventsMod as eventsMod
+import src.GPIOconfig as GPIOconfig
+import src.relay as relay
 
 config_bp = Blueprint('config', __name__)
 

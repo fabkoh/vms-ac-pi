@@ -1,16 +1,16 @@
 from flask import Blueprint, Response, request, abort
 import json
-from src.app.routes.healthcheck import get_healthcheck
+from src.healthcheck import healthcheck
 from src.app.utils.helpers import load_json, save_json
 from src.app.utils.locks import config_lock
-import src.events
+import src.events as events
 
 api_bp = Blueprint('api', __name__)
 
 @api_bp.route("/status", methods=["GET"])
 def get_status() -> Response:
     """Returns healthcheck info"""
-    get_healthcheck(False)
+    healthcheck.main()
     with config_lock:
         data = load_json("config.json")
     controller_config = data["controllerConfig"]

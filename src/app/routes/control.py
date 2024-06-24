@@ -1,6 +1,6 @@
 from flask import Blueprint, Response
 import os
-import src.changeStatic
+import src.changeStatic as changeStatic
 
 control_bp = Blueprint('control', __name__)
 
