@@ -1,5 +1,5 @@
 from flask import Blueprint, Response
-import healthcheck
+import src.healthcheck as healthcheck
 
 healthcheck_bp = Blueprint('healthcheck', __name__)
 

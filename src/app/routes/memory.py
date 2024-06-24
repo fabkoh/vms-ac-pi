@@ -1,8 +1,8 @@
 from flask import Blueprint
 import tracemalloc
 import time
-from app.utils.helpers import display_top
-from executor import thread_pool_executor
+from src.app.utils.helpers import display_top
+from src.executor import thread_pool_executor
 
 memory_bp = Blueprint('memory', __name__)
 
