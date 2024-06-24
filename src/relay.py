@@ -10,26 +10,29 @@ import threading
 from lock import config_lock
 
 from eventActionTriggerConstants import GEN_OUT_1
-from executor import thread_pool_executor
+from executor import setup_logger, thread_pool_executor
 
 path = os.path.dirname(os.path.abspath(__file__))
 
 
 # Create a logger
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
-# Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
-logger.setLevel(logging.DEBUG)
+# # Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
+# logger.setLevel(logging.DEBUG)
 
-# Create a file handler for outputting log messages to a file
-file_handler = logging.FileHandler('/home/etlas/Relay.log')
+# # Create a file handler for outputting log messages to a file
+# file_handler = logging.FileHandler('/home/etlas/Relay.log')
 
-# Create a formatter and add it to the handler
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
+# # Create a formatter and add it to the handler
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# file_handler.setFormatter(formatter)
 
-# Add the handler to the logger
-logger.addHandler(file_handler)
+# # Add the handler to the logger
+# logger.addHandler(file_handler)
+
+setup_logger('Relay.log')
+
 
 # everytime relay triggers, mag_status_open = True
 # if mag_contact opened but mag_status_open = False, TRIGGER ALARM

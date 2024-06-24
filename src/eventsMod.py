@@ -2,30 +2,33 @@ import json
 from datetime import datetime
 import os
 
-from executor import thread_pool_executor
+from executor import setup_logger, thread_pool_executor
 from updateserver import update_server_events
 import eventActionTriggerConstants
 import eventActionTriggers
 from lock import pending_logs_lock, archived_logs_lock, config_lock
 import logging
 
-# Create a logger
-logger = logging.getLogger(__name__)
+# # Create a logger
+# logger = logging.getLogger(__name__)
 
-# Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
-logger.setLevel(logging.DEBUG)
+# # Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
+# logger.setLevel(logging.DEBUG)
 
-# Create a file handler for outputting log messages to a file
-file_handler = logging.FileHandler('/home/etlas/EventsMod.log')
+# # Create a file handler for outputting log messages to a file
+# file_handler = logging.FileHandler('/home/etlas/EventsMod.log')
 
-# Create a formatter and add it to the handler
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
+# # Create a formatter and add it to the handler
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# file_handler.setFormatter(formatter)
 
-# Add the handler to the logger
-logger.addHandler(file_handler)
+# # Add the handler to the logger
+# logger.addHandler(file_handler)
 
 path = os.path.dirname(os.path.abspath(__file__))
+
+setup_logger('EventsMod.log')
+
 
 '''
     1. record_auth and record_button to record transLogs in archivedTrans.json and pendingTrans.json

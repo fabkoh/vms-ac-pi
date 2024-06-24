@@ -1,16 +1,47 @@
 import gc
+import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import logging
 
+
 # Setup logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler('/home/etlas/ThreadPool.log')
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
+# logger = logging.getLogger(__name__)
+# logger.setLevel(logging.DEBUG)
+# file_handler = logging.FileHandler('/home/etlas/ThreadPool.log')
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# file_handler.setFormatter(formatter)
+# logger.addHandler(file_handler)
+
+def setup_logger(log_filename="ThreadPool.log"):
+    # Determine the home directory dynamically
+    home_dir = os.path.expanduser("~")
+    
+    # Define the log file path
+    log_dir = os.path.join(home_dir, "logs")
+    log_file = os.path.join(log_dir, log_filename)
+    
+    # Ensure the log directory exists
+    os.makedirs(log_dir, exist_ok=True)
+    
+    # Set up logging
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    
+    # Create file handler
+    file_handler = logging.FileHandler(log_file)
+    
+    # Create formatter and set it for the handler
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+    
+    # Add the handler to the logger
+    logger.addHandler(file_handler)
+    
+    return logger
+
+setup_logger('ThreadPool.log')
 
 class ThreadPoolMonitor:
     def __init__(self, max_workers):
