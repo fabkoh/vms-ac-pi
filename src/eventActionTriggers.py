@@ -7,6 +7,8 @@ from src.eventActionTriggerConstants import *
 from src.lock import pending_logs_lock
 from src.executor import thread_pool_executor
 from src.var import server_url
+import src.events as events
+import src.GPIOconfig as GPIOconfig
 import gc
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -213,8 +215,6 @@ def check_datetime(schedule):
 
 def flush_output():
     """Activates output"""
-    import events
-    import GPIOconfig
 
     for event in output_events:
         print("this is event")
