@@ -1,4 +1,4 @@
-import GPIOconfig
+import src.GPIOconfig as GPIOconfig
 import src.events as events
 import pigpio
 import src.eventsMod as eventsMod
