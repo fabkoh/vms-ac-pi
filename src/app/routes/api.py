@@ -1,6 +1,6 @@
 from flask import Blueprint, Response, request, abort
 import json
-from src.healthcheck import healthcheck
+import src.healthcheck as healthcheck
 from src.app.utils.helpers import load_json, save_json
 from src.app.utils.locks import config_lock
 import src.events as events
