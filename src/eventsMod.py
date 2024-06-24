@@ -2,7 +2,7 @@ import json
 import os
 from datetime import datetime
 
-from app.constants import event_action_triggers
+from src.app.constants import event_action_triggers
 from src import eventActionTriggers
 from src.executor import setup_logger, thread_pool_executor
 from src.lock import archived_logs_lock, config_lock, pending_logs_lock

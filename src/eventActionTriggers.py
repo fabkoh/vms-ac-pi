@@ -6,7 +6,7 @@ import time
 
 import requests
 
-from app.constants import event_action_triggers
+from src.app.constants import event_action_triggers
 from src import events, GPIOconfig
 import src.events as events
 import src.GPIOconfig as GPIOconfig
