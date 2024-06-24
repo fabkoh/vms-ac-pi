@@ -4,6 +4,7 @@ import os
 import time
 
 import pigpio
+from src.app.constants import event_action_triggers
 
 from src.executor import thread_pool_executor
 from src.lock import config_lock
@@ -366,7 +367,6 @@ def activate_buzz(entrance, t):
     entrance: entrance to activate buzzer (either BOTH_ENTRANCES or entrance_id)
     t: time to run buzzer in seconds (int)
     """
-    import app.constants.event_action_triggers as event_action_triggers
 
     global E1_buzzer_time, E2_buzzer_time
 
@@ -389,7 +389,6 @@ def activate_led(entrance, t):
     entrance: entrance to activate led (either BOTH_ENTRANCE or entrance_id)
     t: time to run buzzer in seconds(int)
     """
-    import app.constants.event_action_triggers as event_action_triggers
 
     global E1_led_time, E2_led_time
 

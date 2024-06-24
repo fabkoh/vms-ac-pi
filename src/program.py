@@ -2,8 +2,9 @@ import gc
 
 import pigpio
 
-from src import events, eventsMod, GPIOconfig, healthcheck, piProperty
+from src import events, eventsMod, GPIOconfig, healthcheck, piProperty, eventActionTriggers
 from src.executor import thread_pool_executor
+import src.app.constants.event_action_triggers as event_action_triggers
 
 """
     1. main program that runs everything, including E1
@@ -149,8 +150,6 @@ def check_events_timer():
 
 def check_gen_pins_and_alarm():
     print("check_gen_pins_and_alarm starting")
-    import app.constants.event_action_triggers as event_action_triggers
-    import eventActionTriggers
 
     def helper(pin, event_trigger):
         """
