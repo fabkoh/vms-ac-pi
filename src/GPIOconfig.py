@@ -366,11 +366,11 @@ def activate_buzz(entrance, t):
     entrance: entrance to activate buzzer (either BOTH_ENTRANCES or entrance_id)
     t: time to run buzzer in seconds (int)
     """
-    import eventActionTriggerConstants
+    import app.constants.event_action_triggers as event_action_triggers
 
     global E1_buzzer_time, E2_buzzer_time
 
-    if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+    if entrance is event_action_triggers.BOTH_ENTRANCE:
         end_time = time.time() + t
         E1_buzzer_time = max(E1_buzzer_time, end_time)
         E2_buzzer_time = max(E2_buzzer_time, end_time)
@@ -389,11 +389,11 @@ def activate_led(entrance, t):
     entrance: entrance to activate led (either BOTH_ENTRANCE or entrance_id)
     t: time to run buzzer in seconds(int)
     """
-    import eventActionTriggerConstants
+    import app.constants.event_action_triggers as event_action_triggers
 
     global E1_led_time, E2_led_time
 
-    if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+    if entrance is event_action_triggers.BOTH_ENTRANCE:
         end_time = time.time() + t
         E1_led_time = max(E1_led_time, end_time)
         E2_led_time = max(E2_led_time, end_time)

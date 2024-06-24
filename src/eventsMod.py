@@ -2,7 +2,8 @@ import json
 import os
 from datetime import datetime
 
-from src import eventActionTriggerConstants, eventActionTriggers
+from app.constants import event_action_triggers
+from src import eventActionTriggers
 from src.executor import setup_logger, thread_pool_executor
 from src.lock import archived_logs_lock, config_lock, pending_logs_lock
 from src.updateserver import update_server_events
@@ -93,8 +94,8 @@ def record_auth_scans(name, accessGroup, authtype, entrance, status):
 
     logger.info("record auth scans, before event_trigger_cb")
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance))
+        event_action_triggers.create_event(
+            event_action_triggers.AUTHENTICATED_SCAN, entrance))
     logger.info("record auth scans, after event_trigger_cb")
     update_logs_and_server(dictionary)
     logger.info("record auth scans, after update_logs_and_server")
@@ -115,8 +116,8 @@ def invalid_pin_used(entrance, status):
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S")),
     }
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.UNAUTHENTICATED_SCAN, entrance))
+        event_action_triggers.create_event(
+            event_action_triggers.UNAUTHENTICATED_SCAN, entrance))
 
     update_logs_and_server(dictionary)
 
@@ -137,8 +138,8 @@ def pin_only_used(entrance, status):
     }
     logger.info("record pin used, before event_trigger_cb")
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance))
+        event_action_triggers.create_event(
+            event_action_triggers.AUTHENTICATED_SCAN, entrance))
     logger.info("record pin used, after event_trigger_cb")
     update_logs_and_server(dictionary)
     logger.info("record pin used, after update_logs_and_server")
@@ -192,8 +193,8 @@ def record_unauth_scans(authtype,
     }
 
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.UNAUTHENTICATED_SCAN, entrance))
+        event_action_triggers.create_event(
+            event_action_triggers.UNAUTHENTICATED_SCAN, entrance))
     print(f"Recorded unauth scan at {entrance}")
     update_logs_and_server(dictionary)
 
@@ -214,11 +215,11 @@ def record_button_pressed(entrance, name_of_button):
     }
     e = entrance
     if e == "":  # no entrance assigned to this push button
-        e = eventActionTriggerConstants.BOTH_ENTRANCE
+        e = event_action_triggers.BOTH_ENTRANCE
     logger.info("push button, before event_trigger_cb")
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.EXIT_BUTTON_PRESSED, e))
+        event_action_triggers.create_event(
+            event_action_triggers.EXIT_BUTTON_PRESSED, e))
 
     update_logs_and_server(dictionary)
 
@@ -242,11 +243,11 @@ def fire_alarm_activated(gpio, level, tick):
     }
     e = entrance
     if e == "":  # no entrance assigned to this push button
-        e = eventActionTriggerConstants.BOTH_ENTRANCE
+        e = event_action_triggers.BOTH_ENTRANCE
     print(f"Fire activated at {e}")
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.FIRE, e))
+        event_action_triggers.create_event(
+            event_action_triggers.FIRE, e))
     update_logs_and_server(dictionary)
 
 
@@ -298,14 +299,14 @@ def record_mag_opened(entrance):
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S")),
     }
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_timer_event(
-            eventActionTriggerConstants.CONTACT_OPEN,
-            eventActionTriggerConstants.START_TIMER,
+        event_action_triggers.create_timer_event(
+            event_action_triggers.CONTACT_OPEN,
+            event_action_triggers.START_TIMER,
             entrance,
         ))
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION,
+        event_action_triggers.create_event(
+            event_action_triggers.CONTACT_OPEN_WITH_AUTHENTICATION,
             entrance))
     update_logs_and_server(dictionary)
 
@@ -325,9 +326,9 @@ def record_mag_closed(entrance):
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S")),
     }
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_timer_event(
-            eventActionTriggerConstants.CONTACT_OPEN,
-            eventActionTriggerConstants.STOP_TIMER,
+        event_action_triggers.create_timer_event(
+            event_action_triggers.CONTACT_OPEN,
+            event_action_triggers.STOP_TIMER,
             entrance,
         ))
     update_logs_and_server(dictionary)
@@ -349,14 +350,14 @@ def record_mag_opened_warning(entrance):
     }
 
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_timer_event(
-            eventActionTriggerConstants.CONTACT_OPEN,
-            eventActionTriggerConstants.START_TIMER,
+        event_action_triggers.create_timer_event(
+            event_action_triggers.CONTACT_OPEN,
+            event_action_triggers.START_TIMER,
             entrance,
         ))
     eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION,
+        event_action_triggers.create_event(
+            event_action_triggers.CONTACT_OPEN_WITHOUT_AUTHENTICATION,
             entrance))
 
     update_logs_and_server(dictionary)

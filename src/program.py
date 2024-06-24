@@ -149,7 +149,7 @@ def check_events_timer():
 
 def check_gen_pins_and_alarm():
     print("check_gen_pins_and_alarm starting")
-    import eventActionTriggerConstants
+    import app.constants.event_action_triggers as event_action_triggers
     import eventActionTriggers
 
     def helper(pin, event_trigger):
@@ -163,9 +163,9 @@ def check_gen_pins_and_alarm():
             print("helper called")
             if gpio == pin:
                 eventActionTriggers.event_trigger_cb(
-                    eventActionTriggerConstants.create_event(
+                    event_action_triggers.create_event(
                         event_trigger,
-                        eventActionTriggerConstants.BOTH_ENTRANCE))
+                        event_action_triggers.BOTH_ENTRANCE))
 
         return f
 
@@ -173,19 +173,19 @@ def check_gen_pins_and_alarm():
         cb1 = GPIOconfig.pi.callback(
             GPIOconfig.Gen_In_1,
             pigpio.RISING_EDGE,
-            helper(GPIOconfig.Gen_In_1, eventActionTriggerConstants.GEN_IN_1),
+            helper(GPIOconfig.Gen_In_1, event_action_triggers.GEN_IN_1),
         )
     if GPIOconfig.Gen_In_2 != None:
         cb2 = GPIOconfig.pi.callback(
             GPIOconfig.Gen_In_2,
             pigpio.RISING_EDGE,
-            helper(GPIOconfig.Gen_In_2, eventActionTriggerConstants.GEN_IN_2),
+            helper(GPIOconfig.Gen_In_2, event_action_triggers.GEN_IN_2),
         )
     if GPIOconfig.Gen_In_3 != None:
         cb3 = GPIOconfig.pi.callback(
             GPIOconfig.Gen_In_3,
             pigpio.RISING_EDGE,
-            helper(GPIOconfig.Gen_In_3, eventActionTriggerConstants.GEN_IN_3),
+            helper(GPIOconfig.Gen_In_3, event_action_triggers.GEN_IN_3),
         )
     cb4 = GPIOconfig.pi.callback(GPIOconfig.Fire, pigpio.RISING_EDGE,
                                  eventsMod.fire_alarm_activated)
