@@ -2,11 +2,11 @@ import json
 from datetime import datetime
 import os
 
-from executor import setup_logger, thread_pool_executor
-from updateserver import update_server_events
-import eventActionTriggerConstants
-import eventActionTriggers
-from lock import pending_logs_lock, archived_logs_lock, config_lock
+from src.executor import setup_logger, thread_pool_executor
+from src.updateserver import update_server_events
+import src.eventActionTriggerConstants as eventActionTriggerConstants
+import src.eventActionTriggers as eventActionTriggers
+from src.lock import pending_logs_lock, archived_logs_lock, config_lock
 
 path = os.path.dirname(os.path.abspath(__file__))
 

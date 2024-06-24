@@ -1,11 +1,11 @@
 from datetime import datetime, date
 
-from executor import setup_logger
-import relay
-import eventsMod
+from src.executor import setup_logger
+import src.relay as relay
+import src.eventsMod as eventsMod
 import json
 import time
-import updateserver
+import src.updateserver as updateserver
 import os
 
 from lock import config_lock

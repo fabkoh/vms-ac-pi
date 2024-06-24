@@ -1,14 +1,12 @@
-import asyncio
 import GPIOconfig
-import events
-import threading
+import src.events as events
 import pigpio
-import eventsMod
-import healthcheck
-import eventsMod
+import src.eventsMod as eventsMod
+import src.healthcheck as healthcheck
+import src.eventsMod as eventsMod
 import gc
-import piProperty
-from executor import thread_pool_executor
+import src.piProperty as piProperty
+from src.executor import thread_pool_executor
 """
     1. main program that runs everything, including E1
     2. when detects any events, imports events.py

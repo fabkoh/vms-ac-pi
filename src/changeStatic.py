@@ -4,7 +4,7 @@ import netifaces
 
 # main() does not run automatically as program (which imports this file)
 # already imported healthcheck
-import healthcheck
+import src.healthcheck as healthcheck
 """
 interface wlan0
 static ip_address=192.168.1.120/24

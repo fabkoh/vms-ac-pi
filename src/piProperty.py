@@ -3,7 +3,7 @@ import re
 import time
 import threading
 
-from executor import setup_logger
+from src.executor import setup_logger
 
 logger = setup_logger("PiProperty.log")
 

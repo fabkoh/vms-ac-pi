@@ -11,11 +11,10 @@ import os
 import json
 import requests
 import time
-import gc
 import src.changeStatic as changeStatic
 import GPIOconfig
-from var import server_url
-from lock import config_lock
+from src.var import server_url
+from src.lock import config_lock
 
 # change_static_ip, get_default_gateway_windows
 

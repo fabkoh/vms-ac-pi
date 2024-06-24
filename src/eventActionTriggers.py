@@ -3,10 +3,10 @@ import json
 import requests
 import time
 import os
-from eventActionTriggerConstants import *
-from lock import pending_logs_lock
-from executor import thread_pool_executor
-from var import server_url
+from src.eventActionTriggerConstants import *
+from src.lock import pending_logs_lock
+from src.executor import thread_pool_executor
+from src.var import server_url
 import gc
 
 path = os.path.dirname(os.path.abspath(__file__))

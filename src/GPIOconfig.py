@@ -1,12 +1,10 @@
-import threading
 import time
 import pigpio
 import json
-from datetime import datetime
 import os
 import gc
-from lock import config_lock
-from executor import thread_pool_executor
+from src.lock import config_lock
+from src.executor import thread_pool_executor
 
 path = os.path.dirname(os.path.abspath(__file__))
 """

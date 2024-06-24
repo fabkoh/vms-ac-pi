@@ -6,8 +6,6 @@ import subprocess
 
 # import psutil
 import os
-import netifaces
-import time
 
 hostname = socket.gethostname()
 
