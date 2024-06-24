@@ -12,7 +12,7 @@ import json
 import requests
 import time
 import gc
-from changeStatic import *
+import src.changeStatic as changeStatic
 import GPIOconfig
 from var import server_url
 from lock import config_lock
@@ -86,9 +86,10 @@ def get_host_ip(hostIP=None):
         try:
             hostIP = socket.gethostbyname(socket.getfqdn())
         except gaierror:
-            logger.warn(
-                "gethostbyname(socket.getfqdn()) failed... trying on hostname()"
-            )
+            pass
+            # logger.warn(
+            #     "gethostbyname(socket.getfqdn()) failed... trying on hostname()"
+            # )
             hostIP = socket.gethostbyname(socket.gethostname())
         if hostIP.startswith("127."):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -103,7 +104,7 @@ def get_host_ip(hostIP=None):
 
         if str(hostIP).startswith("169.254") and (
                 not check_ip_static()):  # apipa, use static ip
-            change_static_ip("192.168.1.230", get_default_gateway_windows(),
+            changeStatic.change_static_ip("192.168.1.230", changeStatic.get_default_gateway_windows(),
                              "8.8.8.8")
             return get_host_ip("ip")
 
