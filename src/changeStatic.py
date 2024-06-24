@@ -1,18 +1,17 @@
 import logging
 import os
+
 import netifaces
 
 # main() does not run automatically as program (which imports this file)
 # already imported healthcheck
-import src.healthcheck as healthcheck
+from src import healthcheck
 """
 interface wlan0
 static ip_address=192.168.1.120/24
 static routers=192.168.1.254
 static domain_name_servers=192.168.1.254
 """
-
-
 def change_static_ip(ip_address, routers, dns):
     conf_file = "/etc/dhcpcd.conf"
     try:

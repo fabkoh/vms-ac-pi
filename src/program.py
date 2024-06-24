@@ -1,12 +1,10 @@
-import src.GPIOconfig as GPIOconfig
-import src.events as events
-import pigpio
-import src.eventsMod as eventsMod
-import src.healthcheck as healthcheck
-import src.eventsMod as eventsMod
 import gc
-import src.piProperty as piProperty
+
+import pigpio
+
+from src import events, eventsMod, GPIOconfig, healthcheck, piProperty
 from src.executor import thread_pool_executor
+
 """
     1. main program that runs everything, including E1
     2. when detects any events, imports events.py
@@ -149,14 +147,10 @@ def check_events_timer():
         events.check_entrance_status()
         gc.collect()
 
-        # check_entrance_E1()
-        # check_entrance_E2()
-
-
 def check_gen_pins_and_alarm():
     print("check_gen_pins_and_alarm starting")
-    import eventActionTriggers
     import eventActionTriggerConstants
+    import eventActionTriggers
 
     def helper(pin, event_trigger):
         """

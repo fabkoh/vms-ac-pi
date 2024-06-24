@@ -1,20 +1,18 @@
-import pigpio
 import json
-from datetime import datetime
-
+# import psutil
+import os
 # Python Program to Get IP Address and send to server 250
 import socket
 import subprocess
-
-# import psutil
-import os
-import json
-import requests
 import time
-import src.changeStatic as changeStatic
-import src.GPIOconfig as GPIOconfig
-from src.var import server_url
+from datetime import datetime
+
+import pigpio
+import requests
+
+from src import GPIOconfig, changeStatic
 from src.lock import config_lock
+from src.var import server_url
 
 # change_static_ip, get_default_gateway_windows
 
@@ -103,8 +101,9 @@ def get_host_ip(hostIP=None):
 
         if str(hostIP).startswith("169.254") and (
                 not check_ip_static()):  # apipa, use static ip
-            changeStatic.change_static_ip("192.168.1.230", changeStatic.get_default_gateway_windows(),
-                             "8.8.8.8")
+            changeStatic.change_static_ip(
+                "192.168.1.230", changeStatic.get_default_gateway_windows(),
+                "8.8.8.8")
             return get_host_ip("ip")
 
     return str(hostIP)

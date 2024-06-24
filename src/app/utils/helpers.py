@@ -1,15 +1,19 @@
 import json
-import os
 import linecache
+import os
 import tracemalloc
+from app.config import Config
+
 
 def load_json(filename: str) -> dict:
-    with open(os.path.join(os.path.dirname(__file__), '..', 'json', filename), 'r') as f:
+    with open(Config.JSON_DIR, filename, "r") as f:
         return json.load(f)
 
+
 def save_json(filename: str, data: dict):
-    with open(os.path.join(os.path.dirname(__file__), '..', 'json', filename), 'w') as f:
+    with open(Config.JSON_DIR, filename, "w") as f:
         json.dump(data, f, indent=4)
+
 
 def display_top(snapshot, key_type="traceback", limit=10):
     snapshot = snapshot.filter_traces((

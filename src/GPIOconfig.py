@@ -1,10 +1,12 @@
-import time
-import pigpio
+import gc
 import json
 import os
-import gc
-from src.lock import config_lock
+import time
+
+import pigpio
+
 from src.executor import thread_pool_executor
+from src.lock import config_lock
 
 path = os.path.dirname(os.path.abspath(__file__))
 """

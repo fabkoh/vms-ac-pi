@@ -1,14 +1,18 @@
-from flask import Blueprint, Response
 import os
-import src.changeStatic as changeStatic
 
-control_bp = Blueprint('control', __name__)
+from flask import Blueprint, Response
+
+from src import changeStatic
+
+control_bp = Blueprint("control", __name__)
+
 
 @control_bp.route("/reboot", methods=["POST"])
 def post_reboot() -> Response:
     """Reboots the controller"""
     os.system("sudo reboot")
     return Response({}, status=200)
+
 
 @control_bp.route("/shutdown", methods=["POST"])
 def post_shutdown() -> Response:

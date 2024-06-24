@@ -1,7 +1,7 @@
-import subprocess
 import re
-import time
+import subprocess
 import threading
+import time
 
 from src.executor import setup_logger
 

@@ -1,9 +1,9 @@
 import gc
+import logging
 import os
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
-import threading
-import logging
 
 
 def setup_logger(log_filename="ThreadPool.log"):

@@ -1,10 +1,11 @@
-from src.executor import setup_logger, thread_pool_executor
-from src.var import server_url
 import json
-import requests
 import os
 
+import requests
+
+from src.executor import setup_logger, thread_pool_executor
 from src.lock import pending_logs_lock
+from src.var import server_url
 
 logger = setup_logger("Relay.log")
 

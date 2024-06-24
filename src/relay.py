@@ -1,13 +1,14 @@
-import RPi.GPIO as GPIO
-from time import sleep
-from datetime import datetime
-import multitasking
 import json
 import os
-from src.lock import config_lock
+from datetime import datetime
+from time import sleep
+
+import multitasking
+import RPi.GPIO as GPIO
 
 from src.eventActionTriggerConstants import GEN_OUT_1
 from src.executor import setup_logger, thread_pool_executor
+from src.lock import config_lock
 
 path = os.path.dirname(os.path.abspath(__file__))
 

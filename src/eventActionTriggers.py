@@ -1,15 +1,17 @@
 import datetime
+import gc
 import json
-import requests
-import time
 import os
-from src.eventActionTriggerConstants import *
-from src.lock import pending_logs_lock
-from src.executor import thread_pool_executor
-from src.var import server_url
+import time
+
+import requests
+
+from src import events, GPIOconfig, eventActionTriggerConstants
 import src.events as events
 import src.GPIOconfig as GPIOconfig
-import gc
+from src.executor import thread_pool_executor
+from src.lock import pending_logs_lock
+from src.var import server_url
 
 path = os.path.dirname(os.path.abspath(__file__))
 EVENT_ACTION_TRIGGERS_DATA = []
@@ -227,7 +229,7 @@ def flush_output():
         # print(entrance)
         if entrance == None:
             if event.get("controller", None) != None:
-                entrance = BOTH_ENTRANCE
+                entrance = eventActionTriggerConstants.BOTH_ENTRANCE
             else:
                 continue  # ignore, malformed json
 
@@ -236,35 +238,35 @@ def flush_output():
             id = output.get("eventActionOutputType",
                             {}).get("eventActionOutputId", None)
             print(f"id is {id}")
-            if id == DOOR_OPEN:
+            if id == eventActionTriggerConstants.DOOR_OPEN:
                 events.open_door_using_entrance_id(entrance)
-            elif id == BUZZER:
+            elif id == eventActionTriggerConstants.BUZZER:
                 print("buzzer")
                 GPIOconfig.activate_buzz(entrance,
                                          output.get("timerDuration", 0))
-            elif id == LED:
+            elif id == eventActionTriggerConstants.LED:
                 print("led")
                 GPIOconfig.activate_led(entrance,
                                         output.get("timerDuration", 0))
-            elif id == GEN_OUT_1:
+            elif id == eventActionTriggerConstants.GEN_OUT_1:
                 timer1 = output.get("timerDuration", 0)
                 print(f"Gen Out 1, timer {timer1} seconds")
                 events.open_GEN_OUT("GEN_OUT_1",
                                     output.get("timerDuration", 0), 1)
-            elif id == GEN_OUT_2:
+            elif id == eventActionTriggerConstants.GEN_OUT_2:
                 timer2 = output.get("timerDuration", 0)
                 print(f"Gen Out 2, timer {timer2} seconds")
                 events.open_GEN_OUT("GEN_OUT_2",
                                     output.get("timerDuration", 0), 2)
-            elif id == GEN_OUT_3:
+            elif id == eventActionTriggerConstants.GEN_OUT_3:
                 timer3 = output.get("timerDuration", 0)
                 print(f"Gen Out 3, timer {timer3} seconds")
                 events.open_GEN_OUT("GEN_OUT_3",
                                     output.get("timerDuration", 0), 3)
-            elif id == SMSNOTIFICATION:
+            elif id == eventActionTriggerConstants.SMSNOTIFICATION:
                 sendSMS_function(event)
                 print("sms activate")
-            elif id == EMAILNOTIFICATION:
+            elif id == eventActionTriggerConstants.EMAILNOTIFICATION:
                 sendEmail_function(event)
                 print("email activate")
 
@@ -294,7 +296,7 @@ def get_entrance_from_event_management(event_management):
         return entrance.get("entranceId", None)
 
     # if its controller, it works for both entrances
-    return BOTH_ENTRANCE
+    return eventActionTriggerConstants.BOTH_ENTRANCE
 
 
 debounce_delay = 1  # 1s debounce delay
@@ -313,15 +315,15 @@ def event_trigger_cb(event_trigger):
         event_trigger (check eventActionTriggerConstants.py): event_trigger which occurred
     """
     # if event is timed, activate timer and return, while true loop will handle the rest
-    if input_is_timed(event_trigger):
+    if eventActionTriggerConstants.input_is_timed(event_trigger):
         print("timed event")
-        timer_action = get_timer_event_timer_action(event_trigger)
-        event_trigger_type = get_timer_event_event_action_trigger(
+        timer_action = eventActionTriggerConstants.get_timer_event_timer_action(event_trigger)
+        event_trigger_type = eventActionTriggerConstants.get_timer_event_event_action_trigger(
             event_trigger)
-        entrance = get_event_entrance(event_trigger)
-        if timer_action == START_TIMER:
+        entrance = eventActionTriggerConstants.get_event_entrance(event_trigger)
+        if timer_action == eventActionTriggerConstants.START_TIMER:
             eventTriggerTime[(event_trigger_type, entrance)] = time.time()
-        elif timer_action == STOP_TIMER:
+        elif timer_action == eventActionTriggerConstants.STOP_TIMER:
             eventTriggerTime[(event_trigger_type, entrance)] = None
             # need to reset all events with this event_trigger_type
             # first filter all events with this event_trigger_type
@@ -334,7 +336,7 @@ def event_trigger_cb(event_trigger):
                             event_trigger_type,
                             eventManagement.get("inputEvents", []),
                             # check if this event management entrance is the same as the event
-                        )) and (entrance is BOTH_ENTRANCE or
+                        )) and (entrance is eventActionTriggerConstants.BOTH_ENTRANCE or
                                 get_entrance_from_event_management(
                                     eventManagement) == entrance),
                     EVENT_ACTION_TRIGGERS_DATA,
@@ -345,8 +347,8 @@ def event_trigger_cb(event_trigger):
 
     # if event is not timed, check for all events
     # first filter events by if they have event_trigger in them
-    event_trigger_id = get_event_trigger_from_event(event_trigger)
-    entrance = get_event_entrance(event_trigger)
+    event_trigger_id = eventActionTriggerConstants.get_event_trigger_from_event(event_trigger)
+    entrance = eventActionTriggerConstants.get_event_entrance(event_trigger)
 
     # for event in filter(  # filter events by if they have event_trigger in them
     #         lambda eventManagement: any(map(  # finds if any inputEvent (in events) have event_trigger
@@ -367,8 +369,8 @@ def event_trigger_cb(event_trigger):
                     eventManagement.get("inputEvents", []),
                 )) and
         (check_datetime(eventManagement.get("triggerSchedule", {}))) and
-        (entrance is BOTH_ENTRANCE or get_entrance_from_event_management(
-            eventManagement) is BOTH_ENTRANCE or
+        (entrance is eventActionTriggerConstants.BOTH_ENTRANCE or get_entrance_from_event_management(
+            eventManagement) is eventActionTriggerConstants.BOTH_ENTRANCE or
          get_entrance_from_event_management(eventManagement) == entrance),
             EVENT_ACTION_TRIGGERS_DATA,
     ):
@@ -392,7 +394,7 @@ def event_trigger_cb(event_trigger):
             if input_event_id != event_trigger_id:
                 t = eventTriggerTime.get((input_event_id, entrance), None)
                 if t == None:
-                    t = eventTriggerTime.get((input_event_id, BOTH_ENTRANCE),
+                    t = eventTriggerTime.get((input_event_id, eventActionTriggerConstants.BOTH_ENTRANCE),
                                              None)
                 d = inputEvent.get("timerDuration", None)
                 # t is None means trigger has not been active so do not activate
@@ -439,7 +441,7 @@ def check_for_only_timer_based_events():
                 d = inputEvent.get("timerDuration", None)
                 t = eventTriggerTime.get((input_id, entrance), None)
                 if t == None:
-                    t = eventTriggerTime.get((input_id, BOTH_ENTRANCE), None)
+                    t = eventTriggerTime.get((input_id, eventActionTriggerConstants.BOTH_ENTRANCE), None)
                 if ((t == None) or (d == None) or
                     (time.time() - t < d)):  # event is not to be activated
                     valid = False

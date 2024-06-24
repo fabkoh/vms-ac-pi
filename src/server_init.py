@@ -1,11 +1,10 @@
 # Python Program to SET IP Address to 250
 # rmb to set dns to
 
-import socket
-import subprocess
-
 # import psutil
 import os
+import socket
+import subprocess
 
 hostname = socket.gethostname()
 

@@ -1,13 +1,10 @@
-from datetime import datetime, date
-
-from src.executor import setup_logger
-import src.relay as relay
-import src.eventsMod as eventsMod
 import json
-import time
-import src.updateserver as updateserver
 import os
+import time
+from datetime import date, datetime
 
+from src import eventsMod, relay, updateserver
+from src.executor import setup_logger
 from src.lock import config_lock
 
 path = os.path.dirname(os.path.abspath(__file__))
