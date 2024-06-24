@@ -31,7 +31,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 # # Add the handler to the logger
 # logger.addHandler(file_handler)
 
-setup_logger('Relay.log')
+logger = setup_logger('Relay.log')
 
 
 # everytime relay triggers, mag_status_open = True

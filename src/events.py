@@ -52,7 +52,7 @@ card_bits = 26
 # # Add the handler to the logger
 # logger.addHandler(file_handler)
 
-setup_logger('Events.log')
+logger = setup_logger('Events.log')
 
 
 class TimerError(Exception):

@@ -27,7 +27,7 @@ import logging
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-setup_logger('EventsMod.log')
+logger = setup_logger('EventsMod.log')
 
 
 '''

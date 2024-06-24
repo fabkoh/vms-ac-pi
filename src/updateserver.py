@@ -26,7 +26,7 @@ import logging
 # # Add the handler to the logger
 # logger.addHandler(file_handler)
 
-setup_logger('Relay.log')
+logger = setup_logger('Relay.log')
 
 
 path = os.path.dirname(os.path.abspath(__file__))

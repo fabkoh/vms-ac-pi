@@ -22,7 +22,7 @@ from executor import setup_logger
 # # Add the handler to the logger
 # logger.addHandler(file_handler)
 
-setup_logger('PiProperty.log')
+logger = setup_logger('PiProperty.log')
 
 
 def get_cpu_temperature():

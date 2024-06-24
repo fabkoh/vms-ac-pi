@@ -41,7 +41,7 @@ def setup_logger(log_filename="ThreadPool.log"):
     
     return logger
 
-setup_logger('ThreadPool.log')
+logger = setup_logger('ThreadPool.log')
 
 class ThreadPoolMonitor:
     def __init__(self, max_workers):
