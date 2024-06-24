@@ -1,8 +1,8 @@
 from flask import Blueprint, Response, request, abort
 import json
-from app.routes.healthcheck import get_healthcheck
-from app.utils.helpers import load_json, save_json
-from app.utils.locks import config_lock
+from src.app.routes.healthcheck import get_healthcheck
+from src.app.utils.helpers import load_json, save_json
+from src.app.utils.locks import config_lock
 import events
 
 api_bp = Blueprint('api', __name__)
