@@ -8,7 +8,7 @@ import time
 import src.updateserver as updateserver
 import os
 
-from lock import config_lock
+from src.lock import config_lock
 
 path = os.path.dirname(os.path.abspath(__file__))
 """
