@@ -4,6 +4,7 @@ import src.healthcheck as healthcheck
 from src.app.utils.helpers import load_json, save_json
 from src.app.utils.locks import config_lock
 import src.events as events
+import src.program as program
 
 api_bp = Blueprint('api', __name__)
 
