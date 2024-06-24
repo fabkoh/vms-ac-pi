@@ -12,7 +12,7 @@ import json
 import requests
 import time
 import src.changeStatic as changeStatic
-import GPIOconfig
+import src.GPIOconfig as GPIOconfig
 from src.var import server_url
 from src.lock import config_lock
 
