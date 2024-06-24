@@ -1,7 +1,7 @@
-'''
+"""
 This file contains the eventActionInputId and eventActionOutputId of eventActions
 DO NOT MODIFY THESE VALUES UNLESS THE JAVA SIDE IS MODIFIED AS WELL
-'''
+"""
 
 # input
 # non timer
@@ -39,37 +39,38 @@ BOTH_ENTRANCE = False
 
 
 def is_both_entrance(trigger):
-    '''helper function to return if trigger is constant BOTH_ENTRANCE'''
+    """helper function to return if trigger is constant BOTH_ENTRANCE"""
     return trigger is BOTH_ENTRANCE
 
 
 def input_is_timed(event_action_trigger):
-    '''return if input is timed (ie contact open)
+    """return if input is timed (ie contact open)
 
     Args:
         event_action_trigger (check eventActionTriggerConstants.py): event_action id
 
     Returns:
         is_timed (bool): if the event_action_trigger is timed
-    '''
+    """
 
-    return type(event_action_trigger) == tuple and len(event_action_trigger) == 3
+    return type(event_action_trigger) == tuple and len(
+        event_action_trigger) == 3
 
 
 def create_event(event_action_trigger, entrance):
-    '''Creates an event ADT (event_action_trigger,entrance)
+    """Creates an event ADT (event_action_trigger,entrance)
     Args:
         event_action_trigger (check eventActionTriggerConstants.py): event_action_trigger
         entrance (int): entrance id
 
     Returns:
         event ADT (a tuple (event_action_trigger,entrance) )
-    '''
+    """
     return (event_action_trigger, entrance)
 
 
 def create_timer_event(event_action_trigger, timer_action, entrance):
-    '''To create timer events (they require 2 states, start and stop timer)
+    """To create timer events (they require 2 states, start and stop timer)
 
     Args:
         event_action_trigger (check eventActionTriggerConstants.py): event_action id
@@ -78,54 +79,54 @@ def create_timer_event(event_action_trigger, timer_action, entrance):
 
     Returns:
         timer event ADT (a tuple (event_action_trigger,timer_action) )
-    '''
+    """
     return (event_action_trigger, timer_action, entrance)
 
 
 def get_timer_event_event_action_trigger(timer_event):
-    '''Returns timer_event event_action_trigger (timer_event[0])
+    """Returns timer_event event_action_trigger (timer_event[0])
 
     Args:
         timer_event: timer_event ADT
 
     Returns:
         event_action_trigger: check eventActionTriggerConstants.py
-    '''
+    """
     return timer_event[0]
 
 
 def get_timer_event_timer_action(timer_event):
-    '''Returns timer_event timer_action (timer_event[1])
+    """Returns timer_event timer_action (timer_event[1])
 
     Args:
         timer_event: timer_event ADT
 
     Returns:
         timer_action: check eventActionTriggerConstants.py
-    '''
+    """
 
     return timer_event[1]
 
 
 def get_event_entrance(event):
-    '''Returns the entrance id
+    """Returns the entrance id
 
     Args:
         event: either an event ADT or timer event ADT
 
     Returns:
         entrance (int): entrance id
-    '''
+    """
     return event[-1]
 
 
 def get_event_trigger_from_event(event):
-    '''returns the event trigger
+    """returns the event trigger
 
     Args:
         event: either an event adt or timer event adt
 
     Returns:
         event (check eventActionTriggerConstants.py)
-    '''
+    """
     return event[0]

@@ -9,17 +9,15 @@ import eventsMod
 import gc
 import piProperty
 from executor import thread_pool_executor
-
-'''
+"""
     1. main program that runs everything, including E1
     2. when detects any events, imports events.py
     3. checks for API calls
-'''
+"""
 healthcheck.main(True)
 
 E1_IN = None
 E1_OUT = None
-
 
 E2_IN = None
 E2_OUT = None
@@ -27,18 +25,18 @@ E2_OUT = None
 
 def mag_and_button():
     print("mag_and_button starting")
-    cb1 = GPIOconfig.pi.callback(
-        events.E1_Mag, pigpio.RISING_EDGE, events.mag_detects_rising)
-    cb2 = GPIOconfig.pi.callback(
-        events.E1_Mag, pigpio.FALLING_EDGE, events.mag_detects_falling)
-    cb3 = GPIOconfig.pi.callback(
-        events.E2_Mag, pigpio.RISING_EDGE, events.mag_detects_rising)
-    cb4 = GPIOconfig.pi.callback(
-        events.E2_Mag, pigpio.FALLING_EDGE, events.mag_detects_falling)
-    cb5 = GPIOconfig.pi.callback(
-        events.E1_Button, pigpio.FALLING_EDGE, events.button_detects_change)
-    cb6 = GPIOconfig.pi.callback(
-        events.E2_Button, pigpio.FALLING_EDGE, events.button_detects_change)
+    cb1 = GPIOconfig.pi.callback(events.E1_Mag, pigpio.RISING_EDGE,
+                                 events.mag_detects_rising)
+    cb2 = GPIOconfig.pi.callback(events.E1_Mag, pigpio.FALLING_EDGE,
+                                 events.mag_detects_falling)
+    cb3 = GPIOconfig.pi.callback(events.E2_Mag, pigpio.RISING_EDGE,
+                                 events.mag_detects_rising)
+    cb4 = GPIOconfig.pi.callback(events.E2_Mag, pigpio.FALLING_EDGE,
+                                 events.mag_detects_falling)
+    cb5 = GPIOconfig.pi.callback(events.E1_Button, pigpio.FALLING_EDGE,
+                                 events.button_detects_change)
+    cb6 = GPIOconfig.pi.callback(events.E2_Button, pigpio.FALLING_EDGE,
+                                 events.button_detects_change)
 
 
 def check_events_for(entrance):
@@ -107,7 +105,6 @@ def check_events_for(entrance):
     #             eventsMod.record_buzzer_start(entrancename)
     #             events.updateserver.update_server_events()
 
-                
     # else:
     #     GPIOconfig.deactivate_buzz_led(entrance[:2])
     #     if timeout_buzzer.status():
@@ -128,6 +125,7 @@ def check_entrance_E1():
             events.relay.unlock_entrance_one()
         else:
             events.relay.lock_entrance_one()
+
 
 # E1_is_active/E2_is_active
 
@@ -156,45 +154,61 @@ def check_events_timer():
         # check_entrance_E1()
         # check_entrance_E2()
 
+
 def check_gen_pins_and_alarm():
     print("check_gen_pins_and_alarm starting")
     import eventActionTriggers
     import eventActionTriggerConstants
 
     def helper(pin, event_trigger):
-        '''
+        """
         Args:
             pin: gpio_pin
             event_trigger: input_event_trigger from eventTriggerConstants
-        '''
+        """
+
         def f(gpio, level, tick):
             print("helper called")
             if gpio == pin:
-                eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_event(
-                    event_trigger, eventActionTriggerConstants.BOTH_ENTRANCE))
+                eventActionTriggers.event_trigger_cb(
+                    eventActionTriggerConstants.create_event(
+                        event_trigger,
+                        eventActionTriggerConstants.BOTH_ENTRANCE))
 
         return f
 
     if GPIOconfig.Gen_In_1 != None:
-        cb1 = GPIOconfig.pi.callback(GPIOconfig.Gen_In_1, pigpio.RISING_EDGE, helper(
-            GPIOconfig.Gen_In_1, eventActionTriggerConstants.GEN_IN_1))
+        cb1 = GPIOconfig.pi.callback(
+            GPIOconfig.Gen_In_1,
+            pigpio.RISING_EDGE,
+            helper(GPIOconfig.Gen_In_1, eventActionTriggerConstants.GEN_IN_1),
+        )
     if GPIOconfig.Gen_In_2 != None:
-        cb2 = GPIOconfig.pi.callback(GPIOconfig.Gen_In_2, pigpio.RISING_EDGE, helper(
-            GPIOconfig.Gen_In_2, eventActionTriggerConstants.GEN_IN_2))
+        cb2 = GPIOconfig.pi.callback(
+            GPIOconfig.Gen_In_2,
+            pigpio.RISING_EDGE,
+            helper(GPIOconfig.Gen_In_2, eventActionTriggerConstants.GEN_IN_2),
+        )
     if GPIOconfig.Gen_In_3 != None:
-        cb3 = GPIOconfig.pi.callback(GPIOconfig.Gen_In_3, pigpio.RISING_EDGE, helper(
-            GPIOconfig.Gen_In_3, eventActionTriggerConstants.GEN_IN_3))
-    cb4 = GPIOconfig.pi.callback(GPIOconfig.Fire, pigpio.RISING_EDGE, eventsMod.fire_alarm_activated)
+        cb3 = GPIOconfig.pi.callback(
+            GPIOconfig.Gen_In_3,
+            pigpio.RISING_EDGE,
+            helper(GPIOconfig.Gen_In_3, eventActionTriggerConstants.GEN_IN_3),
+        )
+    cb4 = GPIOconfig.pi.callback(GPIOconfig.Fire, pigpio.RISING_EDGE,
+                                 eventsMod.fire_alarm_activated)
+
 
 # WARNING READ DESCRIPTION
 
 
 def update_config():
-    '''call this after calling GPIOconfig.update_config(), events.update_config() and events.update_credOccur()
-WARNING THIS FUNCTION DOES NOT WORK
-it adds an addtion detect_bits call, so multiple detect_bits are called after card scan'''
+    """call this after calling GPIOconfig.update_config(), events.update_config() and events.update_credOccur()
+    WARNING THIS FUNCTION DOES NOT WORK
+    it adds an addtion detect_bits call, so multiple detect_bits are called after card scan
+    """
     global E1_IN, E1_OUT, E2_IN, E2_OUT
-    ''' check if decoders are enabled, cancel if true '''
+    """ check if decoders are enabled, cancel if true """
     if E1_IN:
         E1_IN.cancel()
     if E1_OUT:
@@ -204,23 +218,42 @@ it adds an addtion detect_bits call, so multiple detect_bits are called after ca
     if E2_OUT:
         E2_OUT.cancel()
 
-    E1_IN = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E1_IN_D0,
-                               GPIOconfig.E1_IN_D1, events.reader_detects_bits, "E1_IN")
-    E1_OUT = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E1_OUT_D0,
-                                GPIOconfig.E1_OUT_D1, events.reader_detects_bits, "E1_OUT")
+    E1_IN = GPIOconfig.decoder(
+        GPIOconfig.pi,
+        GPIOconfig.E1_IN_D0,
+        GPIOconfig.E1_IN_D1,
+        events.reader_detects_bits,
+        "E1_IN",
+    )
+    E1_OUT = GPIOconfig.decoder(
+        GPIOconfig.pi,
+        GPIOconfig.E1_OUT_D0,
+        GPIOconfig.E1_OUT_D1,
+        events.reader_detects_bits,
+        "E1_OUT",
+    )
 
-    E2_IN = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E2_IN_D0,
-                               GPIOconfig.E2_IN_D1, events.reader_detects_bits, "E2_IN")
-    E2_OUT = GPIOconfig.decoder(GPIOconfig.pi, GPIOconfig.E2_OUT_D0,
-                                GPIOconfig.E2_OUT_D1, events.reader_detects_bits, "E2_OUT")
+    E2_IN = GPIOconfig.decoder(
+        GPIOconfig.pi,
+        GPIOconfig.E2_IN_D0,
+        GPIOconfig.E2_IN_D1,
+        events.reader_detects_bits,
+        "E2_IN",
+    )
+    E2_OUT = GPIOconfig.decoder(
+        GPIOconfig.pi,
+        GPIOconfig.E2_OUT_D0,
+        GPIOconfig.E2_OUT_D1,
+        events.reader_detects_bits,
+        "E2_OUT",
+    )
 
 
 def memory_checker():
-    piProperty.log_system_stats(1*60*10, 1*60*60*24*5)
+    piProperty.log_system_stats(1 * 60 * 10, 1 * 60 * 60 * 24 * 5)
 
 
 update_config()
-
 
 thread_pool_executor.submit(check_events_timer)
 thread_pool_executor.submit(mag_and_button)

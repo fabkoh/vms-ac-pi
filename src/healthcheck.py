@@ -1,10 +1,11 @@
-
 import pigpio
 import json
 from datetime import datetime
+
 # Python Program to Get IP Address and send to server 250
 import socket
 import subprocess
+
 # import psutil
 import os
 import json
@@ -15,10 +16,11 @@ from changeStatic import *
 import GPIOconfig
 from var import server_url
 from lock import config_lock
+
 # change_static_ip, get_default_gateway_windows
 
 path = os.path.dirname(os.path.abspath(__file__))
-file = path+"/json/config.json"
+file = path + "/json/config.json"
 
 pi = GPIOconfig.pi
 config = None
@@ -58,12 +60,12 @@ pi.set_mode(E2_OUT_D1, pigpio.INPUT)
 
 
 def check_ip_static():
-    '''checks /etc/dhcpcd.conf to see if ip is static'''
-    with open('/etc/dhcpcd.conf', 'r') as f:
+    """checks /etc/dhcpcd.conf to see if ip is static"""
+    with open("/etc/dhcpcd.conf", "r") as f:
         data = f.readlines()
 
     # checks if any of the strings start with 'static ip_address'
-    return any(map(lambda s: s.startswith('static ip_address'), data))
+    return any(map(lambda s: s.startswith("static ip_address"), data))
 
 
 def system_call(command):
@@ -72,35 +74,38 @@ def system_call(command):
 
 
 def get_host_ip(hostIP=None):
-    if hostIP is None or hostIP == 'auto':
-        hostIP = 'ip'
+    if hostIP is None or hostIP == "auto":
+        hostIP = "ip"
 
-    if hostIP == 'dns':
+    if hostIP == "dns":
         hostIP = socket.getfqdn()
 
-    elif hostIP == 'ip':
+    elif hostIP == "ip":
         from socket import gaierror
+
         try:
             hostIP = socket.gethostbyname(socket.getfqdn())
         except gaierror:
             logger.warn(
-                'gethostbyname(socket.getfqdn()) failed... trying on hostname()')
+                "gethostbyname(socket.getfqdn()) failed... trying on hostname()"
+            )
             hostIP = socket.gethostbyname(socket.gethostname())
         if hostIP.startswith("127."):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             # doesn't have to be reachable
             while True:
                 try:
-                    s.connect(('10.255.255.255', 1))
+                    s.connect(("10.255.255.255", 1))
                     hostIP = s.getsockname()[0]
                     break
                 except:
                     time.sleep(0.1)
 
-        if str(hostIP).startswith('169.254') and (not check_ip_static()):  # apipa, use static ip
-            change_static_ip(
-                '192.168.1.230', get_default_gateway_windows(), '8.8.8.8')
-            return get_host_ip('ip')
+        if str(hostIP).startswith("169.254") and (
+                not check_ip_static()):  # apipa, use static ip
+            change_static_ip("192.168.1.230", get_default_gateway_windows(),
+                             "8.8.8.8")
+            return get_host_ip("ip")
 
     return str(hostIP)
 
@@ -116,29 +121,31 @@ def main(post_to_etlas=False):
         return system_call("cat /sys/class/net/eth0/address")
 
     def post_to_etlas():
-        url = server_url+'/api/unicon/controller'
+        url = server_url + "/api/unicon/controller"
 
         with open(file, "r+") as outfile:
             data = json.load(outfile)
             outfile.close()
 
-        headers = {'Content-type': 'application/json'}
-        controllerConfig = data['controllerConfig']
-        readersConfig = controllerConfig['readersConnection']
+        headers = {"Content-type": "application/json"}
+        controllerConfig = data["controllerConfig"]
+        readersConfig = controllerConfig["readersConnection"]
         body = {
-            'controllerId': controllerConfig['controllerId'] or None,
+            "controllerId": controllerConfig["controllerId"] or None,
             # ip updated already below before this function call
-            'controllerIP': controllerConfig['controllerIp'],
-            'controllerIPStatic': check_ip_static(),
-            'controllerMAC': controllerConfig['controllerMAC'],
-            'controllerSerialNo': controllerConfig['controllerSerialNo'],
-            'E1_IN': readersConfig['E1_IN'] == 'Connected',
-            'E1_OUT': readersConfig['E1_OUT'] == 'Connected',
-            'E2_IN': readersConfig['E2_IN'] == 'Connected',
-            'E2_OUT': readersConfig['E2_OUT'] == 'Connected'
+            "controllerIP": controllerConfig["controllerIp"],
+            "controllerIPStatic": check_ip_static(),
+            "controllerMAC": controllerConfig["controllerMAC"],
+            "controllerSerialNo": controllerConfig["controllerSerialNo"],
+            "E1_IN": readersConfig["E1_IN"] == "Connected",
+            "E1_OUT": readersConfig["E1_OUT"] == "Connected",
+            "E2_IN": readersConfig["E2_IN"] == "Connected",
+            "E2_OUT": readersConfig["E2_OUT"] == "Connected",
         }
-        r = requests.post(url, data=json.dumps(
-            body), headers=headers, verify=False)
+        r = requests.post(url,
+                          data=json.dumps(body),
+                          headers=headers,
+                          verify=False)
 
         print(r)
         print(r.status_code)
@@ -147,9 +154,12 @@ def main(post_to_etlas=False):
             print("SUCCESS")
 
         try:
-            r2 = requests.post(url, data=json.dumps(
-                body), headers=headers, verify=False)
-            r2.raise_for_status()  # raise an HTTPError if status code is not 200
+            r2 = requests.post(url,
+                               data=json.dumps(body),
+                               headers=headers,
+                               verify=False)
+            r2.raise_for_status(
+            )  # raise an HTTPError if status code is not 200
         except requests.exceptions.RequestException as e:
             print("Error:", e)
 
