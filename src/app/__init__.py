@@ -7,6 +7,8 @@ from .routes.healthcheck import healthcheck_bp
 from .routes.memory import memory_bp
 
 def create_app() -> Flask:
+    print("Blueprints registered")
+
     app = Flask(__name__)
     app.config.from_object(Config)
 
