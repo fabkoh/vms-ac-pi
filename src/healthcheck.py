@@ -7,14 +7,14 @@ import subprocess
 import time
 from datetime import datetime
 
+from src.app import change_static
 import pigpio
 import requests
 
-from src import GPIOconfig, changeStatic
+from src import GPIOconfig
 from src.lock import config_lock
 from src.var import server_url
 
-# change_static_ip, get_default_gateway_windows
 
 path = os.path.dirname(os.path.abspath(__file__))
 file = path + "/json/config.json"
@@ -101,8 +101,8 @@ def get_host_ip(hostIP=None):
 
         if str(hostIP).startswith("169.254") and (
                 not check_ip_static()):  # apipa, use static ip
-            changeStatic.change_static_ip(
-                "192.168.1.230", changeStatic.get_default_gateway_windows(),
+            change_static.change_static_ip(
+                "192.168.1.230", change_static.get_default_gateway_windows(),
                 "8.8.8.8")
             return get_host_ip("ip")
 

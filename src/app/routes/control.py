@@ -1,8 +1,7 @@
 import os
 
 from flask import Blueprint, Response
-
-from src import changeStatic
+from src.app import change_static
 
 control_bp = Blueprint("control", __name__)
 
@@ -17,6 +16,6 @@ def post_reboot() -> Response:
 @control_bp.route("/shutdown", methods=["POST"])
 def post_shutdown() -> Response:
     """Shuts down the controller"""
-    changeStatic.change_dhcp()
+    change_static.change_dhcp()
     os.system("sudo halt")
     return Response({}, status=200)

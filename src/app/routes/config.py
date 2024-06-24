@@ -1,6 +1,7 @@
 from flask import Blueprint, Response, abort, request
 
-from src import changeStatic, events, eventsMod, GPIOconfig, healthcheck, relay
+from src.app import change_static
+from src import events, eventsMod, GPIOconfig, healthcheck, relay
 from src.app.utils.helpers import load_json, save_json
 from src.app.utils.locks import config_lock
 
@@ -22,7 +23,7 @@ def post_config() -> Response:
             != data["controllerConfig"]["controllerSerialNo"]):
         abort(400)
 
-    changeStatic.change_ip(request_body["controllerIPStatic"],
+    change_static.change_ip(request_body["controllerIPStatic"],
                            request_body["controllerIP"])
     healthcheck.main(True)
     update_config()
