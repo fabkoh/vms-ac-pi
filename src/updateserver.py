@@ -33,7 +33,7 @@ def send_request_to_server(url, data):
                                  data=json.dumps(data),
                                  headers=headers,
                                  verify=False,
-                                 timeout=0.5)
+                                 timeout=5)
         print(response)
         print(response.status_code)
         if response.status_code in (201, 200):
