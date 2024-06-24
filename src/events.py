@@ -1,7 +1,4 @@
-import logging
-import asyncio
 from datetime import datetime, date
-# from GPIOconfig import Gen_Out_1
 
 from executor import setup_logger
 import relay
@@ -35,22 +32,6 @@ or_delimiter = " / "
 pin_bits = 4  # 1 pin number
 card_bits = 26
 # end config
-
-# # Create a logger
-# logger = logging.getLogger(__name__)
-
-# # Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
-# logger.setLevel(logging.DEBUG)
-
-# # Create a file handler for outputting log messages to a file
-# file_handler = logging.FileHandler('/home/etlas/Events.log')
-
-# # Create a formatter and add it to the handler
-# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-# file_handler.setFormatter(formatter)
-
-# # Add the handler to the logger
-# logger.addHandler(file_handler)
 
 logger = setup_logger('Events.log')
 

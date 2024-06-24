@@ -5,15 +5,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import logging
 
-
-# Setup logging
-# logger = logging.getLogger(__name__)
-# logger.setLevel(logging.DEBUG)
-# file_handler = logging.FileHandler('/home/etlas/ThreadPool.log')
-# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-# file_handler.setFormatter(formatter)
-# logger.addHandler(file_handler)
-
 def setup_logger(log_filename="ThreadPool.log"):
     # Determine the home directory dynamically
     home_dir = os.path.expanduser("~")

@@ -1,26 +1,9 @@
 import subprocess
 import re
 import time
-import logging
 import threading
 
 from executor import setup_logger
-
-# # Create a logger
-# logger = logging.getLogger(__name__)
-
-# # Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
-# logger.setLevel(logging.DEBUG)
-
-# # Create a file handler for outputting log messages to a file
-# file_handler = logging.FileHandler('/home/etlas/PiProperty.log')
-
-# # Create a formatter and add it to the handler
-# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-# file_handler.setFormatter(formatter)
-
-# # Add the handler to the logger
-# logger.addHandler(file_handler)
 
 logger = setup_logger('PiProperty.log')
 
