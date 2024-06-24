@@ -6,7 +6,7 @@ from time import sleep
 import multitasking
 import RPi.GPIO as GPIO
 
-from app.constants.event_action_triggers import GEN_OUT_1
+from src.app.constants.event_action_triggers import GEN_OUT_1
 from src.executor import setup_logger, thread_pool_executor
 from src.lock import config_lock
 
