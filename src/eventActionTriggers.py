@@ -230,7 +230,7 @@ def flush_output():
         # print(entrance)
         if entrance == None:
             if event.get("controller", None) != None:
-                entrance = event_action_triggers.BOTH_ENTRANCE
+                entrance = event_action_triggers.BOTH_ENTRANCES
             else:
                 continue  # ignore, malformed json
 
