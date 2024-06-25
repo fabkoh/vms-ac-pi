@@ -95,7 +95,7 @@ def check_events_for(entrance):
 
     if timeout_buzzer.status():
         if timeout_buzzer.check(BUZZER_TIMEOUT):
-            # Should this be changed to API call to backend?
+            # Should this be changed to API call to backend? - DS
             print("email")
 
     # if timeout_mag.status():
@@ -134,7 +134,7 @@ def check_entrance_E1():
 
 
 def check_entrance_E2():
-    # should use relay.lock_unlock_entrance_XXX() instead?
+    # should use relay.lock_unlock_entrance_XXX() instead? - DS
     if not events.E2_is_active:
         events.relay.unlock_entrance_two()
     else:

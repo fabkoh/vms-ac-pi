@@ -56,7 +56,7 @@ logger.addHandler(file_handler)
 class TimerError(Exception):
     """A custom exception used to report errors in use of Timer class"""
 
-
+# Timer class is same as the one in timer.py, should import from there instead? - DS
 class Timer:
     def __init__(self):
         self._start_time = None
@@ -249,6 +249,7 @@ timeout_buzzer_E2 = Timer()
 
 MAX_PIN_LENGTH = 6
 
+# the vars in 253 to 261 seem to be not initialised? I'm not sure where they are populated - DS
 credentials_E1_IN = {}  # dict to store credentials
 credentials_E1_OUT = {}  # dict to store credentials
 credentials_E2_IN = {}  # dict to store credentials
@@ -284,7 +285,7 @@ def check_for_wiegand(value):
                     if authmethod:
                         return {"Name": personName, "diffpassword": diffpassword, "AccessGroup": groupName, "Schedule": groupdetails["Schedule"]}
 
-
+# seems to be a helper function for open_door_using_entrance_id, should be a local function within it? - DS
 def open_door(entrance_prefix):
     '''Helper function for eventActionTriggers.py
 
@@ -779,6 +780,7 @@ def mag_detects_rising(gpio, level, tick):
         return
 
     if gpio == E1_Mag:
+        # timer is started but is not stopped - DS
         timeout_mag_E1.start()
         print(f"{E1} is opened at " + str(datetime.now()))
         if mag_E1_allowed_to_open:
