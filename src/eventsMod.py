@@ -47,7 +47,7 @@ def update_config():
     controllerSerial = config['controllerConfig']['controllerSerialNo']
     MAX_JSON_LENGTH = int(config.get("archivedMAXlength", 10))
 
-
+# isn't this handled in line 48
 try:
     # max length before first half of jsons get deleted
     MAX_JSON_LENGTH = int(config["archivedMAXlength"])
