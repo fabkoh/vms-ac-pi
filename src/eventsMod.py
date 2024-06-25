@@ -226,7 +226,7 @@ def record_antipassback(authtype, entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-
+    # Top dictionary is overwritten so no need for it?
     dictionary = {
         "direction": status, "entrance": entrance, "eventActionType": "ANTIPASSBACK : authenticated_scan ",
         "controller": controllerSerial, "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
