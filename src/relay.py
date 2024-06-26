@@ -99,7 +99,7 @@ def setRelayPinLow(relayPin):
 
 # *** Relay activate/deactivate/toggle ***
 
-
+# could possible combine the bottom two functions into one? and have activate level determine whether to set high or low? - DS
 def activateRelay(relayPin, activateLevel):
     print("activateRelay", activateLevel, relayPin)
     if activateLevel == 'High':
