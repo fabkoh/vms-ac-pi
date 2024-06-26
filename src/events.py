@@ -780,7 +780,6 @@ def mag_detects_rising(gpio, level, tick):
         return
 
     if gpio == E1_Mag:
-        # timer is started but is not stopped - DS
         timeout_mag_E1.start()
         print(f"{E1} is opened at " + str(datetime.now()))
         if mag_E1_allowed_to_open:
