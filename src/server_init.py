@@ -106,7 +106,7 @@ def run_servers():
 
 #print ("get_netmask():" + get_netmask())
     
-
+# maybe can change the name of this function to something better? like set_connection() - DS
 def main():
     print("Hostname:" + hostname)
     processedIP = get_host_ip().split('.',1)[0] + "." + get_host_ip().split('.',2)[1] + "."+get_host_ip().split('.',3)[2] +".250"
