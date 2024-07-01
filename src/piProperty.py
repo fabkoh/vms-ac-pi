@@ -1,24 +1,12 @@
 import subprocess
 import re
 import time
-import logging
 import threading
 
-# Create a logger
-logger = logging.getLogger(__name__)
+from executor import setup_logger
 
-# Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
-logger.setLevel(logging.DEBUG)
+logger = setup_logger('PiProperty.log')
 
-# Create a file handler for outputting log messages to a file
-file_handler = logging.FileHandler('/home/etlas/PiProperty.log')
-
-# Create a formatter and add it to the handler
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
-
-# Add the handler to the logger
-logger.addHandler(file_handler)
 
 def get_cpu_temperature():
     result = subprocess.run(['vcgencmd', 'measure_temp'], capture_output=True, text=True)
