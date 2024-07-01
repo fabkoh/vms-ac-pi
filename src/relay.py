@@ -126,6 +126,8 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         setGpioMode()
         setupRelayPin(relayPin)
 
+        # Unsure about logic here, it is supposed to activate and deactivate toggleCount times? If so, seems like the
+        # code from line 141 should be in the for loop?
         for i in range(toggleCount):
             logger.info("toggleRelay1 Activated")
             activateRelay(relayPin, activateLevel)
