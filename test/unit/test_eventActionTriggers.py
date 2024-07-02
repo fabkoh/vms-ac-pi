@@ -10,6 +10,10 @@ from src import eventActionTriggers as EAT
 from src import eventActionTriggerConstants as EATC
 
 def test_queue_output():
+    '''
+    This test ensures that queue_output is actually putting the outputs to 
+    the EAT.output_events list.
+    '''
     event = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
     EAT.queue_output(event)
 
@@ -18,11 +22,10 @@ def test_queue_output():
     EAT.output_events = []
 
 def test_update_event_action_triggers():
+    ''' 
+    This test checks that the update_action_event_triggers function is properly
+    loading in the EAT.json file.
+    '''
     original_json = open(SRC_DIR + "/src/json/eventActionTriggers.json")
     EAT.update_event_action_triggers()
     assert EAT.EVENT_ACTION_TRIGGERS_DATA == json.load(original_json)
-
-def test_fail_update_event_action_triggers():
-    original_json = open(SRC_DIR + "/src/json/eventActionTriggers.json")
-    EAT.update_event_action_triggers()
-    assert EAT.EVENT_ACTION_TRIGGERS_DATA != json.load(original_json)
