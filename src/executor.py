@@ -7,7 +7,11 @@ import logging
 # Setup logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler('/home/etlas/ThreadPool.log')
+
+home = os.path.expanduser("~")
+file_handler_path = home + "/ThreadPool.log"
+file_handler = logging.FileHandler(file_handler_path)
+
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
