@@ -21,3 +21,8 @@ def test_update_event_action_triggers():
     original_json = open(SRC_DIR + "/src/json/eventActionTriggers.json")
     EAT.update_event_action_triggers()
     assert EAT.EVENT_ACTION_TRIGGERS_DATA == json.load(original_json)
+
+def test_update_event_action_triggers():
+    original_json = open(SRC_DIR + "/src/json/eventActionTriggers.json")
+    EAT.update_event_action_triggers()
+    assert EAT.EVENT_ACTION_TRIGGERS_DATA != json.load(original_json)
