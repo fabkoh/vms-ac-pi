@@ -1,5 +1,5 @@
-import eventActionTriggers as EAT
-import eventActionTriggerConstants as EATC
+from .. import eventActionTriggers as EAT
+from .. import eventActionTriggerConstants as EATC
 
 def test_event_action_triggers_queue_output():
     event = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
