@@ -42,6 +42,34 @@ def test_not_input_is_timed():
 
     assert not EATC.input_is_timed(event)
 
+def test_create_event():
+    '''
+    This test tests that create_event creates a 2-tuple with the correct
+    values. There are 3 asserts in this test
+    '''
+    _event_action_trigger = EATC.CONTACT_OPEN_WITH_AUTHENTICATION
+    _entrance = 1
+    event = EATC.create_event(_event_action_trigger, _entrance)
+
+    assert event is tuple and len(event) == 2
+    assert event[0] == _event_action_trigger
+    assert event[1] == _entrance
+
+def test_create_timer_event():
+    '''
+    This test tests that creat_timer_event creates a 3-tuple with the correct
+    values. There are 4 asserts in this test
+    '''
+    _event_action_trigger = EATC.CONTACT_OPEN
+    _timer_action = EATC.START_TIMER
+    _entrance = 1
+    event = EATC.create_timer_event(_event_action_trigger, _timer_action, _entrance)
+
+    assert event is tuple and len(event) == 3
+    assert event[0] == _event_action_trigger
+    assert event[1] == _timer_action
+    assert event[2] == _entrance
+
 def test_get_timer_event_event_action_trigger():
     '''
     This test thats that get_timer_event_event_action_trigger returns the
