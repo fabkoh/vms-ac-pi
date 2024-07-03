@@ -286,9 +286,9 @@ def test_flush_output(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTrig
         num_times_called += 1
     monkeypatch.setattr(EAT, "sendEmail_function", mock_send_email)
 
-    EAT.output_events[0] = mock_json_eventActionTriggers[0]
-    EAT.output_events[1] = mock_json_eventActionTriggers[1]
+    EAT.output_events.append(mock_json_eventActionTriggers[0])
+    EAT.output_events.append(mock_json_eventActionTriggers[1])
     EAT.flush_output()
 
-    assert not EAT.output_events # checks that array is empty
+    assert len(EAT.output_events) == 0
     assert num_times_called == 2
