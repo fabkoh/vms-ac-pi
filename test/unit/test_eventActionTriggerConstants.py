@@ -23,3 +23,22 @@ def test_not_is_both_entrance():
     the defined BOTH_ENTRANCE constant in EATC
     '''
     assert not EATC.is_both_entrance("randomly blahblah")
+
+def test_input_is_timed():
+    '''
+    This test tests that input_is_timed returns true when the event given
+    is a timed event
+    '''
+    event = EATC.create_timer_event(EATC.CONTACT_OPEN, EATC.START_TIMER, 1)
+    
+    assert EATC.input_is_timed(event)
+
+def test_not_input_is_timed():
+    '''
+    This test tests that input_is_timed returns false when the event given
+    is not a timed event
+    '''
+    event = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
+
+    assert not EATC.input_is_timed(event)
+
