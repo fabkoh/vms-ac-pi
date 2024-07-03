@@ -14,7 +14,7 @@ from src import eventActionTriggerConstants as EATC
 
 '''
 TODO:
-flush_output, event_trigger_cb and check_for_only_timer_based_events are hard 
+flush_output and check_for_only_timer_based_events are hard 
 to test due to many dependencies being used.
 '''
 
@@ -274,3 +274,21 @@ def test_event_trigger_cb_2(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     EAT.EVENT_ACTION_TRIGGERS_DATA = original_JSON_data
     EAT.eventTriggerTime = original_eventTriggerTime
     EAT.activated = original_activated
+
+def test_flush_output(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
+    '''
+    This test first adds some mock events into EAT.output_events, then calls
+    flush_output and checks that the output_events array is empty
+    '''
+    num_times_called = 0
+    def mock_send_email(event):
+        global num_times_called
+        num_times_called += 1
+    monkeypatch.setattr(EAT, "sendEmail_function", mock_send_email)
+
+    EAT.output_events[0] = mock_json_eventActionTriggers[0]
+    EAT.output_events[1] = mock_json_eventActionTriggers[1]
+    EAT.flush_output()
+
+    assert not EAT.output_events # checks that array is empty
+    assert num_times_called == 2
