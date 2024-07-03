@@ -242,7 +242,7 @@ def test_event_trigger_cb_1(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     EAT.eventTriggerTime = {}
     EAT.EVENT_ACTION_TRIGGERS_DATA = mock_json_eventActionTriggers
 
-    event_trigger = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
+    event_trigger = EATC.create_timer_event(EATC.CONTACT_OPEN_WITH_AUTHENTICATION, EATC.START_TIMER, 1)
 
     EAT.event_trigger_cb(event_trigger)
     print("\n OUTPUT1:" + str(EAT.output_events))
