@@ -42,3 +42,16 @@ def test_not_input_is_timed():
 
     assert not EATC.input_is_timed(event)
 
+def test_get_timer_event_event_action_trigger():
+    '''
+    This test thats that get_timer_event_event_action_trigger returns the
+    correct event action trigger when called. There are 2 asserts in this test
+    '''
+    event_action_trigger_1 = EATC.CONTACT_OPEN
+    event_action_trigger_2 = EATC.BUZZER
+
+    event1 = EATC.create_timer_event(event_action_trigger_1, EATC.START_TIMER, 1)
+    event2 = EATC.create_timer_event(event_action_trigger_2, EATC.START_TIMER, 1)
+
+    assert EATC.get_timer_event_event_action_trigger(event1) == event_action_trigger_1
+    assert EATC.get_timer_event_event_action_trigger(event2) == event_action_trigger_2
