@@ -254,7 +254,7 @@ def test_event_trigger_cb_1(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     EAT.eventTriggerTime = original_eventTriggerTime
     EAT.activated = original_activated
 
-def test_event_trigger_cb_1(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
+def test_event_trigger_cb_2(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
     
     # This is to ensure that event_trigger_cb doesn't actually flush the output
     #and trigger things IRL
