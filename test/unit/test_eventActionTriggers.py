@@ -3,6 +3,7 @@ import sys
 import json
 import datetime
 import pytest
+import time
 
 TEST_DIR = os.path.dirname(os.path.abspath(__file__)) # /vms-ac-pi/test/unit
 SRC_DIR = os.path.abspath(os.path.join(os.path.join(TEST_DIR, os.pardir), os.pardir)) # /vms-ac-pi
@@ -231,6 +232,7 @@ def test_event_trigger_cb_1(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     EAT.eventTriggerTime = {}
     EAT.EVENT_ACTION_TRIGGERS_DATA = mock_json_eventActionTriggers
 
+    time.sleep(2) # to take into account debounce delay
     event_trigger = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
 
     EAT.event_trigger_cb(event_trigger)
@@ -264,6 +266,7 @@ def test_event_trigger_cb_2(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     EAT.eventTriggerTime = {}
     EAT.EVENT_ACTION_TRIGGERS_DATA = mock_json_eventActionTriggers
 
+    time.sleep(2) # to take into account debounce delay
     event_trigger = EATC.create_event(EATC.UNAUTHENTICATED_SCAN, 1)
 
     EAT.event_trigger_cb(event_trigger)
