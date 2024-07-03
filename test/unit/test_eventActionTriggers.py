@@ -241,10 +241,10 @@ def test_event_trigger_cb_1(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     assert EAT.output_events[0] == mock_json_eventActionTriggers[0]
 
     # At the end of the test, reset vars
-    EAT.output_events = original_output_events
-    EAT.EVENT_ACTION_TRIGGERS_DATA = original_JSON_data
-    EAT.eventTriggerTime = original_eventTriggerTime
-    EAT.activated = original_activated
+    # EAT.output_events = original_output_events
+    # EAT.EVENT_ACTION_TRIGGERS_DATA = original_JSON_data
+    # EAT.eventTriggerTime = original_eventTriggerTime
+    # EAT.activated = original_activated
 
 def test_event_trigger_cb_2(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
     
@@ -275,7 +275,7 @@ def test_event_trigger_cb_2(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     assert EAT.output_events[0] == mock_json_eventActionTriggers[1]
 
     # At the end of the test, reset vars
-    EAT.output_events = original_output_events
-    EAT.EVENT_ACTION_TRIGGERS_DATA = original_JSON_data
-    EAT.eventTriggerTime = original_eventTriggerTime
-    EAT.activated = original_activated
+    # EAT.output_events = original_output_events
+    # EAT.EVENT_ACTION_TRIGGERS_DATA = original_JSON_data
+    # EAT.eventTriggerTime = original_eventTriggerTime
+    # EAT.activated = original_activated
