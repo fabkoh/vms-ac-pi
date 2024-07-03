@@ -17,8 +17,11 @@ flush_output, event_trigger_cb and check_for_only_timer_based_events are hard
 to test due to many dependencies being used.
 '''
 
+# This is so that it can be easily passed into the tests without needing
+#to create a new mock json in every test that needs it
 @pytest.fixture
 def mock_json_eventActionTriggers():
+    today_string_formatted = datetime.date.today().strftime("%Y-%m-%d")
     return [
         {
             "eventsManagementId": 1,
@@ -112,7 +115,7 @@ def mock_json_eventActionTriggers():
             "entrance": {
                 "entranceId": 1
             },
-            "controller": null
+            "controller": None
         }
     ]
 
@@ -228,8 +231,6 @@ def test_event_trigger_cb(monkeypatch: pytest.MonkeyPatch, mock_json_eventAction
     original_eventTriggerTime = EAT.eventTriggerTime
     original_activated = EAT.activated
 
-
-    today_string_formatted = datetime.date.today().strftime("%Y-%m-%d")
     EAT.output_events = []
     EAT.activated = {}
     EAT.eventTriggerTime = {}
