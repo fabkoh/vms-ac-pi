@@ -115,3 +115,18 @@ def test_get_event_entrance():
     assert EATC.get_event_entrance(event_2) == entrances[1]
     assert EATC.get_event_entrance(event_3) == entrances[2]
     assert EATC.get_event_entrance(event_4) == entrances[3]
+
+def test_get_event_trigger_from_event():
+    '''
+    This test tests that get_event_trigger_from_event returns the correct
+    event action trigger when called with an event. There are 2 asserts in
+    this test
+    '''
+    event_action_trigger_1 = EATC.AUTHENTICATED_SCAN
+    event_action_trigger_2 = EATC.UNAUTHENTICATED_SCAN
+
+    event_1 = EATC.create_event(event_action_trigger_1, 1)
+    event_2 = EATC.create_event(event_action_trigger_2, 1)
+
+    assert EATC.get_event_trigger_from_event(event_1) == event_action_trigger_1
+    assert EATC.get_event_trigger_from_event(event_2) == event_action_trigger_2
