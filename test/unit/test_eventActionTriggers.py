@@ -275,13 +275,15 @@ def test_event_trigger_cb_2(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     EAT.eventTriggerTime = original_eventTriggerTime
     EAT.activated = original_activated
 
+num_times_called = 0
 def test_flush_output(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
     '''
     This test first adds some mock events into EAT.output_events, then calls
     flush_output and checks that the output_events array is empty
     '''
-    num_times_called = 0
+    global num_times_called
     def mock_send_email(event):
+        global num_times_called
         num_times_called += 1
     monkeypatch.setattr(EAT, "sendEmail_function", mock_send_email)
 
