@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import datetime
+from pytest import MonkeyPatch
 
 TEST_DIR = os.path.dirname(os.path.abspath(__file__)) # /vms-ac-pi/test/unit
 SRC_DIR = os.path.abspath(os.path.join(os.path.join(TEST_DIR, os.pardir), os.pardir)) # /vms-ac-pi
@@ -10,7 +11,11 @@ sys.path.insert(0, SRC_DIR)
 from src import eventActionTriggers as EAT
 from src import eventActionTriggerConstants as EATC
 
-'''TODO: flush_output is hard to test, skip first and continue from get entrance from event management'''
+'''
+TODO:
+flush_output, event_trigger_cb and check_for_only_timer_based_events are hard 
+to test due to many dependencies being used.
+'''
 
 def test_queue_output():
     '''
@@ -109,3 +114,76 @@ def test_get_both_entrance_from_event_management():
     mock_json_contents = {}
 
     assert EAT.get_entrance_from_event_management(mock_json_contents) == EAT.BOTH_ENTRANCE
+
+def test_event_trigger_cb(monkeypatch):
+    
+    # This is to ensure that event_trigger_cb doesn't actually flush the output
+    #and trigger things IRL
+    def mock_flush_output():
+        pass
+    monkeypatch.setattr(EAT, "flush_output", mock_flush_output)
+
+    # Remembering of original vars to save back later
+    original_output_events = EAT.output_events
+    original_JSON_data = EAT.EVENT_ACTION_TRIGGERS_DATA
+    original_eventTriggerTime = EAT.eventTriggerTime
+    original_activated = EAT.activated
+
+
+    today_string_formatted = datetime.date.today().strftime("%Y-%m-%d")
+    EAT.output_events = []
+    EAT.activated = {}
+    EAT.eventTriggerTime = {}
+    EAT.EVENT_ACTION_TRIGGERS_DATA = {
+        "eventsManagementId": 1,
+        "eventsManagementName": "test",
+        "inputEvents": [
+            {
+                "inputEventId": 1,
+                "timerDuration": null,
+                "eventActionInputType": {
+                    "eventActionInputId": 1,
+                    "eventActionInputName": "AUTHENTICATED SCAN",
+                    "timerEnabled": false,
+                    "eventActionInputConfig": null
+                }
+            }
+        ],
+        "outputActions": [
+            {
+                "outputEventId": 1,
+                "timerDuration": null,
+                "eventActionOutputType": {
+                    "eventActionOutputId": 8,
+                    "eventActionOutputName": "NOTIFICATION (EMAIL)",
+                    "timerEnabled": false,
+                    "eventActionOutputConfig": null,
+                    "recipents": null,
+                    "recipentsMessage": null
+                }
+            }
+        ],
+        "triggerSchedule": {
+            today_string_formatted: [
+                {
+                    "endtime": "24:00",
+                    "starttime": "00:00"
+                }
+            ]
+        },
+        "entrance": {
+            "entranceId": 1
+        },
+        "controller": null
+    },
+
+    event_trigger = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
+
+    EAT.event_trigger_cb(event_trigger)
+    print(EAT.output_events)
+
+    # At the end of the test, reset vars
+    EAT.output_events = original_output_events
+    EAT.EVENT_ACTION_TRIGGERS_DATA = original_JSON_data
+    EAT.eventTriggerTime = original_eventTriggerTime
+    EAT.activated = original_activated
