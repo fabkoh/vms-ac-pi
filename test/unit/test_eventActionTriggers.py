@@ -5,6 +5,9 @@ import datetime
 import pytest
 import time
 
+'''
+This part is needed to be able to import the files from src for testing
+'''
 TEST_DIR = os.path.dirname(os.path.abspath(__file__)) # /vms-ac-pi/test/unit
 SRC_DIR = os.path.abspath(os.path.join(os.path.join(TEST_DIR, os.pardir), os.pardir)) # /vms-ac-pi
 sys.path.insert(0, SRC_DIR)
@@ -13,13 +16,10 @@ from src import eventActionTriggers as EAT
 from src import eventActionTriggerConstants as EATC
 
 '''
-TODO:
-flush_output and check_for_only_timer_based_events are hard 
-to test due to many dependencies being used.
+This is so that it can be easily passed into the tests without needing
+to create a new mock json in every test that needs it. Can read up on pytest
+fixtures to find out more
 '''
-
-# This is so that it can be easily passed into the tests without needing
-#to create a new mock json in every test that needs it
 @pytest.fixture
 def mock_json_eventActionTriggers():
     today_string_formatted = datetime.date.today().strftime("%Y-%m-%d")
@@ -210,7 +210,7 @@ def test_get_both_entrance_from_event_management():
 
 def test_event_trigger_cb_1(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
     '''
-    This test and the one below checks that event_trigger_cb correctly
+    This test and the next test below checks that event_trigger_cb correctly
     queues the correct event to the output_events var upon being called with
     different events (AUTH SCAN and UNAUTH SCAN)
     '''
@@ -275,15 +275,14 @@ def test_event_trigger_cb_2(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     EAT.eventTriggerTime = original_eventTriggerTime
     EAT.activated = original_activated
 
-num_times_called = 0
 def test_flush_output(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
     '''
     This test first adds some mock events into EAT.output_events, then calls
     flush_output and checks that the output_events array is empty
     '''
-    global num_times_called
+    num_times_called = 0
     def mock_send_email(event):
-        global num_times_called
+        nonlocal num_times_called
         num_times_called += 1
     monkeypatch.setattr(EAT, "sendEmail_function", mock_send_email)
 
