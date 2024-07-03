@@ -140,26 +140,26 @@ def test_event_trigger_cb(monkeypatch):
         "inputEvents": [
             {
                 "inputEventId": 1,
-                "timerDuration": null,
+                "timerDuration": None,
                 "eventActionInputType": {
                     "eventActionInputId": 1,
                     "eventActionInputName": "AUTHENTICATED SCAN",
-                    "timerEnabled": false,
-                    "eventActionInputConfig": null
+                    "timerEnabled": False,
+                    "eventActionInputConfig": None
                 }
             }
         ],
         "outputActions": [
             {
                 "outputEventId": 1,
-                "timerDuration": null,
+                "timerDuration": None,
                 "eventActionOutputType": {
                     "eventActionOutputId": 8,
                     "eventActionOutputName": "NOTIFICATION (EMAIL)",
-                    "timerEnabled": false,
-                    "eventActionOutputConfig": null,
-                    "recipents": null,
-                    "recipentsMessage": null
+                    "timerEnabled": False,
+                    "eventActionOutputConfig": None,
+                    "recipents": None,
+                    "recipentsMessage": None
                 }
             }
         ],
@@ -174,7 +174,7 @@ def test_event_trigger_cb(monkeypatch):
         "entrance": {
             "entranceId": 1
         },
-        "controller": null
+        "controller": None
     },
 
     event_trigger = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
