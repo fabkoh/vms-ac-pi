@@ -51,7 +51,7 @@ def test_create_event():
     _entrance = 1
     event = EATC.create_event(_event_action_trigger, _entrance)
 
-    assert event is tuple and len(event) == 2
+    assert type(event) is tuple and len(event) == 2
     assert event[0] == _event_action_trigger
     assert event[1] == _entrance
 
@@ -65,7 +65,7 @@ def test_create_timer_event():
     _entrance = 1
     event = EATC.create_timer_event(_event_action_trigger, _timer_action, _entrance)
 
-    assert event is tuple and len(event) == 3
+    assert type(event) is tuple and len(event) == 3
     assert event[0] == _event_action_trigger
     assert event[1] == _timer_action
     assert event[2] == _entrance
