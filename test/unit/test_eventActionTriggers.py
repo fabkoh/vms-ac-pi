@@ -232,13 +232,10 @@ def test_event_trigger_cb_1(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     EAT.eventTriggerTime = {}
     EAT.EVENT_ACTION_TRIGGERS_DATA = mock_json_eventActionTriggers
 
+    # Testing
     time.sleep(2) # to take into account debounce delay
     event_trigger = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
-
     EAT.event_trigger_cb(event_trigger)
-    print("\n OUTPUT1:" + str(EAT.output_events))
-    print("\n JSON1: " + str(mock_json_eventActionTriggers))
-
     assert EAT.output_events[0] == mock_json_eventActionTriggers[0]
 
     # At the end of the test, reset vars
@@ -266,13 +263,10 @@ def test_event_trigger_cb_2(monkeypatch: pytest.MonkeyPatch, mock_json_eventActi
     EAT.eventTriggerTime = {}
     EAT.EVENT_ACTION_TRIGGERS_DATA = mock_json_eventActionTriggers
 
+    # Testing
     time.sleep(2) # to take into account debounce delay
     event_trigger = EATC.create_event(EATC.UNAUTHENTICATED_SCAN, 1)
-
     EAT.event_trigger_cb(event_trigger)
-    print("\n OUTPUT2:" + str(EAT.output_events))
-    print("\n JSON2: " + str(mock_json_eventActionTriggers))
-
     assert EAT.output_events[0] == mock_json_eventActionTriggers[1]
 
     # At the end of the test, reset vars
