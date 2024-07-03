@@ -217,7 +217,44 @@ def test_get_both_entrance_from_event_management():
 
     assert EAT.get_entrance_from_event_management(mock_json_contents) == EAT.BOTH_ENTRANCE
 
-def test_event_trigger_cb(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
+def test_event_trigger_cb_1(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
+    '''
+    This test and the one below checks that event_trigger_cb correctly
+    queues the correct event to the output_events var upon being called with
+    different events (AUTH SCAN and UNAUTH SCAN)
+    '''
+
+    # This is to ensure that event_trigger_cb doesn't actually flush the output
+    #and trigger things IRL
+    def mock_flush_output():
+        pass
+    monkeypatch.setattr(EAT, "flush_output", mock_flush_output)
+
+    # Remembering of original vars to save back later
+    original_output_events = EAT.output_events
+    original_JSON_data = EAT.EVENT_ACTION_TRIGGERS_DATA
+    original_eventTriggerTime = EAT.eventTriggerTime
+    original_activated = EAT.activated
+
+    # Setting EAT vars to defaults
+    EAT.output_events = []
+    EAT.activated = {}
+    EAT.eventTriggerTime = {}
+    EAT.EVENT_ACTION_TRIGGERS_DATA = mock_json_eventActionTriggers
+
+    event_trigger = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
+
+    EAT.event_trigger_cb(event_trigger)
+
+    assert EAT.output_events[0] == mock_json_eventActionTriggers[0]
+
+    # At the end of the test, reset vars
+    EAT.output_events = original_output_events
+    EAT.EVENT_ACTION_TRIGGERS_DATA = original_JSON_data
+    EAT.eventTriggerTime = original_eventTriggerTime
+    EAT.activated = original_activated
+
+def test_event_trigger_cb_1(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTriggers):
     
     # This is to ensure that event_trigger_cb doesn't actually flush the output
     #and trigger things IRL
@@ -231,6 +268,7 @@ def test_event_trigger_cb(monkeypatch: pytest.MonkeyPatch, mock_json_eventAction
     original_eventTriggerTime = EAT.eventTriggerTime
     original_activated = EAT.activated
 
+    # Setting EAT vars to defaults
     EAT.output_events = []
     EAT.activated = {}
     EAT.eventTriggerTime = {}
@@ -239,10 +277,8 @@ def test_event_trigger_cb(monkeypatch: pytest.MonkeyPatch, mock_json_eventAction
     event_trigger = EATC.create_event(EATC.UNAUTHENTICATED_SCAN, 1)
 
     EAT.event_trigger_cb(event_trigger)
-    print("\nOutput Events: " + str(EAT.output_events))
-    print("\nMock JSON data: " + str(EAT.EVENT_ACTION_TRIGGERS_DATA))
-    print("\nEventTriggerTime: " + str(EAT.eventTriggerTime))
-    print("\nActivated: " + str(EAT.activated))
+
+    assert EAT.output_events[0] == mock_json_eventActionTriggers[1]
 
     # At the end of the test, reset vars
     EAT.output_events = original_output_events
