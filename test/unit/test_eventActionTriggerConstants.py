@@ -72,7 +72,7 @@ def test_create_timer_event():
 
 def test_get_timer_event_event_action_trigger():
     '''
-    This test thats that get_timer_event_event_action_trigger returns the
+    This test tests that get_timer_event_event_action_trigger returns the
     correct event action trigger when called. There are 2 asserts in this test
     '''
     event_action_trigger_1 = EATC.CONTACT_OPEN
@@ -83,3 +83,17 @@ def test_get_timer_event_event_action_trigger():
 
     assert EATC.get_timer_event_event_action_trigger(event1) == event_action_trigger_1
     assert EATC.get_timer_event_event_action_trigger(event2) == event_action_trigger_2
+
+def test_get_timer_event_timer_action():
+    '''
+    This test tests that get_timer_event_timer_action returns the correct event
+    action trigger when called. There are 2 asserts in this test
+    '''
+    timer_action_1 = EATC.START_TIMER
+    timer_action_2 = EATC.STOP_TIMER
+
+    event1 = EATC.create_timer_event(EATC.CONTACT_OPEN, timer_action_1, 1)
+    event2 = EATC.create_timer_event(EATC.CONTACT_OPEN, timer_action_2, 1)
+
+    assert EATC.get_timer_event_timer_action(event1) == timer_action_1
+    assert EATC.get_timer_event_timer_action(event2) == timer_action_2
