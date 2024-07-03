@@ -236,7 +236,7 @@ def test_event_trigger_cb(monkeypatch: pytest.MonkeyPatch, mock_json_eventAction
     EAT.eventTriggerTime = {}
     EAT.EVENT_ACTION_TRIGGERS_DATA = mock_json_eventActionTriggers
 
-    event_trigger = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
+    event_trigger = EATC.create_event(EATC.UNAUTHENTICATED_SCAN, 1)
 
     EAT.event_trigger_cb(event_trigger)
     print("\nOutput Events: " + str(EAT.output_events))
