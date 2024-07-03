@@ -37,6 +37,16 @@ def mock_json_eventActionTriggers():
                         "timerEnabled": False,
                         "eventActionInputConfig": None
                     }
+                },
+                {
+                    "inputEventId": 2,
+                    "timerDuration": 5,
+                    "eventActionInputType": {
+                        "eventActionInputId": 5,
+                        "eventActionInputName": "DOOR OPEN WITH AUTHENTICATION",
+                        "timerEnabled": true,
+                        "eventActionInputConfig": null
+                    }
                 }
             ],
             "outputActions": [
