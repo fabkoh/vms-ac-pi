@@ -78,11 +78,11 @@ def test_get_timer_event_event_action_trigger():
     event_action_trigger_1 = EATC.CONTACT_OPEN
     event_action_trigger_2 = EATC.BUZZER
 
-    event1 = EATC.create_timer_event(event_action_trigger_1, EATC.START_TIMER, 1)
-    event2 = EATC.create_timer_event(event_action_trigger_2, EATC.START_TIMER, 1)
+    event_1 = EATC.create_timer_event(event_action_trigger_1, EATC.START_TIMER, 1)
+    event_2 = EATC.create_timer_event(event_action_trigger_2, EATC.START_TIMER, 1)
 
-    assert EATC.get_timer_event_event_action_trigger(event1) == event_action_trigger_1
-    assert EATC.get_timer_event_event_action_trigger(event2) == event_action_trigger_2
+    assert EATC.get_timer_event_event_action_trigger(event_1) == event_action_trigger_1
+    assert EATC.get_timer_event_event_action_trigger(event_2) == event_action_trigger_2
 
 def test_get_timer_event_timer_action():
     '''
@@ -92,8 +92,26 @@ def test_get_timer_event_timer_action():
     timer_action_1 = EATC.START_TIMER
     timer_action_2 = EATC.STOP_TIMER
 
-    event1 = EATC.create_timer_event(EATC.CONTACT_OPEN, timer_action_1, 1)
-    event2 = EATC.create_timer_event(EATC.CONTACT_OPEN, timer_action_2, 1)
+    event_1 = EATC.create_timer_event(EATC.CONTACT_OPEN, timer_action_1, 1)
+    event_2 = EATC.create_timer_event(EATC.CONTACT_OPEN, timer_action_2, 1)
 
-    assert EATC.get_timer_event_timer_action(event1) == timer_action_1
-    assert EATC.get_timer_event_timer_action(event2) == timer_action_2
+    assert EATC.get_timer_event_timer_action(event_1) == timer_action_1
+    assert EATC.get_timer_event_timer_action(event_2) == timer_action_2
+
+def test_get_event_entrance():
+    '''
+    This test tests that get_event_entrance returns the correct entrance,
+    regardless of whether the event is timed or not. There are 4 asserts in
+    this test
+    '''
+    entrances = [1, 2, 3, 4]
+
+    event_1 = EATC.create_event(EATC.AUTHENTICATED_SCAN, entrances[0])
+    event_2 = EATC.create_event(EATC.DOOR_OPEN, entrances[1])
+    event_3 = EATC.create_timer_event(EATC.CONTACT_OPEN, EATC.START_TIMER, entrances[2])
+    event_4 = EATC.create_timer_event(EATC.CONTACT_OPEN, EATC.STOP_TIMER, entrances[3])
+
+    assert EATC.get_event_entrance(event_1) == entrances[0]
+    assert EATC.get_event_entrance(event_2) == entrances[1]
+    assert EATC.get_event_entrance(event_3) == entrances[2]
+    assert EATC.get_event_entrance(event_4) == entrances[3]
