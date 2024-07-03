@@ -104,8 +104,8 @@ def mock_json_eventActionTriggers():
                     }
                 }
             ],
-            today_string_formatted: {
-                "2024-01-29": [
+            "triggerSchedule": {
+                today_string_formatted: [
                     {
                         "endtime": "24:00",
                         "starttime": "00:00"
