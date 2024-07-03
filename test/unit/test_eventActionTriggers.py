@@ -239,10 +239,10 @@ def test_event_trigger_cb(monkeypatch: pytest.MonkeyPatch, mock_json_eventAction
     event_trigger = EATC.create_event(EATC.AUTHENTICATED_SCAN, 1)
 
     EAT.event_trigger_cb(event_trigger)
-    print("\nOutput Events: " + EAT.output_events)
-    print("\nMock JSON data: " + EAT.EVENT_ACTION_TRIGGERS_DATA)
-    print("\nEventTriggerTime: " + EAT.eventTriggerTime)
-    print("\nActivated: " + EAT.activated)
+    print("\nOutput Events: " + str(EAT.output_events))
+    print("\nMock JSON data: " + str(EAT.EVENT_ACTION_TRIGGERS_DATA))
+    print("\nEventTriggerTime: " + str(EAT.eventTriggerTime))
+    print("\nActivated: " + str(EAT.activated))
 
     # At the end of the test, reset vars
     EAT.output_events = original_output_events
