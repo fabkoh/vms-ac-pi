@@ -282,12 +282,11 @@ def test_flush_output(monkeypatch: pytest.MonkeyPatch, mock_json_eventActionTrig
     '''
     num_times_called = 0
     def mock_send_email(event):
-        global num_times_called
         num_times_called += 1
     monkeypatch.setattr(EAT, "sendEmail_function", mock_send_email)
 
-    EAT.output_events.append(mock_json_eventActionTriggers[0])
-    EAT.output_events.append(mock_json_eventActionTriggers[1])
+    EAT.queue_output(mock_json_eventActionTriggers[0])
+    EAT.queue_output(mock_json_eventActionTriggers[1])
     EAT.flush_output()
 
     assert len(EAT.output_events) == 0
