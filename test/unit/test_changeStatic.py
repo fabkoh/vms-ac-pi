@@ -15,13 +15,13 @@ import io # needed to mock writelines
 def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
     data_written = []
 
-    def mock_readlines(self):
+    def mock_readlines():
         return ['interface eth0\n',
                 'static ip_address\n',
                 'static routers\n',
                 'static domain_name_servers\n']
     
-    def mock_writelines(self, data):
+    def mock_writelines(data):
         nonlocal data_written
         data_written = data
     
@@ -30,10 +30,10 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
             self.mode = mode
         
         def writelines(self, data):
-            return mock_writelines(self, data)
+            return mock_writelines(data)
         
         def readlines(self):
-            return mock_readlines(self)
+            return mock_readlines()
         
         def __enter__(self):
             return self
