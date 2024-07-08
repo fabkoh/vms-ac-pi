@@ -15,36 +15,36 @@ import io # needed to mock writelines
 def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
     data_written = []
 
-    # def mock_readlines(self):
-    #     return ['interface eth0\n',
-    #             'static ip_address\n',
-    #             'static routers\n',
-    #             'static domain_name_servers\n']
+    def mock_readlines(self):
+        return ['interface eth0\n',
+                'static ip_address\n',
+                'static routers\n',
+                'static domain_name_servers\n']
     
-    # def mock_writelines(self, data):
-    #     nonlocal data_written
-    #     data_written = data
+    def mock_writelines(self, data):
+        nonlocal data_written
+        data_written = data
     
-    # class MockFile:
-    #     def __init__(self, mode):
-    #         self.mode = mode
+    class MockFile:
+        def __init__(self, mode):
+            self.mode = mode
         
-    #     def writelines(self, data):
-    #         return mock_writelines(self, data)
+        def writelines(self, data):
+            return mock_writelines(self, data)
         
-    #     def readlines(self):
-    #         return mock_readlines(self)
+        def readlines(self):
+            return mock_readlines(self)
         
-    #     def __enter__(self):
-    #         return self
+        def __enter__(self):
+            return self
         
-    #     def __exit__(self, exc_type, exc_val, exc_tb):
-    #         pass
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            pass
 
-    # def mock_open(filepath, mode):
-    #     return MockFile(mode)
+    def mock_open(filepath, mode):
+        return MockFile(mode)
     
-    # monkeypatch.setattr("builtins.open", mock_open)
+    monkeypatch.setattr("builtins.open", mock_open)
 
     changeStatic.change_static_ip('192.168.1.160', '192.168.1.254', '192.168.1.254')
 
