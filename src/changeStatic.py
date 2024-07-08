@@ -18,6 +18,7 @@ def change_static_ip(ip_address, routers, dns):
         # Sanitize/validate params above
         with open(conf_file, 'r') as file:
             data = file.readlines()
+            print(data)
 
         # Find if config exists
         ethFound = next((x for x in data if 'interface eth0' in x), None)
