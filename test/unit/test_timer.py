@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 '''
 This part is needed to be able to import the files from src for testing
@@ -27,3 +28,23 @@ def test_not_status():
     _timer.start()
     _timer.stop()
     assert not _timer.status()
+
+def test_check():
+    '''
+    This test tests that check() returns true when the elapsed time (5s) is
+    greater than the input argument (3s)
+    '''
+    _timer = timer.Timer()
+    _timer.start()
+    time.sleep(5)
+    assert _timer.check(3)
+
+def test_not_check():
+    '''
+    This test tests that check() returns false when the elapsed time (5s) is
+    less than than the input argument (100s)
+    '''
+    _timer = timer.Timer()
+    _timer.start()
+    time.sleep(5)
+    assert not _timer.check(100)
