@@ -14,7 +14,7 @@ def test_status():
     '''
     This test tests that status() returns true when the timer is still running
     '''
-    _timer = timer()
+    _timer = timer.Timer()
     _timer.start()
     assert _timer.status()
 
@@ -23,7 +23,7 @@ def test_not_status():
     This test tests that status() returns false when the timer has stopped 
     running
     '''
-    _timer = timer()
+    _timer = timer.Timer()
     _timer.start()
     _timer.stop()
     assert not _timer.status()
