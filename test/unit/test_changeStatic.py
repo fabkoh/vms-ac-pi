@@ -17,9 +17,9 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
 
     def mock_readlines(self):
         return ['interface eth0\n',
-                'static ip line\n',
-                'static routers line\n',
-                'static dns line\n']
+                'static ip_address\n',
+                'static routers\n',
+                'static domain_name_servers\n']
     
     def mock_writelines(self, data):
         nonlocal data_written
