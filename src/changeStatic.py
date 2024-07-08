@@ -21,16 +21,11 @@ def change_static_ip(ip_address, routers, dns):
 
         # Find if config exists
         ethFound = next((x for x in data if 'interface eth0' in x), None)
-        print(ethFound)
 
         if ethFound:
             ethIndex = data.index(ethFound)
             if data[ethIndex].startswith('#'):
                 data[ethIndex] = ('interface eth0\n') # commented out by default, make active
-        print(ethIndex)
-        print(data[ethIndex+1])
-        print(data[ethIndex+2])
-        print(data[ethIndex+3])
 
         # If config is found, use index to edit the lines you need ( the next 3)
         if ethIndex:
