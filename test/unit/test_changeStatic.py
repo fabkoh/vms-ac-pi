@@ -22,6 +22,7 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
                 "static dns line"]
     
     def mock_writelines(self, data):
+        nonlocal data_written
         data_written = data
     
     class MockFile:
