@@ -29,10 +29,10 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
         def __init__(self, mode):
             self.mode = mode
         
-        def writelines(self, data):
-            mock_writelines(data)
+        def writelines(data):
+            return mock_writelines(data)
         
-        def readlines(self):
+        def readlines():
             return mock_readlines()
         
         def __enter__(self):
@@ -49,17 +49,3 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
     changeStatic.change_static_ip('192.168.1.160', '192.168.1.254', '192.168.1.254')
 
     print(data_written)
-    # data_extracted = []
-    # def mock_writelines(self, data):
-    #     nonlocal data_extracted
-    #     data_extracted = data
-    # def mock_restart_eth0():
-    #     pass
-    # monkeypatch.setattr(_io.TextIOWrapper, "writelines", mock_writelines)
-    # monkeypatch.setattr(changeStatic, "restart_eth0", mock_restart_eth0)
-
-    # changeStatic.change_static_ip('test_ip_address.250', 'test_router198', 'test_dns8888')
-
-    # print(data_extracted)
-
-
