@@ -46,7 +46,7 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
     
     # monkeypatch.setattr("builtins.open", mock_open)
 
-    changeStatic.change_static_ip('192.168.1.160/24', '192.168.1.254', '192.168.1.254')
+    changeStatic.change_static_ip('192.168.1.160', '192.168.1.254', '192.168.1.254')
 
     print(data_written)
     # data_extracted = []
