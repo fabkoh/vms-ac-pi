@@ -29,10 +29,10 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
         def __init__(self, mode):
             self.mode = mode
         
-        def writelines(data):
+        def writelines(self, data):
             return mock_writelines(data)
         
-        def readlines():
+        def readlines(self):
             return mock_readlines()
         
         def __enter__(self):
