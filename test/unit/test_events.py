@@ -11,7 +11,6 @@ SRC_DIR = os.path.abspath(os.path.join(os.path.join(TEST_DIR, os.pardir), os.par
 sys.path.insert(0, SRC_DIR)
 
 from src import events
-from src import relay
 
 def test_verify_datetime_day():
     '''
@@ -114,14 +113,12 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
 
     # Creating mock functions so relays aren't actually opened
     def mock_verify_datetime(test_schedule):
-        print("mock verify datetime reached")
         if test_schedule == "open":
             return True
         return False
     
     def mock_lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
         nonlocal entrance_1_unlocked
-        print("mock lockunlock 1 reached")
         if unlock:
             entrance_1_unlocked = True
         else:
@@ -129,7 +126,6 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
     
     def mock_lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
         nonlocal entrance_2_unlocked
-        print("mock lockunlock 1 reached")
         if unlock:
             entrance_2_unlocked = True
         else:
@@ -144,6 +140,58 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
     events.check_entrance_status()
 
     assert entrance_1_unlocked and entrance_2_unlocked
+
+    # Setting schedules back to original
+    events.E1_entrance_schedule = original_E1_schedule
+    events.E2_entrance_schedule = original_E2_schedule
+
+def test_check_entrance_status_e1_open(monkeypatch: pytest.MonkeyPatch):
+    '''
+    This test tests that check_entrance status will unlock only E1 when
+    only E1 is within schedule. There are multiple mock functions as we
+    have to ensure that the RPi doesn't actually activate or deactivate relays
+    '''
+    # Vars for asserting if test succeeded
+    entrance_1_unlocked = False
+    entrance_2_unlocked = False
+
+    # Saving original schedule to set back at the end of test
+    original_E1_schedule = events.E1_entrance_schedule
+    original_E2_schedule = events.E2_entrance_schedule
+
+    # Setting dummy schedules for testing
+    events.E1_entrance_schedule = "open"
+    events.E2_entrance_schedule = "close"
+
+    # Creating mock functions so relays aren't actually opened
+    def mock_verify_datetime(test_schedule):
+        if test_schedule == "open":
+            return True
+        return False
+    
+    def mock_lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
+        nonlocal entrance_1_unlocked
+        if unlock:
+            entrance_1_unlocked = True
+        else:
+            entrance_1_unlocked = False
+    
+    def mock_lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
+        nonlocal entrance_2_unlocked
+        if unlock:
+            entrance_2_unlocked = True
+        else:
+            entrance_2_unlocked = False
+
+    # Patching functions with respective mock functions
+    monkeypatch.setattr(events, "verify_datetime", mock_verify_datetime)
+    monkeypatch.setattr("relay.lock_unlock_entrance_one", mock_lock_unlock_entrance_one)
+    monkeypatch.setattr("relay.lock_unlock_entrance_two", mock_lock_unlock_entrance_two)
+    
+    # Actual testing
+    events.check_entrance_status()
+
+    assert entrance_1_unlocked and not entrance_2_unlocked
 
     # Setting schedules back to original
     events.E1_entrance_schedule = original_E1_schedule
