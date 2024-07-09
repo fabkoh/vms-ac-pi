@@ -389,7 +389,7 @@ def test_open_door_using_entrance_id_1(monkeypatch: pytest.MonkeyPatch):
 
     # Multiple tests that only match IDs with entrance 1
     events.open_door_using_entrance_id(12463)
-    events.open_door_using_entrance_id()
+    events.open_door_using_entrance_id(12345)
     events.open_door_using_entrance_id(0)
     events.open_door_using_entrance_id(1)
 
@@ -397,4 +397,46 @@ def test_open_door_using_entrance_id_1(monkeypatch: pytest.MonkeyPatch):
 
     # Setting config back to original
     events.config = original_config
-    
+
+def test_open_door_using_entrance_id_2(monkeypatch: pytest.MonkeyPatch):
+    '''
+    This test tests that open_door_using_entrance_id only opens entrance 2 when
+    the ID given only matches entrance 2
+    '''
+    # Vars to check if functions were called
+    open_door_E1_called = False
+    open_door_E2_called = False
+
+    # Remembering original config to set back at end of test
+    original_config = events.config
+
+    # Mock config contents and setting the events.config to the mock
+    mock_json_contents = {
+        "EntranceName": {
+            "E1": 12463,
+            "E2": 61347
+        },
+    }
+    events.config = mock_json_contents
+
+    # Mocking so that door doesn't actually open
+    def mock_open_door(prefix):
+        nonlocal open_door_E1_called, open_door_E2_called
+        if prefix == "E1":
+            open_door_E1_called = True
+        if prefix == "E2":
+            open_door_E2_called = True
+
+    # Patching the mock function
+    monkeypatch.setattr(events, "open_door", mock_open_door)
+
+    # Multiple tests that only match IDs with entrance 2
+    events.open_door_using_entrance_id(61347)
+    events.open_door_using_entrance_id(12345)
+    events.open_door_using_entrance_id(0)
+    events.open_door_using_entrance_id(1)
+
+    assert open_door_E1_called and not open_door_E2_called
+
+    # Setting config back to original
+    events.config = original_config
