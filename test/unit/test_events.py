@@ -453,7 +453,7 @@ def test_check_for_masterpassword():
     true or false based on the json credOccur and the inputs
     '''
     # Mocking part of credOccur
-    mock_json_contents = {
+    mock_json_contents = [
         {
             "Entrance": 1,
             "EntranceDetails": {
@@ -473,7 +473,7 @@ def test_check_for_masterpassword():
                 }
             }
         }
-    }
+    ]
 
     # Remembering original credOccur and then using the mock json
     original_credOccur = events.credOccur
@@ -494,4 +494,3 @@ def test_check_for_masterpassword():
 
     # Setting credOccur back to original
     events.credOccur = original_credOccur
-    
