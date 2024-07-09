@@ -68,5 +68,6 @@ def test_verify_datetime_time():
             }
         ]
     }
+    print(mock_json_contents)
     
     assert events.verify_datetime(mock_json_contents)
