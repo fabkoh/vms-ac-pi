@@ -136,10 +136,8 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
 
     # Patching functions with respective mock functions
     monkeypatch.setattr(events, "verify_datetime", mock_verify_datetime)
-    monkeypatch.setattr(relay, "lock_unlock_entrance_one",
-                        mock_lock_unlock_entrance_one)
-    monkeypatch.setattr(relay, "lock_unlock_entrance_two",
-                        mock_lock_unlock_entrance_two)
+    monkeypatch.setattr(relay, "lock_unlock_entrance_one", mock_lock_unlock_entrance_one)
+    monkeypatch.setattr(relay, "lock_unlock_entrance_two", mock_lock_unlock_entrance_two)
     
     # Actual testing
     events.check_entrance_status()
