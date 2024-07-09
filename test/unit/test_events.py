@@ -18,6 +18,55 @@ TODO:
 - reader_detects_bits is very nested and hard to test...
 '''
 
+@pytest.fixture
+def mock_json_credOccur():
+    today_string_formatted = datetime.date.today().strftime("%Y-%m-%d")
+    return [
+        {
+            "Entrance": 1,
+            "EntranceDetails": {
+                "AuthenticationDevices": {
+                    "IN": {
+                        "defaultAuthMethod": "Card",
+                        "Masterpassword": 665544,
+                        "Direction": "IN",
+                        "AuthMethod": [
+                            {
+                                "Schedule": {
+                                    today_string_formatted: [
+                                        {
+                                            "endtime": "24:00",
+                                            "starttime": "00:00"
+                                        }
+                                    ]
+                                },
+                                "Method": "Pin"
+                            }
+                        ]
+                    },
+                    "OUT": {
+                        "defaultAuthMethod": "Card",
+                        "Masterpassword": 445566,
+                        "Direction": "OUT",
+                        "AuthMethod": [
+                            {
+                                "Schedule": {
+                                    today_string_formatted: [
+                                        {
+                                            "endtime": "24:00",
+                                            "starttime": "00:00"
+                                        }
+                                    ]
+                                },
+                                "Method": "Card"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+
 def test_verify_datetime_day():
     '''
     This test tests that verify_datetime correctly returns true when the date is
@@ -292,37 +341,14 @@ def test_open_door_using_entrance_id(monkeypatch: pytest.MonkeyPatch):
     # Setting config back to original
     events.config = original_config
 
-def test_check_for_masterpassword():
+def test_check_for_masterpassword(mock_json_credOccur):
     '''
     This test tests that check_for_masterpassword correctly returns either
     true or false based on the json credOccur and the inputs
     '''
-    # Mocking part of credOccur
-    mock_json_contents = [
-        {
-            "Entrance": 1,
-            "EntranceDetails": {
-                "AuthenticationDevices": {
-                    "IN": {
-                        "defaultAuthMethod": "Card",
-                        "Masterpassword": 665544,
-                        "Direction": "IN",
-                        "AuthMethod": []
-                    },
-                    "OUT": {
-                        "defaultAuthMethod": "Card",
-                        "Masterpassword": 445566,
-                        "Direction": "OUT",
-                        "AuthMethod": []
-                    }
-                }
-            }
-        }
-    ]
-
     # Remembering original credOccur and then using the mock json
     original_credOccur = events.credOccur
-    events.credOccur = mock_json_contents
+    events.credOccur = mock_json_credOccur
 
     # Actual testing
     test_in = events.check_for_masterpassword([665544], 1, "IN")
@@ -336,6 +362,25 @@ def test_check_for_masterpassword():
     assert test_in_fail_cred
     assert test_in_fail_entr
     assert test_in_fail_dir
+
+    # Setting credOccur back to original
+    events.credOccur = original_credOccur
+
+def test_verify_authtype(mock_json_credOccur):
+    '''
+    This test tests that verify authtype returns the correct string based
+    on the arguments given and the json file
+    '''
+    # Remembering original credOccur and then using the mock json
+    original_credOccur = events.credOccur
+    events.credOccur = mock_json_credOccur
+
+    # Actual testing
+    test_in = events.verify_authtype(1, "IN")
+    test_out = events.verify_authtype(1, "OUT")
+
+    assert test_in == "Pin"
+    assert test_out == "Card"
 
     # Setting credOccur back to original
     events.credOccur = original_credOccur
