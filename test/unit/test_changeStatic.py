@@ -43,8 +43,11 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
 
     def mock_open(filepath, mode):
         return MockFile(mode)
+    def mock_restart_eth0():
+        pass
     
     monkeypatch.setattr("builtins.open", mock_open)
+    monkeypatch.setattr(changeStatic, "restart_eth0", mock_restart_eth0)
 
     changeStatic.change_static_ip('192.168.1.160', '192.168.1.254', '192.168.1.254')
 

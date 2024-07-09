@@ -26,14 +26,13 @@ def change_static_ip(ip_address, routers, dns):
             ethIndex = data.index(ethFound)
             if data[ethIndex].startswith('#'):
                 data[ethIndex] = ('interface eth0\n') # commented out by default, make active
-        print(ethFound)
-        print(ethIndex)
+
         # If config is found, use index to edit the lines you need ( the next 3)
         if ethIndex:
             data[ethIndex+1] = (f'static ip_address={ip_address}/24\n')
             data[ethIndex+2] = (f'static routers={routers}\n')
             data[ethIndex+3] = (f'static domain_name_servers={dns}\n')
-
+        print(data)
         with open(conf_file, 'w') as file:
             file.writelines( data )
 
