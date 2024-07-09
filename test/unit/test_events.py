@@ -248,3 +248,34 @@ def test_check_entrance_status_neither_open(monkeypatch: pytest.MonkeyPatch):
     # Setting schedules back to original
     events.E1_entrance_schedule = original_E1_schedule
     events.E2_entrance_schedule = original_E2_schedule
+
+def test_open_door_E1(monkeypatch: pytest.MonkeyPatch):
+    # Vars for checking if open door succeeded
+    relay_one_triggered = False
+    relay_two_triggered = False
+
+    # Remembering original values to set back at end of test
+    original_mag_E1 = events.mag_E1_allowed_to_open
+    original_mag_E2 = events.mag_E2_allowed_to_open
+
+    # Mock functions to prevent IRL relay triggers
+    def mock_trigger_relay_one():
+        nonlocal relay_one_triggered
+        relay_one_triggered = True
+    
+    def mock_trigger_relay_two():
+        nonlocal relay_two_triggered
+        relay_two_triggered = True
+
+    # Patching of mock functions
+    monkeypatch.setattr("relay.trigger_relay_one", mock_trigger_relay_one)
+    monkeypatch.setattr("relay.trigger_relay_two", mock_trigger_relay_two)
+
+    # Actual testing
+    events.open_door("E1")
+
+    assert relay_one_triggered and not relay_one_triggered
+
+    # Settings vars back to original
+    events.mag_E1_allowed_to_open = original_mag_E1
+    events.mag_E2_allowed_to_open = original_mag_E2
