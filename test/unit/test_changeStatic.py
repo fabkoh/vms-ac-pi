@@ -52,4 +52,10 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
 
     changeStatic.change_static_ip('192.168.1.160', '192.168.1.254', '192.168.1.254')
 
-    print(data_written)
+    expected = ['#Configuration settings static IP:\n',
+                'interface eth0\n',
+                'static ip_address=192.168.1.160/24\n',
+                'static routers=192.168.1.254\n',
+                'static domain_name_servers=192.168.1.254\n']
+
+    assert data_written == expected
