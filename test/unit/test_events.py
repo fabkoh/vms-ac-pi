@@ -12,6 +12,12 @@ sys.path.insert(0, SRC_DIR)
 
 from src import events
 
+'''
+TODO:
+- check_for_wiegand is not being used anywhere in the codebase. Delete?
+- reader_detects_bits is very nested and hard to test...
+'''
+
 def test_verify_datetime_day():
     '''
     This test tests that verify_datetime correctly returns true when the date is
@@ -436,7 +442,7 @@ def test_open_door_using_entrance_id_2(monkeypatch: pytest.MonkeyPatch):
     events.open_door_using_entrance_id(0)
     events.open_door_using_entrance_id(1)
 
-    assert open_door_E1_called and not open_door_E2_called
+    assert not open_door_E1_called and open_door_E2_called
 
     # Setting config back to original
     events.config = original_config
