@@ -114,6 +114,7 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
 
     # Creating mock functions so relays aren't actually opened
     def mock_verify_datetime(test_schedule):
+        print("mock verify datetime reached")
         if test_schedule == "open":
             return True
         return False
