@@ -102,6 +102,9 @@ def test_change_dhcp(monkeypatch: pytest.MonkeyPatch):
         def readlines(self):
             return mock_readlines()
         
+        def close(self):
+            del self
+        
         def __enter__(self):
             return self
         
