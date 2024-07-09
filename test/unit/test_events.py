@@ -16,6 +16,13 @@ from src import events
 TODO:
 - check_for_wiegand is not being used anywhere in the codebase. Delete?
 - reader_detects_bits is very nested and hard to test...
+- check_for_masterpassword is not used anywhere else, can be used in reader detects bits?
+- verify_authtype is not used anywhere else, can be used in reader detects bits?
+- verify_zone_status is used by update_zone_status, which isn't used anywhere 
+  else
+- verify_antipassback is not used anywhere else
+
+- left mags rise fall and button change TODO
 '''
 
 @pytest.fixture
