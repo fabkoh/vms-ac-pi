@@ -44,12 +44,6 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
         
         def readlines(self):
             return mock_readlines()
-        
-        def __enter__(self):
-            return self
-        
-        def __exit__(self, exc_type, exc_val, exc_tb):
-            pass
 
     def mock_open(filepath, mode):
         return MockFile(mode)
@@ -104,12 +98,6 @@ def test_change_dhcp(monkeypatch: pytest.MonkeyPatch):
         
         def close(self):
             del self
-        
-        def __enter__(self):
-            return self
-        
-        def __exit__(self, exc_type, exc_val, exc_tb):
-            pass
 
     def mock_open(filepath, mode):
         return MockFile(mode)
