@@ -26,10 +26,10 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
     # Setting up of mock functions and classes
     def mock_readlines():
         return ['#Configuration settings static IP:\n',
-                'interface eth0\n',
-                'static ip_address\n',
-                'static routers\n',
-                'static domain_name_servers\n']
+                '#interface eth0\n',
+                '#static ip_address\n',
+                '#static routers\n',
+                '#static domain_name_servers\n']
     
     def mock_writelines(data):
         nonlocal data_written
@@ -70,3 +70,6 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
                 'static domain_name_servers=192.168.1.254\n']
 
     assert data_written == expected
+
+def test_change_dhcp():
+    pass
