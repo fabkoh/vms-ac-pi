@@ -56,9 +56,8 @@ def test_verify_datetime_time():
     today_string_formatted = datetime.date.today().strftime("%Y-%m-%d")
     now = datetime.datetime.now()
     curr_hour = now.hour
-    curr_min = now.min
-    hour_before = f'{curr_hour - 1}:{curr_min}'
-    hour_after = f'{curr_hour + 1}:{curr_min}'
+    hour_before = f"{curr_hour - 1}:00"
+    hour_after = f"{curr_hour + 1}:00"
 
     mock_json_contents = {
         today_string_formatted: [
