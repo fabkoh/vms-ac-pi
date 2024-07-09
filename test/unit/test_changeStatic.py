@@ -12,7 +12,8 @@ sys.path.insert(0, SRC_DIR)
 from src import changeStatic
 import io # needed to mock writelines
 
-def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
+@pytest.fixture
+def mock_file_open_read_write(monkeypatch: pytest.MonkeyPatch):
     data_written = []
 
     def mock_readlines():
@@ -50,6 +51,15 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr("builtins.open", mock_open)
     monkeypatch.setattr(changeStatic, "restart_eth0", mock_restart_eth0)
 
+def test_change_static_ip(mock_file_open_read_write):
+    '''
+    This test tests that change_static_ip is able to properly change the static
+    IP settings in the dhcpcd.conf file of the RPi. As we do not want the test
+    to actually write to the .conf file, we have to mock a few things,
+    including the readlines and writelines functions, along with the open
+    function, so we have to create a MockFile class that is returned when open()
+    is called.s
+    '''
     changeStatic.change_static_ip('192.168.1.160', '192.168.1.254', '192.168.1.254')
 
     expected = ['#Configuration settings static IP:\n',
@@ -58,4 +68,4 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
                 'static routers=192.168.1.254\n',
                 'static domain_name_servers=192.168.1.254\n']
 
-    assert data_written == expected
+    assert mock_file_open_read_write.data_written == expected
