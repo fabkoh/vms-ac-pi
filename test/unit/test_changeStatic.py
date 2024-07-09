@@ -124,9 +124,9 @@ def test_change_dhcp(monkeypatch: pytest.MonkeyPatch):
     changeStatic.change_dhcp()
 
     expected = ['#Configuration settings static IP:\n',
-                '#interface eth0\n',
-                '#static ip_address=exampleIP\n',
-                '#static routers=exampleIP\n',
-                '#static domain_name_servers=exampleIP\n']
+                '# interface eth0\n',
+                '# static ip_address=exampleIP\n',
+                '# static routers=exampleIP\n',
+                '# static domain_name_servers=exampleIP\n']
     
     assert data_written == expected
