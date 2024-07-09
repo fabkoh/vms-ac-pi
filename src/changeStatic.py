@@ -32,7 +32,7 @@ def change_static_ip(ip_address, routers, dns):
             data[ethIndex+1] = (f'static ip_address={ip_address}/24\n')
             data[ethIndex+2] = (f'static routers={routers}\n')
             data[ethIndex+3] = (f'static domain_name_servers={dns}\n')
-        print(data)
+        
         with open(conf_file, 'w') as file:
             file.writelines( data )
 
