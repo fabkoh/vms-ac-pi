@@ -49,5 +49,24 @@ def test_not_verify_datetime_day():
     assert not events.verify_datetime(mock_json_contents)
 
 def test_verify_datetime_time():
+    '''
+    This test tests that verify_datetime correctly returns true when the data
+    is today, and current time is within the timing schedule
+    '''
     today_string_formatted = datetime.date.today().strftime("%Y-%m-%d")
-    print(datetime.datetime.now())
+    now = datetime.datetime.now()
+    curr_hour = now.hour
+    curr_min = now.min
+    hour_before = f'{curr_hour - 1}:{curr_min}'
+    hour_after = f'{curr_hour + 1}:{curr_min}'
+
+    mock_json_contents = {
+        today_string_formatted: [
+            {
+                "endtime": hour_after,
+                "starttime": hour_before
+            }
+        ]
+    }
+    
+    assert events.verify_datetime(mock_json_contents)
