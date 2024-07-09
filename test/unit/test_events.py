@@ -318,3 +318,39 @@ def test_open_door_E2(monkeypatch: pytest.MonkeyPatch):
     # Settings vars back to original
     events.mag_E1_allowed_to_open = original_mag_E1
     events.mag_E2_allowed_to_open = original_mag_E2
+
+def test_open_door_both(monkeypatch: pytest.MonkeyPatch):
+    '''
+    This test tests that open_door triggers both relays when it is
+    called with "E1", then "E2"
+    '''
+    # Vars for checking if open door succeeded
+    relay_one_triggered = False
+    relay_two_triggered = False
+
+    # Remembering original values to set back at end of test
+    original_mag_E1 = events.mag_E1_allowed_to_open
+    original_mag_E2 = events.mag_E2_allowed_to_open
+
+    # Mock functions to prevent IRL relay triggers
+    def mock_trigger_relay_one(TPO):
+        nonlocal relay_one_triggered
+        relay_one_triggered = True
+    
+    def mock_trigger_relay_two(TPO):
+        nonlocal relay_two_triggered
+        relay_two_triggered = True
+
+    # Patching of mock functions
+    monkeypatch.setattr("relay.trigger_relay_one", mock_trigger_relay_one)
+    monkeypatch.setattr("relay.trigger_relay_two", mock_trigger_relay_two)
+
+    # Actual testing
+    events.open_door("E1")
+    events.open_door("E2")
+
+    assert relay_one_triggered and relay_two_triggered
+
+    # Settings vars back to original
+    events.mag_E1_allowed_to_open = original_mag_E1
+    events.mag_E2_allowed_to_open = original_mag_E2
