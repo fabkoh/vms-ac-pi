@@ -99,11 +99,12 @@ def test_not_verify_datetime_time():
     
     assert not events.verify_datetime(mock_json_contents)
 
-def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
+def test_check_entrance_status(monkeypatch: pytest.MonkeyPatch):
     '''
-    This test tests that check_entrance status will unlock both entrances when
-    the entrances are within schedule. There are multiple mock functions as we
-    have to ensure that the RPi doesn't actually activate or deactivate relays
+    This test tests that check_entrance status will unlock both entrances, one
+    entrance, or none of them based on schedule. There are multiple mock 
+    functions as we have to ensure that the RPi doesn't actually activate or 
+    deactivate relays
     '''
     # Vars for asserting if test succeeded
     entrance_1_unlocked = False
@@ -138,6 +139,7 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr("relay.lock_unlock_entrance_one", mock_lock_unlock_entrance_one)
     monkeypatch.setattr("relay.lock_unlock_entrance_two", mock_lock_unlock_entrance_two)
     
+    # ------------- TEST SECTION: Test open both in schedule -------------------
     # Setting dummy schedules for testing
     events.E1_entrance_schedule = "open"
     events.E2_entrance_schedule = "open"
@@ -145,11 +147,13 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
     # Actual testing for unlock E1 when E1 in schedule
     events.check_entrance_status()
     assert entrance_1_unlocked and entrance_2_unlocked
+    # ------------- END OF TEST SECTION ----------------------------------------
 
     # Reset unlocked vars
     entrance_1_unlocked = False
     entrance_2_unlocked = False
 
+    # ------------- TEST SECTION: Test open E1 in schedule ---------------------
     # Setting dummy schedules for testing
     events.E1_entrance_schedule = "open"
     events.E2_entrance_schedule = "close"
@@ -157,11 +161,13 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
     # Actual testing for unlock E2 when E2 in schedule
     events.check_entrance_status()
     assert entrance_1_unlocked and not entrance_2_unlocked
+    # ------------- END OF TEST SECTION ----------------------------------------
 
     # Reset unlocked vars
     entrance_1_unlocked = False
     entrance_2_unlocked = False
 
+    # ------------- TEST SECTION: Test open none in schedule -------------------
     # Setting dummy schedules for testing
     events.E1_entrance_schedule = "close"
     events.E2_entrance_schedule = "close"
@@ -169,6 +175,7 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
     # Actual testing
     events.check_entrance_status()
     assert not entrance_1_unlocked and not entrance_2_unlocked
+    # ------------- END OF TEST SECTION ----------------------------------------
 
     # Setting schedules back to original
     events.E1_entrance_schedule = original_E1_schedule
@@ -201,27 +208,29 @@ def test_open_door(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr("relay.trigger_relay_one", mock_trigger_relay_one)
     monkeypatch.setattr("relay.trigger_relay_two", mock_trigger_relay_two)
 
-    # Actual testing for entrance 1
+    # ------------- TEST SECTION: Test open door 1 -----------------------------
     events.open_door("E1")
     assert relay_one_triggered and not relay_two_triggered
+    # ------------- END OF TEST SECTION ----------------------------------------
 
     # Reset relay 1 and 2
     relay_one_triggered = False
     relay_two_triggered = False
 
-    # Actual testing for entrance 2
+    # ------------- TEST SECTION: Test open door 2 -----------------------------
     events.open_door("E2")
     assert not relay_one_triggered and relay_two_triggered
+    # ------------- END OF TEST SECTION ----------------------------------------
 
     # Reset relay 1 and 2
     relay_one_triggered = False
     relay_two_triggered = False
 
-    # Actual testing for both entrances
+    # ------------- TEST SECTION: Test open both doors -------------------------
     events.open_door("E1")
     events.open_door("E2")
-
     assert relay_one_triggered and relay_two_triggered
+    # ------------- END OF TEST SECTION ----------------------------------------
 
     # Settings vars back to original
     events.mag_E1_allowed_to_open = original_mag_E1
@@ -260,23 +269,25 @@ def test_open_door_using_entrance_id(monkeypatch: pytest.MonkeyPatch):
     # Patching the mock function
     monkeypatch.setattr(events, "open_door", mock_open_door)
 
-    # Multiple tests that only match IDs with entrance 1
+    # ------------- TEST SECTION: Test entrance 1 ------------------------------
     events.open_door_using_entrance_id(12463)
     events.open_door_using_entrance_id(12345)
     events.open_door_using_entrance_id(0)
     events.open_door_using_entrance_id(1)
     assert open_door_E1_called and not open_door_E2_called
+    # ------------- END OF TEST SECTION ----------------------------------------
 
     # Resetting the door_called vars
     open_door_E1_called = False
     open_door_E2_called = False
 
-    # Multiple tests that only match IDs with entrance 2
+    # ------------- TEST SECTION: Test entrance 2 ------------------------------
     events.open_door_using_entrance_id(61347)
     events.open_door_using_entrance_id(12345)
     events.open_door_using_entrance_id(0)
     events.open_door_using_entrance_id(1)
     assert not open_door_E1_called and open_door_E2_called
+    # ------------- END OF TEST SECTION ----------------------------------------
 
     # Setting config back to original
     events.config = original_config
