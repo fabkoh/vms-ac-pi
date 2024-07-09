@@ -446,3 +446,52 @@ def test_open_door_using_entrance_id_2(monkeypatch: pytest.MonkeyPatch):
 
     # Setting config back to original
     events.config = original_config
+
+def test_check_for_masterpassword():
+    '''
+    This test tests that check_for_masterpassword correctly returns either
+    true or false based on the json credOccur and the inputs
+    '''
+    # Mocking part of credOccur
+    mock_json_contents = {
+        {
+            "Entrance": 1,
+            "EntranceDetails": {
+                "AuthenticationDevices": {
+                    "IN": {
+                        "defaultAuthMethod": "Card",
+                        "Masterpassword": 665544,
+                        "Direction": "IN",
+                        "AuthMethod": []
+                    },
+                    "OUT": {
+                        "defaultAuthMethod": "Card",
+                        "Masterpassword": 445566,
+                        "Direction": "OUT",
+                        "AuthMethod": []
+                    }
+                }
+            }
+        }
+    }
+
+    # Remembering original credOccur and then using the mock json
+    original_credOccur = events.credOccur
+    events.credOccur = mock_json_contents
+
+    # Actual testing
+    test_in = events.check_for_masterpassword([665544], 1, "IN")
+    test_out = events.check_for_masterpassword([445566], 1, "OUT")
+    test_in_fail_cred = not events.check_for_masterpassword([1], 1, "IN")
+    test_in_fail_entr = not events.check_for_masterpassword([665544], 2, "IN")
+    test_in_fail_dir = not events.check_for_masterpassword([665544], 1, "OUT")
+
+    assert test_in
+    assert test_out
+    assert test_in_fail_cred
+    assert test_in_fail_entr
+    assert test_in_fail_dir
+
+    # Setting credOccur back to original
+    events.credOccur = original_credOccur
+    
