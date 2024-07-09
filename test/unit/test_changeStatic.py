@@ -16,7 +16,7 @@ def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
     data_written = []
 
     def mock_readlines():
-        return ['#Configuration settings static IP:\n'
+        return ['#Configuration settings static IP:\n',
                 'interface eth0\n',
                 'static ip_address\n',
                 'static routers\n',
