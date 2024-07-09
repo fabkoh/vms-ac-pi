@@ -10,7 +10,6 @@ SRC_DIR = os.path.abspath(os.path.join(os.path.join(TEST_DIR, os.pardir), os.par
 sys.path.insert(0, SRC_DIR)
 
 from src import changeStatic
-import io # needed to mock writelines
 
 def test_change_static_ip(monkeypatch: pytest.MonkeyPatch):
     '''
