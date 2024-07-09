@@ -118,7 +118,7 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
             return True
         return False
     
-    def mock_lock_unlock_entrance_one(ThirdPartyOption, unlock):
+    def mock_lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
         nonlocal entrance_1_unlocked
         print("mock lockunlock 1 reached")
         if unlock:
@@ -126,7 +126,7 @@ def test_check_entrance_status_both_open(monkeypatch: pytest.MonkeyPatch):
         else:
             entrance_1_unlocked = False
     
-    def mock_lock_unlock_entrance_two(ThirdPartyOption, unlock):
+    def mock_lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
         nonlocal entrance_2_unlocked
         print("mock lockunlock 1 reached")
         if unlock:
