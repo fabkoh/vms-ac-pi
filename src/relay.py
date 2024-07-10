@@ -113,8 +113,6 @@ def test_buzzer(gpio, level, tick):
         GPIO.output(gpio, GPIO.LOW)
         time.sleep(1)
 
-test_buzzer(18, 1, 1)
-
 
 def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     
@@ -467,6 +465,7 @@ def lock_entrance_two():
 def main():
     trigger_relay_one()
     trigger_relay_two()
+    test_buzzer(23, 1, 1)
 
 
 if __name__ == '__main__':
