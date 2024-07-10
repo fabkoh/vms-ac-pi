@@ -1,30 +1,13 @@
-from datetime import datetime
-
-from executor import thread_pool_executor
+from executor import setup_logger, thread_pool_executor
 from var import server_url
 import json
 import requests
 import os
-import threading
 
 from lock import pending_logs_lock
-import logging
 
-# Create a logger
-logger = logging.getLogger(__name__)
+logger = setup_logger('Relay.log')
 
-# Set the level of logging. It can be DEBUG, INFO, WARNING, ERROR, CRITICAL
-logger.setLevel(logging.DEBUG)
-
-# Create a file handler for outputting log messages to a file
-file_handler = logging.FileHandler('/home/etlas/UpdateServer.log')
-
-# Create a formatter and add it to the handler
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
-
-# Add the handler to the logger
-logger.addHandler(file_handler)
 
 path = os.path.dirname(os.path.abspath(__file__))
 
