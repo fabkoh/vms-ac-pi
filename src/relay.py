@@ -109,15 +109,13 @@ def deActivateRelay(relayPin, activateLevel):
 
 def test_buzzer(gpio, level, tick):
     print("testing buzzer")
-    pi.set_mode(gpio, pigpio.OUTPUT)
     for i in range(0, 5):
         # GPIOconfig.activate_buzz(eventActionTriggerConstants.BOTH_ENTRANCE, 1)
-        GPIOconfig.activate_led(eventActionTriggerConstants.BOTH_ENTRANCE, 0.25)
-        time.sleep(0.5)
-        # pi.write(gpio, 1)
-        # time.sleep(1)
-        # pi.write(gpio, 0)
-        # time.sleep(1)
+        # GPIOconfig.activate_led(eventActionTriggerConstants.BOTH_ENTRANCE, 0.25)
+        pi.write(gpio, 1)
+        time.sleep(1)
+        pi.write(gpio, 0)
+        time.sleep(1)
     # setGpioMode()
     # setupRelayPin(gpio)
     # for i in range(0, 5):
