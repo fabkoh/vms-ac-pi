@@ -1,3 +1,5 @@
+import time
+
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
@@ -107,7 +109,9 @@ def test_buzzer(gpio, level, tick):
     for i in range(0, 5):
         print("test", i)
         GPIO.output(gpio, GPIO.HIGH)
+        time.sleep(1)
         GPIO.output(gpio, GPIO.LOW)
+        time.sleep(1)
 
 test_buzzer(18, 1, 1)
 
