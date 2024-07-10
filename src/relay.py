@@ -240,7 +240,6 @@ def trigger_relay_one(thirdPartyOption=None):
         print("opening")
         logger.info("Before toggleRelay1")
         thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
-        thread_pool_executor.submit(test_buzzer, 23, 'High', 1)
 
         # cleanupGpio()
     except RuntimeError:
