@@ -404,7 +404,9 @@ def check_for_led_and_buzzer():
 
 def test_buzzer(gpio, level, tick):
    pi.set_mode(gpio, pigpio.OUTPUT)
+   print("testing buzzer")
    for i in range(0, 5):
+      print("test", i)
       pi.write(gpio, 1)
       time.sleep(1)
       pi.write(gpio, 0)
