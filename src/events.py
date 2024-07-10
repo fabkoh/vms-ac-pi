@@ -309,6 +309,63 @@ def open_GEN_OUT(GEN_OUT_PIN, timer, GenNo):
 # record Trans
 # TODO: add event logging
 
+def activate_buzz(entrance, timing):
+    '''
+    Activates the buzzer at <entrance> for a set amount of time. The request is
+    submitted to the thread_pool_executor to be run asychronously.
+
+        Parameters:
+            entrance (Any): Entrance ID based on config.json
+            time: Duration in seconds for how long to activate the buzzer for
+    '''
+    # Imports only used in this function
+    import eventActionTriggerConstants
+    from executor import thread_pool_executor
+
+    # Helper function to send task to thread_pool_executor
+    def thread_pool_helper(pin, timing):
+        GPIOconfig.pi.write(pin, 1)
+        time.sleep(timing)
+        GPIOconfig.pi.write(pin, 0)
+
+    if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E1_OUT_Buzz, timing))
+        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Buzz, timing))
+        return
+
+    if entrance == E1:
+        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E1_OUT_Buzz, timing))
+    elif entrance == E2:
+        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Buzz, timing))
+
+def activate_buzz(entrance, timing):
+    '''
+    Activates the LED at <entrance> for a set amount of time. The request is
+    submitted to the thread_pool_executor to be run asychronously.
+
+        Parameters:
+            entrance (Any): Entrance ID based on config.json
+            time: Duration in seconds for how long to activate the LED for
+    '''
+    # Imports only used in this function
+    import eventActionTriggerConstants
+    from executor import thread_pool_executor
+
+    # Helper function to send task to thread_pool_executor
+    def thread_pool_helper(pin, timing):
+        GPIOconfig.pi.write(pin, 1)
+        time.sleep(timing)
+        GPIOconfig.pi.write(pin, 0)
+
+    if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E1_OUT_Led, timing))
+        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Led, timing))
+        return
+
+    if entrance == E1:
+        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E1_OUT_Led, timing))
+    elif entrance == E2:
+        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Led, timing))
 
 def reader_detects_bits(bits, value, entrance):
 
