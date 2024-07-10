@@ -2,6 +2,7 @@ import os
 import sys
 import datetime
 import pytest
+import time
 
 '''
 This part is needed to be able to import the files from src for testing
@@ -21,8 +22,6 @@ TODO:
 - verify_zone_status is used by update_zone_status, which isn't used anywhere 
   else
 - verify_antipassback is not used anywhere else
-
-- left mags rise fall and button change TODO
 '''
 
 @pytest.fixture
@@ -391,3 +390,115 @@ def test_verify_authtype(mock_json_credOccur):
 
     # Setting credOccur back to original
     events.credOccur = original_credOccur
+
+def  test_mag_detects_rising(monkeypatch: pytest.MonkeyPatch):
+    '''
+    This test tests that mag_detects_rising (callback function called when
+    GPIO detects a RISING EDGE) correctly calls the different output functions
+    based on the scenarios of which GPIO pin called it, and whether it is
+    allowed to open
+    '''
+    # Vars to check if functions were called
+    record_mag_E1 = False
+    record_mag_warning_E1 = False
+    record_mag_E2 = False
+    record_mag_warning_E2 = False
+
+    # Remembering original values for E1 and E2
+    original_E1 = events.E1
+    original_E2 = events.E2
+    original_E1_Mag = events.E1_Mag
+    original_E2_Mag = events.E2_Mag
+    original_E1_allowed_to_open = events.mag_E1_allowed_to_open
+    original_E2_allowed_to_open = events.mag_E2_allowed_to_open
+
+    # Setting up of mock vars for test
+    events.E1 = 1234
+    events.E2 = 5678
+    events.E1_Mag = "Mag1"
+    events.E2_Mag = "Mag2"
+    events.mag_E1_allowed_to_open = True
+    events.mag_E2_allowed_to_open = True
+
+    # Function to reset tracking variables after every test
+    def reset_tracking_vars():
+        nonlocal record_mag_E1, record_mag_warning_E1
+        nonlocal record_mag_E2, record_mag_warning_E2
+        record_mag_E1 = False
+        record_mag_warning_E1 = False
+        record_mag_E2 = False
+        record_mag_warning_E2 = False
+
+    # Function to wait for debounce delay to complete after every test
+    def wait_debounce():
+        time.sleep(0.5) # wait for 0.5 seconds
+
+    # Mock functions so that logs don't actually update
+    def mock_update_server_events():
+        pass
+
+    def mock_record_mag_opened(entrance):
+        nonlocal record_mag_E1, record_mag_E2
+        if entrance == 1234: # Mock ID for E1
+            record_mag_E1 = True
+        if entrance == 5678: # Mock ID for E2
+            record_mag_E2 = True
+
+    def mock_record_mag_opened_warning(entrance):
+        nonlocal record_mag_warning_E1, record_mag_warning_E2
+        if entrance == 1234: # Mock ID for E1
+            record_mag_warning_E1 = True
+        if entrance == 5678: # Mock ID for E2
+            record_mag_warning_E2 = True
+
+    # Patching mock functions
+    monkeypatch.setattr("updateserver.update_server_events", mock_update_server_events)
+    monkeypatch.setattr("eventsMod.record_mag_opened", mock_record_mag_opened)
+    monkeypatch.setattr("eventsMod.record_mag_opened_warning", mock_record_mag_opened_warning)
+
+    # ------------- TEST SECTION: Mags Rising E1, allowed ----------------------
+    events.mag_detects_rising(gpio=events.E1_Mag, level=None, tick=None)
+
+    assert (record_mag_E1 and not record_mag_E2 and
+            not record_mag_warning_E1 and not record_mag_warning_E2)
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    reset_tracking_vars()
+    wait_debounce()
+
+    # ------------- TEST SECTION: Mags Rising E2, allowed ----------------------
+    events.mag_detects_rising(gpio=events.E2_Mag, level=None, tick=None)
+
+    assert (not record_mag_E1 and record_mag_E2 and
+            not record_mag_warning_E1 and not record_mag_warning_E2)
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    reset_tracking_vars()
+    wait_debounce()
+
+    # ------------- TEST SECTION: Mags Rising E1, not allowed ------------------
+    events.mag_E1_allowed_to_open = False
+    events.mag_detects_rising(gpio=events.E1_Mag, level=None, tick=None)
+
+    assert (not record_mag_E1 and not record_mag_E2 and
+            record_mag_warning_E1 and not record_mag_warning_E2)
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    reset_tracking_vars()
+    wait_debounce()
+
+    # ------------- TEST SECTION: Mags Rising E2, not allowed ------------------
+    events.mag_E2_allowed_to_open = False
+    events.mag_detects_rising(gpio=events.E2_Mag, level=None, tick=None)
+
+    assert (not record_mag_E1 and not record_mag_E2 and
+            not record_mag_warning_E1 and record_mag_warning_E2)
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    # Settings vars back to original
+    events.E1 = original_E1
+    events.E2 = original_E2
+    events.E1_Mag = original_E1_Mag
+    events.E2_Mag = original_E2_Mag
+    events.mag_E1_allowed_to_open = original_E1_allowed_to_open
+    events.mag_E2_allowed_to_open = original_E2_allowed_to_open
