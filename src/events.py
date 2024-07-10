@@ -829,7 +829,7 @@ def button_detects_change(gpio, level, tick):
         logger.info(f"{E1} push button1 is pressed at " + str(datetime.now()))
         mag_E1_allowed_to_open = True
         relay.trigger_relay_one(E1_thirdPartyOption)
-        GPIOconfig.test_buzzer(8, 1, 1)
+        GPIOconfig.test_buzzer()
         eventsMod.record_button_pressed(E1, "Security Guard Button")
 
     elif gpio == E2_Button:
