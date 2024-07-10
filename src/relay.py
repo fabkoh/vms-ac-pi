@@ -11,6 +11,8 @@ from executor import setup_logger, thread_pool_executor
 
 import pigpio
 import time
+import GPIOconfig
+import eventActionTriggerConstants
 
 pi = pigpio.pi()
 
@@ -109,10 +111,12 @@ def test_buzzer(gpio, level, tick):
     print("testing buzzer")
     pi.set_mode(gpio, pigpio.OUTPUT)
     for i in range(0, 5):
-        pi.write(gpio, 1)
-        time.sleep(1)
-        pi.write(gpio, 0)
-        time.sleep(1)
+        GPIOconfig.activate_buzz(eventActionTriggerConstants.BOTH_ENTRANCE, 1)
+        time.sleep(2)
+        # pi.write(gpio, 1)
+        # time.sleep(1)
+        # pi.write(gpio, 0)
+        # time.sleep(1)
     # setGpioMode()
     # setupRelayPin(gpio)
     # for i in range(0, 5):
