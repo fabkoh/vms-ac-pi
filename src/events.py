@@ -9,7 +9,7 @@ import updateserver
 import os
 
 from lock import config_lock
-from src import GPIOconfig
+import GPIOconfig
 
 path = os.path.dirname(os.path.abspath(__file__))
 
