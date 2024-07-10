@@ -576,7 +576,7 @@ def reader_detects_bits(bits, value, entrance):
                 logger.info("Updating Logs after Master Password used")
 
                 open_door()
-                led_and_buzzer_correct_cred(entrancename)
+                # led_and_buzzer_correct_cred(entrancename)
                 reset_cred_and_stop_timer()
                 # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
                 # updateserver.update_server_events()
@@ -656,7 +656,7 @@ def reader_detects_bits(bits, value, entrance):
                                 # auth scan
                                 logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
                                 open_door()
-                                led_and_buzzer_correct_cred(entrancename)
+                                # led_and_buzzer_correct_cred(entrancename)
 
                                 if "Pin" == auth_method_name:
                                     eventsMod.pin_only_used(
