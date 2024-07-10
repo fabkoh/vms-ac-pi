@@ -402,5 +402,15 @@ def check_for_led_and_buzzer():
         gc.collect()
 
 
+def test_buzzer(gpio, level, tick):
+   pi.set_mode(gpio, pigpio.OUTPUT)
+   for i in range(0, 5):
+      pi.write(gpio, 1)
+      time.sleep(1)
+      pi.write(gpio, 0)
+      time.sleep(1)
+
+test_buzzer(E1_IN_Led, 1, 1)
+
 thread_pool_executor.submit(check_for_led_and_buzzer)
 # threading.Thread(target=check_for_led_and_buzzer)
