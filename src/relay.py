@@ -465,7 +465,6 @@ def lock_entrance_two():
 def main():
     trigger_relay_one()
     trigger_relay_two()
-    test_buzzer(23, 1, 1)
 
 
 if __name__ == '__main__':
