@@ -368,6 +368,7 @@ def activate_led(entrance,t):
       end_time=time.time()+t
       E1_led_time=max(E1_led_time,end_time)
       E2_led_time=max(E2_led_time,end_time)
+      print(f"entrance time for LED set to {E1_led_time}, current time is {time.time()}")
       return
 
    ent=entrance_id_to_entrance(entrance)
@@ -388,14 +389,16 @@ def check_for_led_and_buzzer():
                 pin2: E1_OUT_Buzz
         '''
         if active or time.time() <= t:
+            print(f"Activating {pin1} and {pin2}")
             pi.write(pin1,1)
             pi.write(pin2,1)
         else:
+            print(f"Deactivating {pin1} and {pin2}")
             pi.write(pin1,0)
             pi.write(pin2,0)
     while True:            
         helper(E1_buzzer,E1_buzzer_time,E1_IN_Buzz,E1_OUT_Buzz)
-        helper(E1_led,E1_led_time,E1_IN_Led,E2_OUT_Led)
+        helper(E1_led,E1_led_time,E1_IN_Led,E1_OUT_Led)
         helper(E2_buzzer,E2_buzzer_time,E2_IN_Buzz,E2_OUT_Buzz)
         helper(E2_led,E2_led_time,E2_IN_Led,E2_OUT_Led)
         time.sleep(1)
