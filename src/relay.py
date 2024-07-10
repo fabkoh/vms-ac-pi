@@ -100,6 +100,15 @@ def deActivateRelay(relayPin, activateLevel):
         setRelayPinHigh(relayPin)
     return
 
+def test_buzzer(gpio, level, tick):
+    print("testing buzzer")
+    for i in range(0, 5):
+        print("test", i)
+        GPIO.output(gpio, GPIO.HIGH)
+        GPIO.output(gpio, GPIO.LOW)
+
+test_buzzer(18, 1, 1)
+
 
 def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     
