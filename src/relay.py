@@ -108,9 +108,9 @@ def test_buzzer(gpio, level, tick):
     setupRelayPin(gpio)
     for i in range(0, 5):
         print("test", i)
-        activateRelay(23, 'HIGH')
+        activateRelay(23, 'High')
         time.sleep(1)
-        activateRelay(23, 'LOW')
+        activateRelay(23, 'Low')
         time.sleep(1)
 
 
@@ -317,7 +317,6 @@ def lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
                 deActivateRelay(outputPin, 'High')
         except RuntimeError:
             print("Entrance is still closed")
-    # print("test")
     return
 
 def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
