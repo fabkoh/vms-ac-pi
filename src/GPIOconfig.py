@@ -342,11 +342,11 @@ def test_buzzer():
       # GPIOconfig.activate_led(eventActionTriggerConstants.BOTH_ENTRANCE, 0.25)
       print("test", 1)
       # pi.write(18, 1)
-      pi.write(17, 1)
-      time.sleep(1)
+      pi.write(4, 1)
+      time.sleep(0.25)
       # pi.write(18, 0)
-      pi.write(17, 0)
-      time.sleep(1)
+      pi.write(4, 0)
+      time.sleep(0.25)
 
 # def activate_buzz(entrance,t):
 #    '''Helper function for eventActionTriggers
