@@ -372,6 +372,12 @@ TODO: functions for led and buzzer behaviour when the credentials are correct/
 wrong
 Correct: Buzzer buzzes for 2 seconds continuously, LED turns green (write 1)
 Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change for LED)
+
+Current issues: 
+- Buzzer and LED doesn't trigger together
+- LED and BUZZER GPIO is swapped
+- Triggering this overrides the output_events queue actions if there is one for
+    or buzzer there
 '''
 def led_and_buzzer_correct_cred(entrance_id):
     '''
