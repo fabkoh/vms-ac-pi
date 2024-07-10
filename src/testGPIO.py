@@ -31,6 +31,7 @@ def deactivate_relay(gpio, level, tick):
 
 
 def test_buzzer(gpio, level, tick):
+    pi.set_mode(E1_IN_Buzz, pigpio.OUTPUT)
     for i in range(0, 5):
         pi.write(E1_IN_Buzz, 1)
         time.sleep(1)
