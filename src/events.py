@@ -367,6 +367,46 @@ def activate_buzz(entrance, timing):
     elif entrance == E2:
         thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Led, timing))
 
+'''
+TODO: functions for led and buzzer behaviour when the credentials are correct/
+wrong
+Correct: Buzzer buzzes for 2 seconds continuously, LED turns green (write 1)
+Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change for LED)
+'''
+def led_and_buzzer_correct_cred(entrance_id):
+    '''
+    Buzzes and lights up LED to show that the correct credentials were entered,
+    when opening the door. Submits the thread_pool_executor to run async
+
+        Parameters:
+            entrance_id (Any): Entrance ID based on config.json
+    '''
+    from executor import thread_pool_executor
+
+    # Buzz for 2 times in quick succession
+    def thread_pool_buzz(pin):
+        for i in range(0, 2):
+            GPIOconfig.pi.write(pin, 1)
+            time.sleep(0.1)
+            GPIOconfig.pi.write(pin, 0)
+            time.sleep(0.1)
+
+    # Turn LED green for 3 seconds
+    def thread_pool_led(pin):
+        GPIOconfig.pi.write(pin, 1)
+        time.sleep(3)
+        GPIOconfig.pi.write(pin, 0)
+    
+    if entrance_id == E1:
+        thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
+        thread_pool_executor.submit(thread_pool_led(GPIOconfig.E1_OUT_Led))
+    elif entrance_id == E2:
+        thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
+        thread_pool_executor.submit(thread_pool_led(GPIOconfig.E2_OUT_Led))
+
+def led_and_buzzer_wrong_cred():
+    pass
+
 def reader_detects_bits(bits, value, entrance):
 
     global mag_E1_allowed_to_open
@@ -536,6 +576,7 @@ def reader_detects_bits(bits, value, entrance):
                 logger.info("Updating Logs after Master Password used")
 
                 open_door()
+                led_and_buzzer_correct_cred(entrancename)
                 reset_cred_and_stop_timer()
                 # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
                 # updateserver.update_server_events()
@@ -615,6 +656,7 @@ def reader_detects_bits(bits, value, entrance):
                                 # auth scan
                                 logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
                                 open_door()
+                                led_and_buzzer_correct_cred(entrancename)
 
                                 if "Pin" == auth_method_name:
                                     eventsMod.pin_only_used(
