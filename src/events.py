@@ -338,7 +338,7 @@ def activate_buzz(entrance, timing):
     elif entrance == E2:
         thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Buzz, timing))
 
-def activate_buzz(entrance, timing):
+def activate_led(entrance, timing):
     '''
     Activates the LED at <entrance> for a set amount of time. The request is
     submitted to the thread_pool_executor to be run asychronously.

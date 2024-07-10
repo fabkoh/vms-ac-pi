@@ -240,7 +240,7 @@ def flush_output():
                     entrance, output.get("timerDuration", 0))
             elif id == LED:
                 print("led")
-                event.activate_led(
+                events.activate_led(
                     entrance, output.get("timerDuration", 0))
             elif id == GEN_OUT_1:
                 timer1 = output.get("timerDuration", 0)
