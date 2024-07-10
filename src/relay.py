@@ -7,9 +7,12 @@ import multitasking
 import json
 import os
 from lock import config_lock
-
-from eventActionTriggerConstants import GEN_OUT_1
 from executor import setup_logger, thread_pool_executor
+
+import pigpio
+import time
+
+pi = pigpio.pi()
 
 path = os.path.dirname(os.path.abspath(__file__))
 
@@ -104,14 +107,20 @@ def deActivateRelay(relayPin, activateLevel):
 
 def test_buzzer(gpio, level, tick):
     print("testing buzzer")
-    setGpioMode()
-    setupRelayPin(gpio)
+    pi.set_mode(gpio, pigpio.OUTPUT)
     for i in range(0, 5):
-        print("test", i)
-        activateRelay(23, 'High')
+        pi.write(gpio, 1)
         time.sleep(1)
-        activateRelay(23, 'Low')
+        pi.write(gpio, 0)
         time.sleep(1)
+    # setGpioMode()
+    # setupRelayPin(gpio)
+    # for i in range(0, 5):
+    #     print("test", i)
+    #     activateRelay(23, 'High')
+    #     time.sleep(1)
+    #     activateRelay(23, 'Low')
+    #     time.sleep(1)
 
 
 def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
