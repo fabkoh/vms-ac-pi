@@ -334,6 +334,18 @@ def entrance_id_to_entrance(entrance_id):
       return "E2"
    # implicit None
 
+
+def test_buzzer(gpio, level, tick):
+   print("testing buzzer")
+   for i in range(0, 5):
+      # GPIOconfig.activate_buzz(eventActionTriggerConstants.BOTH_ENTRANCE, 1)
+      # GPIOconfig.activate_led(eventActionTriggerConstants.BOTH_ENTRANCE, 0.25)
+      print("test", 1)
+      pi.write(gpio, 1)
+      time.sleep(1)
+      pi.write(gpio, 0)
+      time.sleep(1)
+
 # def activate_buzz(entrance,t):
 #    '''Helper function for eventActionTriggers
 #
