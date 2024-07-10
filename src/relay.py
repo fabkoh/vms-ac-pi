@@ -108,9 +108,9 @@ def test_buzzer(gpio, level, tick):
     setupRelayPin(gpio)
     for i in range(0, 5):
         print("test", i)
-        GPIO.output(gpio, GPIO.HIGH)
+        activateRelay(23, 'HIGH')
         time.sleep(1)
-        GPIO.output(gpio, GPIO.LOW)
+        activateRelay(23, 'LOW')
         time.sleep(1)
 
 
