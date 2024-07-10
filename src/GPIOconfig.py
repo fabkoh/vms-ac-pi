@@ -343,10 +343,10 @@ def test_buzzer():
       print("test", 1)
       # pi.write(18, 1)
       pi.write(4, 1)
-      time.sleep(0.01)
+      time.sleep(0.025)
       # pi.write(18, 0)
       pi.write(4, 0)
-      time.sleep(0.01)
+      time.sleep(0.025)
 
 # def activate_buzz(entrance,t):
 #    '''Helper function for eventActionTriggers
