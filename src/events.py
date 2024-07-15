@@ -393,12 +393,14 @@ def led_and_buzzer_correct_cred(entrance_id):
 
     # Buzz for 0.5 seconds
     def thread_pool_buzz(pin):
+        print("BUZZ ON from correct cred")
         GPIOconfig.pi.write(pin, 1)
         time.sleep(0.5)
         GPIOconfig.pi.write(pin, 0)
 
     # Turn LED green for 2 seconds
     def thread_pool_led(pin):
+        print("LED ON from correct cred")
         GPIOconfig.pi.write(pin, 1)
         time.sleep(2)
         GPIOconfig.pi.write(pin, 0)
