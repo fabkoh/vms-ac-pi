@@ -424,18 +424,18 @@ def led_and_buzzer_wrong_cred(entrance_id):
 
     # Buzz for 3 times in quick succession
     def thread_pool_buzz(pin):
-        for i in range(0,3):
+        # for i in range(0,3):
             # GPIOconfig.pi.write(pin, 1)
             # time.sleep(0.1)
             # GPIOconfig.pi.write(pin, 0)
             # time.sleep(0.1)
-            GPIOconfig.pi.write(pin, 1)
-            time.sleep(3)
-            GPIOconfig.pi.write(pin, 0)
+        GPIOconfig.pi.write(pin, 1)
+        time.sleep(3)
+        GPIOconfig.pi.write(pin, 0)
     
     if entrance_id == E1:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
-        thread_pool_executor.submit(thread_pool_buzz(4))
+        thread_pool_executor.submit(thread_pool_buzz(17))
     elif entrance_id == E2:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
         thread_pool_executor.submit(thread_pool_buzz(11))
