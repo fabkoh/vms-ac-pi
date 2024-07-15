@@ -407,7 +407,7 @@ def led_and_buzzer_correct_cred(entrance_id):
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
         # thread_pool_executor.submit(thread_pool_led(GPIOconfig.E1_OUT_Led))
         thread_pool_executor.submit(thread_pool_buzz(17)) # Buzzer pin
-        thread_pool_executor.submit(thread_pool_led(4)) # LED pin
+        # thread_pool_executor.submit(thread_pool_led(4)) # LED pin
     elif entrance_id == E2:
         thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
         thread_pool_executor.submit(thread_pool_led(GPIOconfig.E2_OUT_Led))
