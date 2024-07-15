@@ -432,10 +432,10 @@ def led_and_buzzer_wrong_cred(entrance_id):
     
     if entrance_id == E1:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
-        thread_pool_executor.submit(thread_pool_buzz(11))
+        thread_pool_executor.submit(thread_pool_buzz(17))
     elif entrance_id == E2:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
-        thread_pool_executor.submit(thread_pool_buzz(13))
+        thread_pool_executor.submit(thread_pool_buzz(11))
 
 def reader_detects_bits(bits, value, entrance):
 
