@@ -424,14 +424,11 @@ def led_and_buzzer_wrong_cred(entrance_id):
 
     # Buzz for 3 times in quick succession
     def thread_pool_buzz(pin):
-        # for i in range(0,3):
-            # GPIOconfig.pi.write(pin, 1)
-            # time.sleep(0.1)
-            # GPIOconfig.pi.write(pin, 0)
-            # time.sleep(0.1)
-        GPIOconfig.pi.write(pin, 1)
-        time.sleep(3)
-        GPIOconfig.pi.write(pin, 0)
+        for i in range(0,3):
+            GPIOconfig.pi.write(pin, 1)
+            time.sleep(0.1)
+            GPIOconfig.pi.write(pin, 0)
+            time.sleep(0.1)
     
     if entrance_id == E1:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
@@ -610,6 +607,7 @@ def reader_detects_bits(bits, value, entrance):
                 logger.info("Updating Logs after Master Password used")
 
                 open_door()
+                led_and_buzzer_correct_cred(entrancename)
                 reset_cred_and_stop_timer()
                 # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
                 # updateserver.update_server_events()
@@ -691,6 +689,7 @@ def reader_detects_bits(bits, value, entrance):
                                 # auth scan
                                 logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
                                 open_door()
+                                led_and_buzzer_correct_cred(entrancename)
 
                                 if "Pin" == auth_method_name:
                                     eventsMod.pin_only_used(
