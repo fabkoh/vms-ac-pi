@@ -370,7 +370,7 @@ def activate_led(entrance, timing):
 '''
 TODO: functions for led and buzzer behaviour when the credentials are correct/
 wrong
-Correct: Buzzer buzzes for 2 seconds continuously, LED turns green (write 1)
+Correct: Buzzer buzzes for 0.5 seconds continuously, LED turns green for 2 seconds
 Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change for LED)
 
 Current issues: 
@@ -391,10 +391,10 @@ def led_and_buzzer_correct_cred(entrance_id):
     '''
     from executor import thread_pool_executor
 
-    # Buzz for 2 seconds
+    # Buzz for 0.5 seconds
     def thread_pool_buzz(pin):
         GPIOconfig.pi.write(pin, 1)
-        time.sleep(2)
+        time.sleep(0.5)
         GPIOconfig.pi.write(pin, 0)
 
     # Turn LED green for 2 seconds
@@ -406,8 +406,8 @@ def led_and_buzzer_correct_cred(entrance_id):
     if entrance_id == E1:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
         # thread_pool_executor.submit(thread_pool_led(GPIOconfig.E1_OUT_Led))
-        # thread_pool_executor.submit(thread_pool_buzz(17)) # LED pin
-        thread_pool_executor.submit(thread_pool_led(4)) # Buzzer pin
+        thread_pool_executor.submit(thread_pool_buzz(17)) # LED pin
+        # thread_pool_executor.submit(thread_pool_led(4)) # Buzzer pin
     elif entrance_id == E2:
         thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
         thread_pool_executor.submit(thread_pool_led(GPIOconfig.E2_OUT_Led))
@@ -434,7 +434,7 @@ def led_and_buzzer_wrong_cred(entrance_id):
     
     if entrance_id == E1:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
-        thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Led))
+        thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Led)) # currently writes to E1_R1_BUZZ or E1_IN_BUZZ
     elif entrance_id == E2:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
         thread_pool_executor.submit(thread_pool_buzz(11))
