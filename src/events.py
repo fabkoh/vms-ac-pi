@@ -435,7 +435,7 @@ def led_and_buzzer_wrong_cred(entrance_id):
     
     if entrance_id == E1:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
-        thread_pool_executor.submit(thread_pool_buzz(17))
+        thread_pool_executor.submit(thread_pool_buzz(23))
     elif entrance_id == E2:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
         thread_pool_executor.submit(thread_pool_buzz(11))
