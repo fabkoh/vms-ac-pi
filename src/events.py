@@ -411,6 +411,15 @@ def led_and_buzzer_correct_cred(entrance_id):
         thread_pool_executor.submit(thread_pool_led(GPIOconfig.E2_OUT_Led))
 
 def led_and_buzzer_wrong_cred(entrance_id):
+    '''
+    Buzzes to show that the wrong credentials were entered, when opening the
+    door. Submits the thread_pool_executor to run async.
+    Currently only triggers the OUT Buzzer, may need to include the IN one as
+    well.
+
+        Parameters:
+            entrance_id (Any): Entrance ID based on config.json
+    '''
     from executor import thread_pool_executor
 
     # Buzz for 3 times in quick succession
