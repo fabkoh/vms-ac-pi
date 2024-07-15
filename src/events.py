@@ -382,7 +382,9 @@ Current issues:
 def led_and_buzzer_correct_cred(entrance_id):
     '''
     Buzzes and lights up LED to show that the correct credentials were entered,
-    when opening the door. Submits the thread_pool_executor to run async
+    when opening the door. Submits the thread_pool_executor to run async.
+    Currently only triggers the OUT Buzzer and LED, may need to include the IN
+    one as well.
 
         Parameters:
             entrance_id (Any): Entrance ID based on config.json
@@ -391,16 +393,14 @@ def led_and_buzzer_correct_cred(entrance_id):
 
     # Buzz for 2 times in quick succession
     def thread_pool_buzz(pin):
-        for i in range(0, 2):
-            GPIOconfig.pi.write(pin, 1)
-            time.sleep(0.1)
-            GPIOconfig.pi.write(pin, 0)
-            time.sleep(0.1)
+        GPIOconfig.pi.write(pin, 1)
+        time.sleep(2)
+        GPIOconfig.pi.write(pin, 0)
 
     # Turn LED green for 3 seconds
     def thread_pool_led(pin):
         GPIOconfig.pi.write(pin, 1)
-        time.sleep(3)
+        time.sleep(2)
         GPIOconfig.pi.write(pin, 0)
     
     if entrance_id == E1:
