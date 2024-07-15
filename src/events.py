@@ -370,8 +370,8 @@ def activate_led(entrance, timing):
 '''
 TODO: functions for led and buzzer behaviour when the credentials are correct/
 wrong
-Correct: Buzzer buzzes for 0.5 seconds continuously, LED turns green for 2 seconds
-Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change for LED)
+Correct: Buzzer buzzes for 0.2 seconds, LED turns green for 2 seconds
+Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change)
 
 Current issues: 
 - Buzzer and LED doesn't trigger together. The first one gets triggered, but the
@@ -380,6 +380,10 @@ Current issues:
 - LED and BUZZER GPIO is swapped
 - Triggering this overrides the output_events queue actions if there is one for
     or buzzer there
+
+NOTE: Current testing is directly writing using the actual numbers of the pins,
+not the GPIOconfig ones. BE SURE TO CHANGE BACK TO GPIOconfig ones when testing
+is done.
 '''
 def led_and_buzzer_correct_cred(entrance_id):
     '''
@@ -438,7 +442,7 @@ def led_and_buzzer_wrong_cred(entrance_id):
     
     if entrance_id == E1:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
-        thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Led)) # currently writes to E1_R1_BUZZ or E1_IN_BUZZ
+        thread_pool_executor.submit(thread_pool_buzz(4))
     elif entrance_id == E2:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
         thread_pool_executor.submit(thread_pool_buzz(11))
