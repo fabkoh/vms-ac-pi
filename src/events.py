@@ -374,7 +374,9 @@ Correct: Buzzer buzzes for 0.5 seconds continuously, LED turns green for 2 secon
 Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change for LED)
 
 Current issues: 
-- Buzzer and LED doesn't trigger together
+- Buzzer and LED doesn't trigger together. The first one gets triggered, but the
+    second one doesn't. So if the LED line is first, the LED is triggered and buzzer
+    isn't.
 - LED and BUZZER GPIO is swapped
 - Triggering this overrides the output_events queue actions if there is one for
     or buzzer there
@@ -395,7 +397,7 @@ def led_and_buzzer_correct_cred(entrance_id):
     def thread_pool_buzz(pin):
         print("BUZZ ON from correct cred")
         GPIOconfig.pi.write(pin, 1)
-        time.sleep(0.5)
+        time.sleep(0.2)
         GPIOconfig.pi.write(pin, 0)
 
     # Turn LED green for 2 seconds
