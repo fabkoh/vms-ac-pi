@@ -1,9 +1,10 @@
 import pigpio
 import json
 from threading import Lock
+import os
 
 # Assuming `path` is defined somewhere to point to your JSON configuration file.
-path = "path/to/your/config"
+path = os.path.dirname(os.path.abspath(__file__))
 config_lock = Lock()
 
 config = None
@@ -53,9 +54,9 @@ def update_config():
         E2_OUT_Led, E2_Mag, E2_Button, Gen_In_1, Gen_Out_1, Gen_In_2, Gen_Out_2, \
         Gen_In_3, Gen_Out_3
 
-    with config_lock:
-        with open(path + '/json/config.json') as f:
-            config = json.load(f)
+    f=open(path+'/json/config.json')
+    config=json.load(f)
+    f.close()
 
     GPIOpins = config["GPIOpins"]
 
