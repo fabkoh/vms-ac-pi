@@ -410,17 +410,21 @@ def led_and_buzzer_correct_cred(entrance_id):
         GPIOconfig.pi.write(pin, 1)
         time.sleep(2)
         GPIOconfig.pi.write(pin, 0)
+
+    def thread_pool_buzz_led(buzz_pin, led_pin):
+        GPIOconfig.pi.write(buzz_pin, 1)
+        GPIOconfig.pi.write(led_pin, 1)
+        time.sleep(0.2)
+        GPIOconfig.pi.write(buzz_pin, 0)
+        time.sleep(2)
+        GPIOconfig.pi.write(led_pin, 0)
     
     if entrance_id == E1:
         # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
         # thread_pool_executor.submit(thread_pool_led(GPIOconfig.E1_OUT_Led))
-        print("Before Buzzer sent")
-        thread_pool_executor.submit(thread_pool_buzz(4)) # Buzzer pin
-        # Currently not even reaching here at all
-        print("Buzzer sent")
-        print("Before LED sent")
-        thread_pool_executor.submit(thread_pool_led(17)) # LED pin
-        print("LED sent")
+        # thread_pool_executor.submit(thread_pool_buzz(4)) # Buzzer pin
+        # thread_pool_executor.submit(thread_pool_led(17)) # LED pin
+        thread_pool_executor.submit(thread_pool_buzz_led(4, 17))
 
     elif entrance_id == E2:
         thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
