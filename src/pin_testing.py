@@ -86,13 +86,40 @@ def update_config():
     E2_Mag = int(GPIOpins["E2_Mag"])
     E2_Button = int(GPIOpins["E2_Button"])
 
-    Gen_In_1 = int(GPIOpins["Gen_In_1"])
-    Gen_Out_1 = int(GPIOpins["Gen_Out_1"])
-    Gen_In_2 = int(GPIOpins["Gen_In_2"])
-    Gen_Out_2 = int(GPIOpins["Gen_Out_2"])
-    Gen_In_3 = int(GPIOpins["Gen_In_3"])
-    Gen_Out_3 = int(GPIOpins["Gen_Out_3"])
+    try:
+        Gen_In_1= int(GPIOpins["Gen_In_1"])
+        pi.set_mode(Gen_In_1, pigpio.INPUT)    
+    except:
+        pass
 
+    try:
+        Gen_Out_1= int(GPIOpins["Gen_Out_1"])
+        pi.set_mode(Gen_Out_1, pigpio.OUTPUT) 
+    except:
+        pass
+
+    try:
+        Gen_In_2= int(GPIOpins["Gen_In_2"])
+        pi.set_mode(Gen_In_2, pigpio.INPUT)    
+    except:
+        pass
+
+    try:
+        Gen_Out_2= int(GPIOpins["Gen_Out_2"])
+        pi.set_mode(Gen_Out_2, pigpio.OUTPUT) 
+    except:pass
+
+    try:
+        Gen_In_3= int(GPIOpins["Gen_In_3"])
+        pi.set_mode(Gen_In_3, pigpio.INPUT)    
+    except:pass
+
+    try:
+        Gen_Out_3= int(GPIOpins["Gen_Out_3"])
+        pi.set_mode(Gen_Out_1, pigpio.OUTPUT) 
+
+    except:
+        pass
     # initializing inputs
     input_pins = [Fire, E1_IN_D0, E1_IN_D1, E1_OUT_D0, E1_OUT_D1, E2_IN_D0, E2_IN_D1, E2_OUT_D0, E2_OUT_D1, 
                   Gen_In_1, Gen_In_2, Gen_In_3, E1_Mag, E1_Button, E2_Mag, E2_Button]
