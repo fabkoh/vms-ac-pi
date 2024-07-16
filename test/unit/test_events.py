@@ -507,4 +507,64 @@ def  test_mag_detects_rising(monkeypatch: pytest.MonkeyPatch):
     events.mag_E2_allowed_to_open = original_E2_allowed_to_open
 
 def test_mag_detects_falling(monkeypatch: pytest.MonkeyPatch):
-    pass
+    '''
+    This test tests that mag_detects_falling (callback function called when
+    GPIO detects a FALLING EDGE) correctly calls the different output functions
+    based on the scenarios of which GPIO pin called it.
+    '''
+    # Vars to check if functions were called
+    record_mag_E1 = False
+    record_mag_E2 = False
+
+    # Remembering original values for E1 and E2
+    original_E1 = events.E1
+    original_E2 = events.E2
+    original_E1_Mag = events.E1_Mag
+    original_E2_Mag = events.E2_Mag
+
+    # Setting up of mock vars for test
+    events.E1 = 1234
+    events.E2 = 5678
+    events.E1_Mag = "Mag1"
+    events.E2_Mag = "Mag2"
+    events.mag_E1_allowed_to_open = True
+    events.mag_E2_allowed_to_open = True
+
+    # Mock functions so that logs don't actually update
+    def mock_update_server_events():
+        pass
+
+    def mock_record_mag_closed(entrance):
+        nonlocal record_mag_E1, record_mag_E2
+        if entrance == 1234: # Mock ID for E1
+            record_mag_E1 = True
+        if entrance == 5678: # Mock ID for E2
+            record_mag_E2 = True
+
+    # Patching mock functions
+    monkeypatch.setattr("updateserver.update_server_events", 
+                        mock_update_server_events)
+    monkeypatch.setattr("eventsMod.record_mag_opened", 
+                        mock_record_mag_closed)
+    
+    # ------------- TEST SECTION: Mags Falling E1 ------------------------------
+    events.mag_detects_falling(gpio=events.E1_Mag, level=None, tick=None)
+
+    assert record_mag_E1 and not record_mag_E2
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    record_mag_E1 = False
+    record_mag_E2 = False
+    time.sleep(0.5) # wait for 0.5 seconds
+
+    # ------------- TEST SECTION: Mags Falling E2 ------------------------------
+    events.mag_detects_rising(gpio=events.E2_Mag, level=None, tick=None)
+
+    assert not record_mag_E1 and record_mag_E2
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    # Settings vars back to original
+    events.E1 = original_E1
+    events.E2 = original_E2
+    events.E1_Mag = original_E1_Mag
+    events.E2_Mag = original_E2_Mag
