@@ -143,12 +143,12 @@ update_config()  # initialize
 input_pins = [Fire, E1_IN_D0, E1_IN_D1, E1_OUT_D0, E1_OUT_D1, E2_IN_D0, E2_IN_D1, E2_OUT_D0, E2_OUT_D1, 
               Gen_In_1, Gen_In_2, Gen_In_3, E1_Mag, E1_Button, E2_Mag, E2_Button]
 
-for pin in input_pins:
-    pi.callback(pin, pigpio.EITHER_EDGE, callback_function)
-
+# for pin in input_pins:
+#     pi.callback(pin, pigpio.EITHER_EDGE, callback_function)
+ 
 # Keep the program running to monitor the pins
 try:
     while True:
-        pass
+        pi.write(E1_OUT_Buzz,1)
 except KeyboardInterrupt:
     pi.stop()
