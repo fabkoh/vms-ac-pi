@@ -527,8 +527,6 @@ def test_mag_detects_falling(monkeypatch: pytest.MonkeyPatch):
     events.E2 = 5678
     events.E1_Mag = "Mag1"
     events.E2_Mag = "Mag2"
-    events.mag_E1_allowed_to_open = True
-    events.mag_E2_allowed_to_open = True
 
     # Mock functions so that logs don't actually update
     def mock_update_server_events():
@@ -542,9 +540,9 @@ def test_mag_detects_falling(monkeypatch: pytest.MonkeyPatch):
             record_mag_E2 = True
 
     # Patching mock functions
-    monkeypatch.setattr("updateserver.update_server_events", 
+    monkeypatch.setattr("updateserver.update_server_events",
                         mock_update_server_events)
-    monkeypatch.setattr("eventsMod.record_mag_closed", 
+    monkeypatch.setattr("eventsMod.record_mag_closed",
                         mock_record_mag_closed)
     
     # ------------- TEST SECTION: Mags Falling E1 ------------------------------
