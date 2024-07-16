@@ -566,3 +566,81 @@ def test_mag_detects_falling(monkeypatch: pytest.MonkeyPatch):
     events.E2 = original_E2
     events.E1_Mag = original_E1_Mag
     events.E2_Mag = original_E2_Mag
+
+def test_button_detects_change(monkeypatch: pytest.MonkeyPatch):
+    '''
+    This test tests that button_detects_change (callback function called when
+    GPIO detects a FALLING EDGE) correctly calls the different output functions
+    based on the scenarios of which GPIO pin called it. (Relays)
+    '''
+    # Vars to check if functions were called
+    record_relay_1 = False
+    record_relay_2 = False
+    button_pressed = ""
+
+    # Remembering original values for E1 and E2
+    original_E1 = events.E1
+    original_E2 = events.E2
+    original_E1_Button = events.E1_Button
+    original_E2_Button = events.E2_Button
+
+    # Setting up of mock vars for test
+    events.E1 = 1234
+    events.E2 = 5678
+    events.E1_Button = "Button1"
+    events.E2_Button = "Button2"
+
+    # Mock functions so that logs don't actually update
+    def mock_update_server_events():
+        pass
+
+    def mock_trigger_relay_one(E1_TPO):
+        nonlocal record_relay_1
+        record_relay_1 = True
+    
+    def mock_trigger_relay_two(E1_TPO):
+        nonlocal record_relay_2
+        record_relay_2 = True
+    
+    def mock_record_button_pressed(entrance_id, name):
+        nonlocal button_pressed
+        if entrance_id == 1234:
+            button_pressed = "E1 button"
+        if entrance_id == 5678:
+            button_pressed = "E2 button"
+    
+    # Patching mock functions
+    monkeypatch.setattr("updateserver.update_server_events",
+                        mock_update_server_events)
+    monkeypatch.setattr("relay.trigger_relay_one",
+                        mock_trigger_relay_one)
+    monkeypatch.setattr("relay.trigger_relay_two",
+                        mock_trigger_relay_two)
+    monkeypatch.setattr("eventsMod.record_button_pressed",
+                        mock_record_button_pressed)
+    
+    # ------------- TEST SECTION: Button Pressed E1 ----------------------------
+    events.button_detects_change(gpio=events.E1_Button, level=None, tick=None)
+
+    assert (record_relay_1 and not record_relay_2 and 
+            button_pressed == "E1 button")
+    
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    record_relay_1 = False
+    record_relay_2 = False
+    button_pressed = ""
+    time.sleep(0.5) # wait for 0.5 seconds
+
+    # ------------- TEST SECTION: Button Pressed E2 ----------------------------
+    events.button_detects_change(gpio=events.E2_Button, level=None, tick=None)
+
+    assert (not record_relay_1 and record_relay_2 and
+            button_pressed == "E2 button")
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    # Settings vars back to original
+    events.E1 = original_E1
+    events.E2 = original_E2
+    events.E1_Button = original_E1_Button
+    events.E2_Button = original_E2_Button
