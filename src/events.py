@@ -374,7 +374,6 @@ Correct: Buzzer buzzes for 0.2 seconds, LED turns green for 2 seconds
 Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change)
 
 Current issues: 
-- Unable to do two thread_pool_executor.submit calls together. Unsure why.
 - Triggering this overrides the output_events queue actions if there is one for
     or buzzer there
 '''
@@ -594,7 +593,7 @@ def reader_detects_bits(bits, value, entrance):
                         "AuthenticationDevices", {}).get(entrance_direction, {})
             if entrance_details == {}:  # entrance not found, quit
                 eventsMod.record_unauth_scans(None, None, entrance_direction)
-                led_and_buzzer_wrong_cred(entrancename)
+                # led_and_buzzer_wrong_cred(entrancename)
                 return
 
             # check master password
@@ -607,7 +606,7 @@ def reader_detects_bits(bits, value, entrance):
                 logger.info("Updating Logs after Master Password used")
 
                 open_door()
-                led_and_buzzer_correct_cred(entrancename)
+                # led_and_buzzer_correct_cred(entrancename)
                 reset_cred_and_stop_timer()
                 # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
                 # updateserver.update_server_events()
@@ -633,7 +632,7 @@ def reader_detects_bits(bits, value, entrance):
                 print("auth method not allowed at this timing ")
                 eventsMod.record_unauth_scans(
                     auth_method_name, entrancename, entrance_direction)
-                led_and_buzzer_wrong_cred(entrancename)
+                # led_and_buzzer_wrong_cred(entrancename)
                 reset_cred_and_stop_timer()
                 return
 
@@ -643,7 +642,7 @@ def reader_detects_bits(bits, value, entrance):
                 print("requires more credentials")
                 eventsMod.record_unauth_scans(
                     auth_method_name, entrancename, entrance_direction)
-                led_and_buzzer_wrong_cred(entrancename)
+                # led_and_buzzer_wrong_cred(entrancename)
                 return
 
             # check if need to check if cred belongs to someone
@@ -689,7 +688,7 @@ def reader_detects_bits(bits, value, entrance):
                                 # auth scan
                                 logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
                                 open_door()
-                                led_and_buzzer_correct_cred(entrancename)
+                                # led_and_buzzer_correct_cred(entrancename)
 
                                 if "Pin" == auth_method_name:
                                     eventsMod.pin_only_used(
@@ -713,7 +712,7 @@ def reader_detects_bits(bits, value, entrance):
                             else:
                                 eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get(
                                     "Name", ""), list(access_group.keys())[0])
-                            led_and_buzzer_wrong_cred(entrancename)
+                            # led_and_buzzer_wrong_cred(entrancename)
                             reset_cred_and_stop_timer()
                             return
                 # cannot find person
@@ -724,7 +723,7 @@ def reader_detects_bits(bits, value, entrance):
                 else:
                     eventsMod.record_unauth_scans(
                         auth_method_name, entrancename, entrance_direction)
-                led_and_buzzer_wrong_cred(entrancename)
+                # led_and_buzzer_wrong_cred(entrancename)
                 reset_cred_and_stop_timer()
                 return
 
