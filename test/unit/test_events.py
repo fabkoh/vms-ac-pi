@@ -452,9 +452,12 @@ def  test_mag_detects_rising(monkeypatch: pytest.MonkeyPatch):
             record_mag_warning_E2 = True
 
     # Patching mock functions
-    monkeypatch.setattr("updateserver.update_server_events", mock_update_server_events)
-    monkeypatch.setattr("eventsMod.record_mag_opened", mock_record_mag_opened)
-    monkeypatch.setattr("eventsMod.record_mag_opened_warning", mock_record_mag_opened_warning)
+    monkeypatch.setattr("updateserver.update_server_events", 
+                        mock_update_server_events)
+    monkeypatch.setattr("eventsMod.record_mag_opened", 
+                        mock_record_mag_opened)
+    monkeypatch.setattr("eventsMod.record_mag_opened_warning", 
+                        mock_record_mag_opened_warning)
 
     # ------------- TEST SECTION: Mags Rising E1, allowed ----------------------
     events.mag_detects_rising(gpio=events.E1_Mag, level=None, tick=None)
@@ -502,3 +505,6 @@ def  test_mag_detects_rising(monkeypatch: pytest.MonkeyPatch):
     events.E2_Mag = original_E2_Mag
     events.mag_E1_allowed_to_open = original_E1_allowed_to_open
     events.mag_E2_allowed_to_open = original_E2_allowed_to_open
+
+def test_mag_detects_falling(monkeypatch: pytest.MonkeyPatch):
+    pass
