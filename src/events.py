@@ -397,20 +397,7 @@ def led_and_buzzer_correct_cred(entrance_id):
     '''
     from executor import thread_pool_executor
 
-    # Buzz for 0.5 seconds
-    def thread_pool_buzz(pin):
-        print("BUZZ ON from correct cred")
-        GPIOconfig.pi.write(pin, 1)
-        time.sleep(0.2)
-        GPIOconfig.pi.write(pin, 0)
-
-    # Turn LED green for 2 seconds
-    def thread_pool_led(pin):
-        print("LED ON from correct cred")
-        GPIOconfig.pi.write(pin, 1)
-        time.sleep(2)
-        GPIOconfig.pi.write(pin, 0)
-
+    # Buzz for 0.2 seconds, light up LED for 2.2 seconds
     def thread_pool_buzz_led(buzz_pin, led_pin):
         GPIOconfig.pi.write(buzz_pin, 1)
         GPIOconfig.pi.write(led_pin, 1)
@@ -420,15 +407,13 @@ def led_and_buzzer_correct_cred(entrance_id):
         GPIOconfig.pi.write(led_pin, 0)
     
     if entrance_id == E1:
-        # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
-        # thread_pool_executor.submit(thread_pool_led(GPIOconfig.E1_OUT_Led))
-        # thread_pool_executor.submit(thread_pool_buzz(4)) # Buzzer pin
-        # thread_pool_executor.submit(thread_pool_led(17)) # LED pin
-        thread_pool_executor.submit(thread_pool_buzz_led(4, 17))
+        # thread_pool_executor.submit(
+        #     thread_pool_buzz_led(GPIOconfig.E1_OUT_Buzz, GPIOconfig.E1_OUT_Led))
+        thread_pool_executor.submit(thread_pool_buzz_led(4, 17)) # Buzz+LED pin
 
     elif entrance_id == E2:
-        thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
-        thread_pool_executor.submit(thread_pool_led(GPIOconfig.E2_OUT_Led))
+        thread_pool_executor.submit(
+            thread_pool_buzz_led(GPIOconfig.E2_OUT_Buzz, GPIOconfig.E2_OUT_Led))
 
 def led_and_buzzer_wrong_cred(entrance_id):
     '''
