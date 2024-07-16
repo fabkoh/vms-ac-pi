@@ -389,7 +389,7 @@ def led_and_buzzer_correct_cred(entrance_id):
     '''
     Buzzes and lights up LED to show that the correct credentials were entered,
     when opening the door. Submits the thread_pool_executor to run async.
-    Currently only triggers the OUT Buzzer and LED, may need to include the IN
+    Currently only triggers the IN Buzzer and LED, may need to include the OUT
     one as well.
 
         Parameters:
@@ -409,7 +409,6 @@ def led_and_buzzer_correct_cred(entrance_id):
     if entrance_id == E1:
         thread_pool_executor.submit(
             thread_pool_buzz_led(GPIOconfig.E1_IN_Buzz, GPIOconfig.E1_IN_Led))
-        # thread_pool_executor.submit(thread_pool_buzz_led(4, 17)) # Buzz+LED pin
 
     elif entrance_id == E2:
         thread_pool_executor.submit(
@@ -419,7 +418,7 @@ def led_and_buzzer_wrong_cred(entrance_id):
     '''
     Buzzes to show that the wrong credentials were entered, when opening the
     door. Submits the thread_pool_executor to run async.
-    Currently only triggers the OUT Buzzer, may need to include the IN one as
+    Currently only triggers the IN Buzzer, may need to include the OUT one as
     well.
 
         Parameters:
@@ -437,10 +436,8 @@ def led_and_buzzer_wrong_cred(entrance_id):
     
     if entrance_id == E1:
         thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_IN_Buzz))
-        # thread_pool_executor.submit(thread_pool_buzz(4))
     elif entrance_id == E2:
         thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_IN_Buzz))
-        # thread_pool_executor.submit(thread_pool_buzz(11))
 
 def reader_detects_bits(bits, value, entrance):
 
