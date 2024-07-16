@@ -149,6 +149,6 @@ input_pins = [Fire, E1_IN_D0, E1_IN_D1, E1_OUT_D0, E1_OUT_D1, E2_IN_D0, E2_IN_D1
 # Keep the program running to monitor the pins
 try:
     while True:
-        pi.write(18,0)
+        pi.write(23,1)
 except KeyboardInterrupt:
     pi.stop()
