@@ -544,7 +544,7 @@ def test_mag_detects_falling(monkeypatch: pytest.MonkeyPatch):
     # Patching mock functions
     monkeypatch.setattr("updateserver.update_server_events", 
                         mock_update_server_events)
-    monkeypatch.setattr("eventsMod.record_mag_opened", 
+    monkeypatch.setattr("eventsMod.record_mag_closed", 
                         mock_record_mag_closed)
     
     # ------------- TEST SECTION: Mags Falling E1 ------------------------------
