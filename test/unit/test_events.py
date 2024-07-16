@@ -556,7 +556,7 @@ def test_mag_detects_falling(monkeypatch: pytest.MonkeyPatch):
     time.sleep(0.5) # wait for 0.5 seconds
 
     # ------------- TEST SECTION: Mags Falling E2 ------------------------------
-    events.mag_detects_rising(gpio=events.E2_Mag, level=None, tick=None)
+    events.mag_detects_falling(gpio=events.E2_Mag, level=None, tick=None)
 
     assert not record_mag_E1 and record_mag_E2
     # ------------- END OF TEST SECTION ----------------------------------------
