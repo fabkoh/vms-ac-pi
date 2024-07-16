@@ -374,16 +374,9 @@ Correct: Buzzer buzzes for 0.2 seconds, LED turns green for 2 seconds
 Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change)
 
 Current issues: 
-- Buzzer and LED doesn't trigger together. The first one gets triggered, but the
-    second one doesn't. So if the LED line is first, the LED is triggered and buzzer
-    isn't.
-- LED and BUZZER GPIO is swapped
+- Unable to do two thread_pool_executor.submit calls together. Unsure why.
 - Triggering this overrides the output_events queue actions if there is one for
     or buzzer there
-
-NOTE: Current testing is directly writing using the actual numbers of the pins,
-not the GPIOconfig ones. BE SURE TO CHANGE BACK TO GPIOconfig ones when testing
-is done.
 '''
 def led_and_buzzer_correct_cred(entrance_id):
     '''
@@ -408,14 +401,14 @@ def led_and_buzzer_correct_cred(entrance_id):
     
     if entrance_id == E1:
         thread_pool_executor.submit(
-            thread_pool_buzz_led(GPIOconfig.E1_OUT_Buzz, GPIOconfig.E1_OUT_Led))
+            thread_pool_buzz_led, GPIOconfig.E1_OUT_Buzz, GPIOconfig.E1_OUT_Led)
         thread_pool_executor.submit(
-            thread_pool_buzz_led(GPIOconfig.E1_IN_Buzz, GPIOconfig.E1_IN_Led))
+            thread_pool_buzz_led, GPIOconfig.E1_IN_Buzz, GPIOconfig.E1_IN_Led)
     elif entrance_id == E2:
         thread_pool_executor.submit(
-            thread_pool_buzz_led(GPIOconfig.E2_OUT_Buzz, GPIOconfig.E2_OUT_Led))
+            thread_pool_buzz_led, GPIOconfig.E2_OUT_Buzz, GPIOconfig.E2_OUT_Led)
         thread_pool_executor.submit(
-            thread_pool_buzz_led(GPIOconfig.E2_IN_Buzz, GPIOconfig.E2_IN_Led))
+            thread_pool_buzz_led, GPIOconfig.E2_IN_Buzz, GPIOconfig.E2_IN_Led)
 
 def led_and_buzzer_wrong_cred(entrance_id):
     '''
