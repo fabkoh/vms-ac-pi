@@ -407,13 +407,13 @@ def led_and_buzzer_correct_cred(entrance_id):
         GPIOconfig.pi.write(led_pin, 0)
     
     if entrance_id == E1:
-        # thread_pool_executor.submit(
-        #     thread_pool_buzz_led(GPIOconfig.E1_OUT_Buzz, GPIOconfig.E1_OUT_Led))
-        thread_pool_executor.submit(thread_pool_buzz_led(4, 17)) # Buzz+LED pin
+        thread_pool_executor.submit(
+            thread_pool_buzz_led(GPIOconfig.E1_IN_Buzz, GPIOconfig.E1_IN_Led))
+        # thread_pool_executor.submit(thread_pool_buzz_led(4, 17)) # Buzz+LED pin
 
     elif entrance_id == E2:
         thread_pool_executor.submit(
-            thread_pool_buzz_led(GPIOconfig.E2_OUT_Buzz, GPIOconfig.E2_OUT_Led))
+            thread_pool_buzz_led(GPIOconfig.E2_IN_Buzz, GPIOconfig.E2_IN_Led))
 
 def led_and_buzzer_wrong_cred(entrance_id):
     '''
@@ -436,11 +436,11 @@ def led_and_buzzer_wrong_cred(entrance_id):
             time.sleep(0.1)
     
     if entrance_id == E1:
-        # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_OUT_Buzz))
-        thread_pool_executor.submit(thread_pool_buzz(4))
+        thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E1_IN_Buzz))
+        # thread_pool_executor.submit(thread_pool_buzz(4))
     elif entrance_id == E2:
-        # thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_OUT_Buzz))
-        thread_pool_executor.submit(thread_pool_buzz(11))
+        thread_pool_executor.submit(thread_pool_buzz(GPIOconfig.E2_IN_Buzz))
+        # thread_pool_executor.submit(thread_pool_buzz(11))
 
 def reader_detects_bits(bits, value, entrance):
 
@@ -968,7 +968,6 @@ def button_detects_change(gpio, level, tick):
         logger.info(f"{E1} push button1 is pressed at " + str(datetime.now()))
         mag_E1_allowed_to_open = True
         relay.trigger_relay_one(E1_thirdPartyOption)
-        GPIOconfig.test_buzzer()
         eventsMod.record_button_pressed(E1, "Security Guard Button")
 
     elif gpio == E2_Button:
