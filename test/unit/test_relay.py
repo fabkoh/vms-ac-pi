@@ -45,20 +45,15 @@ def mock_relaySetHighLow(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(relay, "setRelayPinHigh", mock_setRelayPinHigh)
     monkeypatch.setattr(relay, "setRelayPinLow", mock_setRelayPinLow)
 
-@pytest.fixture
-def reset_tracking_variables():
-    global relayPinNumber, relayPinSetting
-    relayPinNumber = 0
-    relayPinSetting = []
-
-def test_setRelay(mock_relaySetHighLow, reset_tracking_variables):
+def test_setRelay(mock_relaySetHighLow):
     # ------------- TEST SECTION: Set Relay High -------------------------------
     relay.setRelay(5, "High")
     assert relayPinSetting == ["High"]
     assert relayPinNumber == 5
     # ------------- END OF TEST SECTION ----------------------------------------
 
-    reset_tracking_variables
+    relayPinNumber = 0
+    relayPinSetting = []
 
     # ------------- TEST SECTION: Set Relay Low --------------------------------
     relay.setRelay(10, "Low")
@@ -66,11 +61,12 @@ def test_setRelay(mock_relaySetHighLow, reset_tracking_variables):
     assert relayPinNumber == 10
     # ------------- END OF TEST SECTION ----------------------------------------
 
-def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup, reset_tracking_variables):
+def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup):
     # ------------- TEST SECTION: Toggle Relay 1, 2 seconds --------------------
     relay.toggleRelay1(5, 2000, 1000, 1)
     assert relayPinSetting == ["High", "Low"]
     assert relayPinNumber == 5
     # ------------- END OF TEST SECTION ----------------------------------------
 
-    reset_tracking_variables
+    relayPinNumber = 0
+    relayPinSetting = []
