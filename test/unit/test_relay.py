@@ -84,3 +84,24 @@ def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup):
 
     relayPinNumber = 0
     relayPinSetting = []
+
+def test_toggleRelayGen(mock_relaySetHighLow, mock_setup_cleanup):
+    global relayPinNumber, relayPinSetting
+    # ------------- TEST SECTION: Toggle Relay General, Pin 20 Gen 1------------
+    relay.toggleRelayGen(20, 2000, 1)
+    assert relayPinSetting == ["High", "Low"]
+    assert relayPinNumber == 20
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Toggle Relay General, Pin 25 Gen 2------------
+    relay.toggleRelayGen(25, 2000, 2)
+    relay.toggleRelayGen(25, 2000, 2)
+    assert relayPinSetting == ["High", "Low"]
+    assert relayPinNumber == 25
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
