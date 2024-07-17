@@ -84,14 +84,14 @@ def test_setRelay(mock_relaySetHighLow):
 def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup):
     '''
     This functions tests that toggleRelay1 properly toggles the relay pin high,
-    and low, depending on the toggle count.
+    then to low, with the correct pin
     '''
     global relayPinNumber, relayPinSetting
     relayPinNumber = 0
     relayPinSetting = []
 
     # ------------- TEST SECTION: Toggle Relay 1, 2 seconds --------------------
-    relay.toggleRelay1(5, 2000, 1000, 1)
+    relay.toggleRelay1(5, 2000, 1000)
     assert relayPinSetting == ["High", "Low"]
     assert relayPinNumber == 5
     # ------------- END OF TEST SECTION ----------------------------------------
@@ -100,8 +100,8 @@ def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup):
     relayPinSetting = []
 
     # ------------- TEST SECTION: Toggle Relay 1, 1 second, twice --------------
-    relay.toggleRelay1(10, 1000, 1000, 2)
-    assert relayPinSetting == ["High", "Low", "High", "Low"]
+    relay.toggleRelay1(10, 1000, 1000)
+    assert relayPinSetting == ["High", "Low"]
     assert relayPinNumber == 10
     # ------------- END OF TEST SECTION ----------------------------------------
 
