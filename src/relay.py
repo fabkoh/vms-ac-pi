@@ -135,7 +135,7 @@ def setRelay(relayPin, activateLevel):
 # NOTE: toggleRelay1 and toggleRelay2 are essentially doing the exact same thing
 #and can be combined into a single function. The only difference is that the
 #logging is different.
-def toggleRelay1(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+def toggleRelay1(relayPin, activateMilliSeconds, deActivateMilliSeconds):
     '''
     This function toggles the relay pin on and off based on the 
     activateMilliSeconds for the number of toggleCount times.
@@ -154,14 +154,10 @@ def toggleRelay1(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleC
         setGpioMode()
         setupRelayPin(relayPin)
 
-        # Unsure about logic here, it is supposed to activate and deactivate toggleCount times? If so, seems like the
-        # code from line 141 should be in the for loop?
-        for i in range(toggleCount):
-            logger.info("toggleRelay1 Activated")
-            setRelay(relayPin, 'High')
-
-            E1_opened = True
-            sleep(activateMilliSeconds / 1000)
+        logger.info("toggleRelay1 Activated")
+        setRelay(relayPin, 'High')
+        E1_opened = True
+        sleep(activateMilliSeconds / 1000)
 
         if E1_perm_opened:
             pass
@@ -174,7 +170,7 @@ def toggleRelay1(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleC
     return
 
 
-def toggleRelay2(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+def toggleRelay2(relayPin, activateMilliSeconds, deActivateMilliSeconds):
     '''
     This function toggles the relay pin on and off based on the
     activateMilliSeconds for the number of toggleCount times.
@@ -192,12 +188,11 @@ def toggleRelay2(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleC
     if not E2_opened:
         setGpioMode()
         setupRelayPin(relayPin)
-        for i in range(toggleCount):
-            logger.info("toggleRelay2 Activated")
-            setRelay(relayPin, 'High')
 
-            E2_opened = True
-            sleep(activateMilliSeconds / 1000)
+        logger.info("toggleRelay2 Activated")
+        setRelay(relayPin, 'High')
+        E2_opened = True
+        sleep(activateMilliSeconds / 1000)
 
         if E2_perm_opened:
             pass
@@ -305,7 +300,7 @@ def trigger_relay_one(thirdPartyOption=None):
     try:
         setGpioMode()
         setupRelayPin(outputPin)
-        thread_pool_executor.submit(toggleRelay1, outputPin, 5000, 1000, 1)
+        thread_pool_executor.submit(toggleRelay1, outputPin, 5000, 1000)
         cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
@@ -338,7 +333,7 @@ def trigger_relay_two(thirdPartyOption=None):
     try:
         setGpioMode()
         setupRelayPin(outputPin)
-        thread_pool_executor.submit(toggleRelay2, outputPin, 5000, 1000, 1)
+        thread_pool_executor.submit(toggleRelay2, outputPin, 5000, 1000)
         cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
