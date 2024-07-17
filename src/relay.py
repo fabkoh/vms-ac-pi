@@ -91,11 +91,25 @@ def setupRelayPin(relayPin):
 
 
 def setRelayPinHigh(relayPin):
+    '''
+    This function sets the relay pin to high, meaning it will be activated
+    in real life.
+
+    Parameters:
+        relayPin (int): The GPIO pin number of the relay
+    '''
     GPIO.output(relayPin, GPIO.HIGH)
     return
 
 
 def setRelayPinLow(relayPin):
+    '''
+    This function sets the relay pin to low, meaning it will be deactivated
+    in real life.
+
+    Parameters:
+        relayPin (int): The GPIO pin number of the relay
+    '''
     GPIO.output(relayPin, GPIO.LOW)
     return
 
@@ -117,12 +131,26 @@ def setRelay(relayPin, activateLevel):
         setRelayPinLow(relayPin)
     return
 
+
+# NOTE: toggleRelay1 and toggleRelay2 are essentially doing the exact same thing
+#and can be combined into a single function. The only difference is that the
+#logging is different.
 def toggleRelay1(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
-    
+    '''
+    This function toggles the relay pin on and off based on the 
+    activateMilliSeconds for the number of toggleCount times.
+
+    Parameters:
+        relayPin (int): The GPIO pin number of the relay
+        activateMilliSeconds (int): The number of milliseconds to activate the
+            relay pin
+        deActivateMilliSeconds (int): The number of milliseconds to deactivate
+            the relay pin
+        toggleCount (int): The number of times to toggle
+    '''
     global E1_opened
     logger.info("Trigger toggleRelay 1, E1_opened: %s", E1_opened)
     if not E1_opened:
-        # print timing before gpio set up
         setGpioMode()
         setupRelayPin(relayPin)
 
@@ -134,7 +162,7 @@ def toggleRelay1(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleC
 
             E1_opened = True
             sleep(activateMilliSeconds / 1000)
-            # print(E1_perm_opened)
+
         if E1_perm_opened:
             pass
         else:
@@ -147,30 +175,52 @@ def toggleRelay1(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleC
 
 
 def toggleRelay2(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+    '''
+    This function toggles the relay pin on and off based on the
+    activateMilliSeconds for the number of toggleCount times.
+
+    Parameters:
+        relayPin (int): The GPIO pin number of the relay
+        activateMilliSeconds (int): The number of milliseconds to activate the
+            relay pin
+        deActivateMilliSeconds (int): The number of milliseconds to deactivate
+            the relay pin
+        toggleCount (int): The number of times to toggle
+    '''
     global E2_opened
     logger.info("Trigger toggleRelay 2, E2_opened: %s", E2_opened)
     if not E2_opened:
         setGpioMode()
         setupRelayPin(relayPin)
         for i in range(toggleCount):
+            logger.info("toggleRelay2 Activated")
             setRelay(relayPin, 'High')
 
             E2_opened = True
             sleep(activateMilliSeconds / 1000)
-            # print(E1_perm_opened)
+
         if E2_perm_opened:
             pass
         else:
+            logger.info("toggleRelay2 Deactivated")
             E2_opened = False
             setRelay(relayPin, 'Low')
             sleep(deActivateMilliSeconds / 1000)
 
     return
 
-# Events Management: Output actions timer for GENOUT_1/2/3
-
 
 def toggleRelayGen(relayPin, activateMilliSeconds, GenNo):
+    '''
+    This function toggles the relay pin on and off based on the
+    activateMilliSeconds, only once.
+
+    Parameters:
+        relayPin (int): The GPIO pin number of the relay
+        activateMilliSeconds (int): The number of milliseconds to activate the
+            relay pin
+        GenNo (int): The number for the general pin being toggled
+    '''
     global GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN, E1_opened, E2_opened
     setRelay(relayPin, 'High')
     if (GenNo == 1):
@@ -230,12 +280,24 @@ def toggleRelayGen(relayPin, activateMilliSeconds, GenNo):
 
 
 def trigger_relay_one(thirdPartyOption=None):
+    '''
+    This function triggers relay 1, to unlock or do other actions depending on
+    whether the thirdPartyOption is set. If the thirdPartyOption is set, the
+    outputPin is set to the corresponding GPIO pin number, else it will be
+    default Relay_1.
+
+    Parameters:
+        thirdPartyOption (str): The third party option to set the outputPin to
+        (optional)
+    '''
     outputPin = Relay_1
 
     if thirdPartyOption == "GEN_OUT_1":
         outputPin = GEN_OUT_1
+
     if thirdPartyOption == "GEN_OUT_2":
         outputPin = GEN_OUT_2
+
     if thirdPartyOption == "GEN_OUT_3":
         outputPin = GEN_OUT_3
 
@@ -251,12 +313,24 @@ def trigger_relay_one(thirdPartyOption=None):
 
 
 def trigger_relay_two(thirdPartyOption=None):
+    '''
+    This function triggers relay 2, to unlock or do other actions depending on
+    whether the thirdPartyOption is set. If the thirdPartyOption is set, the
+    outputPin is set to the corresponding GPIO pin number, else it will be
+    default Relay_2.
+
+    Parameters:
+        thirdPartyOption (str): The third party option to set the outputPin to
+        (optional)
+    '''
     outputPin = Relay_2
 
     if thirdPartyOption == "GEN_OUT_1":
         outputPin = GEN_OUT_1
+
     if thirdPartyOption == "GEN_OUT_2":
         outputPin = GEN_OUT_2
+
     if thirdPartyOption == "GEN_OUT_3":
         outputPin = GEN_OUT_3
 
@@ -302,13 +376,11 @@ def lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
             E1_perm_opened = False
             E1_previous = None
             if (not E1_opened):
-                # print("trying to lock")
                 setGpioMode()
                 setupRelayPin(outputPin)
                 setRelay(outputPin, 'Low')
         except RuntimeError:
             print("Entrance is still closed")
-    # print("test")
     return
 
 def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
@@ -317,15 +389,12 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
 
     if thirdPartyOption == "GEN_OUT_1":
         outputPin = GEN_OUT_1
-        # print(thirdPartyOption,outputPin)
 
     if thirdPartyOption == "GEN_OUT_2":
         outputPin = GEN_OUT_2
-        # print(thirdPartyOption,outputPin)
 
     if thirdPartyOption == "GEN_OUT_3":
         outputPin = GEN_OUT_3
-        # print(thirdPartyOption,outputPin)
 
     global E2_perm_opened
     global E2_previous
@@ -348,13 +417,11 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
             E2_perm_opened = False
             E2_previous = None
             if (not E2_opened):
-                # print("trying to lock")
                 setGpioMode()
                 setupRelayPin(outputPin)
                 setRelay(outputPin, 'Low')
         except RuntimeError:
             print("Entrance is still closed")
-    # print("test")
     return
 
 
@@ -367,15 +434,12 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
 
     if GEN_OUT_PIN == "GEN_OUT_1":
         outputPin = GEN_OUT_1
-        # print(GEN_OUT_PIN,outputPin)
 
     if GEN_OUT_PIN == "GEN_OUT_2":
         outputPin = GEN_OUT_2
-        # print(GEN_OUT_PIN,outputPin)
 
     if GEN_OUT_PIN == "GEN_OUT_3":
         outputPin = GEN_OUT_3
-        # print(GEN_OUT_PIN,outputPin)
 
     setGpioMode()
     setupRelayPin(outputPin)
@@ -393,7 +457,6 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
 
 @multitasking.task
 def unlock_entrance_one():
-
     setGpioMode()
     setupRelayPin(Relay_1)
 
@@ -408,7 +471,6 @@ def unlock_entrance_one():
 
 @multitasking.task
 def lock_entrance_one():
-
     setGpioMode()
     setupRelayPin(Relay_1)
 
@@ -423,7 +485,6 @@ def lock_entrance_one():
 
 @multitasking.task
 def unlock_entrance_two():
-
     setGpioMode()
     setupRelayPin(Relay_2)
 
@@ -438,7 +499,6 @@ def unlock_entrance_two():
 
 @multitasking.task
 def lock_entrance_two():
-
     setGpioMode()
     setupRelayPin(Relay_2)
 
