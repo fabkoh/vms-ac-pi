@@ -75,3 +75,12 @@ def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup):
 
     relayPinNumber = 0
     relayPinSetting = []
+
+    # ------------- TEST SECTION: Toggle Relay 1, 1 second, twice --------------
+    relay.toggleRelay1(10, 1000, 1000, 2)
+    assert relayPinSetting == ["High", "Low", "High", "Low"]
+    assert relayPinNumber == 10
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
