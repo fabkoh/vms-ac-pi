@@ -237,8 +237,8 @@ def toggleRelayGen(relayPin, activateMilliSeconds, GenNo):
         GEN_2_OPEN = False
     elif (GenNo == 3):
         GEN_3_OPEN = False
-    while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN or E1_opened or E2_opened):
-        sleep(1)
+    # while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN or E1_opened or E2_opened):
+    #     sleep(1)
     return
 # *** Tests ***
 
