@@ -230,7 +230,7 @@ def toggleRelayGen(relayPin, activateMilliSeconds, GenNo):
         GEN_2_OPEN = True
     elif (GenNo == 3):
         GEN_3_OPEN = True
-    sleep(activateMilliSeconds)
+    sleep(activateMilliSeconds / 1000)
     setRelay(relayPin, 'Low')
     print("Relaygen set to low")
     if (GenNo == 1):
