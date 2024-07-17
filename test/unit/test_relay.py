@@ -305,3 +305,44 @@ def test_trigger_relay_two(mock_relaySetHighLow, mock_setup_cleanup):
     relay.GEN_OUT_1 = original_GEN_OUT_1
     relay.GEN_OUT_2 = original_GEN_OUT_2
     relay.GEN_OUT_3 = original_GEN_OUT_3
+
+def test_lock_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
+    '''
+    This function tests that lock_unlock_entrance_one is able to lock and unlock
+    the default entrance one relay pin, or a given third party option, properly.
+    '''
+    global relayPinNumber, relayPinSetting
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # To remember original value to set back later
+    original_Relay_1 = relay.Relay_1
+    original_GEN_OUT_1 = relay.GEN_OUT_1
+    original_GEN_OUT_2 = relay.GEN_OUT_2
+    original_GEN_OUT_3 = relay.GEN_OUT_3
+
+    # setting Relay_1 to testing value
+    relay.Relay_1 = 51
+    relay.GEN_OUT_1 = 52
+    relay.GEN_OUT_2 = 53
+    relay.GEN_OUT_3 = 54
+
+    # ------------- TEST SECTION: Unlock Entrance 1, no TPO --------------------
+    relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
+
+    assert relayPinSetting == ["High"]
+    assert relayPinNumber == 51
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Unlock Entrance 1 while unlocked -------------
+    with pytest.raises(RuntimeError):
+        relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
+
+    # Setting back original functions
+    relay.Relay_1 = original_Relay_1
+    relay.GEN_OUT_1 = original_GEN_OUT_1
+    relay.GEN_OUT_2 = original_GEN_OUT_2
+    relay.GEN_OUT_3 = original_GEN_OUT_3
