@@ -125,7 +125,7 @@ def setRelay(relayPin, activateLevel):
         setRelayPinLow(relayPin)
     return
 
-def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+def toggleRelay1(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     
     global E1_opened
     logger.info("Trigger toggleRelay 1, E1_opened: %s", E1_opened)
@@ -138,7 +138,8 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         # code from line 141 should be in the for loop?
         for i in range(toggleCount):
             logger.info("toggleRelay1 Activated")
-            activateRelay(relayPin, activateLevel)
+            # activateRelay(relayPin, activateLevel)
+            setRelay(relayPin, 'High')
 
             E1_opened = True
             sleep(activateMilliSeconds / 1000)
@@ -148,20 +149,22 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         else:
             logger.info("toggleRelay1 Deactivated")
             E1_opened = False
-            deActivateRelay(relayPin, activateLevel)
+            # deActivateRelay(relayPin, activateLevel)
+            setRelay(relayPin, 'Low')
             sleep(deActivateMilliSeconds / 1000)
 
     return
 
 
-def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+def toggleRelay2(relayPin, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     global E2_opened
     logger.info("Trigger toggleRelay 2, E2_opened: %s", E2_opened)
     if not E2_opened:
         setGpioMode()
         setupRelayPin(relayPin)
         for i in range(toggleCount):
-            activateRelay(relayPin, activateLevel)
+            # activateRelay(relayPin, activateLevel)
+            setRelay(relayPin, 'High')
 
             E2_opened = True
             sleep(activateMilliSeconds / 1000)
@@ -170,7 +173,8 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
             pass
         else:
             E2_opened = False
-            deActivateRelay(relayPin, activateLevel)
+            # deActivateRelay(relayPin, activateLevel)
+            setRelay(relayPin, 'Low')
             sleep(deActivateMilliSeconds / 1000)
 
     return
@@ -178,9 +182,10 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 # Events Management: Output actions timer for GENOUT_1/2/3
 
 
-def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
+def toggleRelayGen(relayPin, activateMilliSeconds, GenNo):
     global GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN, E1_opened, E2_opened
-    activateRelay(relayPin, activateLevel)
+    # activateRelay(relayPin, activateLevel)
+    setRelay(relayPin, 'High')
     if (GenNo == 1):
         GEN_1_OPEN = True
     elif (GenNo == 2):
@@ -188,7 +193,8 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
     elif (GenNo == 3):
         GEN_3_OPEN = True
     sleep(activateMilliSeconds)
-    deActivateRelay(relayPin, activateLevel)
+    # deActivateRelay(relayPin, activateLevel)
+    setRelay(relayPin, 'Low')
     if (GenNo == 1):
         GEN_1_OPEN = False
     elif (GenNo == 2):
@@ -259,7 +265,7 @@ def trigger_relay_one(thirdPartyOption=None):
         print("opening")
         logger.info("Before toggleRelay1")
         # toggleRelay1(outputPin, 'High', 5000, 1000, 1)
-        thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
+        thread_pool_executor.submit(toggleRelay1, outputPin, 5000, 1000, 1)
 
         # cleanupGpio()
     except RuntimeError:
@@ -284,9 +290,10 @@ def trigger_relay_two(thirdPartyOption=None):
     try:
         setGpioMode()
         setupRelayPin(outputPin)
-        toggleRelay2(relayPin=outputPin, activateLevel='High',
-                     activateMilliSeconds=5000, deActivateMilliSeconds=1000,
-                     toggleCount=1)
+        # toggleRelay2(relayPin=outputPin, activateLevel='High',
+        #              activateMilliSeconds=5000, deActivateMilliSeconds=1000,
+        #              toggleCount=1)
+        thread_pool_executor.submit(toggleRelay2, outputPin, 5000, 1000, 1)
         cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
@@ -410,9 +417,10 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
 
     # print(f" {GEN_OUT_PIN}  unlocked")
     try:
-        toggleRelayGen(relayPin=outputPin, activateLevel='High',
-                       activateMilliSeconds=timer, GenNo=GenNo
-                       )
+        # toggleRelayGen(relayPin=outputPin, activateLevel='High',
+        #                activateMilliSeconds=timer, GenNo=GenNo
+        #                )
+        thread_pool_executor.submit(toggleRelayGen, outputPin, timer, GenNo)
         print(f"finish open_GEN_OUT {outputPin}")
         cleanupGpio()
     except RuntimeError:
