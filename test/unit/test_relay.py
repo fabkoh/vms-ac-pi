@@ -1,6 +1,7 @@
 import os
 import sys
 import pytest
+import time
 
 '''
 This part is needed to be able to import the files from src for testing
@@ -13,6 +14,21 @@ from src import relay
 
 relayPinNumber = 0
 relayPinSetting = "" # either "High" or "Low"
+
+@pytest.fixture
+def mock_setup_cleanup(monkeypatch: pytest.MonkeyPatch):
+    def mock_setGpioMode():
+        pass
+    
+    def mock_setupRelayPin(relayPin):
+        pass
+
+    def mock_cleanupGpio():
+        pass
+
+    monkeypatch.setattr(relay, "setGpioMode", mock_setGpioMode)
+    monkeypatch.setattr(relay, "setupRelayPin", mock_setupRelayPin)
+    monkeypatch.setattr(relay, "cleanupGpio", mock_cleanupGpio)
 
 @pytest.fixture
 def mock_relaySetHighLow(monkeypatch: pytest.MonkeyPatch):
@@ -40,4 +56,14 @@ def test_setRelay(mock_relaySetHighLow):
     relay.setRelay(10, "Low")
     assert relayPinSetting == "Low"
     assert relayPinNumber == 10
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup):
+    # ------------- TEST SECTION: Toggle Relay 1, 2 seconds --------------------
+    relay.toggleRelay1(5, 2000, 1000, 1)
+    assert relayPinSetting == "High"
+    assert relayPinNumber == 5
+    time.sleep(2.5)
+    assert relayPinSetting == "Low"
+    assert relayPinNumber == 5
     # ------------- END OF TEST SECTION ----------------------------------------
