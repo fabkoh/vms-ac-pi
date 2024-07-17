@@ -12,7 +12,7 @@ sys.path.insert(0, SRC_DIR)
 from src import relay
 
 relayPinNumber = 0
-relayPinSetting = ""
+relayPinSetting = "" # either "High" or "Low"
 
 @pytest.fixture
 def mock_relaySetHighLow(monkeypatch: pytest.MonkeyPatch):
@@ -30,7 +30,14 @@ def mock_relaySetHighLow(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(relay, "setRelayPinLow", mock_setRelayPinLow)
 
 def test_setRelay(mock_relaySetHighLow):
+    # ------------- TEST SECTION: Set Relay High -------------------------------
     relay.setRelay(5, "High")
     assert relayPinSetting == "High"
     assert relayPinNumber == 5
+    # ------------- END OF TEST SECTION ----------------------------------------
 
+    # ------------- TEST SECTION: Set Relay Low --------------------------------
+    relay.setRelay(10, "Low")
+    assert relayPinSetting == "Low"
+    assert relayPinNumber == 10
+    # ------------- END OF TEST SECTION ----------------------------------------
