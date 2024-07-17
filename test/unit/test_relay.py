@@ -18,19 +18,19 @@ relayPinSetting = ""
 def mock_relaySetHighLow(monkeypatch: pytest.MonkeyPatch):
     def mock_setRelayPinHigh(relayPin):
         global relayPinSetting, relayPinNumber
-        relayPinSetting = "HIGH"
+        relayPinSetting = "High"
         relayPinNumber = relayPin
 
     def mock_setRelayPinLow(relayPin):
         global relayPinSetting, relayPinNumber
-        relayPinSetting = "LOW"
+        relayPinSetting = "Low"
         relayPinNumber = relayPin
 
     monkeypatch.setattr(relay, "setRelayPinHigh", mock_setRelayPinHigh)
     monkeypatch.setattr(relay, "setRelayPinLow", mock_setRelayPinLow)
 
 def test_setRelay(mock_relaySetHighLow):
-    relay.setRelay(5, "HIGH")
-    assert relayPinSetting == "HIGH"
+    relay.setRelay(5, "High")
+    assert relayPinSetting == "High"
     assert relayPinNumber == 5
 
