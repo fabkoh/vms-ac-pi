@@ -207,6 +207,27 @@ def test_trigger_relay_one(mock_relaySetHighLow, mock_setup_cleanup):
     relayPinNumber = 0
     relayPinSetting = []
 
+    # ------------- TEST SECTION: Trigger Relay 1, TPO Gen 2 -------------------
+    relay.trigger_relay_one("GEN_OUT_2")
+
+    time.sleep(10) # To allow threadpoolexecutor to finish task
+
+    assert relayPinSetting == ["High", "Low"]
+    assert relayPinNumber == 53
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Trigger Relay 1, TPO Gen 3 -------------------
+    relay.trigger_relay_one("GEN_OUT_3")
+
+    time.sleep(10) # To allow threadpoolexecutor to finish task
+
+    assert relayPinSetting == ["High", "Low"]
+    assert relayPinNumber == 54
+    # ------------- END OF TEST SECTION ----------------------------------------
+
     # Setting back original functions
     relay.Relay_1 = original_Relay_1
     relay.GEN_OUT_1 = original_GEN_OUT_1
