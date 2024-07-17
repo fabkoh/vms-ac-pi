@@ -345,6 +345,16 @@ def trigger_relay_two(thirdPartyOption=None):
     return
 
 def lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
+    '''
+    This function locks or unlocks entrance one based on the unlock parameter.
+    There is also a thirdPartyOption parameter that can be set to use a TPO
+    instead of the door. 
+
+    Parameters:
+        thirdPartyOption (str): The third party option to set the outputPin to
+        (optional)
+        unlock (bool): Whether to unlock or lock the entrance
+    '''
     outputPin = Relay_1
     if thirdPartyOption == "GEN_OUT_1":
         outputPin = GEN_OUT_1
@@ -384,7 +394,16 @@ def lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
     return
 
 def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
+    '''
+    This function locks or unlocks entrance two based on the unlock parameter.
+    There is also a thirdPartyOption parameter that can be set to use a TPO
+    instead of the door.
 
+    Parameters:
+        thirdPartyOption (str): The third party option to set the outputPin to
+        (optional)
+        unlock (bool): Whether to unlock or lock the entrance
+    '''
     outputPin = Relay_2
 
     if thirdPartyOption == "GEN_OUT_1":
@@ -427,9 +446,15 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
 
 @multitasking.task
 def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
-    # print("open_GEN_OUT activated")
-    # doesnt get run on second scan
+    '''
+    This function only serves to open a specific GEN_OUT pin, for a specific
+    amount of time based on timer.
 
+    Parameters:
+        GEN_OUT_PIN (str): The GEN_OUT pin to open
+        timer (int): The amount of time to keep the GEN_OUT pin open
+        GenNo (int): The number for the general pin being toggled
+    '''
     outputPin = None
 
     if GEN_OUT_PIN == "GEN_OUT_1":
@@ -444,7 +469,6 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
     setGpioMode()
     setupRelayPin(outputPin)
 
-    # print(f" {GEN_OUT_PIN}  unlocked")
     try:
         thread_pool_executor.submit(toggleRelayGen, outputPin, timer, GenNo)
         print(f"finish open_GEN_OUT {outputPin}")
@@ -454,9 +478,11 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
     return
 
 
-
 @multitasking.task
 def unlock_entrance_one():
+    '''
+    This function specifically unlocks entrance one only.
+    '''
     setGpioMode()
     setupRelayPin(Relay_1)
 
@@ -471,6 +497,9 @@ def unlock_entrance_one():
 
 @multitasking.task
 def lock_entrance_one():
+    '''
+    This function specifically locks entrance one only.
+    '''
     setGpioMode()
     setupRelayPin(Relay_1)
 
@@ -485,6 +514,9 @@ def lock_entrance_one():
 
 @multitasking.task
 def unlock_entrance_two():
+    '''
+    This function specifically unlocks entrance two only.
+    '''
     setGpioMode()
     setupRelayPin(Relay_2)
 
@@ -499,6 +531,9 @@ def unlock_entrance_two():
 
 @multitasking.task
 def lock_entrance_two():
+    '''
+    This function specifically locks entrance two only.
+    '''
     setGpioMode()
     setupRelayPin(Relay_2)
 
