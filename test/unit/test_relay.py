@@ -26,9 +26,9 @@ def mock_setup_cleanup(monkeypatch: pytest.MonkeyPatch):
     def mock_cleanupGpio():
         pass
 
-    monkeypatch.setattr(relay, "setGpioMode", mock_setGpioMode)
-    monkeypatch.setattr(relay, "setupRelayPin", mock_setupRelayPin)
-    monkeypatch.setattr(relay, "cleanupGpio", mock_cleanupGpio)
+    monkeypatch.setattr("relay.setGpioMode", mock_setGpioMode)
+    monkeypatch.setattr("relay.setupRelayPin", mock_setupRelayPin)
+    monkeypatch.setattr("relay.cleanupGpio", mock_cleanupGpio)
 
 @pytest.fixture
 def mock_relaySetHighLow(monkeypatch: pytest.MonkeyPatch):
@@ -42,8 +42,8 @@ def mock_relaySetHighLow(monkeypatch: pytest.MonkeyPatch):
         relayPinSetting.append("Low")
         relayPinNumber = relayPin
 
-    monkeypatch.setattr(relay, "setRelayPinHigh", mock_setRelayPinHigh)
-    monkeypatch.setattr(relay, "setRelayPinLow", mock_setRelayPinLow)
+    monkeypatch.setattr("relay.setRelayPinHigh", mock_setRelayPinHigh)
+    monkeypatch.setattr("relay.setRelayPinLow", mock_setRelayPinLow)
 
 def test_setRelay(mock_relaySetHighLow):
     global relayPinNumber, relayPinSetting
