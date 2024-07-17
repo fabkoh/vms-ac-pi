@@ -223,6 +223,7 @@ def toggleRelayGen(relayPin, activateMilliSeconds, GenNo):
     '''
     global GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN, E1_opened, E2_opened
     setRelay(relayPin, 'High')
+    print("Relaygen set to high")
     if (GenNo == 1):
         GEN_1_OPEN = True
     elif (GenNo == 2):
@@ -231,14 +232,16 @@ def toggleRelayGen(relayPin, activateMilliSeconds, GenNo):
         GEN_3_OPEN = True
     sleep(activateMilliSeconds)
     setRelay(relayPin, 'Low')
+    print("Relaygen set to low")
     if (GenNo == 1):
         GEN_1_OPEN = False
     elif (GenNo == 2):
         GEN_2_OPEN = False
     elif (GenNo == 3):
         GEN_3_OPEN = False
-    # while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN or E1_opened or E2_opened):
-    #     sleep(1)
+    while (GEN_1_OPEN or GEN_2_OPEN or GEN_3_OPEN or E1_opened or E2_opened):
+        print("in while loop")
+        sleep(1)
     return
 # *** Tests ***
 
