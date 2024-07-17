@@ -58,7 +58,7 @@ def test_setRelay(mock_relaySetHighLow, reset_tracking_variables):
     assert relayPinNumber == 5
     # ------------- END OF TEST SECTION ----------------------------------------
 
-    reset_tracking_variables()
+    reset_tracking_variables
 
     # ------------- TEST SECTION: Set Relay Low --------------------------------
     relay.setRelay(10, "Low")
@@ -73,4 +73,4 @@ def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup, reset_tracking_v
     assert relayPinNumber == 5
     # ------------- END OF TEST SECTION ----------------------------------------
 
-    reset_tracking_variables()
+    reset_tracking_variables
