@@ -306,6 +306,9 @@ def test_trigger_relay_two(mock_relaySetHighLow, mock_setup_cleanup):
     relay.GEN_OUT_2 = original_GEN_OUT_2
     relay.GEN_OUT_3 = original_GEN_OUT_3
 
+'''
+TODO: Currently not throwing RuntimeError, need to fix?
+'''
 def test_lock_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
     '''
     This function tests that lock_unlock_entrance_one is able to lock and unlock
@@ -339,6 +342,7 @@ def test_lock_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
 
     # ------------- TEST SECTION: Unlock Entrance 1 while unlocked -------------
     with pytest.raises(RuntimeError):
+        relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
         relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
 
     # Setting back original functions
