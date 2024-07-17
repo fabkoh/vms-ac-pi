@@ -47,6 +47,9 @@ def mock_relaySetHighLow(monkeypatch: pytest.MonkeyPatch):
 
 def test_setRelay(mock_relaySetHighLow):
     global relayPinNumber, relayPinSetting
+    relayPinNumber = 0
+    relayPinSetting = []
+
     # ------------- TEST SECTION: Set Relay High -------------------------------
     relay.setRelay(5, "High")
     assert relayPinSetting == ["High"]
@@ -67,6 +70,10 @@ def test_setRelay(mock_relaySetHighLow):
 
 def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup):
     global relayPinNumber, relayPinSetting
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
     # ------------- TEST SECTION: Toggle Relay 1, 2 seconds --------------------
     relay.toggleRelay1(5, 2000, 1000, 1)
     assert relayPinSetting == ["High", "Low"]
@@ -87,6 +94,10 @@ def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup):
 
 def test_toggleRelayGen(mock_relaySetHighLow, mock_setup_cleanup):
     global relayPinNumber, relayPinSetting
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
     # ------------- TEST SECTION: Toggle Relay General, Pin 20 Gen 1------------
     relay.toggleRelayGen(20, 2000, 1)
     assert relayPinSetting == ["High", "Low"]
