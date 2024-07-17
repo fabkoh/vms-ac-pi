@@ -13,7 +13,7 @@ sys.path.insert(0, SRC_DIR)
 from src import relay
 
 relayPinNumber = 0
-relayPinSetting = "" # either "High" or "Low"
+relayPinSetting = []
 
 @pytest.fixture
 def mock_setup_cleanup(monkeypatch: pytest.MonkeyPatch):
@@ -34,36 +34,43 @@ def mock_setup_cleanup(monkeypatch: pytest.MonkeyPatch):
 def mock_relaySetHighLow(monkeypatch: pytest.MonkeyPatch):
     def mock_setRelayPinHigh(relayPin):
         global relayPinSetting, relayPinNumber
-        relayPinSetting = "High"
+        relayPinSetting.append("High")
         relayPinNumber = relayPin
 
     def mock_setRelayPinLow(relayPin):
         global relayPinSetting, relayPinNumber
-        relayPinSetting = "Low"
+        relayPinSetting.append("Low")
         relayPinNumber = relayPin
 
     monkeypatch.setattr(relay, "setRelayPinHigh", mock_setRelayPinHigh)
     monkeypatch.setattr(relay, "setRelayPinLow", mock_setRelayPinLow)
 
-def test_setRelay(mock_relaySetHighLow):
+@pytest.fixture
+def reset_tracking_variables():
+    global relayPinNumber, relayPinSetting
+    relayPinNumber = 0
+    relayPinSetting = []
+
+def test_setRelay(mock_relaySetHighLow, reset_tracking_variables):
     # ------------- TEST SECTION: Set Relay High -------------------------------
     relay.setRelay(5, "High")
-    assert relayPinSetting == "High"
+    assert relayPinSetting == ["High"]
     assert relayPinNumber == 5
     # ------------- END OF TEST SECTION ----------------------------------------
+
+    reset_tracking_variables()
 
     # ------------- TEST SECTION: Set Relay Low --------------------------------
     relay.setRelay(10, "Low")
-    assert relayPinSetting == "Low"
+    assert relayPinSetting == ["Low"]
     assert relayPinNumber == 10
     # ------------- END OF TEST SECTION ----------------------------------------
 
-def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup):
+def test_toggleRelay1(mock_relaySetHighLow, mock_setup_cleanup, reset_tracking_variables):
     # ------------- TEST SECTION: Toggle Relay 1, 2 seconds --------------------
     relay.toggleRelay1(5, 2000, 1000, 1)
-    assert relayPinSetting == "High"
-    assert relayPinNumber == 5
-    time.sleep(2.5)
-    assert relayPinSetting == "Low"
+    assert relayPinSetting == ["High", "Low"]
     assert relayPinNumber == 5
     # ------------- END OF TEST SECTION ----------------------------------------
+
+    reset_tracking_variables()
