@@ -264,9 +264,10 @@ def trigger_relay_two(thirdPartyOption=None):
     try:
         setGpioMode()
         setupRelayPin(outputPin)
-        toggleRelay2(relayPin=outputPin, activateLevel='High',
-                     activateMilliSeconds=5000, deActivateMilliSeconds=1000,
-                     toggleCount=1)
+        # toggleRelay2(relayPin=outputPin, activateLevel='High',
+        #              activateMilliSeconds=5000, deActivateMilliSeconds=1000,
+        #              toggleCount=1)
+        thread_pool_executor.submit(toggleRelay2, outputPin, 'High', 5000, 1000, 1)
         cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
