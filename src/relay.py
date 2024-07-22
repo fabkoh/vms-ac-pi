@@ -109,6 +109,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         # print timing before gpio set up
         setGpioMode()
         setupRelayPin(relayPin)
+        print("toggleRelay1 Activated")
 
         for i in range(toggleCount):
             logger.info("toggleRelay1 Activated")
@@ -124,6 +125,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
             E1_opened = False
             deActivateRelay(relayPin, activateLevel)
             sleep(deActivateMilliSeconds / 1000)
+            print("toggleRelay1 Deactivated")
 
     return
 
