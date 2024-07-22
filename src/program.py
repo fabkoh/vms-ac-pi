@@ -95,7 +95,7 @@ def check_events_for(entrance):
 
     if timeout_buzzer.status():
         if timeout_buzzer.check(BUZZER_TIMEOUT):
-            # print("email")
+            print("email")
 
     # if timeout_mag.status():
     #     if timeout_mag.check(MAG_TIMEOUT):
