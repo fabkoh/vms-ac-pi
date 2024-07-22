@@ -79,6 +79,7 @@ class ThreadPoolMonitor:
             task_id = self.task_id_counter
             self.task_id_counter += 1
             self.active_tasks[task_id] = func.__name__  # Track task by name
+        print(task_id, " task created: ", datetime.now())
         logger.info(f"Task {task_id} submitted: {func.__name__}. Total submitted: {len(self.active_tasks)}")
         self.queue.put(priority, (task_id, func, args, kwargs))
 
