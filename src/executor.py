@@ -18,7 +18,7 @@ def setup_logger(log_filename="ThreadPool.log"):
     os.makedirs(log_dir, exist_ok=True)
     
     # Set up logging
-    logger = logging.getlogger(__name__)
+    logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     
     # Create file handler
