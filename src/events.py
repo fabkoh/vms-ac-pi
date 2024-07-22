@@ -424,7 +424,7 @@ def reader_detects_bits(bits, value, entrance):
     elif bits == card_bits:  # card
         credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
         logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
-        # print(str(datetime.now()) + " Card detected: bits={} value={}".format(
+        print(str(datetime.now()) + " Card detected: bits={} value={}".format(
             bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
         credential_added = True
 
@@ -495,7 +495,7 @@ def reader_detects_bits(bits, value, entrance):
             auth_method_is_and = and_delimiter in auth_method_name
             auth_method_keys = auth_method_name.split(
                 and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
-            # print("auth_method_is_and, auth_method_keys",
+            print("auth_method_is_and, auth_method_keys",
                   auth_method_is_and, auth_method_keys)
 
             # check for credentials not in auth_method_keys
@@ -539,7 +539,7 @@ def reader_detects_bits(bits, value, entrance):
                                 return False
                             for singleCred in listOfCred:
                                 if singleCred.get("Value") == k[1]:
-                                    # print(datetime.now().date() <= datetime.strptime(
+                                    print(datetime.now().date() <= datetime.strptime(
                                         singleCred.get("EndDate"), '%Y-%m-%d').date())
                                     if singleCred.get("IsPerm"):
                                         return True
@@ -747,7 +747,7 @@ def verify_antipassback(entrancename):
 
 def gen_check(gpio):
     if gpio == Gen_Out_1:
-        # print("Gen out 1 ")
+        print("Gen out 1 ")
 
 
 debounce_delay = 0.05 # 50ms debounce delay
