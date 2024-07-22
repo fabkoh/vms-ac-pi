@@ -27,19 +27,19 @@ update_event_action_triggers()
 
 
 def GEN_OUT_4_function():
-    # print("GEN_OUT_4")
+    print("GEN_OUT_4")
 
 
 def GEN_OUT_3_function():
-    # print("GEN_OUT_3")
+    print("GEN_OUT_3")
 
 
 def GEN_OUT_2_function():
-    # print("GEN_OUT_2")
+    print("GEN_OUT_2")
 
 
 def GEN_OUT_1_function():
-    # print("GEN_OUT_2")
+    print("GEN_OUT_2")
 
 
 def sendEmail_function(event):
@@ -79,10 +79,10 @@ def sendEmail_function(event):
                 json.dump([], fileclear, indent=4)
                 fileclear.close()
         else:
-            # print("Fail to send")
+            print("Fail to send")
     except Exception as e:
 
-        # print("Exception:", str(e))
+        print("Exception:", str(e))
         # print("No connection to ", url)
 
 
@@ -118,16 +118,16 @@ def sendSMS_function(event):
                 json.dump([], fileclear, indent=4)
                 fileclear.close()
         else:
-            # print("Fail to send")
+            print("Fail to send")
     except:
-        # print("No connection to ", url)
+        print("No connection to ", url)
 
 # controllerId in string
 # eventaction in list
 
 
 def external_controller_GEN_OUT_function(controllerId, eventaction):
-    # print(controllerId, type(controllerId))
+    print(controllerId, type(controllerId))
     # print(eventaction, type(eventaction))
 
 
