@@ -233,11 +233,11 @@ def trigger_relay_one(thirdPartyOption=None):
         # print("opening")
         # logger.info("Before toggleRelay1")
         # toggleRelay1(outputPin, 'High', 5000, 1000, 1)
-        # thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
-        toggleRelay1(relayPin=outputPin, activateLevel='High',
-                     activateMilliSeconds=5000, deActivateMilliSeconds=1000,
-                     toggleCount=1)
-        cleanupGpio()
+        thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
+        # toggleRelay1(relayPin=outputPin, activateLevel='High',
+        #              activateMilliSeconds=5000, deActivateMilliSeconds=1000,
+        #              toggleCount=1)
+        # cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
     # # print("test")
