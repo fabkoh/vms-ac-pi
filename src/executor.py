@@ -4,7 +4,6 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
-import heapq
 import logging
 
 def setup_logger(log_filename="ThreadPool.log"):
@@ -36,66 +35,28 @@ def setup_logger(log_filename="ThreadPool.log"):
 
 logger = setup_logger('ThreadPool.log')
 
-class PriorityQueue:
-    def __init__(self):
-        self._queue = []
-        self._index = 0
-        self._lock = threading.Lock()
-    
-    def put(self, priority, task):
-        with self._lock:
-            heapq.heappush(self._queue, (priority, self._index, task))
-            self._index += 1
-    
-    def get(self):
-        with self._lock:
-            if self._queue:
-                return heapq.heappop(self._queue)[2]
-            else:
-                return None
-    
-    def is_empty(self):
-        with self._lock:
-            return not self._queue
-
 class ThreadPoolMonitor:
     def __init__(self, max_workers):
         self.executor = ThreadPoolExecutor(max_workers=max_workers)
         self.lock = threading.Lock()
         self.task_id_counter = 0
         self.active_tasks = {}
-        self.queue = PriorityQueue()
         self.monitoring_thread = threading.Thread(target=self._monitor_queue_length)
         self.monitoring_thread.daemon = True
         self.monitoring_thread.start()
 
-        # Start a thread to handle high-priority tasks
-        self.priority_thread = threading.Thread(target=self._process_priority_tasks)
-        self.priority_thread.daemon = True
-        self.priority_thread.start()
-
-    def submit(self, func, *args, priority=0, **kwargs):
+    def submit(self, func, *args, **kwargs):
         with self.lock:
             task_id = self.task_id_counter
             self.task_id_counter += 1
             self.active_tasks[task_id] = func.__name__  # Track task by name
-        print(task_id, " task created: ", datetime.now())
-        print(priority, " task priority")
+        print(task_id, "creating thread: ", datetime.now())
         logger.info(f"Task {task_id} submitted: {func.__name__}. Total submitted: {len(self.active_tasks)}")
-        self.queue.put(priority, (task_id, func, args, kwargs))
-
-    def _process_priority_tasks(self):
-        while True:
-            task = self.queue.get()
-            if task:
-                task_id, func, args, kwargs = task
-                print(task_id, " executing task: ", datetime.now())
-                future = self.executor.submit(self._run, task_id, func, *args, **kwargs)
-                future.add_done_callback(lambda f: self._task_complete(task_id, f))
-            time.sleep(0.1)  # Poll every 0.1 seconds to check for new tasks
+        future = self.executor.submit(self._run, task_id, func, *args, **kwargs)
+        future.add_done_callback(lambda f: self._task_complete(task_id, f))
+        return future
 
     def _run(self, task_id, func, *args, **kwargs):
-        print(task_id, " thread running: ", datetime.now())
         logger.info(f"Thread started running task {task_id}: {func.__name__}")
         result = func(*args, **kwargs)
         logger.info(f"Thread completed task {task_id}: {func.__name__}")
