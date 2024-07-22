@@ -92,7 +92,7 @@ def setRelayPinLow(relayPin):
 
 
 def activateRelay(relayPin, activateLevel):
-    print("activateRelay", activateLevel, relayPin)
+    print("activateRelay", activateLevel, relayPin, time.time())
     if activateLevel == 'High':
         setRelayPinHigh(relayPin)
     else:
