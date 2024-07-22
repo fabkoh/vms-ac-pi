@@ -2,7 +2,7 @@ from datetime import datetime
 import gc
 import os
 import time
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 import logging
 
@@ -37,7 +37,7 @@ logger = setup_logger('ThreadPool.log')
 
 class ThreadPoolMonitor:
     def __init__(self, max_workers):
-        self.executor = ProcessPoolExecutor(max_workers=max_workers)
+        self.executor = ThreadPoolExecutor(max_workers=max_workers)
         self.lock = threading.Lock()
         self.task_id_counter = 0
         self.active_tasks = {}
@@ -50,7 +50,7 @@ class ThreadPoolMonitor:
             task_id = self.task_id_counter
             self.task_id_counter += 1
             self.active_tasks[task_id] = func.__name__  # Track task by name
-        # print(task_id, "creating thread: ", datetime.now())
+        print(task_id, "creating thread: ", datetime.now())
         logger.info(f"Task {task_id} submitted: {func.__name__}. Total submitted: {len(self.active_tasks)}")
         future = self.executor.submit(self._run, task_id, func, *args, **kwargs)
         future.add_done_callback(lambda f: self._task_complete(task_id, f))
@@ -63,7 +63,7 @@ class ThreadPoolMonitor:
         return result
 
     def _task_complete(self, task_id, future):
-        # print(task_id, " thread completed: ", datetime.now())
+        print(task_id, " thread completed: ", datetime.now())
         with self.lock:
             if task_id in self.active_tasks:
                 del self.active_tasks[task_id]
