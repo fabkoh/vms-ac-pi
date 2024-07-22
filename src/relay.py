@@ -11,7 +11,6 @@ from executor import setup_logger, thread_pool_executor
 
 import pigpio
 import time
-import asyncio
 import GPIOconfig
 import eventActionTriggerConstants
 
@@ -109,8 +108,7 @@ def deActivateRelay(relayPin, activateLevel):
     return
 
 
-async def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
-    
+def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     global E1_opened
     logger.info("Trigger toggleRelay 1, E1_opened: %s", E1_opened)
     if not E1_opened:
@@ -123,8 +121,7 @@ async def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivate
             activateRelay(relayPin, activateLevel)
 
             E1_opened = True
-            # sleep(activateMilliSeconds / 1000)
-            await asyncio.sleep(activateMilliSeconds / 1000)
+            sleep(activateMilliSeconds / 1000)
             # print(E1_perm_opened)
         if E1_perm_opened:
             pass
@@ -132,13 +129,12 @@ async def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivate
             logger.info("toggleRelay1 Deactivated")
             E1_opened = False
             deActivateRelay(relayPin, activateLevel)
-            # sleep(deActivateMilliSeconds / 1000)
-            await asyncio.sleep(deActivateMilliSeconds / 1000)
+            sleep(deActivateMilliSeconds / 1000)
 
     return
 
 
-async def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
+def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     global E2_opened
     logger.info("Trigger toggleRelay 2, E2_opened: %s", E2_opened)
     if not E2_opened:
@@ -148,16 +144,14 @@ async def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivate
             activateRelay(relayPin, activateLevel)
 
             E2_opened = True
-            # sleep(activateMilliSeconds / 1000)
-            await asyncio.sleep(activateMilliSeconds / 1000)
+            sleep(activateMilliSeconds / 1000)
             # print(E1_perm_opened)
         if E2_perm_opened:
             pass
         else:
             E2_opened = False
             deActivateRelay(relayPin, activateLevel)
-            # sleep(deActivateMilliSeconds / 1000)
-            await asyncio.sleep(deActivateMilliSeconds / 1000)
+            sleep(deActivateMilliSeconds / 1000)
 
     return
 
