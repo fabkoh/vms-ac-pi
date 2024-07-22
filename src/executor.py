@@ -4,6 +4,7 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
+import heapq
 import logging
 
 def setup_logger(log_filename="ThreadPool.log"):
