@@ -1,7 +1,7 @@
 import gc
 import os
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 import threading
 import logging
 
@@ -36,7 +36,7 @@ logger = setup_logger('ThreadPool.log')
 
 class ThreadPoolMonitor:
     def __init__(self, max_workers):
-        self.executor = ThreadPoolExecutor(max_workers=max_workers)
+        self.executor = ProcessPoolExecutor(max_workers=max_workers)
         self.lock = threading.Lock()
         self.task_id_counter = 0
         self.active_tasks = {}
