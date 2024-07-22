@@ -300,17 +300,17 @@ def test_pin(pin, duration=2):
     time.sleep(0.1)  # Short delay before reading back the state
     # Verify the pin is high
     if pi.read(pin) == 1:
-        # print(f"Pin {pin} is HIGH")
+        print(f"Pin {pin} is HIGH")
     else:
-        # print(f"Error: Pin {pin} is not HIGH as expected")
+        print(f"Error: Pin {pin} is not HIGH as expected")
     time.sleep(duration - 0.1)
     pi.write(pin, 0)  # Turn off
     # Verify the pin is low
     time.sleep(0.1)
     if pi.read(pin) == 0:
-        # print(f"Pin {pin} is LOW")
+        print(f"Pin {pin} is LOW")
     else:
-        # print(f"Error: Pin {pin} is not LOW as expected")
+        print(f"Error: Pin {pin} is not LOW as expected")
     # print(f"Tested {pin}\n")
 
 
