@@ -39,7 +39,7 @@ def send_request_to_server(url, data):
                 with open(path + '/json/pendingLogs.json', 'w') as fileclear:
                     json.dump([], fileclear, indent=4)
     except Exception as e:
-        # print("No connection to ", url, "\nError: ", e)
+        print("No connection to ", url, "\nError: ", e)
 
 
 def update_external_zone_status(controllerId, entrance, dictionary, direction):
