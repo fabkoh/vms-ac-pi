@@ -92,7 +92,7 @@ def setRelayPinLow(relayPin):
 
 
 def activateRelay(relayPin, activateLevel):
-    print("activateRelay", activateLevel, relayPin, str(datetime.now()))
+    print("activateRelay", activateLevel, relayPin)
     if activateLevel == 'High':
         setRelayPinHigh(relayPin)
     else:
@@ -233,7 +233,7 @@ def trigger_relay_one(thirdPartyOption=None):
         outputPin = GEN_OUT_3
         # print(thirdPartyOption,outputPin)
 
-    print(" EM 1 unlocked at " + str(datetime.now()) + "trigger_relay_one")
+    print(" EM 1 unlocked at " + str(datetime.now()))
     try:
         setGpioMode()
         setupRelayPin(outputPin)
