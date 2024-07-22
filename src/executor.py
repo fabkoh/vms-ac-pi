@@ -57,6 +57,8 @@ class ThreadPoolMonitor:
         return future
 
     def _run(self, task_id, func, *args, **kwargs):
+        print(task_id, " thread running: ", datetime.now())
+
         logger.info(f"Thread started running task {task_id}: {func.__name__}")
         result = func(*args, **kwargs)
         logger.info(f"Thread completed task {task_id}: {func.__name__}")
