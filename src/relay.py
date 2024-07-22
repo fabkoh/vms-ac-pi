@@ -104,15 +104,15 @@ def deActivateRelay(relayPin, activateLevel):
 def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     
     global E1_opened
-    logger.info("Trigger toggleRelay 1, E1_opened: %s", E1_opened)
+    # logger.info("Trigger toggleRelay 1, E1_opened: %s", E1_opened)
     if not E1_opened:
         # print timing before gpio set up
         setGpioMode()
         setupRelayPin(relayPin)
-        print("toggleRelay1 Activated: ", datetime.now())
+        # print("toggleRelay1 Activated: ", datetime.now())
 
         for i in range(toggleCount):
-            logger.info("toggleRelay1 Activated")
+            # logger.info("toggleRelay1 Activated")
             activateRelay(relayPin, activateLevel)
 
             E1_opened = True
@@ -121,11 +121,11 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         if E1_perm_opened:
             pass
         else:
-            logger.info("toggleRelay1 Deactivated")
+            # logger.info("toggleRelay1 Deactivated")
             E1_opened = False
             deActivateRelay(relayPin, activateLevel)
             sleep(deActivateMilliSeconds / 1000)
-            print("toggleRelay1 Deactivated: ", datetime.now())
+            # print("toggleRelay1 Deactivated: ", datetime.now())
 
     return
 
@@ -232,15 +232,15 @@ def trigger_relay_one(thirdPartyOption=None):
     try:
         setGpioMode()
         setupRelayPin(outputPin)
-        print("opening")
-        logger.info("Before toggleRelay1")
+        # print("opening")
+        # logger.info("Before toggleRelay1")
         # toggleRelay1(outputPin, 'High', 5000, 1000, 1)
-        print("before creating thread: ", datetime.now())
-        # thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1, priority=1)
-        toggleRelay1(relayPin=outputPin, activateLevel='High',
-                     activateMilliSeconds=5000, deActivateMilliSeconds=1000,
-                     toggleCount=1)
-        cleanupGpio()
+        # print("before creating thread: ", datetime.now())
+        thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1, priority=1)
+        # toggleRelay1(relayPin=outputPin, activateLevel='High',
+        #              activateMilliSeconds=5000, deActivateMilliSeconds=1000,
+        #              toggleCount=1)
+        # cleanupGpio()
 
         # cleanupGpio()
     except RuntimeError:
