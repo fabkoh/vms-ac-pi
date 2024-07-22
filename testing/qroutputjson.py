@@ -33,7 +33,7 @@ while True:
         cv2.putText(img, qrcode, (int(bbox[0][0][0]), int(bbox[0][0][1]) - 10), cv2.FONT_HERSHEY_SIMPLEX,
                     0.5, (0, 255, 0), 2)
         if qrcode:
-            #print("data found: ", data)
+            ## print("data found: ", data)
             #compare data against file
             #unlock
             file1 = open("/home/pi/codes.txt", "r")
@@ -44,7 +44,7 @@ while True:
   
 
             if authenticated:
-                print("Authed!", qrcode)
+                # print("Authed!", qrcode)
                 data = {}
                 data["qrcode"] = qrcode
                 data["datetime"] = timeString

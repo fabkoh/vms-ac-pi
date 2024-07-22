@@ -150,7 +150,7 @@ def post_entrance_name():
     '''
     
     request_body = flask.request.json
-    print(request_body)
+    # print(request_body)
     if ('E1' not in request_body) or ('E2' not in request_body) or ('controllerSerialNo' not in request_body):
         flask.abort(400)
 
@@ -235,23 +235,23 @@ def display_top(snapshot, key_type='traceback', limit=10):
     ))
     top_stats = snapshot.statistics(key_type)
 
-    print("Top displayed")
+    # print("Top displayed")
     with open('/home/etlas/memory_usage.log', 'a') as f:
-        print("Top %s tracebacks" % limit, file=f)
+        # print("Top %s tracebacks" % limit, file=f)
         for index, stat in enumerate(top_stats[:limit], 1):
-            print("#%s: %.1f KiB" % (index, stat.size / 1024), file=f)
+            # print("#%s: %.1f KiB" % (index, stat.size / 1024), file=f)
             for frame in stat.traceback:
                 # Extract line from the source file
                 line = linecache.getline(frame.filename, frame.lineno).strip()
-                print("    File \"%s\", line %s, in %s" % (frame.filename, frame.lineno, line), file=f)
-            print("\n", file=f)
+                # print("    File \"%s\", line %s, in %s" % (frame.filename, frame.lineno, line), file=f)
+            # print("\n", file=f)
 
         other = top_stats[limit:]
         if other:
             size = sum(stat.size for stat in other)
-            print("%s other: %.1f KiB" % (len(other), size / 1024), file=f)
+            # print("%s other: %.1f KiB" % (len(other), size / 1024), file=f)
         total = sum(stat.size for stat in top_stats)
-        print("Total allocated size: %.1f KiB" % (total / 1024), file=f)
+        # print("Total allocated size: %.1f KiB" % (total / 1024), file=f)
 
 def log_memory_usage_every_hour():
     tracemalloc.start(25)  # Adjust stack depth as needed

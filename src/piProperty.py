@@ -43,7 +43,7 @@ def log_system_stats(interval, duration):
         stats = get_system_stats()
         timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
         log = f'{timestamp} - CPU Temp: {stats["cpu_temperature"]}°C, RAM Usage: {stats["ram_usage_percentage"]:.2f}%, CPU Usage: {stats["cpu_usage_percentage"]:.2f}%'
-        print(log)
+        # print(log)
         logger.info(log + str(threading.activeCount()))
 
         time.sleep(interval)

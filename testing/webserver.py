@@ -29,7 +29,7 @@ def processtest():
             if (key == "controllerIP") and (value == "192.168.1.166"):
                 print ("sameip")
             else:
-                print("run os commands to configure")
+                # print("run os commands to configure")
         return js
     else:
         return 'Content-Type not supported!'

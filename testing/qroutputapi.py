@@ -26,7 +26,7 @@ while True:
         cv2.putText(img, data, (int(bbox[0][0][0]), int(bbox[0][0][1]) - 10), cv2.FONT_HERSHEY_SIMPLEX,
                     0.5, (0, 255, 0), 2)
         if data:
-            #print("data found: ", data)
+            ## print("data found: ", data)
             #compare data against file
             #unlock
             file1 = open("/home/pi/codes.txt", "r")
@@ -44,7 +44,7 @@ if authenticated:
    # free camera object and exit
    cap.release()
    cv2.destroyAllWindows()
-   print("Authed!", data) 
+   # print("Authed!", data) 
    scannedRecord = [{'qrCode' : data}, {'Time' : timeString}, {'flag' : '1'}]
    @app.route('/', methods=['GET'])
    def test():

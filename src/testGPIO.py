@@ -20,12 +20,12 @@ def listen():
 
 def activate_relay(gpio, level, tick):
     pi.write(Gen_2,1)
-    print(pi.read(Gen_2),"activate")
+    # print(pi.read(Gen_2),"activate")
     
 
 def deactivate_relay(gpio, level, tick):
     pi.write(Gen_2,0)
-    print(pi.read(Gen_2),"deactivate")
+    # print(pi.read(Gen_2),"deactivate")
 
 
 

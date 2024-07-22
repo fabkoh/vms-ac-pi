@@ -21,18 +21,18 @@ while True:
         cv2.putText(img, data, (int(bbox[0][0][0]), int(bbox[0][0][1]) - 10), cv2.FONT_HERSHEY_SIMPLEX,
                     0.5, (0, 255, 0), 2)
         if data:
-            #print("data found: ", data)
+            ## print("data found: ", data)
             #compare data against file
             #unlock
             file1 = open("/home/pi/codes.txt", "r")
             readfile = file1.read()
             if data in readfile:
-                print("Authed!", data)
+                # print("Authed!", data)
             file1.close()
   
 
             if authenticated:
-               # print("Authed!", data)
+               # # print("Authed!", data)
                 authenticated = None
     # display the image preview
     cv2.imshow("code detector", img)

@@ -30,7 +30,7 @@ if __name__ == "__main__":
        #authenticated = None
 while True: # Run forever
     if GPIO.input(10) == GPIO.HIGH:
-        print("Button was pushed!")
+        # print("Button was pushed!")
         result = usbrelay_py.board_control(board[0],1,1)
         time.sleep(3)
         result = usbrelay_py.board_control(board[0],1,0)
@@ -44,4 +44,4 @@ data = json.load(file)
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 r = requests.post(url, data=json.dumps(data), headers=headers)
 
-print(r.status_code)
+# print(r.status_code)
