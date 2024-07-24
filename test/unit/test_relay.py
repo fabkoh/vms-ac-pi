@@ -536,6 +536,10 @@ def test_lock_unlock_entrance_two(mock_relaySetHighLow, mock_setup_cleanup):
     relay.GEN_OUT_3 = original_GEN_OUT_3
 
 def test_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
+    '''
+    This function tests that unlock_entrance_one directly triggers and opens
+    relay 1
+    '''
     global relayPinNumber, relayPinSetting
     relayPinNumber = 0
     relayPinSetting = []
@@ -548,7 +552,7 @@ def test_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
 
     # ------------- TEST SECTION: Unlock Entrance One --------------------------
     relay.unlock_entrance_one()
-    time.sleep(1)
+    time.sleep(1) # wait to multitasking task to finish
 
     assert relayPinSetting == ["High"]
     assert relayPinNumber == 51
@@ -559,3 +563,90 @@ def test_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
 
     # Setting back original values
     relay.Relay_1 = original_Relay_1
+
+def test_lock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
+    '''
+    This function tests that lock_entrance_one directly triggers and closes
+    relay 1
+    '''
+    global relayPinNumber, relayPinSetting
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # To remember original value to set back later
+    original_Relay_1 = relay.Relay_1
+
+    # setting Relay_2 to testing value
+    relay.Relay_1 = 51
+
+    # ------------- TEST SECTION: Unlock Entrance One --------------------------
+    relay.lock_entrance_one()
+    time.sleep(1) # wait to multitasking task to finish
+
+    assert relayPinSetting == ["Low"]
+    assert relayPinNumber == 51
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # Setting back original values
+    relay.Relay_1 = original_Relay_1
+
+def test_unlock_entrance_two(mock_relaySetHighLow, mock_setup_cleanup):
+    '''
+    This function tests that unlock_entrance_two directly triggers and opens
+    relay 2
+    '''
+    global relayPinNumber, relayPinSetting
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # To remember original value to set back later
+    original_Relay_2 = relay.Relay_2
+
+    # setting Relay_2 to testing value
+    relay.Relay_2 = 61
+
+    # ------------- TEST SECTION: Unlock Entrance One --------------------------
+    relay.unlock_entrance_two()
+    time.sleep(1) # wait to multitasking task to finish
+
+    assert relayPinSetting == ["High"]
+    assert relayPinNumber == 61
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # Setting back original values
+    relay.Relay_2 = original_Relay_2
+
+def test_lock_entrance_two(mock_relaySetHighLow, mock_setup_cleanup):
+    '''
+    This function tests that lock_entrance_two directly triggers and closes
+    relay 2
+    '''
+    global relayPinNumber, relayPinSetting
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # To remember original value to set back later
+    original_Relay_2 = relay.Relay_2
+
+    # setting Relay_2 to testing value
+    relay.Relay_2 = 61
+
+    # ------------- TEST SECTION: Unlock Entrance One --------------------------
+    relay.lock_entrance_two()
+    time.sleep(1) # wait to multitasking task to finish
+
+    assert relayPinSetting == ["Low"]
+    assert relayPinNumber == 61
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # Setting back original values
+    relay.Relay_2 = original_Relay_2
