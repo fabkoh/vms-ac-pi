@@ -340,10 +340,18 @@ def test_lock_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
     relayPinNumber = 0
     relayPinSetting = []
 
+    # ------------- TEST SECTION: Lock Entrance 1, no TPO ----------------------
+    relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=False)
+
+    assert relayPinSetting == ["Low"]
+    assert relayPinNumber == 51
+    # ------------- END OF TEST SECTION ----------------------------------------
+
     # ------------- TEST SECTION: Unlock Entrance 1 while unlocked -------------
     with pytest.raises(RuntimeError):
         relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
         relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
+    # ------------- END OF TEST SECTION ----------------------------------------
 
     # Setting back original functions
     relay.Relay_1 = original_Relay_1
