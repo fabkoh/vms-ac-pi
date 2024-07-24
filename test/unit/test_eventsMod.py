@@ -16,6 +16,18 @@ dictionary_sent = {}
 
 @pytest.fixture
 def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
+    '''
+    This fixture mocks all the relevant functions needed.
+
+    mock_logger_info mocks the logging, and does nothing, as we do not want the
+    tests to actually log anything
+
+    mock_event_trigger_cb mocks the event_trigger_cb function, so we can capture
+    and use assertions to check that the correct event is created
+
+    mock_update_logs_and_server mocks the update_logs_and_server function, so
+    we can see what data is being sent, and we can assert to test
+    '''
     def mock_logger_info(string, *args, **kwargs):
         pass
 
@@ -32,4 +44,22 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
                         mock_event_trigger_cb)
     monkeypatch.setattr("eventsMod.update_logs_and_server", 
                         mock_update_logs_and_server)
+
+def test_record_auth_scans(mock_all_relevant_functions):
+
+    # Remembering original serial number for reset at end of test
+    original_serial = eventsMod.controllerSerial
+
+    # Setting test serial
+    eventsMod.controllerSerial = "test_serial_123"
+
+    # ------------- TEST SECTION: Record Auth Scan -----------------------------
+    eventsMod.record_auth_scans(name=1, accessGroup="1", authtype="Pin", 
+                                entrance=1, status="In")
     
+    print(event_callback_created)
+    print(dictionary_sent)
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    # Resetting serial number
+    eventsMod.controllerSerial = original_serial
