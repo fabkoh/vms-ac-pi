@@ -58,7 +58,9 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr("logging.getLogger", mock_getLogger)
     monkeypatch.setattr("eventActionTriggers.event_trigger_cb", 
                         mock_event_trigger_cb)
-    monkeypatch.setattr("eventsMod.update_logs_and_server", 
+    monkeypatch.setattr("update_logs_and_server", 
+                        mock_update_logs_and_server)
+    monkeypatch.setattr("eventsMod.update_logs_and_server",
                         mock_update_logs_and_server)
 
 def test_record_auth_scans(mock_all_relevant_functions):
