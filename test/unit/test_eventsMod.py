@@ -19,7 +19,7 @@ class mock_logger:
         self.name = name
 
     def info(self, message):
-        pass
+        print("mock info called with message: " + message)
 
     def setLevel(self, level):
         pass
@@ -74,8 +74,8 @@ def test_record_auth_scans(mock_all_relevant_functions):
     eventsMod.record_auth_scans(name=1, accessGroup="1", authtype="Card", 
                                 entrance=1, status="IN")
     
-    print(event_callback_created)
-    print(dictionary_sent)
+    print("EventCB" + event_callback_created)
+    print("Dictionary" + dictionary_sent)
     # ------------- END OF TEST SECTION ----------------------------------------
 
     # Resetting serial number
