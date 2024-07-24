@@ -58,7 +58,7 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr("logging.getLogger", mock_getLogger)
     monkeypatch.setattr("eventActionTriggers.event_trigger_cb", 
                         mock_event_trigger_cb)
-    monkeypatch.setattr(eventsMod, "update_logs_and_server", mock_event_trigger_cb)
+    monkeypatch.setattr(eventsMod, "update_logs_and_server", mock_update_logs_and_server)
     monkeypatch.setattr("eventsMod.update_logs_and_server",
                         mock_update_logs_and_server)
 
@@ -74,8 +74,8 @@ def test_record_auth_scans(mock_all_relevant_functions):
     eventsMod.record_auth_scans(name=1, accessGroup="1", authtype="Card", 
                                 entrance=1, status="IN")
     
-    print("EventCB" + str(event_callback_created))
-    print("Dictionary" + str(dictionary_sent))
+    print("\nEventCB: " + str(event_callback_created))
+    print("\nDictionary" + str(dictionary_sent))
     # ------------- END OF TEST SECTION ----------------------------------------
 
     # Resetting serial number
