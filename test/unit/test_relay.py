@@ -228,7 +228,7 @@ def test_trigger_relay_one(mock_relaySetHighLow, mock_setup_cleanup):
     assert relayPinNumber == 54
     # ------------- END OF TEST SECTION ----------------------------------------
 
-    # Setting back original functions
+    # Setting back original values
     relay.Relay_1 = original_Relay_1
     relay.GEN_OUT_1 = original_GEN_OUT_1
     relay.GEN_OUT_2 = original_GEN_OUT_2
@@ -300,7 +300,7 @@ def test_trigger_relay_two(mock_relaySetHighLow, mock_setup_cleanup):
     assert relayPinNumber == 64
     # ------------- END OF TEST SECTION ----------------------------------------
 
-    # Setting back original functions
+    # Setting back original values
     relay.Relay_2 = original_Relay_2
     relay.GEN_OUT_1 = original_GEN_OUT_1
     relay.GEN_OUT_2 = original_GEN_OUT_2
@@ -416,7 +416,7 @@ def test_lock_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
     #     relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
     # ------------- END OF TEST SECTION ----------------------------------------
 
-    # Setting back original functions
+    # Setting back original values
     relay.Relay_1 = original_Relay_1
     relay.GEN_OUT_1 = original_GEN_OUT_1
     relay.GEN_OUT_2 = original_GEN_OUT_2
@@ -534,3 +534,27 @@ def test_lock_unlock_entrance_two(mock_relaySetHighLow, mock_setup_cleanup):
     relay.GEN_OUT_1 = original_GEN_OUT_1
     relay.GEN_OUT_2 = original_GEN_OUT_2
     relay.GEN_OUT_3 = original_GEN_OUT_3
+
+def test_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
+    global relayPinNumber, relayPinSetting
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # To remember original value to set back later
+    original_Relay_1 = relay.Relay_1
+
+    # setting Relay_2 to testing value
+    relay.Relay_1 = 51
+
+    # ------------- TEST SECTION: Unlock Entrance One --------------------------
+    relay.unlock_entrance_one()
+
+    assert relayPinSetting == ["High"]
+    assert relayPinNumber == 51
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # Setting back original values
+    relay.Relay_1 = original_Relay_1
