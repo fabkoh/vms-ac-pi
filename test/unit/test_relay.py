@@ -548,6 +548,7 @@ def test_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
 
     # ------------- TEST SECTION: Unlock Entrance One --------------------------
     relay.unlock_entrance_one()
+    time.sleep(1)
 
     assert relayPinSetting == ["High"]
     assert relayPinNumber == 51
