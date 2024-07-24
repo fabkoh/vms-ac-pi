@@ -74,8 +74,8 @@ def test_record_auth_scans(mock_all_relevant_functions):
     eventsMod.record_auth_scans(name=1, accessGroup="1", authtype="Card", 
                                 entrance=1, status="IN")
     
-    print("EventCB" + event_callback_created)
-    print("Dictionary" + dictionary_sent)
+    print("EventCB" + str(event_callback_created))
+    print("Dictionary" + str(dictionary_sent))
     # ------------- END OF TEST SECTION ----------------------------------------
 
     # Resetting serial number
