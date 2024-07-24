@@ -44,8 +44,8 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     mock_update_logs_and_server mocks the update_logs_and_server function, so
     we can see what data is being sent, and we can assert to test
     '''
-    def mock_getLogger(name=None):
-        return mock_logger(name)
+    # def mock_getLogger(name=None):
+    #     return mock_logger(name)
 
     def mock_event_trigger_cb(event):
         global event_callback_created
@@ -55,19 +55,25 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
         global dictionary_sent
         dictionary_sent = dictionary
     
-    monkeypatch.setattr("logging.getLogger", mock_getLogger)
+    # monkeypatch.setattr("logging.getLogger", mock_getLogger)
     monkeypatch.setattr("eventActionTriggers.event_trigger_cb", 
                         mock_event_trigger_cb)
     monkeypatch.setattr(eventsMod, "update_logs_and_server", mock_update_logs_and_server)
     monkeypatch.setattr("eventsMod.update_logs_and_server",
                         mock_update_logs_and_server)
 
-def test_record_auth_scans(mock_all_relevant_functions):
+@pytest.fixture
+def mock_logger(monkeypatch: pytest.MonkeyPatch):
+    return mock_logger("random_name")
+
+def test_record_auth_scans(mock_all_relevant_functions, mock_logger):
 
     # Remembering original serial number for reset at end of test
+    original_logger = eventsMod.logger
     original_serial = eventsMod.controllerSerial
 
     # Setting test serial
+    eventsMod.logger = mock_logger
     eventsMod.controllerSerial = "test_serial_123"
 
     # ------------- TEST SECTION: Record Auth Scan -----------------------------
@@ -75,8 +81,9 @@ def test_record_auth_scans(mock_all_relevant_functions):
                                 entrance=1, status="IN")
     
     print("\nEventCB: " + str(event_callback_created))
-    print("\nDictionary" + str(dictionary_sent))
+    print("\nDictionary: " + str(dictionary_sent))
     # ------------- END OF TEST SECTION ----------------------------------------
 
     # Resetting serial number
+    eventsMod.logger = original_logger
     eventsMod.controllerSerial = original_serial
