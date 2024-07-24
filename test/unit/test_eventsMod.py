@@ -35,8 +35,8 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     mock_update_logs_and_server mocks the update_logs_and_server function, so
     we can see what data is being sent, and we can assert to test
     '''
-    def mock_logging(name):
-        return mock_logger(name )
+    def mock_getLogger(name):
+        return mock_logger(name)
 
     def mock_event_trigger_cb(event):
         global event_callback_created
@@ -46,7 +46,7 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
         global dictionary_sent
         dictionary_sent = dictionary
     
-    monkeypatch.setattr("logging.getLogger", mock_logging)
+    monkeypatch.setattr("logging.getLogger", mock_getLogger)
     monkeypatch.setattr("eventActionTriggers.event_trigger_cb", 
                         mock_event_trigger_cb)
     monkeypatch.setattr("eventsMod.update_logs_and_server", 
