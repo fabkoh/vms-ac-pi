@@ -360,10 +360,30 @@ def test_lock_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
     relayPinNumber = 0
     relayPinSetting = []
 
+    #  ------------- TEST SECTION: Lock Entrance 1, TPO Gen 1 ------------------
+    relay.lock_unlock_entrance_one(thirdPartyOption="GEN_OUT_1", unlock=False)
+
+    assert relayPinSetting == ["Low"]
+    assert relayPinNumber == 52
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
     # ------------- TEST SECTION: Unlock Entrance 1, TPO Gen 2 -----------------
     relay.lock_unlock_entrance_one(thirdPartyOption="GEN_OUT_2", unlock=True)
 
     assert relayPinSetting == ["High"]
+    assert relayPinNumber == 53
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Lock Entrance 1, TPO Gen 2 -------------------
+    relay.lock_unlock_entrance_one(thirdPartyOption="GEN_OUT_2", unlock=False)
+
+    assert relayPinSetting == ["Low"]
     assert relayPinNumber == 53
     # ------------- END OF TEST SECTION ----------------------------------------
 
@@ -379,7 +399,7 @@ def test_lock_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
 
     relayPinNumber = 0
     relayPinSetting = []
-    
+
     # ------------- TEST SECTION: Unlock Entrance 1 while unlocked -------------
     # with pytest.raises(RuntimeError):
     #     relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
