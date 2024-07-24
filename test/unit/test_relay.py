@@ -421,3 +421,116 @@ def test_lock_unlock_entrance_one(mock_relaySetHighLow, mock_setup_cleanup):
     relay.GEN_OUT_1 = original_GEN_OUT_1
     relay.GEN_OUT_2 = original_GEN_OUT_2
     relay.GEN_OUT_3 = original_GEN_OUT_3
+
+def test_lock_unlock_entrance_two(mock_relaySetHighLow, mock_setup_cleanup):
+    '''
+    This function tests that lock_unlock_entrance_two is able to lock and unlock
+    the default entrance two relay pin, or a given third party option, properly.
+    '''
+    global relayPinNumber, relayPinSetting
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # To remember original value to set back later
+    original_Relay_2 = relay.Relay_2
+    original_GEN_OUT_1 = relay.GEN_OUT_1
+    original_GEN_OUT_2 = relay.GEN_OUT_2
+    original_GEN_OUT_3 = relay.GEN_OUT_3
+
+    # setting Relay_2 to testing value
+    relay.Relay_2 = 61
+    relay.GEN_OUT_1 = 62
+    relay.GEN_OUT_2 = 63
+    relay.GEN_OUT_3 = 64
+
+    # ------------- TEST SECTION: Unlock Entrance 2, no TPO --------------------
+    relay.lock_unlock_entrance_two(thirdPartyOption=None, unlock=True)
+
+    assert relayPinSetting == ["High"]
+    assert relayPinNumber == 61
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Lock Entrance 2, no TPO ----------------------
+    relay.lock_unlock_entrance_two(thirdPartyOption=None, unlock=False)
+
+    assert relayPinSetting == ["Low"]
+    assert relayPinNumber == 61
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Unlock Entrance 2, TPO Gen 1 -----------------
+    relay.lock_unlock_entrance_two(thirdPartyOption="GEN_OUT_1", unlock=True)
+
+    assert relayPinSetting == ["High"]
+    assert relayPinNumber == 62
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    #  ------------- TEST SECTION: Lock Entrance 2, TPO Gen 1 ------------------
+    relay.lock_unlock_entrance_two(thirdPartyOption="GEN_OUT_1", unlock=False)
+
+    assert relayPinSetting == ["Low"]
+    assert relayPinNumber == 62
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Unlock Entrance 2, TPO Gen 2 -----------------
+    relay.lock_unlock_entrance_two(thirdPartyOption="GEN_OUT_2", unlock=True)
+
+    assert relayPinSetting == ["High"]
+    assert relayPinNumber == 63
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Lock Entrance 2, TPO Gen 2 -------------------
+    relay.lock_unlock_entrance_two(thirdPartyOption="GEN_OUT_2", unlock=False)
+
+    assert relayPinSetting == ["Low"]
+    assert relayPinNumber == 63
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Unlock Entrance 2, TPO Gen 3 -----------------
+    relay.lock_unlock_entrance_two(thirdPartyOption="GEN_OUT_3", unlock=True)
+
+    assert relayPinSetting == ["High"]
+    assert relayPinNumber == 64
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Lock Entrance 2, TPO Gen 3 -------------------
+    relay.lock_unlock_entrance_two(thirdPartyOption="GEN_OUT_3", unlock=False)
+
+    assert relayPinSetting == ["Low"]
+    assert relayPinNumber == 64
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    relayPinNumber = 0
+    relayPinSetting = []
+
+    # ------------- TEST SECTION: Unlock Entrance 1 while unlocked -------------
+    # with pytest.raises(RuntimeError):
+    #     relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
+    #     relay.lock_unlock_entrance_one(thirdPartyOption=None, unlock=True)
+    # ------------- END OF TEST SECTION ----------------------------------------
+
+    # Setting back original functions
+    relay.Relay_2 = original_Relay_2
+    relay.GEN_OUT_1 = original_GEN_OUT_1
+    relay.GEN_OUT_2 = original_GEN_OUT_2
+    relay.GEN_OUT_3 = original_GEN_OUT_3
