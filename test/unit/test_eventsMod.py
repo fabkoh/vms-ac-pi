@@ -62,18 +62,14 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr("eventsMod.update_logs_and_server",
                         mock_update_logs_and_server)
 
-@pytest.fixture
-def mock_logger(monkeypatch: pytest.MonkeyPatch):
-    return mock_logger("random_name")
-
-def test_record_auth_scans(mock_all_relevant_functions, mock_logger):
+def test_record_auth_scans(mock_all_relevant_functions):
 
     # Remembering original serial number for reset at end of test
     original_logger = eventsMod.logger
     original_serial = eventsMod.controllerSerial
 
     # Setting test serial
-    eventsMod.logger = mock_logger
+    eventsMod.logger = mock_logger("random_name")
     eventsMod.controllerSerial = "test_serial_123"
 
     # ------------- TEST SECTION: Record Auth Scan -----------------------------
