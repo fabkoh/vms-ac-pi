@@ -15,7 +15,7 @@ event_callback_created = ()
 dictionary_sent = {}
 
 class mock_logger:
-    def __init__(self, name):
+    def __init__(self, name=None):
         self.name = name
 
     def info(self, message):
@@ -35,7 +35,7 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     mock_update_logs_and_server mocks the update_logs_and_server function, so
     we can see what data is being sent, and we can assert to test
     '''
-    def mock_getLogger(name):
+    def mock_getLogger(name=None):
         return mock_logger(name)
 
     def mock_event_trigger_cb(event):
