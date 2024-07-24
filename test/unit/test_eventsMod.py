@@ -39,7 +39,7 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
         global dictionary_sent
         dictionary_sent = dictionary
     
-    monkeypatch.setattr("logger.info", mock_logger_info)
+    monkeypatch.setattr("Logger.info", mock_logger_info)
     monkeypatch.setattr("eventActionTriggers.event_trigger_cb", 
                         mock_event_trigger_cb)
     monkeypatch.setattr("eventsMod.update_logs_and_server", 
@@ -54,8 +54,8 @@ def test_record_auth_scans(mock_all_relevant_functions):
     eventsMod.controllerSerial = "test_serial_123"
 
     # ------------- TEST SECTION: Record Auth Scan -----------------------------
-    eventsMod.record_auth_scans(name=1, accessGroup="1", authtype="Pin", 
-                                entrance=1, status="In")
+    eventsMod.record_auth_scans(name=1, accessGroup="1", authtype="Card", 
+                                entrance=1, status="IN")
     
     print(event_callback_created)
     print(dictionary_sent)
