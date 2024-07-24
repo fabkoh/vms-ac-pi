@@ -14,6 +14,13 @@ from src import eventsMod
 event_callback_created = ()
 dictionary_sent = {}
 
+class mock_logger:
+    def __init__(self, name):
+        self.name = name
+
+    def info(self, message):
+        pass
+
 @pytest.fixture
 def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     '''
@@ -28,8 +35,8 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     mock_update_logs_and_server mocks the update_logs_and_server function, so
     we can see what data is being sent, and we can assert to test
     '''
-    def mock_logger_info(string, *args, **kwargs):
-        pass
+    def mock_logging(name):
+        return mock_logger(name )
 
     def mock_event_trigger_cb(event):
         global event_callback_created
@@ -39,7 +46,7 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
         global dictionary_sent
         dictionary_sent = dictionary
     
-    monkeypatch.setattr("Logger.info", mock_logger_info)
+    monkeypatch.setattr("logging.getLogger", mock_logging)
     monkeypatch.setattr("eventActionTriggers.event_trigger_cb", 
                         mock_event_trigger_cb)
     monkeypatch.setattr("eventsMod.update_logs_and_server", 
