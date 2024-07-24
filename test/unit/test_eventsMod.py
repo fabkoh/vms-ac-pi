@@ -21,6 +21,15 @@ class mock_logger:
     def info(self, message):
         pass
 
+    def setLevel(self, level):
+        pass
+
+    def addHandler(self, hdlr):
+        pass
+
+    def removeHandler(self, hdlr):
+        pass
+
 @pytest.fixture
 def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     '''
