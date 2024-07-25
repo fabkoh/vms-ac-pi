@@ -327,6 +327,9 @@ def activate_buzz(entrance, timing):
         GPIOconfig.pi.write(pin, 1)
         time.sleep(timing)
         GPIOconfig.pi.write(pin, 0)
+        print("In function events.activate_buzz, in the helper function")
+
+    print("In function events.activate_buzz ", entrance, " entrance and ", timing, " timing")
 
     if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
         thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_OUT_Buzz, timing)
