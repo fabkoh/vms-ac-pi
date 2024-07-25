@@ -15,6 +15,10 @@ from src import eventActionTriggerConstants as EATC
 event_callback_created = ()
 dictionary_sent = {}
 
+'''
+This is a mock_logger class, used to replace the logger in eventsMod during
+testing
+'''
 class mock_logger:
     def __init__(self, name=None):
         self.name = name
@@ -31,6 +35,10 @@ class mock_logger:
     def removeHandler(self, hdlr):
         pass
 
+'''
+This is the pytest fixture used to mock functions that we don't want to actually
+execute, but instead want to capture and test the data using assertions.
+'''
 @pytest.fixture
 def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     '''
@@ -63,8 +71,6 @@ def test_record_auth_scans(mock_all_relevant_functions):
     '''
     This function tests that record_auth_scans creates the correct event and
     pushes the correct dictionary to the server and its own logs.
-
-    TODO: Assertions are not done yet, create the test cases
     '''
     global event_callback_created, dictionary_sent
 
@@ -80,8 +86,6 @@ def test_record_auth_scans(mock_all_relevant_functions):
     eventsMod.record_auth_scans(name=12345, accessGroup="1", authtype="Card", 
                                 entrance=1, status="IN")
     
-    print("\nEventCB: " + str(event_callback_created))
-    print("\nDictionary: " + str(dictionary_sent))
     assert event_callback_created == (EATC.AUTHENTICATED_SCAN, 1)
     assert dictionary_sent["person"] == {"personId": 12345}
     assert dictionary_sent["accessGroup"] == {"accessGroupId": "1"}
