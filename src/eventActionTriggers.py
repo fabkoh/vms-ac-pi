@@ -1,11 +1,9 @@
 import datetime
 import json
 import requests
-import threading
 import time
 import os
 from eventActionTriggerConstants import *
-import relay
 from lock import pending_logs_lock
 from executor import thread_pool_executor
 from var import server_url

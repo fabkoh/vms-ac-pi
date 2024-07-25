@@ -1,5 +1,3 @@
-import gc
-
 import flask
 import healthcheck
 import json
@@ -13,12 +11,9 @@ import healthcheck
 import relay
 import eventActionTriggers
 import piProperty
-import program
 from lock import config_lock
 import tracemalloc
 import linecache
-import datetime
-import threading
 import time
 
 from executor import thread_pool_executor

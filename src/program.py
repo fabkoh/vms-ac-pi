@@ -1,7 +1,5 @@
-import asyncio
 import GPIOconfig
 import events
-import threading
 import pigpio
 import eventsMod
 import healthcheck

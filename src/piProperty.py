@@ -1,7 +1,6 @@
 import subprocess
 import re
 import time
-import threading
 
 from executor import setup_logger
 
