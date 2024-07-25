@@ -10,6 +10,7 @@ import os
 import json
 import requests
 import time
+import gc
 from changeStatic import *
 import GPIOconfig
 from var import server_url
