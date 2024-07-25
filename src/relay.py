@@ -305,7 +305,6 @@ def lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
                 deActivateRelay(outputPin, 'High')
         except RuntimeError:
             print("Entrance is still closed")
-
     return
 
 def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):

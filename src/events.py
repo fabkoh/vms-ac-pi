@@ -687,7 +687,6 @@ def reader_detects_bits(bits, value, entrance):
                             if verify_datetime(access_group_info.get('Schedule', {})):
 
                                 # auth scan
-                                #logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
                                 
                                 led_and_buzzer_correct_cred(entrancename)
                                 open_door()
@@ -901,8 +900,8 @@ def mag_detects_rising(gpio, level, tick):
     print(f"{gpio} Mag opened")
 
     if gpio == E1_Mag:
-        timeout_mag_E1.start()\
-        # print(f"{E1} is opened at " + str(datetime.now()))\
+        timeout_mag_E1.start()
+        # print(f"{E1} is opened at " + str(datetime.now()))
         if mag_E1_allowed_to_open:
             eventsMod.record_mag_opened(E1)
         else:

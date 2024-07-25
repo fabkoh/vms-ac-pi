@@ -88,11 +88,9 @@ def record_auth_scans(name, accessGroup, authtype, entrance, status):
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
-
     # logger.info("record auth scans, after event_trigger_cb")
     update_logs_and_server(dictionary)
     # logger.info("record auth scans, after update_logs_and_server")
-
 
 def invalid_pin_used(entrance, status):
     dictionary = {
@@ -118,13 +116,11 @@ def pin_only_used(entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-
     # logger.info("record pin used, before event_trigger_cb")
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
-
     # logger.info("record pin used, after event_trigger_cb")
     update_logs_and_server(dictionary)
     # logger.info("record pin used, after update_logs_and_server")
@@ -328,7 +324,6 @@ def update(file, lock, dictionary):
             except:
                 data = []
 
-
             # print("before dict append", str(datetime.now()))
 
             data.append(dictionary)
@@ -338,8 +333,6 @@ def update(file, lock, dictionary):
             json.dump(data, outfile, indent=4)
     outfile.close()
     # print("after lock", str(datetime.now()))
-
-
 
 
 # delete first half if exceeds length
