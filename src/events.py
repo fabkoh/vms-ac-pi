@@ -329,7 +329,7 @@ def activate_buzz(entrance, timing):
         ping_timer = Timer()
 
         ping_timer.start()
-        while not ping_timer.check(timing*1000):
+        while not ping_timer.check(timing):
             print("writing 1 to pin ", pin)
             GPIOconfig.pi.write(pin, 1)
         ping_timer.stop()
