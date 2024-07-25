@@ -66,6 +66,8 @@ def test_record_auth_scans(mock_all_relevant_functions):
 
     TODO: Assertions are not done yet, create the test cases
     '''
+    global event_callback_created, dictionary_sent
+
     # Remembering original serial number for reset at end of test
     original_logger = eventsMod.logger
     original_serial = eventsMod.controllerSerial
@@ -84,11 +86,14 @@ def test_record_auth_scans(mock_all_relevant_functions):
     assert dictionary_sent["person"] == {"personId": 12345}
     assert dictionary_sent["accessGroup"] == {"accessGroupId": "1"}
     assert dictionary_sent["direction"] == "IN"
-    assert dictionary_sent["entrance"] == 1
+    assert dictionary_sent["entrance"] == {"entranceId": 1}
     assert dictionary_sent["eventActionType"] == {"eventActionTypeId": 1} # based on Java side
     assert dictionary_sent["controller"] == {"controllerSerialNo": eventsMod.controllerSerial}
 
     # ------------- END OF TEST SECTION ----------------------------------------
+
+    event_callback_created = ()
+    dictionary_sent = {}
 
     # Resetting serial number
     eventsMod.logger = original_logger
