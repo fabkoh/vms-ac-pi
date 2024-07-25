@@ -10,6 +10,7 @@ SRC_DIR = os.path.abspath(os.path.join(os.path.join(TEST_DIR, os.pardir), os.par
 sys.path.insert(0, SRC_DIR)
 
 from src import eventsMod
+from src import eventActionTriggerConstants as EATC
 
 event_callback_created = ()
 dictionary_sent = {}
@@ -44,9 +45,6 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
     mock_update_logs_and_server mocks the update_logs_and_server function, so
     we can see what data is being sent, and we can assert to test
     '''
-    # def mock_getLogger(name=None):
-    #     return mock_logger(name)
-
     def mock_event_trigger_cb(event):
         global event_callback_created
         event_callback_created = event
@@ -55,7 +53,6 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
         global dictionary_sent
         dictionary_sent = dictionary
     
-    # monkeypatch.setattr("logging.getLogger", mock_getLogger)
     monkeypatch.setattr("eventActionTriggers.event_trigger_cb", 
                         mock_event_trigger_cb)
     monkeypatch.setattr(eventsMod, "update_logs_and_server", mock_update_logs_and_server)
@@ -63,7 +60,12 @@ def mock_all_relevant_functions(monkeypatch: pytest.MonkeyPatch):
                         mock_update_logs_and_server)
 
 def test_record_auth_scans(mock_all_relevant_functions):
+    '''
+    This function tests that record_auth_scans creates the correct event and
+    pushes the correct dictionary to the server and its own logs.
 
+    TODO: Assertions are not done yet, create the test cases
+    '''
     # Remembering original serial number for reset at end of test
     original_logger = eventsMod.logger
     original_serial = eventsMod.controllerSerial
@@ -73,11 +75,19 @@ def test_record_auth_scans(mock_all_relevant_functions):
     eventsMod.controllerSerial = "test_serial_123"
 
     # ------------- TEST SECTION: Record Auth Scan -----------------------------
-    eventsMod.record_auth_scans(name=1, accessGroup="1", authtype="Card", 
+    eventsMod.record_auth_scans(name=12345, accessGroup="1", authtype="Card", 
                                 entrance=1, status="IN")
     
     print("\nEventCB: " + str(event_callback_created))
     print("\nDictionary: " + str(dictionary_sent))
+    assert event_callback_created == (EATC.AUTHENTICATED_SCAN, 1)
+    assert dictionary_sent["person"] == {"personId": 12345}
+    assert dictionary_sent["accessGroup"] == {"accessGroupId": "1"}
+    assert dictionary_sent["direction"] == "IN"
+    assert dictionary_sent["entrance"] == 1
+    assert dictionary_sent["eventActionType"] == {"eventActionTypeId": 1} # based on Java side
+    assert dictionary_sent["controller"] == {"controllerSerialNo": eventsMod.controllerSerial}
+
     # ------------- END OF TEST SECTION ----------------------------------------
 
     # Resetting serial number
