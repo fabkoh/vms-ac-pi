@@ -325,12 +325,11 @@ def activate_buzz(entrance, timing):
     # Helper function to send task to thread_pool_executor
     def thread_pool_helper(pin, timing):
         print("In function events.activate_buzz, in the helper function with pin number ", pin)
-        from src import timer
 
-        ping_timer = timer.Timer()
+        ping_timer = Timer()
 
         ping_timer.start()
-        while not ping_timer.check(timing):
+        while not ping_timer.check(timing*1000):
             print("writing 1 to pin ", pin)
             GPIOconfig.pi.write(pin, 1)
         ping_timer.stop()
