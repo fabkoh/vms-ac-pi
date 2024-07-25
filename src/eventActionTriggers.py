@@ -236,7 +236,6 @@ def flush_output():
                 events.open_door_using_entrance_id(entrance)
             elif id == BUZZER:
                 print("buzzer")
-                print("In EAT.flush_output, under BUZZER, entrance is ", entrance, " and timing is ", output.get("timerDuration", 0))
                 events.activate_buzz(
                     entrance, output.get("timerDuration", 0))
             elif id == LED:
