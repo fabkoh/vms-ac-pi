@@ -329,14 +329,14 @@ def activate_buzz(entrance, timing):
         GPIOconfig.pi.write(pin, 0)
 
     if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
-        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E1_OUT_Buzz, timing))
-        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Buzz, timing))
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_OUT_Buzz, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Buzz, timing)
         return
 
     if entrance == E1:
-        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E1_OUT_Buzz, timing))
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_OUT_Buzz, timing)
     elif entrance == E2:
-        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Buzz, timing))
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Buzz, timing)
 
 def activate_led(entrance, timing):
     '''
@@ -358,14 +358,14 @@ def activate_led(entrance, timing):
         GPIOconfig.pi.write(pin, 0)
 
     if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
-        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E1_OUT_Led, timing))
-        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Led, timing))
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_OUT_Led, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Led, timing)
         return
 
     if entrance == E1:
-        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E1_OUT_Led, timing))
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_OUT_Led, timing)
     elif entrance == E2:
-        thread_pool_executor.submit(thread_pool_helper(GPIOconfig.E2_OUT_Led, timing))
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Led, timing)
 
 '''
 TODO: functions for led and buzzer behaviour when the credentials are correct/
