@@ -48,7 +48,7 @@ def sendEmail_function(event):
         entrance = entranceObj.get("entranceId", None)
     else:
         entrance = None
-    print(f"sendEmail to entrance {entrance}")
+    # print(f"sendEmail to entrance {entrance}")
     url = server_url+'/api/events/eventsSMTP'
     # Create a new event object and copy all the key-value pairs from the original event object
     newevent = {}
@@ -61,19 +61,19 @@ def sendEmail_function(event):
 
     data = json.dumps(
         newevent)
-    # print(data)
-    print(f"url is {url}")
+    # # print(data)
+    # print(f"url is {url}")
 
     try:
-        print("sending email")
+        # print("sending email")
         headers = {'Content-type': 'application/json'}
         r = requests.post(url, data=data, headers=headers,
                           verify=False, timeout=10)
-        print(r)
-        print(r.status_code)
+        # print(r)
+        # print(r.status_code)
 
         if r.status_code == 201 or r.status_code == 200:
-            print("SUCCESS")
+            # print("SUCCESS")
             with pending_logs_lock:
                 fileclear = open(path+'/json/pendingLogs.json', 'w')
                 json.dump([], fileclear, indent=4)
@@ -83,12 +83,12 @@ def sendEmail_function(event):
     except Exception as e:
 
         print("Exception:", str(e))
-        print("No connection to ", url)
+        # print("No connection to ", url)
 
 
 def sendSMS_function(event):
     entrance = event.get("entrance", {}).get("entranceId", None)
-    print(f"sendSMS to entrance {entrance}")
+    # print(f"sendSMS to entrance {entrance}")
     url = server_url+'/api/events/eventsSMS'
     # Create a new event object and copy all the key-value pairs from the original event object
     newevent = {}
@@ -101,18 +101,18 @@ def sendSMS_function(event):
 
     data = json.dumps(
         newevent)
-    # print(data)
-    print(f"url is {url}")
+    # # print(data)
+    # print(f"url is {url}")
 
     try:
         headers = {'Content-type': 'application/json'}
         r = requests.post(url, data=data, headers=headers,
                           verify=False, timeout=5)
-        print(r)
-        print(r.status_code)
+        # print(r)
+        # print(r.status_code)
 
         if r.status_code == 201 or r.status_code == 200:
-            print("SUCCESS")
+            # print("SUCCESS")
             with pending_logs_lock:
                 fileclear = open(path+'/json/pendingLogs.json', 'w')
                 json.dump([], fileclear, indent=4)
@@ -127,7 +127,7 @@ def sendSMS_function(event):
 
 
 def external_controller_GEN_OUT_function(controllerId, eventaction):
-    print(controllerId, type(controllerId))
+    # print(controllerId, type(controllerId))
     print(eventaction, type(eventaction))
 
 
@@ -183,26 +183,26 @@ def check_datetime(schedule):
     Returns:
         active: if the schedule is current active
     '''
-    # print(f"schedule: {schedule}")
+    # # print(f"schedule: {schedule}")
     # time_array = schedule.get(str(datetime.date.today()), None)
     today = datetime.date.today().strftime("%Y-%m-%d")
-    # print("Today:", today)
+    # # print("Today:", today)
 
     time_array = schedule.get(today, None)
-    # print("Time Array:", time_array)
+    # # print("Time Array:", time_array)
 
     if time_array == None:
-        # print("No schedule for today")
+        # # print("No schedule for today")
         return False
-    # print(f"time array is {time_array}")
+    # # print(f"time array is {time_array}")
     curr_datetime = datetime.datetime.now()
     curr_time = curr_datetime.strftime(
         "%H") + ":" + curr_datetime.strftime("%M")  # "HH:MM"
     for timing in time_array:
         start_time = timing.get("starttime", "24:00")
         end_time = timing.get("endtime", "00:00")
-        # print(f"start time is {start_time}, end time is {end_time}")
-        # print(f"curr time is {curr_time}")
+        # # print(f"start time is {start_time}, end time is {end_time}")
+        # # print(f"curr time is {curr_time}")
         if start_time <= curr_time <= end_time:
             return True
     return False
@@ -213,14 +213,14 @@ def flush_output():
     import events
     import GPIOconfig
     for event in output_events:
-        print("this is event")
-        print(event)
+        # print("this is event")
+        # print(event)
         entranceObj = event.get("entrance", {})
         if entranceObj != None:
             entrance = entranceObj.get("entranceId", None)
         else:
             entrance = None 
-        # print(entrance)
+        # # print(entrance)
         if entrance == None:
             if event.get("controller", None) != None:
                 entrance = BOTH_ENTRANCE
@@ -228,10 +228,10 @@ def flush_output():
                 continue  # ignore, malformed json
 
         for output in event.get("outputActions", []):
-            # print(output)
+            # # print(output)
             id = output.get("eventActionOutputType", {}).get(
                 "eventActionOutputId", None)
-            print(f"id is {id}")
+            # print(f"id is {id}")
             if id == DOOR_OPEN:
                 events.open_door_using_entrance_id(entrance)
             elif id == BUZZER:
@@ -244,25 +244,25 @@ def flush_output():
                     entrance, output.get("timerDuration", 0))
             elif id == GEN_OUT_1:
                 timer1 = output.get("timerDuration", 0)
-                print(f"Gen Out 1, timer {timer1} seconds")
+                # print(f"Gen Out 1, timer {timer1} seconds")
                 events.open_GEN_OUT(
                     "GEN_OUT_1", output.get("timerDuration", 0), 1)
             elif id == GEN_OUT_2:
                 timer2 = output.get("timerDuration", 0)
-                print(f"Gen Out 2, timer {timer2} seconds")
+                # print(f"Gen Out 2, timer {timer2} seconds")
                 events.open_GEN_OUT(
                     "GEN_OUT_2", output.get("timerDuration", 0), 2)
             elif id == GEN_OUT_3:
                 timer3 = output.get("timerDuration", 0)
-                print(f"Gen Out 3, timer {timer3} seconds")
+                # print(f"Gen Out 3, timer {timer3} seconds")
                 events.open_GEN_OUT(
                     "GEN_OUT_3", output.get("timerDuration", 0), 3)
             elif id == SMSNOTIFICATION:
                 sendSMS_function(event)
-                print("sms activate")
+                # print("sms activate")
             elif id == EMAILNOTIFICATION:
                 sendEmail_function(event)
-                print("email activate")
+                # print("email activate")
 
     output_events.clear()
 
@@ -346,7 +346,7 @@ def event_trigger_cb(event_trigger):
     #              get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
     #              get_entrance_from_event_management(eventManagement) == entrance),  # check if trigger is currently active
     #         EVENT_ACTION_TRIGGERS_DATA):
-    #     print(f"event is {event}")
+    #     # print(f"event is {event}")
     for event in filter(
         lambda eventManagement: any(
             map(
@@ -362,7 +362,7 @@ def event_trigger_cb(event_trigger):
         ),
         EVENT_ACTION_TRIGGERS_DATA
     ):
-        print(f"event is {event}")
+        # print(f"event is {event}")
 
         event_management_id = event.get("eventsManagementId", None)
 
@@ -374,7 +374,7 @@ def event_trigger_cb(event_trigger):
         entrance = get_entrance_from_event_management(event)
         # check if all time based trigger is valid
         for inputEvent in event.get("inputEvents", []):
-            print(f"inputEvent is {inputEvent}")
+            # print(f"inputEvent is {inputEvent}")
             # each eventManagement has max 1 event based trigger
             # if the event is different, it must be a timer based trigger
             input_event_id = inputEvent.get(

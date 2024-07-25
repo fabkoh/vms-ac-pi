@@ -108,10 +108,10 @@ def run_servers():
     
 
 def main():
-    print("Hostname:" + hostname)
+    # print("Hostname:" + hostname)
     processedIP = get_host_ip().split('.',1)[0] + "." + get_host_ip().split('.',2)[1] + "."+get_host_ip().split('.',3)[2] +".250"
-    print("host IP: " + get_host_ip())
-    print(get_default_gateway_windows())
+    # print("host IP: " + get_host_ip())
+    # print(get_default_gateway_windows())
     print ("DNS: " + socket.getfqdn())
     print ("Serial Num: " + get_serialnum().decode())
 
