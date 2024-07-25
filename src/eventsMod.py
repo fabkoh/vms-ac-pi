@@ -83,7 +83,6 @@ def record_auth_scans(name, accessGroup, authtype, entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-
     # logger.info("record auth scans, before event_trigger_cb")
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
@@ -310,7 +309,6 @@ def update_logs_and_server(dictionary):
         update_server_events()
 
     # create thread to implement the above
-    # thread_task()
     thread_pool_executor.submit(thread_task)
 
 
@@ -335,7 +333,6 @@ def update(file, lock, dictionary):
             json.dump(data, outfile, indent=4)
     outfile.close()
     # print("after lock", str(datetime.now()))
-
 
 
 # delete first half if exceeds length

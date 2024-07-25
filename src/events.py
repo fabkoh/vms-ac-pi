@@ -9,6 +9,7 @@ import updateserver
 import os
 
 from lock import config_lock
+import GPIOconfig
 
 path = os.path.dirname(os.path.abspath(__file__))
 
@@ -308,6 +309,150 @@ def open_GEN_OUT(GEN_OUT_PIN, timer, GenNo):
 # record Trans
 # TODO: add event logging
 
+def activate_buzz(entrance, timing):
+    '''
+    Activates the buzzer at <entrance> for a set amount of time. The request is
+    submitted to the thread_pool_executor to be run asychronously.
+
+        Parameters:
+            entrance (Any): Entrance ID based on config.json
+            time: Duration in seconds for how long to activate the buzzer for
+    '''
+    # Imports only used in this function
+    import eventActionTriggerConstants
+    from executor import thread_pool_executor
+
+    # Helper function to send task to thread_pool_executor
+    def thread_pool_helper(pin, timing):
+        ping_timer = Timer()
+
+        ping_timer.start()
+        while not ping_timer.check(timing):
+            GPIOconfig.pi.write(pin, 1)
+        ping_timer.stop()
+
+        GPIOconfig.pi.write(pin, 0)
+
+    if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_IN_Buzz, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_OUT_Buzz, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_IN_Buzz, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Buzz, timing)
+        return
+
+    if entrance == E1:
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_IN_Buzz, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_OUT_Buzz, timing)
+    elif entrance == E2:
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_IN_Buzz, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Buzz, timing)
+
+def activate_led(entrance, timing):
+    '''
+    Activates the LED at <entrance> for a set amount of time. The request is
+    submitted to the thread_pool_executor to be run asychronously.
+
+        Parameters:
+            entrance (Any): Entrance ID based on config.json
+            time: Duration in seconds for how long to activate the LED for
+    '''
+    # Imports only used in this function
+    import eventActionTriggerConstants
+    from executor import thread_pool_executor
+
+    # Helper function to send task to thread_pool_executor
+    def thread_pool_helper(pin, timing):
+        ping_timer = Timer()
+
+        ping_timer.start()
+        while not ping_timer.check(timing):
+            GPIOconfig.pi.write(pin, 1)
+        ping_timer.stop()
+        
+        GPIOconfig.pi.write(pin, 0)
+
+    if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_IN_Led, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_OUT_Led, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_IN_Led, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Led, timing)
+        return
+
+    if entrance == E1:
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_IN_Led, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E1_OUT_Led, timing)
+    elif entrance == E2:
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_IN_Led, timing)
+        thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Led, timing)
+
+'''
+TODO: functions for led and buzzer behaviour when the credentials are correct/
+wrong
+Correct: Buzzer buzzes for 0.2 seconds, LED turns green for 2 seconds
+Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change)
+
+Current issues: 
+- Triggering this overrides the output_events queue actions if there is one for
+    or buzzer there
+'''
+def led_and_buzzer_correct_cred(entrance_id):
+    '''
+    Buzzes and lights up LED to show that the correct credentials were entered,
+    when opening the door. Submits the thread_pool_executor to run async.
+    Currently only triggers the IN Buzzer and LED, may need to include the OUT
+    one as well.
+
+        Parameters:
+            entrance_id (Any): Entrance ID based on config.json
+    '''
+    from executor import thread_pool_executor
+
+    # Buzz for 0.2 seconds, light up LED for 2.2 seconds
+    def thread_pool_buzz_led(buzz_pin, led_pin):
+        GPIOconfig.pi.write(buzz_pin, 1)
+        GPIOconfig.pi.write(led_pin, 1)
+        time.sleep(0.2)
+        GPIOconfig.pi.write(buzz_pin, 0)
+        time.sleep(2)
+        GPIOconfig.pi.write(led_pin, 0)
+    
+    if entrance_id == E1:
+        thread_pool_executor.submit(
+            thread_pool_buzz_led, GPIOconfig.E1_OUT_Buzz, GPIOconfig.E1_OUT_Led)
+        thread_pool_executor.submit(
+            thread_pool_buzz_led, GPIOconfig.E1_IN_Buzz, GPIOconfig.E1_IN_Led)
+    elif entrance_id == E2:
+        thread_pool_executor.submit(
+            thread_pool_buzz_led, GPIOconfig.E2_OUT_Buzz, GPIOconfig.E2_OUT_Led)
+        thread_pool_executor.submit(
+            thread_pool_buzz_led, GPIOconfig.E2_IN_Buzz, GPIOconfig.E2_IN_Led)
+
+def led_and_buzzer_wrong_cred(entrance_id):
+    '''
+    Buzzes to show that the wrong credentials were entered, when opening the
+    door. Submits the thread_pool_executor to run async.
+    Currently only triggers the IN Buzzer, may need to include the OUT one as
+    well.
+
+        Parameters:
+            entrance_id (Any): Entrance ID based on config.json
+    '''
+    from executor import thread_pool_executor
+
+    # Buzz for 3 times in quick succession
+    def thread_pool_buzz(pin):
+        for i in range(0,3):
+            GPIOconfig.pi.write(pin, 1)
+            time.sleep(0.1)
+            GPIOconfig.pi.write(pin, 0)
+            time.sleep(0.1)
+    
+    if entrance_id == E1:
+        thread_pool_executor.submit(thread_pool_buzz, GPIOconfig.E1_OUT_Buzz)
+        thread_pool_executor.submit(thread_pool_buzz, GPIOconfig.E1_IN_Buzz)
+    elif entrance_id == E2:
+        thread_pool_executor.submit(thread_pool_buzz, GPIOconfig.E2_OUT_Buzz)
+        thread_pool_executor.submit(thread_pool_buzz, GPIOconfig.E2_IN_Buzz)
 
 def reader_detects_bits(bits, value, entrance):
 
@@ -466,6 +611,7 @@ def reader_detects_bits(bits, value, entrance):
                         "AuthenticationDevices", {}).get(entrance_direction, {})
             if entrance_details == {}:  # entrance not found, quit
                 eventsMod.record_unauth_scans(None, None, entrance_direction)
+                led_and_buzzer_wrong_cred(entrancename)
                 return
 
             # check master password
@@ -477,7 +623,9 @@ def reader_detects_bits(bits, value, entrance):
                     "Master Pin", entrancename, entrance_direction)
                 # logger.info("Updating Logs after Master Password used")
 
+                led_and_buzzer_correct_cred(entrancename)
                 open_door()
+                
                 reset_cred_and_stop_timer()
                 # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
                 # updateserver.update_server_events()
@@ -503,6 +651,7 @@ def reader_detects_bits(bits, value, entrance):
                 # print("auth method not allowed at this timing ")
                 eventsMod.record_unauth_scans(
                     auth_method_name, entrancename, entrance_direction)
+                led_and_buzzer_wrong_cred(entrancename)
                 reset_cred_and_stop_timer()
                 return
 
@@ -512,6 +661,7 @@ def reader_detects_bits(bits, value, entrance):
                 # print("requires more credentials")
                 eventsMod.record_unauth_scans(
                     auth_method_name, entrancename, entrance_direction)
+                led_and_buzzer_wrong_cred(entrancename)
                 return
 
             # check if need to check if cred belongs to someone
@@ -555,8 +705,10 @@ def reader_detects_bits(bits, value, entrance):
                             if verify_datetime(access_group_info.get('Schedule', {})):
 
                                 # auth scan
-                                # logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
+                                
+                                led_and_buzzer_correct_cred(entrancename)
                                 open_door()
+                                
 
                                 if "Pin" == auth_method_name:
                                     eventsMod.pin_only_used(
@@ -580,6 +732,7 @@ def reader_detects_bits(bits, value, entrance):
                             else:
                                 eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person.get(
                                     "Name", ""), list(access_group.keys())[0])
+                            led_and_buzzer_wrong_cred(entrancename)
                             reset_cred_and_stop_timer()
                             return
                 # cannot find person
@@ -590,6 +743,7 @@ def reader_detects_bits(bits, value, entrance):
                 else:
                     eventsMod.record_unauth_scans(
                         auth_method_name, entrancename, entrance_direction)
+                led_and_buzzer_wrong_cred(entrancename)
                 reset_cred_and_stop_timer()
                 return
 
@@ -761,6 +915,8 @@ def mag_detects_rising(gpio, level, tick):
     if time.time() - mag_detects_rising.last_call_time < debounce_delay:
         return
 
+    print(f"{gpio} Mag opened")
+
     if gpio == E1_Mag:
         timeout_mag_E1.start()
         # print(f"{E1} is opened at " + str(datetime.now()))
@@ -786,6 +942,8 @@ mag_detects_rising.last_call_time = 0
 def mag_detects_falling(gpio, level, tick):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
+
+    print(f"{gpio} Mag closed")
 
     if time.time() - mag_detects_falling.last_call_time < debounce_delay:
         return

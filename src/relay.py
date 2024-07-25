@@ -1,3 +1,5 @@
+import time
+
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
@@ -5,9 +7,14 @@ import multitasking
 import json
 import os
 from lock import config_lock
-
-from eventActionTriggerConstants import GEN_OUT_1
 from executor import setup_logger, thread_pool_executor
+
+import pigpio
+import time
+import GPIOconfig
+import eventActionTriggerConstants
+
+pi = pigpio.pi()
 
 path = os.path.dirname(os.path.abspath(__file__))
 
@@ -102,7 +109,6 @@ def deActivateRelay(relayPin, activateLevel):
 
 
 def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
-    
     global E1_opened
     # logger.info("Trigger toggleRelay 1, E1_opened: %s", E1_opened)
     if not E1_opened:
@@ -232,11 +238,7 @@ def trigger_relay_one(thirdPartyOption=None):
         setupRelayPin(outputPin)
         # print("opening")
         # logger.info("Before toggleRelay1")
-        # toggleRelay1(outputPin, 'High', 5000, 1000, 1)
         thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
-        # toggleRelay1(relayPin=outputPin, activateLevel='High',
-        #              activateMilliSeconds=5000, deActivateMilliSeconds=1000,
-        #              toggleCount=1)
         # cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
@@ -261,11 +263,6 @@ def trigger_relay_two(thirdPartyOption=None):
         setGpioMode()
         setupRelayPin(outputPin)
         thread_pool_executor.submit(toggleRelay2, outputPin, 'High', 5000, 1000, 1)
-
-        # toggleRelay2(relayPin=outputPin, activateLevel='High',
-        #              activateMilliSeconds=5000, deActivateMilliSeconds=1000,
-        #              toggleCount=1)
-        # cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
     return
@@ -308,7 +305,6 @@ def lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
                 deActivateRelay(outputPin, 'High')
         except RuntimeError:
             print("Entrance is still closed")
-    # # print("test")
     return
 
 def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):

@@ -1,10 +1,13 @@
 import pigpio
+import time
 
 pi = pigpio.pi()
 
 Gen_1 = 27
 Gen_2 = 13
 Gen_3 = 21
+E1_IN_Buzz = 23
+E1_IN_LED = 8
 
 
 pi.set_mode(Gen_1, pigpio.OUTPUT)    
@@ -28,12 +31,20 @@ def deactivate_relay(gpio, level, tick):
     # print(pi.read(Gen_2),"deactivate")
 
 
+def test_buzzer(gpio, level, tick):
+    pi.set_mode(gpio, pigpio.OUTPUT)
+    for i in range(0, 5):
+        pi.write(gpio, 1)
+        time.sleep(1)
+        pi.write(gpio, 0)
+        time.sleep(1)
 
 cb = pi.callback(Gen_3, pigpio.FALLING_EDGE, activate_relay)
 cb1 = pi.callback(Gen_3, pigpio.RISING_EDGE, deactivate_relay)
-   
-while True:
-    listen()
+
+# while True:
+#     listen()
+test_buzzer(E1_IN_LED, 1, 1)
 
 
 #pi.write(Gen_2,0)

@@ -235,12 +235,12 @@ def flush_output():
             if id == DOOR_OPEN:
                 events.open_door_using_entrance_id(entrance)
             elif id == BUZZER:
-                # print("buzzer")
-                GPIOconfig.activate_buzz(
+                print("buzzer")
+                events.activate_buzz(
                     entrance, output.get("timerDuration", 0))
             elif id == LED:
-                # print("led")
-                GPIOconfig.activate_led(
+                print("led")
+                events.activate_led(
                     entrance, output.get("timerDuration", 0))
             elif id == GEN_OUT_1:
                 timer1 = output.get("timerDuration", 0)
