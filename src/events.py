@@ -327,7 +327,7 @@ def activate_buzz(entrance, timing):
         GPIOconfig.pi.write(pin, 1)
         time.sleep(timing)
         GPIOconfig.pi.write(pin, 0)
-        print("In function events.activate_buzz, in the helper function")
+        print("In function events.activate_buzz, in the helper function with pin number ", pin)
 
     print("In function events.activate_buzz ", entrance, " entrance and ", timing, " timing")
 
