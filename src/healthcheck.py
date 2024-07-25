@@ -140,8 +140,8 @@ def main(post_to_etlas=False):
         r = requests.post(url, data=json.dumps(
             body), headers=headers, verify=False)
 
-        print(r)
-        print(r.status_code)
+        # print(r)
+        # print(r.status_code)
 
         if r.status_code == 201 or r.status_code == 200:
             print("SUCCESS")

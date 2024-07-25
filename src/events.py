@@ -47,7 +47,7 @@ class Timer:
     def start(self):
         """Start a new timer"""
         if self._start_time is not None:
-            print("Timer is running. Use .stop() to stop it")
+            # print("Timer is running. Use .stop() to stop it")
             return
             raise TimerError(f"Timer is running. Use .stop() to stop it")
 
@@ -56,18 +56,18 @@ class Timer:
     def stop(self):
         """Stop the timer, and report the elapsed time"""
         if self._start_time is None:
-            print("Timer is not running. Use .start() to start it")
+            # print("Timer is not running. Use .start() to start it")
             return
             raise TimerError(f"Timer is not running. Use .start() to start it")
 
         elapsed_time = time.perf_counter() - self._start_time
         self._start_time = None
-        print(f"Elapsed time: {elapsed_time:0.4f} seconds")
+        # print(f"Elapsed time: {elapsed_time:0.4f} seconds")
 
     def check(self, TIME):
         """return True if current_elapsed_time exceeds TIME"""
         if self._start_time is None:
-            print("Timer is not running. Use .start() to start it")
+            # print("Timer is not running. Use .start() to start it")
             return
 
         current_elapsed_time = time.perf_counter() - self._start_time
@@ -154,9 +154,9 @@ def verify_datetime(schedule):
 
     try:
         for scheduledate, scheduletime in schedule.items():
-            # print(scheduledate,scheduletime)
+            # # print(scheduledate,scheduletime)
             if scheduledate == str(date.today()):
-                # print("today in schedule")
+                # # print("today in schedule")
                 for timing in scheduletime:
                     now = datetime.now().time()
                     start = datetime.strptime(
@@ -166,11 +166,11 @@ def verify_datetime(schedule):
                             timing["endtime"], "%H:%M").time()
 
                         if now >= start and now < end:
-                            # print("now in schedule") # strictly within
+                            # # print("now in schedule") # strictly within
                             return True
                     else:
                         if now >= start:
-                            # print("now in schedule") # strictly within
+                            # # print("now in schedule") # strictly within
                             return True
     except:
         pass
@@ -181,17 +181,17 @@ def verify_datetime(schedule):
 def check_entrance_status():
 
     if verify_datetime(E1_entrance_schedule):
-        # print("unlock E1")
+        # # print("unlock E1")
         relay.lock_unlock_entrance_one(E1_thirdPartyOption, True)
     else:
-        # print("lock E1")
+        # # print("lock E1")
         relay.lock_unlock_entrance_one(E1_thirdPartyOption, False)
 
     if verify_datetime(E2_entrance_schedule):
-        # print("unlock E2")
+        # # print("unlock E2")
         relay.lock_unlock_entrance_two(E2_thirdPartyOption, True)
     else:
-        # print("lock E2")
+        # # print("lock E2")
         relay.lock_unlock_entrance_two(E2_thirdPartyOption, False)
 
 
@@ -289,9 +289,9 @@ def open_door_using_entrance_id(entrance_id):
 
        entrance_id (int): entrance id
     '''
-    # print("here",config.get("EntranceName",{}).get("E1",None) == entrance_id)
+    # # print("here",config.get("EntranceName",{}).get("E1",None) == entrance_id)
     if entrance_id and entrance_id == config.get("EntranceName", {}).get("E1", None):
-        # print("here")
+        # # print("here")
         open_door("E1")
     elif entrance_id and entrance_id == config.get("EntranceName", {}).get("E2", None):
         open_door("E2")
@@ -352,7 +352,7 @@ def reader_detects_bits(bits, value, entrance):
 
         Returns None'''
         # add unauth scan function call
-        # print(f"recording {auth_method_name} at {entrancename}")
+        # # print(f"recording {auth_method_name} at {entrancename}")
         # eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction,  "", list(access_group.keys())[0])
         
         pinsvalue.clear()
@@ -368,8 +368,8 @@ def reader_detects_bits(bits, value, entrance):
 
     def open_door():
         '''opens the door, set mags to allow open, update server events'''
-        # print("open")
-        logger.info("Trigger open_door method")
+        # # print("open")
+        # logger.info("Trigger open_door method")
         global mag_E1_allowed_to_open
         global mag_E2_allowed_to_open
         if entrance_prefix == "E1":
@@ -399,7 +399,7 @@ def reader_detects_bits(bits, value, entrance):
 
     # Process the pin value inputed by user
     def process_pin_value(value):
-        print("value={}".format(value))
+        # print("value={}".format(value))
         if 0 <= value <= 9:  # normal input
             if len(pinsvalue) > MAX_PIN_LENGTH:
                 return False  # Indicate processing should stop
@@ -414,8 +414,8 @@ def reader_detects_bits(bits, value, entrance):
         return False  # Default case, credential not added
 
     # credential_added means user input has ended
-    logger.info("bits={} value={}".format(bits, value))
-    print("bits={} value={}".format(bits, value))
+    # logger.info("bits={} value={}".format(bits, value))
+    # print("bits={} value={}".format(bits, value))
 
     credential_added = False
     if bits == pin_bits:  # 1 number keyed in
@@ -423,7 +423,7 @@ def reader_detects_bits(bits, value, entrance):
 
     elif bits == card_bits:  # card
         credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
-        logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
+        # logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
         print(str(datetime.now()) + " Card detected: bits={} value={}".format(
             bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
         credential_added = True
@@ -454,8 +454,8 @@ def reader_detects_bits(bits, value, entrance):
     # 2 check auth method (if cred entered not in curr cred schedule, reset)
     # 3 check person creds
     if credential_added:
-        logger.info("Check Credentials")
-        print(credentials)
+        # logger.info("Check Credentials")
+        # print(credentials)
         try:
             device_details = {}
             entrance_details = {}
@@ -472,10 +472,10 @@ def reader_detects_bits(bits, value, entrance):
             if pin_type in credentials and \
                "Masterpassword" in device_details and \
                credentials[pin_type] == device_details["Masterpassword"]:
-                logger.info("Using Master Password")
+                # logger.info("Using Master Password")
                 eventsMod.record_masterpassword_used(
                     "Master Pin", entrancename, entrance_direction)
-                logger.info("Updating Logs after Master Password used")
+                # logger.info("Updating Logs after Master Password used")
 
                 open_door()
                 reset_cred_and_stop_timer()
@@ -484,7 +484,7 @@ def reader_detects_bits(bits, value, entrance):
                 return
 
             # check auth method
-            # print(device_details)
+            # # print(device_details)
             auth_method_name = device_details["defaultAuthMethod"]
             for auth_method in device_details.get("AuthMethod", []):
                 if "Method" in auth_method and \
@@ -500,7 +500,7 @@ def reader_detects_bits(bits, value, entrance):
 
             # check for credentials not in auth_method_keys
             if any(map(lambda k: k not in auth_method_keys, credentials)):
-                print("auth method not allowed at this timing ")
+                # print("auth method not allowed at this timing ")
                 eventsMod.record_unauth_scans(
                     auth_method_name, entrancename, entrance_direction)
                 reset_cred_and_stop_timer()
@@ -509,7 +509,7 @@ def reader_detects_bits(bits, value, entrance):
             # have some crendetials but need more
             if ((auth_method_is_and and any(map(lambda k: k in credentials, auth_method_keys)))
                     and not all(map(lambda k: k in credentials, auth_method_keys))):
-                print("requires more credentials")
+                # print("requires more credentials")
                 eventsMod.record_unauth_scans(
                     auth_method_name, entrancename, entrance_direction)
                 return
@@ -520,7 +520,7 @@ def reader_detects_bits(bits, value, entrance):
                 # check person cred
                 # 1 find the person
                 # 2 check if the person's access group can enter
-                logger.info("Finding person credentials in entrance_details")
+                # logger.info("Finding person credentials in entrance_details")
                 for access_group in entrance_details.get("AccessGroups", []):
                     # find the person
                     person_found = False
@@ -529,9 +529,9 @@ def reader_detects_bits(bits, value, entrance):
                     for person in access_group_info.get("Persons", []):
                         # check if this person has the creds
                         person_credentials = person.get("Credentials", {})
-                        # print(person_credentials)
-                        # print("person_credentials",person_credentials)
-                        # print("credentials",credentials)
+                        # # print(person_credentials)
+                        # # print("person_credentials",person_credentials)
+                        # # print("credentials",credentials)
 
                         def checkcred(k):
                             listOfCred = person_credentials.get(k[0])
@@ -551,11 +551,11 @@ def reader_detects_bits(bits, value, entrance):
                         # see if all credentials belong to person
                         if all(map(checkcred, list(credentials.items()))):
                             # check if the person's access group can enter
-                            # print(verify_datetime(access_group_info.get('Schedule', {})))
+                            # # print(verify_datetime(access_group_info.get('Schedule', {})))
                             if verify_datetime(access_group_info.get('Schedule', {})):
 
                                 # auth scan
-                                logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
+                                # logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
                                 open_door()
 
                                 if "Pin" == auth_method_name:
@@ -573,7 +573,7 @@ def reader_detects_bits(bits, value, entrance):
                                 reset_cred_and_stop_timer()
                                 return
                             # person dont have access at this time
-                            logger.info("Found person, but not allowed to enter at this timing")
+                            # logger.info("Found person, but not allowed to enter at this timing")
                             if "Pin" == auth_method_name:
                                 eventsMod.invalid_pin_used(
                                     entrancename, entrance_direction)
@@ -583,7 +583,7 @@ def reader_detects_bits(bits, value, entrance):
                             reset_cred_and_stop_timer()
                             return
                 # cannot find person
-                logger.info("Cannot find person")
+                # logger.info("Cannot find person")
                 if "Pin" == auth_method_name:
                     eventsMod.invalid_pin_used(
                         entrancename, entrance_direction)
@@ -632,14 +632,14 @@ schedule = {
 '''
 '''
 def verify_datetime(schedule):
-    #print(schedule)
-    #print(type(schedule))
-    #print(str(date.today()))
-    print(datetime.now())
+    ## print(schedule)
+    ## print(type(schedule))
+    ## print(str(date.today()))
+    # print(datetime.now())
     for scheduledate,scheduletime in schedule.items():
-        #print(scheduledate,scheduletime)
+        ## print(scheduledate,scheduletime)
         if scheduledate == str(date.today()):
-            print("today in schedule")
+            # print("today in schedule")
             for timing in scheduletime:
                 now = datetime.now().time()
                 start = datetime.strptime(timing["starttime"], "%H:%M").time()
@@ -647,11 +647,11 @@ def verify_datetime(schedule):
                     end = datetime.strptime(timing["endtime"], "%H:%M").time()
                         
                     if now >= start and now < end:
-                        print("now in schedule") # strictly within
+                        # print("now in schedule") # strictly within
                         return True
                 else:
                     if now >= start:
-                        print("now in schedule") # strictly within
+                        # print("now in schedule") # strictly within
                         return True
 
     return False 
@@ -710,7 +710,7 @@ def update_zone_status(entrance, entrancestatus, persondetails):
         except:
             checkdata = {"controllerId": "", "E1": [], "E2": []}
 
-    # print(verify_zone_status(entrance,entrancestatus,persondetails))
+    # # print(verify_zone_status(entrance,entrancestatus,persondetails))
     if verify_zone_status(entrance, entrancestatus, persondetails):
         controllerId = config["controllerConfig"][0]["controllerId"]
         dictionary = {"Name": persondetails["Name"],
@@ -731,7 +731,7 @@ def update_zone_status(entrance, entrancestatus, persondetails):
 
 
 # persondetails = {"Name": "Bryan","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}
-# print(verify_zone_status("E1R1","In",persondetails))
+# # print(verify_zone_status("E1R1","In",persondetails))
 # update_zone_status("E1R1","In",persondetails)
 
 # check if antipassback if required
@@ -763,7 +763,7 @@ def mag_detects_rising(gpio, level, tick):
 
     if gpio == E1_Mag:
         timeout_mag_E1.start()
-        print(f"{E1} is opened at " + str(datetime.now()))
+        # print(f"{E1} is opened at " + str(datetime.now()))
         if mag_E1_allowed_to_open:
             eventsMod.record_mag_opened(E1)
         else:
@@ -772,7 +772,7 @@ def mag_detects_rising(gpio, level, tick):
 
     if gpio == E2_Mag:
         timeout_mag_E2.start()
-        print(f"{E2} is opened at " + str(datetime.now()))
+        # print(f"{E2} is opened at " + str(datetime.now()))
         if mag_E2_allowed_to_open:
             eventsMod.record_mag_opened(E2)
         else:
@@ -792,14 +792,14 @@ def mag_detects_falling(gpio, level, tick):
 
     if gpio == E1_Mag:
         timeout_mag_E1.stop()
-        print(f"{E1} is closed at " + str(datetime.now()))
+        # print(f"{E1} is closed at " + str(datetime.now()))
         mag_E1_allowed_to_open = False
         eventsMod.record_mag_closed(E1)
         updateserver.update_server_events()
 
     if gpio == E2_Mag:
         timeout_mag_E2.stop()
-        print(f"{E2} is closed at " + str(datetime.now()))
+        # print(f"{E2} is closed at " + str(datetime.now()))
         mag_E2_allowed_to_open = False
         eventsMod.record_mag_closed(E2)
         updateserver.update_server_events()
@@ -817,17 +817,17 @@ def button_detects_change(gpio, level, tick):
     if time.time() - button_detects_change.last_call_time < debounce_delay:
         return
 
-    print(gpio, "gpio")
+    # print(gpio, "gpio")
 
     # handle button press
     if gpio == E1_Button:
-        logger.info(f"{E1} push button1 is pressed at " + str(datetime.now()))
+        # logger.info(f"{E1} push button1 is pressed at " + str(datetime.now()))
         mag_E1_allowed_to_open = True
         relay.trigger_relay_one(E1_thirdPartyOption)
         eventsMod.record_button_pressed(E1, "Security Guard Button")
 
     elif gpio == E2_Button:
-        logger.info(f"{E2} push button2 is pressed at " + str(datetime.now()))
+        # logger.info(f"{E2} push button2 is pressed at " + str(datetime.now()))
         mag_E2_allowed_to_open = True
         relay.trigger_relay_two(E2_thirdPartyOption)
         eventsMod.record_button_pressed(E2, "Security Guard Button")
@@ -843,13 +843,13 @@ button_detects_change.last_call_time = 0
 #     global mag_E2_allowed_to_open
 
 #     if gpio == E1_Button:
-#         print(f"{E1} push button1 is pressed at " + str(datetime.now()))
+#         # print(f"{E1} push button1 is pressed at " + str(datetime.now()))
 #         mag_E1_allowed_to_open = True
 #         relay.trigger_relay_one(E1_thirdPartyOption)
 #         eventsMod.record_button_pressed(E1, "Security Guard Button")
 
 #     if gpio == E2_Button:
-#         print(f"{E2} push button2 is pressed at " + str(datetime.now()))
+#         # print(f"{E2} push button2 is pressed at " + str(datetime.now()))
 #         mag_E2_allowed_to_open = True
 #         relay.trigger_relay_two(E2_thirdPartyOption)
 #         eventsMod.record_button_pressed(E2, "Security Guard Button")

@@ -26,7 +26,7 @@ E2_OUT = None
 
 
 def mag_and_button():
-    print("mag_and_button starting")
+    # print("mag_and_button starting")
     cb1 = GPIOconfig.pi.callback(
         events.E1_Mag, pigpio.RISING_EDGE, events.mag_detects_rising)
     cb2 = GPIOconfig.pi.callback(
@@ -103,7 +103,7 @@ def check_events_for(entrance):
 
     #         if not timeout_buzzer.status():
     #             timeout_buzzer.start()
-    #             print("Buzzer started buzzing")
+    #             # print("Buzzer started buzzing")
     #             eventsMod.record_buzzer_start(entrancename)
     #             events.updateserver.update_server_events()
 
@@ -112,7 +112,7 @@ def check_events_for(entrance):
     #     GPIOconfig.deactivate_buzz_led(entrance[:2])
     #     if timeout_buzzer.status():
     #         timeout_buzzer.stop()
-    #         print("Buzzer stopped buzzing")
+    #         # print("Buzzer stopped buzzing")
     #         eventsMod.record_buzzer_end(entrancename)
 
     events.time.sleep(0.1)
@@ -144,7 +144,7 @@ def check_entrance_E2():
 
 
 def check_events_timer():
-    print("check_events_timer starting")
+    # print("check_events_timer starting")
     while True:
         check_events_for("E1_IN")
         check_events_for("E1_OUT")
@@ -157,7 +157,7 @@ def check_events_timer():
         # check_entrance_E2()
 
 def check_gen_pins_and_alarm():
-    print("check_gen_pins_and_alarm starting")
+    # print("check_gen_pins_and_alarm starting")
     import eventActionTriggers
     import eventActionTriggerConstants
 
@@ -168,7 +168,7 @@ def check_gen_pins_and_alarm():
             event_trigger: input_event_trigger from eventTriggerConstants
         '''
         def f(gpio, level, tick):
-            print("helper called")
+            # print("helper called")
             if gpio == pin:
                 eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_event(
                     event_trigger, eventActionTriggerConstants.BOTH_ENTRANCE))

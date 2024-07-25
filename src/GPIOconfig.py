@@ -260,7 +260,7 @@ gpio_pins_bcm = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 
 def activate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
-   print("buzzzzzing and led on")
+   # print("buzzzzzing and led on")
    # for pin in gpio_pins_bcm:
    #    pi.set_mode(pin, pigpio.OUTPUT)
    #    pi.write(pin, 0)
@@ -295,7 +295,7 @@ def deactivate_buzz_led(entrance) :
 # Function to test a pin
 def test_pin(pin, duration=2):
     pi.set_mode(pin, pigpio.OUTPUT)
-    print(f"Testing {pin}")
+    # print(f"Testing {pin}")
     pi.write(pin, 1)  # Turn on
     time.sleep(0.1)  # Short delay before reading back the state
     # Verify the pin is high
@@ -311,7 +311,7 @@ def test_pin(pin, duration=2):
         print(f"Pin {pin} is LOW")
     else:
         print(f"Error: Pin {pin} is not LOW as expected")
-    print(f"Tested {pin}\n")
+    # print(f"Tested {pin}\n")
 
 
 # Test each pin
