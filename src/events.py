@@ -251,7 +251,6 @@ timeout_buzzer_E2 = Timer()
 
 MAX_PIN_LENGTH = 6
 
-# the vars in 253 to 261 seem to be not initialised? I'm not sure where they are populated - DS
 credentials_E1_IN = {}  # dict to store credentials
 credentials_E1_OUT = {}  # dict to store credentials
 credentials_E2_IN = {}  # dict to store credentials
@@ -262,30 +261,6 @@ pinsvalue_E1_OUT = []  # array to store pins
 pinsvalue_E2_IN = []  # array to store pins
 pinsvalue_E2_OUT = []  # array to store pins
 
-
-# takes in string wiegand value, return name, passwords, accessgroup and schedule
-def check_for_wiegand(value):
-    for entranceslist in credOccur:
-        Accessgroups = entranceslist["EntranceDetails"]["AccessGroups"]
-        for specificAccessGroup in Accessgroups:
-            for groupName, groupdetails in specificAccessGroup.items():
-                for persondetails in groupdetails["Persons"]:
-
-                    diffpassword = list()
-                    authmethod = None
-
-                    # check wiegand value belongs to which person, add the rest of wiegand values and pins to diffpassowrd
-                    for type, password in persondetails["Credentials"].items():
-                        if value == password:
-                            authmethod = type
-                            personName = persondetails["Name"]
-
-                        if type != authmethod:
-                            diffpassword.append(password)
-
-                    # once done, return the data
-                    if authmethod:
-                        return {"Name": personName, "diffpassword": diffpassword, "AccessGroup": groupName, "Schedule": groupdetails["Schedule"]}
 
 # seems to be a helper function for open_door_using_entrance_id, should be a local function within it? - DS
 def open_door(entrance_prefix):
