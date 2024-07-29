@@ -95,7 +95,6 @@ def check_events_for(entrance):
 
     if timeout_buzzer.status():
         if timeout_buzzer.check(BUZZER_TIMEOUT):
-            # Should this be changed to API call to backend? - DS
             print("email")
 
     # if timeout_mag.status():
