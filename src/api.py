@@ -223,12 +223,6 @@ def get_piProperty():
     data = piProperty.get_system_stats()
     return flask.Response(json.dumps(data), headers={ 'Content-type': 'application/json' }, status=200)
 
-# does this only trigger button press for E1 but not E2 - DS
-@app.route('/api/exit', methods=['GET'])
-def exit_button_api():
-    data = events.button_detects_change(5, "", "")
-    return flask.Response('', status=204)
-
 def display_top(snapshot, key_type='traceback', limit=10):
     snapshot = snapshot.filter_traces((
         tracemalloc.Filter(False, "<frozen importlib._bootstrap>"),
