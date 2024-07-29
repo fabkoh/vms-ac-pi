@@ -36,6 +36,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 config = None
 controllerSerial = None
 MAX_JSON_LENGTH = None
+DEFAULT_JSON_LENGTH = 10
 
 
 def update_config():
@@ -47,14 +48,7 @@ def update_config():
         f.close()
 
     controllerSerial = config['controllerConfig']['controllerSerialNo']
-    MAX_JSON_LENGTH = int(config.get("archivedMAXlength", 10))
-
-# isn't this handled in line 48
-try:
-    # max length before first half of jsons get deleted
-    MAX_JSON_LENGTH = int(config["archivedMAXlength"])
-except:
-    MAX_JSON_LENGTH = 10
+    MAX_JSON_LENGTH = int(config.get("archivedMAXlength", DEFAULT_JSON_LENGTH))
 
 update_config()
 '''
@@ -356,6 +350,7 @@ def update(file, lock, dictionary):
 
 # delete first half if exceeds length
 def clear_file_storage(file, lock):
+    global MAX_JSON_LENGTH
     with lock:
         with open(file, "r") as checkfile:
             try:
