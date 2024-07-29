@@ -58,7 +58,7 @@ logger.addHandler(file_handler)
 class TimerError(Exception):
     """A custom exception used to report errors in use of Timer class"""
 
-# Timer class is same as the one in timer.py, should import from there instead? - DS
+
 class Timer:
     def __init__(self):
         self._start_time = None
