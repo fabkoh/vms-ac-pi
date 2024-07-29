@@ -262,7 +262,6 @@ pinsvalue_E2_IN = []  # array to store pins
 pinsvalue_E2_OUT = []  # array to store pins
 
 
-# seems to be a helper function for open_door_using_entrance_id, should be a local function within it? - DS
 def open_door(entrance_prefix):
     '''Helper function for eventActionTriggers.py
 
@@ -361,18 +360,6 @@ def reader_detects_bits(bits, value, entrance):
         if entrance_prefix == "E1":
             pass
 
-    def open_door():
-        '''opens the door, set mags to allow open, update server events'''
-        # print("open")
-        logger.info("Trigger open_door method")
-        global mag_E1_allowed_to_open
-        global mag_E2_allowed_to_open
-        if entrance_prefix == "E1":
-            mag_E1_allowed_to_open = True
-            relay.trigger_relay_one(E1_thirdPartyOption)
-        elif entrance_prefix == "E2":
-            mag_E2_allowed_to_open = True
-            relay.trigger_relay_two(E2_thirdPartyOption)
 
     # steps
     # 1 start / restart timer
@@ -472,7 +459,7 @@ def reader_detects_bits(bits, value, entrance):
                     "Master Pin", entrancename, entrance_direction)
                 logger.info("Updating Logs after Master Password used")
 
-                open_door()
+                open_door(entrance_prefix)
                 reset_cred_and_stop_timer()
                 # eventsMod.record_masterpassword_used("masterpassword", entrancename, entrance_direction)
                 # updateserver.update_server_events()
@@ -551,7 +538,7 @@ def reader_detects_bits(bits, value, entrance):
 
                                 # auth scan
                                 logger.info("Found person, allowed to enter, auth_method: %s", auth_method_name)
-                                open_door()
+                                open_door(entrance_prefix)
 
                                 if "Pin" == auth_method_name:
                                     eventsMod.pin_only_used(
