@@ -118,8 +118,7 @@ def get_event_entrance(event):
     '''
     return event[-1]
 
-# can standardise with above by renaming to get_event_event_action_trigger
-def get_event_trigger_from_event(event):
+def get_event_event_action_trigger(event):
     '''returns the event trigger
 
     Args:
