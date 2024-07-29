@@ -214,16 +214,6 @@ def fire_alarm_activated(gpio, level, tick):
 def record_antipassback(authtype, entrance, status):
 
     dictionary = {
-        "person": {"personId": name},
-        "accessGroup": {"accessGroupId": accessGroup},
-        "direction": status,
-        "entrance": {"entranceId": entrance},
-        "eventActionType": {"eventActionTypeId": 2},
-        "controller": {"controllerSerialNo": controllerSerial},
-        "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
-    }
-    # Top dictionary is overwritten so no need for it?
-    dictionary = {
         "direction": status, "entrance": entrance, "eventActionType": "ANTIPASSBACK : authenticated_scan ",
         "controller": controllerSerial, "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
