@@ -256,6 +256,9 @@ def record_mag_closed(entrance):
         eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION,
         eventActionTriggerConstants.STOP_TIMER,
         entrance))
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_event(
+        eventActionTriggerConstants.CONTACT_CLOSE, 
+        entrance))
     update_logs_and_server(dictionary)
 
 

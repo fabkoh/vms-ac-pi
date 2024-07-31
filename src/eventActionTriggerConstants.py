@@ -18,7 +18,7 @@ GEN_IN_3 = 9  # check program.py check_gen_and_fire_pins
 
 # timer (timer ADTs will have 2 fields, id and start/stop timer)
 # check eventMod.py record_mag_opened, record_mag_opened_warning, record_mag_closed
-CONTACT_OPEN = 10
+CONTACT_CLOSE = 10
 
 START_TIMER = True
 STOP_TIMER = False
