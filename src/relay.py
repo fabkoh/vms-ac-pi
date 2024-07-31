@@ -3,7 +3,6 @@ import time
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
-import multitasking
 import json
 import os
 from lock import config_lock
