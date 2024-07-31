@@ -354,21 +354,21 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
     return
 
 
-def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
+def open_GEN_OUT(GEN_OUT_NAME=None, timer=1000, GenNo=1):
     # # print("open_GEN_OUT activated")
     # doesnt get run on second scan
 
     outputPin = None
 
-    if GEN_OUT_PIN == "GEN_OUT_1":
+    if GEN_OUT_NAME == "GEN_OUT_1":
         outputPin = GEN_OUT_1
         # # print(GEN_OUT_PIN,outputPin)
 
-    if GEN_OUT_PIN == "GEN_OUT_2":
+    if GEN_OUT_NAME == "GEN_OUT_2":
         outputPin = GEN_OUT_2
         # # print(GEN_OUT_PIN,outputPin)
 
-    if GEN_OUT_PIN == "GEN_OUT_3":
+    if GEN_OUT_NAME == "GEN_OUT_3":
         outputPin = GEN_OUT_3
         # # print(GEN_OUT_PIN,outputPin)
 
@@ -379,7 +379,7 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
         thread_pool_executor.submit(toggleRelayGen, outputPin, 'High', timer, GenNo)
         # print(f"finish open_GEN_OUT {outputPin}")
     except RuntimeError:
-        print(f" {GEN_OUT_PIN} still opened")
+        print(f" {GEN_OUT_NAME} still opened")
     return
 
 
