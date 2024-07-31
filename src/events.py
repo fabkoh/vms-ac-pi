@@ -163,7 +163,7 @@ def verify_datetime(schedule):
         end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
     
         # Check if the current date is in the recurrence rule
-        for dt in rule:
+        for dt in rule.between(now.replace(hour=0, minute=0, second=0, microsecond=0), now.replace(hour=23, minute=59, second=59, microsecond=999999)):
             if dt.date() == now.date():
                 if start_time <= now.time() <= end_time:
                     return True
