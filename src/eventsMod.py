@@ -228,13 +228,15 @@ def record_mag_opened(entrance):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-                                                                                        eventActionTriggerConstants.START_TIMER,
-                                                                                        entrance))
-    eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION, entrance)
-    )
+    # eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
+    #                                                                                     eventActionTriggerConstants.START_TIMER,
+    #                                                                                     entrance))
+
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
+        eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION,
+        eventActionTriggerConstants.START_TIMER,
+        entrance))
+    
     update_logs_and_server(dictionary)
 
 
@@ -246,9 +248,14 @@ def record_mag_closed(entrance):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-                                                                                        eventActionTriggerConstants.STOP_TIMER,
-                                                                                        entrance))
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
+        eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION,
+        eventActionTriggerConstants.STOP_TIMER,
+        entrance))
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
+        eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION,
+        eventActionTriggerConstants.STOP_TIMER,
+        entrance))
     update_logs_and_server(dictionary)
 
 
@@ -261,13 +268,14 @@ def record_mag_opened_warning(entrance):
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-                                                                                        eventActionTriggerConstants.START_TIMER,
-                                                                                        entrance))
-    eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION, entrance)
-    )
+    # eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
+    #                                                                                     eventActionTriggerConstants.START_TIMER,
+    #                                                                                     entrance))
+    
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
+        eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION,
+        eventActionTriggerConstants.START_TIMER,
+        entrance))
 
     update_logs_and_server(dictionary)
 

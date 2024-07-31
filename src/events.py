@@ -924,7 +924,6 @@ def mag_detects_rising(gpio, level, tick):
             eventsMod.record_mag_opened(E1)
         else:
             eventsMod.record_mag_opened_warning(E1)
-        updateserver.update_server_events()
 
     if gpio == E2_Mag:
         timeout_mag_E2.start()
@@ -933,7 +932,6 @@ def mag_detects_rising(gpio, level, tick):
             eventsMod.record_mag_opened(E2)
         else:
             eventsMod.record_mag_opened_warning(E2)
-        updateserver.update_server_events()
 
     mag_detects_rising.last_call_time = time.time()
 
@@ -953,14 +951,12 @@ def mag_detects_falling(gpio, level, tick):
         # print(f"{E1} is closed at " + str(datetime.now()))
         mag_E1_allowed_to_open = False
         eventsMod.record_mag_closed(E1)
-        updateserver.update_server_events()
 
     if gpio == E2_Mag:
         timeout_mag_E2.stop()
         # print(f"{E2} is closed at " + str(datetime.now()))
         mag_E2_allowed_to_open = False
         eventsMod.record_mag_closed(E2)
-        updateserver.update_server_events()
 
     mag_detects_falling.last_call_time = time.time()
 
