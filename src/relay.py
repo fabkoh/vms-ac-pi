@@ -372,14 +372,10 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
         outputPin = GEN_OUT_3
         # # print(GEN_OUT_PIN,outputPin)
 
-    setGpioMode()
-    setupRelayPin(outputPin)
-
     # # print(f" {GEN_OUT_PIN}  unlocked")
     try:
-        # toggleRelayGen(relayPin=outputPin, activateLevel='High',
-        #                activateMilliSeconds=timer, GenNo=GenNo
-        #                )
+        setGpioMode()
+        setupRelayPin(outputPin)
         thread_pool_executor.submit(toggleRelayGen, outputPin, 'High', timer, GenNo)
         # print(f"finish open_GEN_OUT {outputPin}")
     except RuntimeError:
