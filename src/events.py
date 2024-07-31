@@ -7,6 +7,7 @@ import json
 import time
 import updateserver
 import os
+from dateutil.rrule import rrulestr
 
 from lock import config_lock
 
@@ -151,6 +152,23 @@ E2_thirdPartyOption = "N.A."
 
 
 def verify_datetime(schedule):
+    if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
+        rule = rrulestr(schedule["rrule"])
+    
+        # Get the current time
+        now = datetime.now()
+        # Parse the start and end times
+        start_time = datetime.strptime(schedule["starttime"], "%H:%M:%S").time()
+        end_time = datetime.strptime(schedule["endtime"], "%H:%M:%S").time()
+    
+        # Check if the current date is in the recurrence rule
+        for dt in rule:
+            if dt.date() == now.date():
+                if start_time <= now.time() <= end_time:
+                    return True
+        return False
+    
+    return False
 
     try:
         for scheduledate, scheduletime in schedule.items():
