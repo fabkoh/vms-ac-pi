@@ -312,20 +312,20 @@ def event_trigger_cb(event_trigger):
     if input_is_timed(event_trigger):
         # print("timed event")
         timer_action = get_timer_event_timer_action(event_trigger)
-        event_trigger_type = get_timer_event_event_action_trigger(
+        event_trigger_id = get_timer_event_event_action_trigger(
             event_trigger)
         entrance = get_event_entrance(event_trigger)
         if timer_action == START_TIMER:
-            eventTriggerTime[(event_trigger_type, entrance)] = time.time()
+            eventTriggerTime[(event_trigger_id, entrance)] = time.time()
         elif timer_action == STOP_TIMER:
-            eventTriggerTime[(event_trigger_type, entrance)] = None
+            eventTriggerTime[(event_trigger_id, entrance)] = None
             # need to reset all events with this event_trigger_type
             # first filter all events with this event_trigger_type
             for event in filter(  # filter events with this event_trigger_type
                 lambda eventManagement: any(map(
                     lambda inputEvent: inputEvent.get(
                         "eventActionInputType", {})
-                    .get("eventActionInputId", None) == event_trigger_type,
+                    .get("eventActionInputId", None) == event_trigger_id,
                     eventManagement.get("inputEvents", [])
                 )) and (entrance is BOTH_ENTRANCE or get_entrance_from_event_management(eventManagement) == entrance),  # check if this event management entrance is the same as the event
                 EVENT_ACTION_TRIGGERS_DATA
