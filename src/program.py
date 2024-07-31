@@ -118,31 +118,6 @@ def check_events_for(entrance):
     events.time.sleep(0.1)
 
 
-# E1_is_active/E2_is_active
-def check_entrance_E1():
-    if not events.E1_is_active:
-        events.relay.unlock_entrance_one()
-    else:
-        events.relay.lock_entrance_one()
-        if events.verify_datetime(events.E1_entrance_schedule):
-            events.relay.unlock_entrance_one()
-        else:
-            events.relay.lock_entrance_one()
-
-# E1_is_active/E2_is_active
-
-
-def check_entrance_E2():
-    if not events.E2_is_active:
-        events.relay.unlock_entrance_two()
-    else:
-        events.relay.lock_entrance_two()
-        if events.verify_datetime(events.E2_entrance_schedule):
-            events.relay.unlock_entrance_two()
-        else:
-            events.relay.lock_entrance_two()
-
-
 def check_events_timer():
     # print("check_events_timer starting")
     while True:
