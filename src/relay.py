@@ -1,3 +1,5 @@
+import time
+
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
@@ -5,9 +7,14 @@ import multitasking
 import json
 import os
 from lock import config_lock
-
-from eventActionTriggerConstants import GEN_OUT_1
 from executor import setup_logger, thread_pool_executor
+
+import pigpio
+import time
+import GPIOconfig
+import eventActionTriggerConstants
+
+pi = pigpio.pi()
 
 path = os.path.dirname(os.path.abspath(__file__))
 
@@ -85,7 +92,7 @@ def setRelayPinLow(relayPin):
 
 
 def activateRelay(relayPin, activateLevel):
-    print("activateRelay", activateLevel, relayPin)
+    # print("activateRelay", activateLevel, relayPin)
     if activateLevel == 'High':
         setRelayPinHigh(relayPin)
     else:
@@ -102,25 +109,24 @@ def deActivateRelay(relayPin, activateLevel):
 
 
 def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
-    
     global E1_opened
-    logger.info("Trigger toggleRelay 1, E1_opened: %s", E1_opened)
+    # logger.info("Trigger toggleRelay 1, E1_opened: %s", E1_opened)
     if not E1_opened:
         # print timing before gpio set up
         setGpioMode()
         setupRelayPin(relayPin)
 
         for i in range(toggleCount):
-            logger.info("toggleRelay1 Activated")
+            # logger.info("toggleRelay1 Activated")
             activateRelay(relayPin, activateLevel)
 
             E1_opened = True
             sleep(activateMilliSeconds / 1000)
-            # print(E1_perm_opened)
+            # # print(E1_perm_opened)
         if E1_perm_opened:
             pass
         else:
-            logger.info("toggleRelay1 Deactivated")
+            # logger.info("toggleRelay1 Deactivated")
             E1_opened = False
             deActivateRelay(relayPin, activateLevel)
             sleep(deActivateMilliSeconds / 1000)
@@ -130,7 +136,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 
 def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliSeconds, toggleCount):
     global E2_opened
-    logger.info("Trigger toggleRelay 2, E2_opened: %s", E2_opened)
+    # logger.info("Trigger toggleRelay 2, E2_opened: %s", E2_opened)
     if not E2_opened:
         setGpioMode()
         setupRelayPin(relayPin)
@@ -139,7 +145,7 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 
             E2_opened = True
             sleep(activateMilliSeconds / 1000)
-            # print(E1_perm_opened)
+            # # print(E1_perm_opened)
         if E2_perm_opened:
             pass
         else:
@@ -191,7 +197,7 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
 #                     toggleCount = 1)
 #             cleanupGpio()
 #         except RuntimeError:
-#             print("Entrance is still opened 'third-party-options'.")
+#             # print("Entrance is still opened 'third-party-options'.")
 
 #         return
 
@@ -199,14 +205,14 @@ def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
 #     setGpioMode()
 #     setupRelayPin(Relay_1)
 
-#     print(" EM 1 unlocked at " + str(datetime.now()))
+#     # print(" EM 1 unlocked at " + str(datetime.now()))
 #     try:
 #         toggleRelay(relayPin = Relay_1, activateLevel = 'High', \
 #                 activateMilliSeconds = 5000, deActivateMilliSeconds = 1000, \
 #                 toggleCount = 1)
 #         cleanupGpio()
 #     except RuntimeError:
-#         print("Entrance is still opened")
+#         # print("Entrance is still opened")
 
 #     return
 
@@ -216,29 +222,27 @@ def trigger_relay_one(thirdPartyOption=None):
 
     if thirdPartyOption == "GEN_OUT_1":
         outputPin = GEN_OUT_1
-        # print(thirdPartyOption,outputPin)
+        # # print(thirdPartyOption,outputPin)
 
     if thirdPartyOption == "GEN_OUT_2":
         outputPin = GEN_OUT_2
-        # print(thirdPartyOption,outputPin)
+        # # print(thirdPartyOption,outputPin)
 
     if thirdPartyOption == "GEN_OUT_3":
         outputPin = GEN_OUT_3
-        # print(thirdPartyOption,outputPin)
+        # # print(thirdPartyOption,outputPin)
 
-    print(" EM 1 unlocked at " + str(datetime.now()))
+    # print(" EM 1 unlocked at " + str(datetime.now()))
     try:
         setGpioMode()
         setupRelayPin(outputPin)
-        print("opening")
-        logger.info("Before toggleRelay1")
-        # toggleRelay1(outputPin, 'High', 5000, 1000, 1)
+        # print("opening")
+        # logger.info("Before toggleRelay1")
         thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
-
         # cleanupGpio()
     except RuntimeError:
         print("Entrance is still opened")
-    # print("test")
+    # # print("test")
     return
 
 
@@ -254,14 +258,11 @@ def trigger_relay_two(thirdPartyOption=None):
     if thirdPartyOption == "GEN_OUT_3":
         outputPin = GEN_OUT_3
 
-    # print('  EM 2 unlocked')
+    # # print('  EM 2 unlocked')
     try:
         setGpioMode()
         setupRelayPin(outputPin)
-        toggleRelay2(relayPin=outputPin, activateLevel='High',
-                     activateMilliSeconds=5000, deActivateMilliSeconds=1000,
-                     toggleCount=1)
-        cleanupGpio()
+        thread_pool_executor.submit(toggleRelay2, outputPin, 'High', 5000, 1000, 1)
     except RuntimeError:
         print("Entrance is still opened")
     return
@@ -298,13 +299,12 @@ def lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
             E1_perm_opened = False
             E1_previous = None
             if (not E1_opened):
-                # print("trying to lock")
+                # # print("trying to lock")
                 setGpioMode()
                 setupRelayPin(outputPin)
                 deActivateRelay(outputPin, 'High')
         except RuntimeError:
             print("Entrance is still closed")
-    # print("test")
     return
 
 def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
@@ -313,15 +313,15 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
 
     if thirdPartyOption == "GEN_OUT_1":
         outputPin = GEN_OUT_1
-        # print(thirdPartyOption,outputPin)
+        # # print(thirdPartyOption,outputPin)
 
     if thirdPartyOption == "GEN_OUT_2":
         outputPin = GEN_OUT_2
-        # print(thirdPartyOption,outputPin)
+        # # print(thirdPartyOption,outputPin)
 
     if thirdPartyOption == "GEN_OUT_3":
         outputPin = GEN_OUT_3
-        # print(thirdPartyOption,outputPin)
+        # # print(thirdPartyOption,outputPin)
 
     global E2_perm_opened
     global E2_previous
@@ -344,44 +344,44 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
             E2_perm_opened = False
             E2_previous = None
             if (not E2_opened):
-                # print("trying to lock")
+                # # print("trying to lock")
                 setGpioMode()
                 setupRelayPin(outputPin)
                 deActivateRelay(outputPin, 'High')
         except RuntimeError:
             print("Entrance is still closed")
-    # print("test")
+    # # print("test")
     return
 
 
 @multitasking.task
 def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
-    # print("open_GEN_OUT activated")
+    # # print("open_GEN_OUT activated")
     # doesnt get run on second scan
 
     outputPin = None
 
     if GEN_OUT_PIN == "GEN_OUT_1":
         outputPin = GEN_OUT_1
-        # print(GEN_OUT_PIN,outputPin)
+        # # print(GEN_OUT_PIN,outputPin)
 
     if GEN_OUT_PIN == "GEN_OUT_2":
         outputPin = GEN_OUT_2
-        # print(GEN_OUT_PIN,outputPin)
+        # # print(GEN_OUT_PIN,outputPin)
 
     if GEN_OUT_PIN == "GEN_OUT_3":
         outputPin = GEN_OUT_3
-        # print(GEN_OUT_PIN,outputPin)
+        # # print(GEN_OUT_PIN,outputPin)
 
     setGpioMode()
     setupRelayPin(outputPin)
 
-    # print(f" {GEN_OUT_PIN}  unlocked")
+    # # print(f" {GEN_OUT_PIN}  unlocked")
     try:
         toggleRelayGen(relayPin=outputPin, activateLevel='High',
                        activateMilliSeconds=timer, GenNo=GenNo
                        )
-        print(f"finish open_GEN_OUT {outputPin}")
+        # print(f"finish open_GEN_OUT {outputPin}")
         cleanupGpio()
     except RuntimeError:
         print(f" {GEN_OUT_PIN} still opened")
@@ -395,7 +395,7 @@ def unlock_entrance_one():
     setGpioMode()
     setupRelayPin(Relay_1)
 
-    print(" EM 1 unlocked at " + str(datetime.now()))
+    # print(" EM 1 unlocked at " + str(datetime.now()))
     try:
         activateRelay(Relay_1, 'High')
     except RuntimeError:
@@ -410,7 +410,7 @@ def lock_entrance_one():
     setGpioMode()
     setupRelayPin(Relay_1)
 
-    print(" EM 1 locked at " + str(datetime.now()))
+    # print(" EM 1 locked at " + str(datetime.now()))
     try:
         deActivateRelay(Relay_1, 'High')
     except RuntimeError:
@@ -425,7 +425,7 @@ def unlock_entrance_two():
     setGpioMode()
     setupRelayPin(Relay_2)
 
-    print(" EM 2 unlocked at " + str(datetime.now()))
+    # print(" EM 2 unlocked at " + str(datetime.now()))
     try:
         activateRelay(Relay_2, 'High')
     except RuntimeError:
@@ -440,7 +440,7 @@ def lock_entrance_two():
     setGpioMode()
     setupRelayPin(Relay_2)
 
-    print(" EM 2 locked at " + str(datetime.now()))
+    # print(" EM 2 locked at " + str(datetime.now()))
     try:
         deActivateRelay(Relay_2, 'High')
     except RuntimeError:

@@ -19,7 +19,7 @@ def update_server_events():
 
     url = server_url + '/api/unicon/events'
 
-    logger.info("Update Server Events called")
+    # logger.info("Update Server Events called")
     # Start the send_request_to_server function in a new thread
 
     thread_pool_executor.submit(send_request_to_server, url, data)
@@ -31,10 +31,10 @@ def send_request_to_server(url, data):
     try:
         headers = {'Content-type': 'application/json'}
         response = requests.post(url, data=json.dumps(data), headers=headers, verify=False, timeout=0.5)
-        print(response)
-        print(response.status_code)
+        # print(response)
+        # print(response.status_code)
         if response.status_code in (201, 200):
-            print("SUCCESS")
+            # print("SUCCESS")
             with pending_logs_lock:
                 with open(path + '/json/pendingLogs.json', 'w') as fileclear:
                     json.dump([], fileclear, indent=4)
@@ -54,7 +54,7 @@ def update_external_zone_status(controllerId, entrance, dictionary, direction):
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         r = requests.post(url, data=json.dumps(data), headers=headers)
 
-        print(r.status_code)
+        # print(r.status_code)
 
         if r.status_code == 200:
             break

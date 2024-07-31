@@ -260,7 +260,7 @@ gpio_pins_bcm = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 
 def activate_buzz_led(entrance) :
    global E1_buzzer,E1_led,E2_buzzer,E2_led
-   print("buzzzzzing and led on")
+   # print("buzzzzzing and led on")
    # for pin in gpio_pins_bcm:
    #    pi.set_mode(pin, pigpio.OUTPUT)
    #    pi.write(pin, 0)
@@ -295,7 +295,7 @@ def deactivate_buzz_led(entrance) :
 # Function to test a pin
 def test_pin(pin, duration=2):
     pi.set_mode(pin, pigpio.OUTPUT)
-    print(f"Testing {pin}")
+    # print(f"Testing {pin}")
     pi.write(pin, 1)  # Turn on
     time.sleep(0.1)  # Short delay before reading back the state
     # Verify the pin is high
@@ -311,7 +311,7 @@ def test_pin(pin, duration=2):
         print(f"Pin {pin} is LOW")
     else:
         print(f"Error: Pin {pin} is not LOW as expected")
-    print(f"Tested {pin}\n")
+    # print(f"Tested {pin}\n")
 
 
 # Test each pin
@@ -334,73 +334,75 @@ def entrance_id_to_entrance(entrance_id):
       return "E2"
    # implicit None
 
-def activate_buzz(entrance,t):
-   '''Helper function for eventActionTriggers
+# def activate_buzz(entrance,t):
+#    '''Helper function for eventActionTriggers
+#
+#    entrance: entrance to activate buzzer (either BOTH_ENTRANCES or entrance_id)
+#    t: time to run buzzer in seconds (int)
+#    '''
+#    import eventActionTriggerConstants
+#    global E1_buzzer_time,E2_buzzer_time
+#
+#    if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+#       end_time=time.time()+t
+#       E1_buzzer_time=max(E1_buzzer_time,end_time)
+#       E2_buzzer_time=max(E2_buzzer_time,end_time)
+#       return
+#
+#    ent = entrance_id_to_entrance(entrance)
+#    if ent == "E1":
+#       E1_buzzer_time=max(E1_buzzer_time,time.time()+t)
+#    elif ent == "E2":
+#       E2_buzzer_time=max(E2_buzzer_time,time.time()+t)
+#
+# def activate_led(entrance,t):
+#    '''Helper function for eventActionTriggers
+#
+#    entrance: entrance to activate led (either BOTH_ENTRANCE or entrance_id)
+#    t: time to run buzzer in seconds(int)
+#    '''
+#    import eventActionTriggerConstants
+#    global E1_led_time,E2_led_time
+#
+#    if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
+#       end_time=time.time()+t
+#       E1_led_time=max(E1_led_time,end_time)
+#       E2_led_time=max(E2_led_time,end_time)
+#       print(f"In GPIO config: entrance time for LED set to {E1_led_time}, current time is {time.time()}")
+#       return
+#
+#    ent=entrance_id_to_entrance(entrance)
+#    if ent == "E1":
+#       E1_led_time=max(E1_led_time,time.time()+t)
+#    elif ent == "E2":
+#       E2_led_time=max(E2_led_time,time.time()+t)
+#
+# def check_for_led_and_buzzer():
+#     '''Continuous checks the variables above to see if to activate/deactivate buzzer/led'''
+#     def helper(active,t,pin1,pin2):
+#         '''helper function to activate pins
+#
+#             Args: (example)
+#                 active: E1_buzzer
+#                 t: E1_buzzer_time
+#                 pin1: E1_IN_Buzz
+#                 pin2: E1_OUT_Buzz
+#         '''
+#         if active or time.time() <= t:
+#             print(f"In GPIOconfig: Activating {pin1} and {pin2}")
+#             pi.write(pin1,1)
+#             pi.write(pin2,1)
+#         else:
+#             print(f"In GPIO config: Deactivating {pin1} and {pin2}")
+#             pi.write(pin1,0)
+#             pi.write(pin2,0)
+#     while True:
+#         helper(E1_buzzer,E1_buzzer_time,E1_IN_Buzz,E1_OUT_Buzz)
+#         helper(E1_led,E1_led_time,E1_IN_Led,E1_OUT_Led)
+#         helper(E2_buzzer,E2_buzzer_time,E2_IN_Buzz,E2_OUT_Buzz)
+#         helper(E2_led,E2_led_time,E2_IN_Led,E2_OUT_Led)
+#         time.sleep(1)
+#         gc.collect()
 
-   entrance: entrance to activate buzzer (either BOTH_ENTRANCES or entrance_id)
-   t: time to run buzzer in seconds (int)
-   '''
-   import eventActionTriggerConstants
-   global E1_buzzer_time,E2_buzzer_time
 
-   if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
-      end_time=time.time()+t
-      E1_buzzer_time=max(E1_buzzer_time,end_time)
-      E2_buzzer_time=max(E2_buzzer_time,end_time)
-      return
-
-   ent = entrance_id_to_entrance(entrance)
-   if ent == "E1":
-      E1_buzzer_time=max(E1_buzzer_time,time.time()+t)
-   elif ent == "E2":
-      E2_buzzer_time=max(E2_buzzer_time,time.time()+t)
-
-def activate_led(entrance,t):
-   '''Helper function for eventActionTriggers
-
-   entrance: entrance to activate led (either BOTH_ENTRANCE or entrance_id)
-   t: time to run buzzer in seconds(int)
-   '''
-   import eventActionTriggerConstants
-   global E1_led_time,E2_led_time
-
-   if entrance is eventActionTriggerConstants.BOTH_ENTRANCE:
-      end_time=time.time()+t
-      E1_led_time=max(E1_led_time,end_time)
-      E2_led_time=max(E2_led_time,end_time)
-      return
-
-   ent=entrance_id_to_entrance(entrance)
-   if ent == "E1":
-      E1_led_time=max(E1_led_time,time.time()+t)
-   elif ent == "E2":
-      E2_led_time=max(E2_led_time,time.time()+t)
-
-def check_for_led_and_buzzer():
-    '''Continuous checks the variables above to see if to activate/deactivate buzzer/led'''
-    def helper(active,t,pin1,pin2):
-        '''helper function to activate pins
-
-            Args: (example)
-                active: E1_buzzer
-                t: E1_buzzer_time
-                pin1: E1_IN_Buzz
-                pin2: E1_OUT_Buzz
-        '''
-        if active or time.time() <= t:
-            pi.write(pin1,1)
-            pi.write(pin2,1)
-        else:
-            pi.write(pin1,0)
-            pi.write(pin2,0)
-    while True:            
-        helper(E1_buzzer,E1_buzzer_time,E1_IN_Buzz,E1_OUT_Buzz)
-        helper(E1_led,E1_led_time,E1_IN_Led,E2_OUT_Led)
-        helper(E2_buzzer,E2_buzzer_time,E2_IN_Buzz,E2_OUT_Buzz)
-        helper(E2_led,E2_led_time,E2_IN_Led,E2_OUT_Led)
-        time.sleep(1)
-        gc.collect()
-
-
-thread_pool_executor.submit(check_for_led_and_buzzer)
-# threading.Thread(target=check_for_led_and_buzzer)
+# thread_pool_executor.submit(check_for_led_and_buzzer)
