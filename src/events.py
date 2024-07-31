@@ -154,6 +154,7 @@ E2_thirdPartyOption = "N.A."
 
 def verify_datetime(schedule):
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
+        print("before verify datetime: ",datetime.now())
         rule = rrulestr(schedule["rrule"])
     
         # Get the current time
@@ -163,7 +164,7 @@ def verify_datetime(schedule):
         end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
     
         # Check if the current date is in the recurrence rule
-        for dt in rule.between(now.replace(hour=0, minute=0, second=0, microsecond=0), now.replace(hour=23, minute=59, second=59, microsecond=999999)):
+        for dt in rule:
             if dt.date() == now.date():
                 if start_time <= now.time() <= end_time:
                     return True
@@ -721,6 +722,7 @@ def reader_detects_bits(bits, value, entrance):
                             # check if the person's access group can enter
                             # # print(verify_datetime(access_group_info.get('Schedule', {})))
                             if verify_datetime(access_group_info.get('Schedule', {})):
+                                print("after verify datetime: ",datetime.now())
 
                                 # auth scan
                                 
