@@ -354,7 +354,6 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
     return
 
 
-@multitasking.task
 def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
     # # print("open_GEN_OUT activated")
     # doesnt get run on second scan
@@ -378,11 +377,11 @@ def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
 
     # # print(f" {GEN_OUT_PIN}  unlocked")
     try:
-        toggleRelayGen(relayPin=outputPin, activateLevel='High',
-                       activateMilliSeconds=timer, GenNo=GenNo
-                       )
+        # toggleRelayGen(relayPin=outputPin, activateLevel='High',
+        #                activateMilliSeconds=timer, GenNo=GenNo
+        #                )
+        thread_pool_executor.submit(toggleRelayGen, outputPin, 'High', timer, GenNo)
         # print(f"finish open_GEN_OUT {outputPin}")
-        cleanupGpio()
     except RuntimeError:
         print(f" {GEN_OUT_PIN} still opened")
     return
