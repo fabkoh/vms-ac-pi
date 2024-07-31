@@ -358,7 +358,8 @@ def event_trigger_cb(event_trigger):
                 eventManagement.get("inputEvents", [])
             )
         ) and (
-            check_datetime(eventManagement.get("triggerSchedule", {}))) and (
+            check_datetime(eventManagement.get("triggerSchedule", {}))
+        ) and (
             entrance is BOTH_ENTRANCE or
             get_entrance_from_event_management(eventManagement) is BOTH_ENTRANCE or
             get_entrance_from_event_management(eventManagement) == entrance
