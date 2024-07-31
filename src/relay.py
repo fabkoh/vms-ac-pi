@@ -3,7 +3,6 @@ import time
 import RPi.GPIO as GPIO
 from time import sleep
 from datetime import datetime
-import multitasking
 import json
 import os
 from lock import config_lock
@@ -354,98 +353,32 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
     return
 
 
-@multitasking.task
-def open_GEN_OUT(GEN_OUT_PIN=None, timer=1000, GenNo=1):
+def open_GEN_OUT(GEN_OUT_NAME=None, timer=1000, GenNo=1):
     # # print("open_GEN_OUT activated")
     # doesnt get run on second scan
 
     outputPin = None
 
-    if GEN_OUT_PIN == "GEN_OUT_1":
+    if GEN_OUT_NAME == "GEN_OUT_1":
         outputPin = GEN_OUT_1
         # # print(GEN_OUT_PIN,outputPin)
 
-    if GEN_OUT_PIN == "GEN_OUT_2":
+    if GEN_OUT_NAME == "GEN_OUT_2":
         outputPin = GEN_OUT_2
         # # print(GEN_OUT_PIN,outputPin)
 
-    if GEN_OUT_PIN == "GEN_OUT_3":
+    if GEN_OUT_NAME == "GEN_OUT_3":
         outputPin = GEN_OUT_3
         # # print(GEN_OUT_PIN,outputPin)
 
-    setGpioMode()
-    setupRelayPin(outputPin)
-
     # # print(f" {GEN_OUT_PIN}  unlocked")
     try:
-        toggleRelayGen(relayPin=outputPin, activateLevel='High',
-                       activateMilliSeconds=timer, GenNo=GenNo
-                       )
+        setGpioMode()
+        setupRelayPin(outputPin)
+        thread_pool_executor.submit(toggleRelayGen, outputPin, 'High', timer, GenNo)
         # print(f"finish open_GEN_OUT {outputPin}")
-        cleanupGpio()
     except RuntimeError:
-        print(f" {GEN_OUT_PIN} still opened")
-    return
-
-
-
-@multitasking.task
-def unlock_entrance_one():
-
-    setGpioMode()
-    setupRelayPin(Relay_1)
-
-    # print(" EM 1 unlocked at " + str(datetime.now()))
-    try:
-        activateRelay(Relay_1, 'High')
-    except RuntimeError:
-        print("Entrance is still opened")
-
-    return
-
-
-@multitasking.task
-def lock_entrance_one():
-
-    setGpioMode()
-    setupRelayPin(Relay_1)
-
-    # print(" EM 1 locked at " + str(datetime.now()))
-    try:
-        deActivateRelay(Relay_1, 'High')
-    except RuntimeError:
-        print("Entrance is still opened")
-
-    return
-
-
-@multitasking.task
-def unlock_entrance_two():
-
-    setGpioMode()
-    setupRelayPin(Relay_2)
-
-    # print(" EM 2 unlocked at " + str(datetime.now()))
-    try:
-        activateRelay(Relay_2, 'High')
-    except RuntimeError:
-        print("Entrance is still opened")
-
-    return
-
-
-@multitasking.task
-def lock_entrance_two():
-
-    setGpioMode()
-    setupRelayPin(Relay_2)
-
-    # print(" EM 2 locked at " + str(datetime.now()))
-    try:
-        deActivateRelay(Relay_2, 'High')
-    except RuntimeError:
-        print("Entrance is still opened")
-
+        print(f" {GEN_OUT_NAME} still opened")
     return
 
 
