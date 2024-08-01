@@ -626,6 +626,8 @@ def reader_detects_bits(bits, value, entrance):
     try:
         device_details = {}
         entrance_details = {}
+        credentialLookup = {}
+
         for entrance_list in credOccur.get("Entrances", []):
             if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
                 entrance_details = entrance_list.get("EntranceDetails", {})
@@ -635,6 +637,8 @@ def reader_detects_bits(bits, value, entrance):
             eventsMod.record_unauth_scans(None, None, entrance_direction)
             led_and_buzzer_wrong_cred(entrancename)
             return
+        
+        credentialLookup = credOccur.get("credentialLookup", {})
 
         # Check master password
         if "Masterpassword" in device_details and credentials.get('pin_type') == device_details["Masterpassword"]:
