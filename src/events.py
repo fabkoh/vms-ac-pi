@@ -166,6 +166,7 @@ def verify_datetime(schedule):
         
             # Check if the current date is in the recurrence rule
             for dt in rule:
+                print(dt)
                 if dt.date() == now.date():
                     if start_time <= now.time() <= end_time:
                         return True
