@@ -154,17 +154,17 @@ E2_thirdPartyOption = "N.A."
 
 def verify_datetime(schedule):
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
-        print("before verify datetime: ", datetime.now())
+        print("before verify datetime: ", datetime.now(timezone.utc))
         try:
             rule = rrulestr(schedule["rrule"])
         
-            # Get the current time
-            now = datetime.now()
+            # Get the current time as an offset-aware datetime
+            now = datetime.now(timezone.utc)
             # Parse the start and end times
             start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
             end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
             
-            # Get the first occurrence after the start of today
+            # Get the start of today as an offset-aware datetime
             start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
             next_occurrence = rule.after(start_of_today, inc=True)
             
