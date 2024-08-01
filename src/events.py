@@ -231,6 +231,7 @@ def update_credOccur():
 
                 E2_entrance_schedule = entrance["EntranceSchedule"]
                 E2_thirdPartyOption = entrance["ThirdPartyOptions"]
+    
 
 
 # initialise
@@ -630,9 +631,9 @@ def reader_detects_bits(bits, value, entrance):
                 entrance_details = entrance_list.get("EntranceDetails", {})
                 device_details = entrance_details.get("AuthenticationDevices", {}).get(entrance_direction, {})
 
-        if "credentialLookup" in credOccur:
-            credentialLookup = credOccur["credentialLookup"]
-            
+        if "CredentialLookup" in credOccur:
+            credentialLookup = credOccur.get("CredentialLookup", {})
+
         if not entrance_details:  # entrance not found, quit
             eventsMod.record_unauth_scans(None, None, entrance_direction)
             led_and_buzzer_wrong_cred(entrancename)
@@ -675,37 +676,31 @@ def reader_detects_bits(bits, value, entrance):
         if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or
            ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))):
             # Check person cred
-            for access_group in entrance_details.get("AccessGroups", []):
-                access_group_info = access_group.get("GroupId")
-                if not access_group_info:
-                    continue
+            person_ids_checked = set()
 
-                for person_id in access_group.get("Persons", []):
-                    person_credentials = {k: v for k, v in credentialLookup.items() if v["PersonId"] == person_id}
+            for cred_type, cred_value in credentials.items():
+                cred_info = credentialLookup.get(cred_value)
+                if cred_info:
+                    person_id = cred_info["PersonId"]
+                    if person_id not in person_ids_checked:
+                        person_ids_checked.add(person_id)
+                        access_group_id = cred_info["AccessGroup"]
+                        access_group_info = next((ag for ag in entrance_details.get("AccessGroups", []) if ag["GroupId"] == access_group_id), None)
 
-                    def checkcred(k):
-                        cred_info = person_credentials.get(k[1])
-                        if not cred_info:
-                            return False
-                        if cred_info.get("IsPerm"):
-                            return True
-                        return datetime.now().date() <= datetime.strptime(cred_info.get("EndDate"), '%Y-%m-%d').date()
-
-                    if all(map(checkcred, credentials.items())):
-                        if verify_datetime(access_group.get('Schedule', {})):
+                        if access_group_info and verify_datetime(access_group_info.get('Schedule', {})):
                             led_and_buzzer_correct_cred(entrancename)
                             open_door()
                             if "Pin" == auth_method_name:
                                 eventsMod.pin_only_used(entrancename, entrance_direction)
                             else:
-                                eventsMod.record_auth_scans(person_id, access_group_info, auth_method_name, entrancename, entrance_direction)
+                                eventsMod.record_auth_scans(person_id, access_group_id, auth_method_name, entrancename, entrance_direction)
                             reset_cred_and_stop_timer()
                             return
 
                         if "Pin" == auth_method_name:
                             eventsMod.invalid_pin_used(entrancename, entrance_direction)
                         else:
-                            eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person_id, access_group_info)
+                            eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction, person_id, access_group_id)
                         led_and_buzzer_wrong_cred(entrancename)
                         reset_cred_and_stop_timer()
                         return
@@ -738,7 +733,6 @@ def verify_authtype(entrance, device, credOccur):
                     for methoddict in devicedetails["AuthMethod"]:
                         if verify_datetime(methoddict["Schedule"]):
                             return methoddict["Method"]
-
 
 '''
 returns True if current moment is in schedule
