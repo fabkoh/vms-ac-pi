@@ -154,7 +154,7 @@ E2_thirdPartyOption = "N.A."
 
 def verify_datetime(schedule):
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
-        print("before verify datetime: ",datetime.now())
+        print("before verify datetime: ", datetime.now())
         try:
             rule = rrulestr(schedule["rrule"])
         
@@ -163,19 +163,20 @@ def verify_datetime(schedule):
             # Parse the start and end times
             start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
             end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
-        
-            # Check if the current date is in the recurrence rule
-            for dt in rule:
-                print(dt)
-                if dt.date() == now.date():
-                    if start_time <= now.time() <= end_time:
-                        return True
+            
+            # Get the first occurrence after the start of today
+            start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+            next_occurrence = rule.after(start_of_today, inc=True)
+            
+            if next_occurrence and next_occurrence.date() == now.date():
+                if start_time <= now.time() <= end_time:
+                    return True
             return False
         except Exception as e:
             print(e)
-    
+            return False
     return False
-
+    
     try:
         for scheduledate, scheduletime in schedule.items():
             # # print(scheduledate,scheduletime)
