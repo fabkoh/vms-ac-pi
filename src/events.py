@@ -154,6 +154,7 @@ E2_thirdPartyOption = "N.A."
 
 def verify_datetime(schedule):
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
+        return False 
         print("before verify datetime: ",datetime.now())
         rule = rrulestr(schedule["rrule"])
     
@@ -625,14 +626,10 @@ def reader_detects_bits(bits, value, entrance):
     try:
         device_details = {}
         entrance_details = {}
-        credentialLookup = {}
         for entrance_list in credOccur.get("Entrances", []):
             if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
                 entrance_details = entrance_list.get("EntranceDetails", {})
                 device_details = entrance_details.get("AuthenticationDevices", {}).get(entrance_direction, {})
-
-        if "CredentialLookup" in credOccur:
-            credentialLookup = credOccur.get("CredentialLookup", {})
 
         if not entrance_details:  # entrance not found, quit
             eventsMod.record_unauth_scans(None, None, entrance_direction)
