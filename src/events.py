@@ -221,15 +221,16 @@ def update_credOccur():
     f = open(path+'/json/credOccur.json')
     credOccur = json.load(f)
     f.close()
-    for entrance in credOccur:
-        if entrance["Entrance"] == E1:
-            E1_entrance_schedule = entrance["EntranceSchedule"]
-            E1_thirdPartyOption = entrance["ThirdPartyOptions"]
+    if "Entrances" in credOccur:
+        for entrance in credOccur["Entrances"]:
+            if entrance["Entrance"] == E1:
+                E1_entrance_schedule = entrance["EntranceSchedule"]
+                E1_thirdPartyOption = entrance["ThirdPartyOptions"]
 
-        if entrance["Entrance"] == E2:
+            if entrance["Entrance"] == E2:
 
-            E2_entrance_schedule = entrance["EntranceSchedule"]
-            E2_thirdPartyOption = entrance["ThirdPartyOptions"]
+                E2_entrance_schedule = entrance["EntranceSchedule"]
+                E2_thirdPartyOption = entrance["ThirdPartyOptions"]
 
 
 # initialise
@@ -623,11 +624,15 @@ def reader_detects_bits(bits, value, entrance):
     try:
         device_details = {}
         entrance_details = {}
+        credentialLookup = {}
         for entrance_list in credOccur.get("Entrances", []):
             if "Entrance" in entrance_list and entrance_list["Entrance"] == entrancename:
                 entrance_details = entrance_list.get("EntranceDetails", {})
                 device_details = entrance_details.get("AuthenticationDevices", {}).get(entrance_direction, {})
 
+        if "credentialLookup" in credOccur:
+            credentialLookup = credOccur["credentialLookup"]
+            
         if not entrance_details:  # entrance not found, quit
             eventsMod.record_unauth_scans(None, None, entrance_direction)
             led_and_buzzer_wrong_cred(entrancename)
