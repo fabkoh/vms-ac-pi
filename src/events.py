@@ -155,7 +155,7 @@ E2_thirdPartyOption = "N.A."
 def verify_datetime(schedule):
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
         print("before verify datetime: ",datetime.now())
-        if "rrule" in schedule:
+        try:
             rule = rrulestr(schedule["rrule"])
         
             # Get the current time
@@ -170,6 +170,8 @@ def verify_datetime(schedule):
                     if start_time <= now.time() <= end_time:
                         return True
             return False
+        except Exception as e:
+            print(e)
     
     return False
 
