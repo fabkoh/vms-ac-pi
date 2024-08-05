@@ -1,4 +1,5 @@
-from datetime import datetime, date, timezone
+from datetime import datetime, date
+from dateutil.rrule import rrulestr
 
 from executor import setup_logger
 import relay
@@ -154,29 +155,29 @@ E2_thirdPartyOption = "N.A."
 
 def verify_datetime(schedule):
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
-        print("before verify datetime: ", datetime.now(timezone.utc))
+        print("before verify datetime: ", datetime.now())
         try:
             rule = rrulestr(schedule["rrule"])
-        
-            # Get the current time as an offset-aware datetime
-            now = datetime.now(timezone.utc)
+            
+            # Get the current time
+            now = datetime.now()
             # Parse the start and end times
             start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
             end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
+
+            # Find the next occurrence after 'now'
+            next_occurrence = rule.xafter(now, inc=True)
             
-            # Get the start of today as an offset-aware datetime
-            start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
-            next_occurrence = rule.after(start_of_today, inc=True)
-            
-            if next_occurrence and next_occurrence.date() == now.date():
+            # Check if the next occurrence is today and within the time range
+            if next_occurrence.date() == now.date():
                 if start_time <= now.time() <= end_time:
                     return True
             return False
         except Exception as e:
             print(e)
-            return False
-    return False
     
+    return False
+
     try:
         for scheduledate, scheduletime in schedule.items():
             # # print(scheduledate,scheduletime)
