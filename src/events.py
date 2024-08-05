@@ -173,7 +173,7 @@ def verify_datetime(schedule):
             # Adjust 'now' to yesterday to ensure today's occurrences are included
             yesterday = now - timedelta(days=1)
             next_occurrence = rule.after(yesterday, inc=True)
-
+            print(next_occurrence.date(), now.date())
             # Check if the next occurrence is today and within the time range
             if next_occurrence.date() == now.date():
                 if start_time <= now.time() <= end_time:
