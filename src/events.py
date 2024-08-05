@@ -178,6 +178,7 @@ def verify_datetime(schedule):
             if next_occurrence.date() == now.date():
                 if start_time <= now.time() <= end_time:
                     return True
+            print("schedule not valid")
             return False
         except Exception as e:
             print(e)
@@ -668,7 +669,6 @@ def reader_detects_bits(bits, value, entrance):
 
         auth_method_is_and = and_delimiter in auth_method_name
         auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
-        print("auth_method_is_and, auth_method_keys", auth_method_is_and, auth_method_keys)
 
         # Check for credentials not in auth_method_keys
         if any(map(lambda k: k not in auth_method_keys, credentials.keys())):
@@ -684,7 +684,6 @@ def reader_detects_bits(bits, value, entrance):
             led_and_buzzer_wrong_cred(entrancename)
             return
 
-        print("checking credentials map")
         # Check if need to check if cred belongs to someone
         if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or
            ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))):
@@ -693,7 +692,6 @@ def reader_detects_bits(bits, value, entrance):
 
             for cred_type, cred_value in credentials.items():
                 cred_info = credentialLookup.get(cred_value)
-                print("person found: ", cred_info, credentialLookup)
                 if cred_info:
                     person_id = cred_info["PersonId"]
                     if person_id not in person_ids_checked:
