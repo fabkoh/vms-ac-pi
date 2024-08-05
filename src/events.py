@@ -164,7 +164,10 @@ def verify_datetime(schedule):
                 now = datetime.now()
                 # Parse the start and end times
                 start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
-                end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
+                if schedule["endtime"] == "24:00":
+                    end_time = datetime.strptime("23:59:59", "%H:%M:%S").time()
+                else:
+                    end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
             
                 # Check if the current date is in the recurrence rule
                 for dt in rule:
