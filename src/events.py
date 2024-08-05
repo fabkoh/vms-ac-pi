@@ -166,7 +166,7 @@ def verify_datetime(schedule):
             end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
 
             # Find the next occurrence after 'now'
-            next_occurrence = rule.xafter(now, inc=True)
+            next_occurrence = rule.after(now, inc=True)
             
             # Check if the next occurrence is today and within the time range
             if next_occurrence.date() == now.date():
