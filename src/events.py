@@ -175,6 +175,8 @@ def verify_datetime(schedule):
                     if dt.date() == now.date():
                         if start_time <= now.time() <= end_time:
                             return True
+                    if dt.date() > now.date():
+                        return False
                 return False
             except Exception as e:
                 print(e)
