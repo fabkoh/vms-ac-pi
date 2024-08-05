@@ -686,13 +686,16 @@ def reader_detects_bits(bits, value, entrance):
             for cred_type, cred_value in credentials.items():
                 cred_info = credentialLookup.get(cred_value)
                 if cred_info:
+                    print("person found")
                     person_id = cred_info["PersonId"]
                     if person_id not in person_ids_checked:
                         person_ids_checked.add(person_id)
                         access_group_id = cred_info["AccessGroup"]
                         access_group_info = next((ag for ag in entrance_details.get("AccessGroups", []) if ag["GroupId"] == access_group_id), None)
+                        print("AG found")
 
                         if access_group_info and verify_datetime(access_group_info.get('Schedule', {})):
+                            print("AG schedule active")
                             led_and_buzzer_correct_cred(entrancename)
                             open_door()
                             if "Pin" == auth_method_name:
