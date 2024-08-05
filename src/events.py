@@ -649,7 +649,7 @@ def reader_detects_bits(bits, value, entrance):
             led_and_buzzer_wrong_cred(entrancename)
             return
         
-        credentialLookup = credOccur.get("credentialLookup", {})
+        credentialLookup = credOccur.get("CredentialLookup", {})
 
         # Check master password
         if "Masterpassword" in device_details and credentials.get('pin_type') == device_details["Masterpassword"]:
@@ -693,7 +693,7 @@ def reader_detects_bits(bits, value, entrance):
 
             for cred_type, cred_value in credentials.items():
                 cred_info = credentialLookup.get(cred_value)
-                print("person found: ", cred_info)
+                print("person found: ", cred_info, credentialLookup)
                 if cred_info:
                     person_id = cred_info["PersonId"]
                     if person_id not in person_ids_checked:
