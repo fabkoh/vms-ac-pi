@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from dateutil.rrule import rrulestr
 
 from executor import setup_logger
@@ -164,8 +164,12 @@ def verify_datetime(schedule):
             now = datetime.now(tzlocal())
             
             # Parse the start and end times as naive times
+            # Parse the start and end times as naive times
             start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
-            end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
+            if schedule["endtime"] == "24:00":
+                end_time = (datetime.strptime("23:59:59", "%H:%M:%S") + timedelta(seconds=1)).time()
+            else:
+                end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
 
             # Find the next occurrence after 'now'
             next_occurrence = rule.after(now, inc=True)
