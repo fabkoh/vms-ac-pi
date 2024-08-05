@@ -166,7 +166,7 @@ def verify_datetime(schedule):
             # Parse the start and end times as naive times
             start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
             if schedule["endtime"] == "24:00":
-                end_time = (datetime.strptime("23:59:59", "%H:%M:%S") + timedelta(seconds=1)).time()
+                end_time = datetime.strptime("23:59:59", "%H:%M:%S").time()
             else:
                 end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
 
