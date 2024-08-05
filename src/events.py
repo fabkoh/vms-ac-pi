@@ -459,7 +459,9 @@ def reader_detects_bits(bits, value, entrance):
     global mag_E1_allowed_to_open
     global mag_E2_allowed_to_open
 
-    print(f"bits = {bits} \nvalue = {value} \nentrance = {entrance}")
+    print(f"Number of bits = {bits} 
+          \nValue given  = {value} 
+          \nEntrance = {entrance}")
 
     temp = entrance.split("_")
     entrance_prefix = temp[0]
