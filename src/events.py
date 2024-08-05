@@ -156,7 +156,7 @@ E2_thirdPartyOption = "N.A."
 
 def verify_datetime(schedule):
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
-        print("before verify datetime: ", datetime.now())
+        # print("before verify datetime: ", datetime.now())
         try:
             rule = rrulestr(schedule["rrule"])
             
