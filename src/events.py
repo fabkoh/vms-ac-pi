@@ -159,9 +159,10 @@ def verify_datetime(schedule):
         try:
             rule = rrulestr(schedule["rrule"])
             
-            # Get the current time
-            now = datetime.now()
-            # Parse the start and end times
+            # Get the current time with local timezone
+            now = datetime.now(tzlocal())
+            
+            # Parse the start and end times as naive times
             start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
             end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
 
