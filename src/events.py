@@ -692,7 +692,7 @@ def reader_detects_bits(bits, value, entrance):
                         person_ids_checked.add(person_id)
                         access_group_id = cred_info["AccessGroup"]
                         access_group_info = next((ag for ag in entrance_details.get("AccessGroups", []) if ag["GroupId"] == access_group_id), None)
-                        print("AG found")
+                        print("AG found: ", access_group_info)
 
                         if access_group_info and verify_datetime(access_group_info.get('Schedule', {})):
                             print("AG schedule active")
