@@ -684,6 +684,7 @@ def reader_detects_bits(bits, value, entrance):
             led_and_buzzer_wrong_cred(entrancename)
             return
 
+        print("checking credentials map")
         # Check if need to check if cred belongs to someone
         if ((auth_method_is_and and all(map(lambda k: k in credentials, auth_method_keys))) or
            ((not auth_method_is_and) and any(map(lambda k: k in credentials, auth_method_keys)))):
@@ -692,6 +693,7 @@ def reader_detects_bits(bits, value, entrance):
 
             for cred_type, cred_value in credentials.items():
                 cred_info = credentialLookup.get(cred_value)
+                print("person found: ", cred_info)
                 if cred_info:
                     person_id = cred_info["PersonId"]
                     if person_id not in person_ids_checked:
