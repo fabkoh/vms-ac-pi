@@ -176,6 +176,7 @@ def verify_datetime(schedule):
             print(next_occurrence.date(), now.date())
             # Check if the next occurrence is today and within the time range
             if next_occurrence.date() == now.date():
+                print(start_time, now.time(), end_time)
                 if start_time <= now.time() <= end_time:
                     return True
             return False
