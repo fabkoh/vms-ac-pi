@@ -156,7 +156,7 @@ E2_thirdPartyOption = "N.A."
 
 def verify_datetime(schedule):
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
-        print("before verify datetime: ", datetime.now())
+        # print("before verify datetime: ", datetime.now())
         try:
             rule = rrulestr(schedule["rrule"])
             
@@ -173,10 +173,10 @@ def verify_datetime(schedule):
             # Adjust 'now' to yesterday to ensure today's occurrences are included
             yesterday = now - timedelta(days=1)
             next_occurrence = rule.after(yesterday, inc=True)
-            print(next_occurrence.date(), now.date())
+            # print(next_occurrence.date(), now.date())
             # Check if the next occurrence is today and within the time range
             if next_occurrence.date() == now.date():
-                print(start_time, now.time(), end_time)
+                # print(start_time, now.time(), end_time)
                 if start_time <= now.time() <= end_time:
                     return True
             return False
