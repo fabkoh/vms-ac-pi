@@ -156,7 +156,6 @@ E2_thirdPartyOption = "N.A."
 
 def verify_datetime(schedule):
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
-        print("before verify datetime: ", datetime.now())
         try:
             rule = rrulestr(schedule["rrule"])
             
@@ -166,17 +165,27 @@ def verify_datetime(schedule):
             # Parse the start and end times as naive times
             start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
             if schedule["endtime"] == "24:00":
-                end_time = (datetime.strptime("23:59:59", "%H:%M:%S") + timedelta(seconds=1)).time()
+                end_time = time(23, 59, 59)
             else:
                 end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
 
-            # Find the next occurrence after 'now'
-            next_occurrence = rule.after(now, inc=True)
-            print(next_occurrence.date(), now.date())
-            # Check if the next occurrence is today and within the time range
-            if next_occurrence.date() == now.date():
+            # Check if the current date is valid in the recurrence rule
+            start_of_today = datetime.combine(now.date(), time(0, 0), tzlocal())
+            end_of_today = datetime.combine(now.date(), time(23, 59, 59), tzlocal())
+            
+            next_occurrence_after_now = rule.after(now, inc=True)
+            next_occurrence_today = rule.before(end_of_today, inc=True)
+            
+            # If the next occurrence after now is today, check the time range
+            if next_occurrence_after_now and next_occurrence_after_now.date() == now.date():
                 if start_time <= now.time() <= end_time:
                     return True
+
+            # If the next occurrence before end of today is today, check the time range
+            if next_occurrence_today and next_occurrence_today.date() == now.date():
+                if start_time <= now.time() <= end_time:
+                    return True
+
             return False
         except Exception as e:
             print(e)
