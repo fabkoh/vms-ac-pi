@@ -246,7 +246,7 @@ def trigger_relay_one(thirdPartyOption=None):
         outputPin = GEN_OUT_3
 
     try:
-        thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
+        thread_pool_executor.submit(toggleRelay1, outputPin, 5000, 1000)
     except RuntimeError:
         print("Entrance is still opened")
     return
@@ -273,10 +273,37 @@ def trigger_relay_two(thirdPartyOption=None):
         outputPin = GEN_OUT_3
 
     try:
-        thread_pool_executor.submit(toggleRelay2, outputPin, 'High', 5000, 1000, 1)
+        thread_pool_executor.submit(toggleRelay2, outputPin, 5000, 1000)
     except RuntimeError:
         print("Entrance is still opened")
     return
+
+
+def open_GEN_OUT(GEN_OUT_NAME=None, timer=1000, GenNo=1):
+    '''
+    This function only serves to open a specific GEN_OUT pin, for a specific
+    amount of time based on timer.
+
+    Parameters:
+        GEN_OUT_PIN (str): The GEN_OUT pin to open
+        timer (int): The amount of time to keep the GEN_OUT pin open
+        GenNo (int): The number for the general pin being toggled
+    '''
+    outputPin = None
+
+    if GEN_OUT_NAME == "GEN_OUT_1":
+        outputPin = GEN_OUT_1
+    if GEN_OUT_NAME == "GEN_OUT_2":
+        outputPin = GEN_OUT_2
+    if GEN_OUT_NAME == "GEN_OUT_3":
+        outputPin = GEN_OUT_3
+    
+    try:
+        thread_pool_executor.submit(toggleRelayGen, outputPin, timer, GenNo)
+    except RuntimeError:
+        print(f" {GEN_OUT_NAME} still opened")
+    return
+
 
 def lock_unlock_entrance_one(thirdPartyOption=None, unlock=False):
     '''
@@ -372,32 +399,6 @@ def lock_unlock_entrance_two(thirdPartyOption=None, unlock=False):
                 setRelay(outputPin, 'Low')
         except RuntimeError:
             print("Entrance is still closed")
-    return
-
-
-def open_GEN_OUT(GEN_OUT_NAME=None, timer=1000, GenNo=1):
-    '''
-    This function only serves to open a specific GEN_OUT pin, for a specific
-    amount of time based on timer.
-
-    Parameters:
-        GEN_OUT_PIN (str): The GEN_OUT pin to open
-        timer (int): The amount of time to keep the GEN_OUT pin open
-        GenNo (int): The number for the general pin being toggled
-    '''
-    outputPin = None
-
-    if GEN_OUT_NAME == "GEN_OUT_1":
-        outputPin = GEN_OUT_1
-    if GEN_OUT_NAME == "GEN_OUT_2":
-        outputPin = GEN_OUT_2
-    if GEN_OUT_NAME == "GEN_OUT_3":
-        outputPin = GEN_OUT_3
-    
-    try:
-        thread_pool_executor.submit(toggleRelayGen, outputPin, 'High', timer, GenNo)
-    except RuntimeError:
-        print(f" {GEN_OUT_NAME} still opened")
     return
 
 
