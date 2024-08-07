@@ -3,27 +3,25 @@ This file contains the eventActionInputId and eventActionOutputId of eventAction
 DO NOT MODIFY THESE VALUES UNLESS THE JAVA SIDE IS MODIFIED AS WELL
 '''
 
-# input
-# non timer
+# Input IDs
+# Non-timed inputs
 AUTHENTICATED_SCAN = 1  # check eventsMod.py record_auth_scans
 UNAUTHENTICATED_SCAN = 2  # check eventsMod.py record_unauth_scans
 EXIT_BUTTON_PRESSED = 3  # check eventsMod.py record_button_pressed
-# check eventsMod.py record_mag_opened_warning
-CONTACT_OPEN_WITHOUT_AUTHENTICATION = 4
-CONTACT_OPEN_WITH_AUTHENTICATION = 5  # check eventsMod.py record_mag_opened
 FIRE = 6  # fire pin, check program.py check_gen_and_fire_pins
 GEN_IN_1 = 7  # check program.py check_gen_and_fire_pins
 GEN_IN_2 = 8  # check program.py check_gen_and_fire_pins
 GEN_IN_3 = 9  # check program.py check_gen_and_fire_pins
+CONTACT_CLOSE = 10 # check eventMod.py record_mag_closed
+# Timed inputs
+CONTACT_OPEN_WITHOUT_AUTHENTICATION = 4 # check eventsMod.py record_mag_opened_warning
+CONTACT_OPEN_WITH_AUTHENTICATION = 5  # check eventsMod.py record_mag_opened
 
-# timer (timer ADTs will have 2 fields, id and start/stop timer)
-# check eventMod.py record_mag_opened, record_mag_opened_warning, record_mag_closed
-CONTACT_CLOSE = 10
-
+# Start/Stop timer values for creating timed events
 START_TIMER = True
 STOP_TIMER = False
 
-# output
+# Output IDs
 # check flush_output function in eventActionTriggers.py
 GEN_OUT_1 = 1
 GEN_OUT_2 = 2
