@@ -596,6 +596,8 @@ def reader_detects_bits(bits, value, entrance):
     # logger.info("bits={} value={}".format(bits, value))
     # print("bits={} value={}".format(bits, value))
 
+    print(bits, value)
+    
     credential_added = False
     if bits == pin_bits:  # 1 number keyed in
         credential_added = process_pin_value(value)
