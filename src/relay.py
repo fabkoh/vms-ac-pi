@@ -119,6 +119,7 @@ def toggleRelay1(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         for i in range(toggleCount):
             # logger.info("toggleRelay1 Activated")
             activateRelay(relayPin, activateLevel)
+            activateRelay(relayPin, activateLevel)
 
             E1_opened = True
             sleep(activateMilliSeconds / 1000)
@@ -141,6 +142,7 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
         setGpioMode()
         setupRelayPin(relayPin)
         for i in range(toggleCount):
+            activateRelay(relayPin, activateLevel)
             activateRelay(relayPin, activateLevel)
 
             E2_opened = True
