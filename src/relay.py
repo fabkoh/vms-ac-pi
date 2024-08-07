@@ -159,6 +159,10 @@ def toggleRelay2(relayPin, activateLevel, activateMilliSeconds, deActivateMilliS
 
 def toggleRelayGen(relayPin, activateLevel, activateMilliSeconds, GenNo):
     global GEN_1_OPEN, GEN_2_OPEN, GEN_3_OPEN, E1_opened, E2_opened
+    
+    setGpioMode()
+    setupRelayPin(relayPin)
+
     activateRelay(relayPin, activateLevel)
     if (GenNo == 1):
         GEN_1_OPEN = True
@@ -233,8 +237,6 @@ def trigger_relay_one(thirdPartyOption=None):
 
     # print(" EM 1 unlocked at " + str(datetime.now()))
     try:
-        setGpioMode()
-        setupRelayPin(outputPin)
         # print("opening")
         # logger.info("Before toggleRelay1")
         thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
@@ -259,8 +261,6 @@ def trigger_relay_two(thirdPartyOption=None):
 
     # # print('  EM 2 unlocked')
     try:
-        setGpioMode()
-        setupRelayPin(outputPin)
         thread_pool_executor.submit(toggleRelay2, outputPin, 'High', 5000, 1000, 1)
     except RuntimeError:
         print("Entrance is still opened")
@@ -373,8 +373,6 @@ def open_GEN_OUT(GEN_OUT_NAME=None, timer=1000, GenNo=1):
 
     # # print(f" {GEN_OUT_PIN}  unlocked")
     try:
-        setGpioMode()
-        setupRelayPin(outputPin)
         thread_pool_executor.submit(toggleRelayGen, outputPin, 'High', timer, GenNo)
         # print(f"finish open_GEN_OUT {outputPin}")
     except RuntimeError:
