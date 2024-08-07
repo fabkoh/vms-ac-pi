@@ -74,6 +74,18 @@ controller         CONTROLLERID
 
 
 def record_auth_scans(name, accessGroup, authtype, entrance, status):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when auth_scan happens
+    
+        Parameters:
+            name: ID of the person
+            accessGroup: ID of the access group
+            authtype: type of authentication used
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
         "person": {"personId": name},
         "accessGroup": {"accessGroupId": accessGroup},
@@ -93,6 +105,15 @@ def record_auth_scans(name, accessGroup, authtype, entrance, status):
     # logger.info("record auth scans, after update_logs_and_server")
 
 def invalid_pin_used(entrance, status):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when invalid pin is used
+
+        Parameters:
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
         "direction": status,
         "entrance": {"entranceId": entrance},
