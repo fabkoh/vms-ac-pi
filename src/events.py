@@ -152,7 +152,14 @@ E2_thirdPartyOption = "N.A."
 
 
 def verify_datetime(schedule):
+    '''
+    This function checks if the current actual time is within the given
+    schedule. If it is, then it will return true, else it will return false.
 
+        Parameters:
+            schedule (dict): A dictionary containing the schedule for a given
+            day.
+    '''
     try:
         for scheduledate, scheduletime in schedule.items():
             # # print(scheduledate,scheduletime)
@@ -385,16 +392,6 @@ def activate_led(entrance, timing):
         thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_IN_Led, timing)
         thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Led, timing)
 
-'''
-TODO: functions for led and buzzer behaviour when the credentials are correct/
-wrong
-Correct: Buzzer buzzes for 0.2 seconds, LED turns green for 2 seconds
-Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change)
-
-Current issues: 
-- Triggering this overrides the output_events queue actions if there is one for
-    or buzzer there
-'''
 def led_and_buzzer_correct_cred(entrance_id):
     '''
     Buzzes and lights up LED to show that the correct credentials were entered,
