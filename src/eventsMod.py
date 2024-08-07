@@ -95,14 +95,13 @@ def record_auth_scans(name, accessGroup, authtype, entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    # logger.info("record auth scans, before event_trigger_cb")
+    
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
-    # logger.info("record auth scans, after event_trigger_cb")
+    
     update_logs_and_server(dictionary)
-    # logger.info("record auth scans, after update_logs_and_server")
 
 def invalid_pin_used(entrance, status):
     '''
@@ -121,6 +120,7 @@ def invalid_pin_used(entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
+
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.UNAUTHENTICATED_SCAN, entrance)
@@ -146,14 +146,13 @@ def pin_only_used(entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    # logger.info("record pin used, before event_trigger_cb")
+    
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
-    # logger.info("record pin used, after event_trigger_cb")
+    
     update_logs_and_server(dictionary)
-    # logger.info("record pin used, after update_logs_and_server")
 
 
 def record_masterpassword_used(authtype, entrance, status):
@@ -176,9 +175,6 @@ def record_masterpassword_used(authtype, entrance, status):
     }
 
     update_logs_and_server(dictionary)
-
-# updates pendingTrans.json and send to backend
-# updates archivedTrans.json for backup
 
 
 def record_unauth_scans(authtype, entrance, status, name=None, access_group=None):
@@ -208,7 +204,7 @@ def record_unauth_scans(authtype, entrance, status, name=None, access_group=None
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.UNAUTHENTICATED_SCAN, entrance)
     )
-    # print(f"Recorded unauth scan at {entrance}")
+    
     update_logs_and_server(dictionary)
 
 
@@ -228,10 +224,11 @@ def record_button_pressed(entrance, name_of_button):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
+    
     e = entrance
     if e == '':  # no entrance assigned to this push button
         e = eventActionTriggerConstants.BOTH_ENTRANCE
-    # logger.info("push button, before event_trigger_cb")
+    
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.EXIT_BUTTON_PRESSED, e)
