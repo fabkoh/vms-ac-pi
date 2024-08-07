@@ -234,10 +234,6 @@ def trigger_relay_one(thirdPartyOption=None):
 
     # print(" EM 1 unlocked at " + str(datetime.now()))
     try:
-        setGpioMode()
-        setupRelayPin(outputPin)
-        # print("opening")
-        # logger.info("Before toggleRelay1")
         thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
         # cleanupGpio()
     except Exception as e:
@@ -260,8 +256,6 @@ def trigger_relay_two(thirdPartyOption=None):
 
     # # print('  EM 2 unlocked')
     try:
-        setGpioMode()
-        setupRelayPin(outputPin)
         thread_pool_executor.submit(toggleRelay2, outputPin, 'High', 5000, 1000, 1)
     except Exception as e:
         print("Entrance is still opened")
