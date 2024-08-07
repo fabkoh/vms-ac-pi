@@ -130,6 +130,15 @@ def invalid_pin_used(entrance, status):
 
 
 def pin_only_used(entrance, status):
+    '''
+    This functions creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when only pin is used
+
+        Parameters:
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
         "direction": status,
         "entrance": {"entranceId": entrance},
@@ -148,6 +157,16 @@ def pin_only_used(entrance, status):
 
 
 def record_masterpassword_used(authtype, entrance, status):
+    '''
+    This functions creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when only pin is used
+
+        Parameters:
+            authtype: type of authentication used
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
         "direction": status,
         "entrance": {"entranceId": entrance},
@@ -163,6 +182,18 @@ def record_masterpassword_used(authtype, entrance, status):
 
 
 def record_unauth_scans(authtype, entrance, status, name=None, access_group=None):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when unauth_scan happens
+    
+        Parameters:
+            authtype: type of authentication used
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+            name: ID of the person
+            accessGroup: ID of the access group
+    '''
     dictionary = {
         "person": {"personId": name},
         "accessGroup": {"accessGroupId": access_group},
@@ -182,7 +213,15 @@ def record_unauth_scans(authtype, entrance, status, name=None, access_group=None
 
 
 def record_button_pressed(entrance, name_of_button):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when button is pressed
 
+        Parameters:
+            entrance: entrance ID
+            name_of_button: name of the button pressed
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 9},
@@ -200,7 +239,6 @@ def record_button_pressed(entrance, name_of_button):
 
     update_logs_and_server(dictionary)
 
-# status = opened/ closed
 
 def fire_alarm_activated(gpio, level, tick):
     entrance = ""
@@ -213,7 +251,6 @@ def fire_alarm_activated(gpio, level, tick):
     e = entrance
     if e == '':  # no entrance assigned to this push button
         e = eventActionTriggerConstants.BOTH_ENTRANCE
-    # print(f"Fire activated at {e}")
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.FIRE, e)
@@ -249,9 +286,6 @@ def record_mag_opened(entrance):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    # eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-    #                                                                                     eventActionTriggerConstants.START_TIMER,
-    #                                                                                     entrance))
 
     eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
         eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION,
@@ -291,10 +325,6 @@ def record_mag_opened_warning(entrance):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-
-    # eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-    #                                                                                     eventActionTriggerConstants.START_TIMER,
-    #                                                                                     entrance))
     
     eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
         eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION,
@@ -302,8 +332,6 @@ def record_mag_opened_warning(entrance):
         entrance))
 
     update_logs_and_server(dictionary)
-
-# status = started buzzing/ stopped buzzing
 
 
 def record_buzzer_start(entrance):
@@ -331,8 +359,6 @@ def record_buzzer_end(entrance):
 
 
 # update to update json files
-
-
 def update_logs_and_server(dictionary):
     def thread_task():
         update(path + "/json/archivedLogs.json", archived_logs_lock, dictionary)
