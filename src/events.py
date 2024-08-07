@@ -251,31 +251,6 @@ pinsvalue_E2_IN = []  # array to store pins
 pinsvalue_E2_OUT = []  # array to store pins
 
 
-# takes in string wiegand value, return name, passwords, accessgroup and schedule
-def check_for_wiegand(value):
-    for entranceslist in credOccur:
-        Accessgroups = entranceslist["EntranceDetails"]["AccessGroups"]
-        for specificAccessGroup in Accessgroups:
-            for groupName, groupdetails in specificAccessGroup.items():
-                for persondetails in groupdetails["Persons"]:
-
-                    diffpassword = list()
-                    authmethod = None
-
-                    # check wiegand value belongs to which person, add the rest of wiegand values and pins to diffpassowrd
-                    for type, password in persondetails["Credentials"].items():
-                        if value == password:
-                            authmethod = type
-                            personName = persondetails["Name"]
-
-                        if type != authmethod:
-                            diffpassword.append(password)
-
-                    # once done, return the data
-                    if authmethod:
-                        return {"Name": personName, "diffpassword": diffpassword, "AccessGroup": groupName, "Schedule": groupdetails["Schedule"]}
-
-
 def open_door(entrance_prefix):
     '''Helper function for eventActionTriggers.py
 
