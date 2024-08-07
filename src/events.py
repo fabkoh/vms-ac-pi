@@ -187,7 +187,11 @@ def verify_datetime(schedule):
 
 
 def check_entrance_status():
-
+    '''
+    This function checks for whether the different entrances are within
+    schedule, and then physically calls the relays to lock or unlock the
+    entrances accordingly.
+    '''
     if verify_datetime(E1_entrance_schedule):
         # # print("unlock E1")
         relay.lock_unlock_entrance_one(E1_thirdPartyOption, True)
@@ -279,17 +283,9 @@ def open_door_using_entrance_id(entrance_id):
     elif entrance_id and entrance_id == config.get("EntranceName", {}).get("E2", None):
         open_door("E2")
 
-# Events Management: Output actions timer for GENOUT_1/2/3
-
 
 def open_GEN_OUT(GEN_OUT_PIN, timer, GenNo):
     relay.open_GEN_OUT(GEN_OUT_PIN, timer, GenNo)
-
-# keep track of wiegand values and pins
-# check if person allowed to enter
-# trigger relays
-# record Trans
-# TODO: add event logging
 
 def activate_buzz(entrance, timing):
     '''
@@ -426,6 +422,10 @@ def led_and_buzzer_wrong_cred(entrance_id):
         thread_pool_executor.submit(thread_pool_buzz, GPIOconfig.E2_OUT_Buzz)
         thread_pool_executor.submit(thread_pool_buzz, GPIOconfig.E2_IN_Buzz)
 
+# keep track of wiegand values and pins
+# check if person allowed to enter
+# trigger relays
+# record Trans
 def reader_detects_bits(bits, value, entrance):
 
     global mag_E1_allowed_to_open
