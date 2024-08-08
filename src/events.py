@@ -657,6 +657,7 @@ def reader_detects_bits(bits, value, entrance):
         # Check master password
         print("before checking masterpassword")
         print(device_details, credentials)
+        print("Masterpassword" in device_details, credentials.get('pin_type') == device_details["Masterpassword"])
         if "Masterpassword" in device_details and credentials.get('pin_type') == device_details["Masterpassword"]:
             eventsMod.record_masterpassword_used("Master Pin", entrancename, entrance_direction)
             led_and_buzzer_correct_cred(entrancename)
