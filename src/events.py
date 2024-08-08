@@ -655,6 +655,8 @@ def reader_detects_bits(bits, value, entrance):
         credentialLookup = credOccur.get("CredentialLookup", {})
 
         # Check master password
+        print("before checking masterpassword")
+        print(device_details, credentials)
         if "Masterpassword" in device_details and credentials.get('pin_type') == device_details["Masterpassword"]:
             eventsMod.record_masterpassword_used("Master Pin", entrancename, entrance_direction)
             led_and_buzzer_correct_cred(entrancename)
@@ -951,7 +953,7 @@ def button_detects_change(gpio, level, tick):
 
     # print(gpio, "gpio")
 
-    # handle button press
+    # handle button reader
     if gpio == E1_Button:
         # logger.info(f"{E1} push button1 is pressed at " + str(datetime.now()))
         mag_E1_allowed_to_open = True
@@ -969,36 +971,3 @@ def button_detects_change(gpio, level, tick):
 
 # initialize the last call time
 button_detects_change.last_call_time = 0
-
-# def button_detects_change(gpio, level, tick):
-#     global mag_E1_allowed_to_open
-#     global mag_E2_allowed_to_open
-
-#     if gpio == E1_Button:
-#         # print(f"{E1} push button1 is pressed at " + str(datetime.now()))
-#         mag_E1_allowed_to_open = True
-#         relay.trigger_relay_one(E1_thirdPartyOption)
-#         eventsMod.record_button_pressed(E1, "Security Guard Button")
-
-#     if gpio == E2_Button:
-#         # print(f"{E2} push button2 is pressed at " + str(datetime.now()))
-#         mag_E2_allowed_to_open = True
-#         relay.trigger_relay_two(E2_thirdPartyOption)
-#         eventsMod.record_button_pressed(E2, "Security Guard Button")
-
-
-# 1st person going in
-# reader_detects_bits(26,"s1e97ncksiu","E1_IN")
-# bits_reader(26,"696955874","E1R1")
-
-# 2nd person going in
-# bits_reader(26,"2535645","E1R1")
-# bits_reader(26,"ege56g4er","E1R1")
-
-# 2nd person going in AGAIN
-# bits_reader(26,"2535645","E1R1")
-# bits_reader(26,"ege56g4er","E1R1")
-
-# 1st person going out
-# bits_reader(26,"s1e97ncksiu","E1R2")
-# bits_reader(26,"696955874","E1R2")
