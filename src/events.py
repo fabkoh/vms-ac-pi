@@ -682,8 +682,7 @@ def reader_detects_bits(bits, value, entrance):
         # Have some credentials but need more
         if ((auth_method_is_and and any(map(lambda k: k in credentials, auth_method_keys)))
                 and not all(map(lambda k: k in credentials, auth_method_keys))):
-            eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
-            led_and_buzzer_wrong_cred(entrancename)
+            print("waiting for more credentials")
             return
 
         # Check if need to check if cred belongs to someone
