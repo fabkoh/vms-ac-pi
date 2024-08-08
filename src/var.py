@@ -4,7 +4,7 @@
 # esther private ip
 # server_url = "http://192.168.1.1:8082" 
 
-# yongning private ip
+# etlas private ip
 server_url = "http://192.168.1.250:8082"
 
 # PI BE server
