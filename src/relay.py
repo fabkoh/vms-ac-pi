@@ -246,8 +246,9 @@ def trigger_relay_one(thirdPartyOption=None):
         outputPin = GEN_OUT_3
 
     try:
-        thread_pool_executor.submit(toggleRelay1, outputPin, 5000, 1000)
-    except RuntimeError:
+        thread_pool_executor.submit(toggleRelay1, outputPin, 'High', 5000, 1000, 1)
+        # cleanupGpio()
+    except Exception as e:
         print("Entrance is still opened")
     return
 
@@ -273,8 +274,8 @@ def trigger_relay_two(thirdPartyOption=None):
         outputPin = GEN_OUT_3
 
     try:
-        thread_pool_executor.submit(toggleRelay2, outputPin, 5000, 1000)
-    except RuntimeError:
+        thread_pool_executor.submit(toggleRelay2, outputPin, 'High', 5000, 1000, 1)
+    except Exception as e:
         print("Entrance is still opened")
     return
 
