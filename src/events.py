@@ -334,8 +334,8 @@ def open_door_using_entrance_id(entrance_id):
 # Events Management: Output actions timer for GENOUT_1/2/3
 
 
-def open_GEN_OUT(GEN_OUT_PIN, timer, GenNo):
-    relay.open_GEN_OUT(GEN_OUT_PIN, timer, GenNo)
+def open_GEN_OUT(GEN_OUT_NAME, timer, GenNo):
+    relay.open_GEN_OUT(GEN_OUT_NAME, timer, GenNo)
 
 # keep track of wiegand values and pins
 # check if person allowed to enter
