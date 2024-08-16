@@ -238,6 +238,11 @@ def record_button_pressed(entrance, name_of_button):
 
 
 def fire_alarm_activated(gpio, level, tick):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when the fire alarm is activated
+    '''
     entrance = ""
     dictionary = {
         "entrance": {"entranceId": entrance},
@@ -256,27 +261,37 @@ def fire_alarm_activated(gpio, level, tick):
 
 
 def record_antipassback(authtype, entrance, status):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when antipassback occurred
 
+        Parameters:
+            authtype: type of authentication used
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
-        "person": {"personId": name},
-        "accessGroup": {"accessGroupId": accessGroup},
-        "direction": status,
-        "entrance": {"entranceId": entrance},
-        "eventActionType": {"eventActionTypeId": 2},
-        "controller": {"controllerSerialNo": controllerSerial},
+        "direction": status, 
+        "entrance": entrance, 
+        "eventActionType": "ANTIPASSBACK : authenticated_scan ",
+        "controller": controllerSerial, 
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
-    }
-
-    dictionary = {
-        "direction": status, "entrance": entrance, "eventActionType": "ANTIPASSBACK : authenticated_scan ",
-        "controller": controllerSerial, "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
     update_logs_and_server(dictionary)
 
 
 def record_mag_opened(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when magnetic contact at the door is opened
+    with authentication
 
+        Parameters:
+            entrance: entrance ID
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 4},
@@ -293,7 +308,14 @@ def record_mag_opened(entrance):
 
 
 def record_mag_closed(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when magnetic contact at the door is closed
 
+        Parameters:
+            entrance: entrance ID
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 5},
@@ -315,7 +337,15 @@ def record_mag_closed(entrance):
 
 
 def record_mag_opened_warning(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when magnetic contact at the door is opened
+    without authentication
 
+        Parameters:
+            entrance: entrance ID
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 6},
@@ -332,7 +362,12 @@ def record_mag_opened_warning(entrance):
 
 
 def record_buzzer_start(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server when the buzzer has started
 
+    NOTE: This function is not used in the current implementation
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 7},
@@ -344,7 +379,12 @@ def record_buzzer_start(entrance):
 
 
 def record_buzzer_end(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server when the buzzer has stopped
 
+    NOTE: This function is not used in the current implementation
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 8},
@@ -357,6 +397,14 @@ def record_buzzer_end(entrance):
 
 # update to update json files
 def update_logs_and_server(dictionary):
+    '''
+    This function submits a task to the thread_pool_executor to update the
+    respective log files, then update the server of the events with the
+    pendingLogs.json file
+
+        Parameters:
+            dictionary: dictionary containing the event details
+    '''
     def thread_task():
         update(path + "/json/archivedLogs.json", archived_logs_lock, dictionary)
         update(path + "/json/pendingLogs.json", pending_logs_lock, dictionary)
@@ -368,6 +416,17 @@ def update_logs_and_server(dictionary):
 
 
 def update(file, lock, dictionary):
+    '''
+    This function opens and updates the json file with the dictionary provided
+    by writing directly to it. If the file exceeds the MAX_JSON_LENGTH, the
+    first half of the file will be deleted using clear_file_storage.
+
+        Parameters:
+            file: file to update
+            lock: lock to prevent multiple threads from writing to the file
+            at the same time
+            dictionary: dictionary containing the event details
+    '''
     # check if current json files exceed max length
     clear_file_storage(file, lock)
     # print("before lock", str(datetime.now()))
@@ -392,6 +451,15 @@ def update(file, lock, dictionary):
 
 # delete first half if exceeds length
 def clear_file_storage(file, lock):
+    '''
+    This function checks if the json file exceeds the MAX_JSON_LENGTH, and
+    deletes the first half of the file if it does
+
+        Parameters:
+            file: file to check
+            lock: lock to prevent multiple threads from writing to the file
+            at the same time
+    '''
     with lock:
         with open(file, "r") as checkfile:
             try:
@@ -409,17 +477,6 @@ def clear_file_storage(file, lock):
 
 
 def main():
-    # persondetails = {"Name": "YongNing","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}
-
-    # record_auth_scans(persondetails,"Card","Maindoor","In")
-    # record_button_pressed("Maindoor","Security guard button")
-
-    # record_auth(persondetails,"Card","Maindoor","In")
-    # record_button("Maindoor","Security guard button")
-    # record_auth(persondetails,"Card","Maindoor","In")
-    # record_button("Maindoor","Security guard button")
-    # record_auth(persondetails,"Card","Maindoor","In")
-    # record_button("Maindoor","Security guard button")
     pass
 
 
