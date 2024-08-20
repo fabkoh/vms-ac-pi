@@ -654,6 +654,8 @@ def reader_detects_bits(bits, value, entrance):
         
         credentialLookup = credOccur.get("CredentialLookup", {})
 
+        logger.info("Checking for credentials {}".format(credentials))
+        logger.info("Masterpassword" in device_details, credentials.get(pin_type) == device_details["Masterpassword"])
         # Check master password
         if "Masterpassword" in device_details and credentials.get(pin_type) == device_details["Masterpassword"]:
             eventsMod.record_masterpassword_used("Master Pin", entrancename, entrance_direction)
