@@ -184,7 +184,7 @@ def verify_datetime(schedule):
             print(e)
     
     return False
-
+  
     try:
         for scheduledate, scheduletime in schedule.items():
             # # print(scheduledate,scheduletime)
@@ -212,7 +212,11 @@ def verify_datetime(schedule):
 
 
 def check_entrance_status():
-
+    '''
+    This function checks for whether the different entrances are within
+    schedule, and then physically calls the relays to lock or unlock the
+    entrances accordingly.
+    '''
     if verify_datetime(E1_entrance_schedule):
         # # print("unlock E1")
         relay.lock_unlock_entrance_one(E1_thirdPartyOption, True)
@@ -278,31 +282,6 @@ pinsvalue_E2_IN = []  # array to store pins
 pinsvalue_E2_OUT = []  # array to store pins
 
 
-# takes in string wiegand value, return name, passwords, accessgroup and schedule
-def check_for_wiegand(value):
-    for entranceslist in credOccur:
-        Accessgroups = entranceslist["EntranceDetails"]["AccessGroups"]
-        for specificAccessGroup in Accessgroups:
-            for groupName, groupdetails in specificAccessGroup.items():
-                for persondetails in groupdetails["Persons"]:
-
-                    diffpassword = list()
-                    authmethod = None
-
-                    # check wiegand value belongs to which person, add the rest of wiegand values and pins to diffpassowrd
-                    for type, password in persondetails["Credentials"].items():
-                        if value == password:
-                            authmethod = type
-                            personName = persondetails["Name"]
-
-                        if type != authmethod:
-                            diffpassword.append(password)
-
-                    # once done, return the data
-                    if authmethod:
-                        return {"Name": personName, "diffpassword": diffpassword, "AccessGroup": groupName, "Schedule": groupdetails["Schedule"]}
-
-
 def open_door(entrance_prefix):
     '''Helper function for eventActionTriggers.py
 
@@ -331,17 +310,9 @@ def open_door_using_entrance_id(entrance_id):
     elif entrance_id and entrance_id == config.get("EntranceName", {}).get("E2", None):
         open_door("E2")
 
-# Events Management: Output actions timer for GENOUT_1/2/3
-
 
 def open_GEN_OUT(GEN_OUT_NAME, timer, GenNo):
     relay.open_GEN_OUT(GEN_OUT_NAME, timer, GenNo)
-
-# keep track of wiegand values and pins
-# check if person allowed to enter
-# trigger relays
-# record Trans
-# TODO: add event logging
 
 def activate_buzz(entrance, timing):
     '''
@@ -419,16 +390,6 @@ def activate_led(entrance, timing):
         thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_IN_Led, timing)
         thread_pool_executor.submit(thread_pool_helper, GPIOconfig.E2_OUT_Led, timing)
 
-'''
-TODO: functions for led and buzzer behaviour when the credentials are correct/
-wrong
-Correct: Buzzer buzzes for 0.2 seconds, LED turns green for 2 seconds
-Wrong: Buzzer buzzes 3 times in quick sucession, LED remains red (no change)
-
-Current issues: 
-- Triggering this overrides the output_events queue actions if there is one for
-    or buzzer there
-'''
 def led_and_buzzer_correct_cred(entrance_id):
     '''
     Buzzes and lights up LED to show that the correct credentials were entered,
@@ -488,6 +449,10 @@ def led_and_buzzer_wrong_cred(entrance_id):
         thread_pool_executor.submit(thread_pool_buzz, GPIOconfig.E2_OUT_Buzz)
         thread_pool_executor.submit(thread_pool_buzz, GPIOconfig.E2_IN_Buzz)
 
+# keep track of wiegand values and pins
+# check if person allowed to enter
+# trigger relays
+# record Trans
 def reader_detects_bits(bits, value, entrance):
 
     global mag_E1_allowed_to_open
@@ -538,12 +503,6 @@ def reader_detects_bits(bits, value, entrance):
         credentials.clear()
         if timeout_cred.status():
             timeout_cred.stop()
-
-
-    def greenlight_and_beep():
-        '''set wiegand reader to show green light and give a recognisaible beep, 2-3 secondas long'''
-        if entrance_prefix == "E1":
-            pass
 
     def open_door():
         '''opens the door, set mags to allow open, update server events'''
@@ -897,7 +856,6 @@ def mag_detects_rising(gpio, level, tick):
             eventsMod.record_mag_opened(E1)
         else:
             eventsMod.record_mag_opened_warning(E1)
-        updateserver.update_server_events()
 
     if gpio == E2_Mag:
         timeout_mag_E2.start()
@@ -906,7 +864,6 @@ def mag_detects_rising(gpio, level, tick):
             eventsMod.record_mag_opened(E2)
         else:
             eventsMod.record_mag_opened_warning(E2)
-        updateserver.update_server_events()
 
     mag_detects_rising.last_call_time = time.time()
 
@@ -926,14 +883,12 @@ def mag_detects_falling(gpio, level, tick):
         # print(f"{E1} is closed at " + str(datetime.now()))
         mag_E1_allowed_to_open = False
         eventsMod.record_mag_closed(E1)
-        updateserver.update_server_events()
 
     if gpio == E2_Mag:
         timeout_mag_E2.stop()
         # print(f"{E2} is closed at " + str(datetime.now()))
         mag_E2_allowed_to_open = False
         eventsMod.record_mag_closed(E2)
-        updateserver.update_server_events()
 
     mag_detects_falling.last_call_time = time.time()
 

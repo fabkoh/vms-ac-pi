@@ -74,6 +74,18 @@ controller         CONTROLLERID
 
 
 def record_auth_scans(name, accessGroup, authtype, entrance, status):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when auth_scan happens
+    
+        Parameters:
+            name: ID of the person
+            accessGroup: ID of the access group
+            authtype: type of authentication used
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
         "person": {"personId": name},
         "accessGroup": {"accessGroupId": accessGroup},
@@ -83,16 +95,24 @@ def record_auth_scans(name, accessGroup, authtype, entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    # logger.info("record auth scans, before event_trigger_cb")
+    
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
-    # logger.info("record auth scans, after event_trigger_cb")
+    
     update_logs_and_server(dictionary)
-    # logger.info("record auth scans, after update_logs_and_server")
 
 def invalid_pin_used(entrance, status):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when invalid pin is used
+
+        Parameters:
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
         "direction": status,
         "entrance": {"entranceId": entrance},
@@ -100,6 +120,7 @@ def invalid_pin_used(entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
+
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.UNAUTHENTICATED_SCAN, entrance)
@@ -109,6 +130,15 @@ def invalid_pin_used(entrance, status):
 
 
 def pin_only_used(entrance, status):
+    '''
+    This functions creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when only pin is used
+
+        Parameters:
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
         "direction": status,
         "entrance": {"entranceId": entrance},
@@ -116,17 +146,26 @@ def pin_only_used(entrance, status):
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    # logger.info("record pin used, before event_trigger_cb")
+    
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.AUTHENTICATED_SCAN, entrance)
     )
-    # logger.info("record pin used, after event_trigger_cb")
+    
     update_logs_and_server(dictionary)
-    # logger.info("record pin used, after update_logs_and_server")
 
 
 def record_masterpassword_used(authtype, entrance, status):
+    '''
+    This functions creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when only pin is used
+
+        Parameters:
+            authtype: type of authentication used
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
         "direction": status,
         "entrance": {"entranceId": entrance},
@@ -137,11 +176,20 @@ def record_masterpassword_used(authtype, entrance, status):
 
     update_logs_and_server(dictionary)
 
-# updates pendingTrans.json and send to backend
-# updates archivedTrans.json for backup
-
 
 def record_unauth_scans(authtype, entrance, status, name=None, access_group=None):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when unauth_scan happens
+    
+        Parameters:
+            authtype: type of authentication used
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+            name: ID of the person
+            accessGroup: ID of the access group
+    '''
     dictionary = {
         "person": {"personId": name},
         "accessGroup": {"accessGroupId": access_group},
@@ -156,22 +204,31 @@ def record_unauth_scans(authtype, entrance, status, name=None, access_group=None
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.UNAUTHENTICATED_SCAN, entrance)
     )
-    # print(f"Recorded unauth scan at {entrance}")
+    
     update_logs_and_server(dictionary)
 
 
 def record_button_pressed(entrance, name_of_button):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when button is pressed
 
+        Parameters:
+            entrance: entrance ID
+            name_of_button: name of the button pressed
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 9},
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
+    
     e = entrance
     if e == '':  # no entrance assigned to this push button
         e = eventActionTriggerConstants.BOTH_ENTRANCE
-    # logger.info("push button, before event_trigger_cb")
+    
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.EXIT_BUTTON_PRESSED, e)
@@ -179,9 +236,13 @@ def record_button_pressed(entrance, name_of_button):
 
     update_logs_and_server(dictionary)
 
-# status = opened/ closed
 
 def fire_alarm_activated(gpio, level, tick):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when the fire alarm is activated
+    '''
     entrance = ""
     dictionary = {
         "entrance": {"entranceId": entrance},
@@ -192,7 +253,6 @@ def fire_alarm_activated(gpio, level, tick):
     e = entrance
     if e == '':  # no entrance assigned to this push button
         e = eventActionTriggerConstants.BOTH_ENTRANCE
-    # print(f"Fire activated at {e}")
     eventActionTriggers.event_trigger_cb(
         eventActionTriggerConstants.create_event(
             eventActionTriggerConstants.FIRE, e)
@@ -201,81 +261,113 @@ def fire_alarm_activated(gpio, level, tick):
 
 
 def record_antipassback(authtype, entrance, status):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when antipassback occurred
 
+        Parameters:
+            authtype: type of authentication used
+            entrance: entrance ID
+            status: direction of the scan (IN or OUT)
+    '''
     dictionary = {
-        "person": {"personId": name},
-        "accessGroup": {"accessGroupId": accessGroup},
-        "direction": status,
-        "entrance": {"entranceId": entrance},
-        "eventActionType": {"eventActionTypeId": 2},
-        "controller": {"controllerSerialNo": controllerSerial},
+        "direction": status, 
+        "entrance": entrance, 
+        "eventActionType": "ANTIPASSBACK : authenticated_scan ",
+        "controller": controllerSerial, 
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
-    }
-
-    dictionary = {
-        "direction": status, "entrance": entrance, "eventActionType": "ANTIPASSBACK : authenticated_scan ",
-        "controller": controllerSerial, "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
 
     update_logs_and_server(dictionary)
 
 
 def record_mag_opened(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when magnetic contact at the door is opened
+    with authentication
 
+        Parameters:
+            entrance: entrance ID
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 4},
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-                                                                                        eventActionTriggerConstants.START_TIMER,
-                                                                                        entrance))
-    eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION, entrance)
-    )
+
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
+        eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION,
+        eventActionTriggerConstants.START_TIMER,
+        entrance))
+    
     update_logs_and_server(dictionary)
 
 
 def record_mag_closed(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when magnetic contact at the door is closed
 
+        Parameters:
+            entrance: entrance ID
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 5},
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-                                                                                        eventActionTriggerConstants.STOP_TIMER,
-                                                                                        entrance))
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
+        eventActionTriggerConstants.CONTACT_OPEN_WITH_AUTHENTICATION,
+        eventActionTriggerConstants.STOP_TIMER,
+        entrance))
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
+        eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION,
+        eventActionTriggerConstants.STOP_TIMER,
+        entrance))
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_event(
+        eventActionTriggerConstants.CONTACT_CLOSE, 
+        entrance))
     update_logs_and_server(dictionary)
 
 
 def record_mag_opened_warning(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server, and uses event_trigger_cb to trigger the output
+    action for what should happen when magnetic contact at the door is opened
+    without authentication
 
+        Parameters:
+            entrance: entrance ID
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 6},
         "controller": {"controllerSerialNo": controllerSerial},
         "eventTime": datetime.now().strftime(("%m-%d-%Y %H:%M:%S"))
     }
-
-    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(eventActionTriggerConstants.CONTACT_OPEN,
-                                                                                        eventActionTriggerConstants.START_TIMER,
-                                                                                        entrance))
-    eventActionTriggers.event_trigger_cb(
-        eventActionTriggerConstants.create_event(
-            eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION, entrance)
-    )
+    
+    eventActionTriggers.event_trigger_cb(eventActionTriggerConstants.create_timer_event(
+        eventActionTriggerConstants.CONTACT_OPEN_WITHOUT_AUTHENTICATION,
+        eventActionTriggerConstants.START_TIMER,
+        entrance))
 
     update_logs_and_server(dictionary)
 
-# status = started buzzing/ stopped buzzing
-
 
 def record_buzzer_start(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server when the buzzer has started
 
+    NOTE: This function is not used in the current implementation
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 7},
@@ -287,7 +379,12 @@ def record_buzzer_start(entrance):
 
 
 def record_buzzer_end(entrance):
+    '''
+    This function creates a dictionary to send to backend using
+    update_logs_and_server when the buzzer has stopped
 
+    NOTE: This function is not used in the current implementation
+    '''
     dictionary = {
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 8},
@@ -299,9 +396,15 @@ def record_buzzer_end(entrance):
 
 
 # update to update json files
-
-
 def update_logs_and_server(dictionary):
+    '''
+    This function submits a task to the thread_pool_executor to update the
+    respective log files, then update the server of the events with the
+    pendingLogs.json file
+
+        Parameters:
+            dictionary: dictionary containing the event details
+    '''
     def thread_task():
         update(path + "/json/archivedLogs.json", archived_logs_lock, dictionary)
         update(path + "/json/pendingLogs.json", pending_logs_lock, dictionary)
@@ -313,6 +416,17 @@ def update_logs_and_server(dictionary):
 
 
 def update(file, lock, dictionary):
+    '''
+    This function opens and updates the json file with the dictionary provided
+    by writing directly to it. If the file exceeds the MAX_JSON_LENGTH, the
+    first half of the file will be deleted using clear_file_storage.
+
+        Parameters:
+            file: file to update
+            lock: lock to prevent multiple threads from writing to the file
+            at the same time
+            dictionary: dictionary containing the event details
+    '''
     # check if current json files exceed max length
     clear_file_storage(file, lock)
     # print("before lock", str(datetime.now()))
@@ -337,6 +451,15 @@ def update(file, lock, dictionary):
 
 # delete first half if exceeds length
 def clear_file_storage(file, lock):
+    '''
+    This function checks if the json file exceeds the MAX_JSON_LENGTH, and
+    deletes the first half of the file if it does
+
+        Parameters:
+            file: file to check
+            lock: lock to prevent multiple threads from writing to the file
+            at the same time
+    '''
     with lock:
         with open(file, "r") as checkfile:
             try:
@@ -354,17 +477,6 @@ def clear_file_storage(file, lock):
 
 
 def main():
-    # persondetails = {"Name": "YongNing","diffpassword" : "NO", "AccessGroup": "ISS","Schedule":"Schedule"}
-
-    # record_auth_scans(persondetails,"Card","Maindoor","In")
-    # record_button_pressed("Maindoor","Security guard button")
-
-    # record_auth(persondetails,"Card","Maindoor","In")
-    # record_button("Maindoor","Security guard button")
-    # record_auth(persondetails,"Card","Maindoor","In")
-    # record_button("Maindoor","Security guard button")
-    # record_auth(persondetails,"Card","Maindoor","In")
-    # record_button("Maindoor","Security guard button")
     pass
 
 
