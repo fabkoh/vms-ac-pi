@@ -563,6 +563,7 @@ def reader_detects_bits(bits, value, entrance):
 
     elif bits == card_bits:  # card
         print("Base value before transformation: ", value)
+        print("Binary value: ", "{:026b}".format(value))
         credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
         # logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
         print(str(datetime.now()) + " Card detected: bits={} value={}".format(
