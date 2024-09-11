@@ -562,8 +562,7 @@ def reader_detects_bits(bits, value, entrance):
         credential_added = process_pin_value(value)
 
     elif bits == card_bits:  # card
-        # credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
-        credentials[fingerprint_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
+        credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
         # logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
         print(str(datetime.now()) + " Card detected: bits={} value={}".format(
             bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
