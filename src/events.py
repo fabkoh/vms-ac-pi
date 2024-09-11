@@ -631,6 +631,10 @@ def reader_detects_bits(bits, value, entrance):
         auth_method_is_and = and_delimiter in auth_method_name
         auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
 
+        print("auth_method_name: ", auth_method_name)
+        print("auth_method_keys: ", auth_method_keys)
+        print("credentials: ", credentials)
+
         # Check for credentials not in auth_method_keys
         if any(map(lambda k: k not in auth_method_keys, credentials.keys())):
             eventsMod.record_unauth_scans(auth_method_name, entrancename, entrance_direction)
