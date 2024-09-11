@@ -562,8 +562,8 @@ def reader_detects_bits(bits, value, entrance):
         credential_added = process_pin_value(value)
 
     elif bits == card_bits:  # card
-        print("Base value before transformation: ", value)
-        print("Binary value: ", "{:026b}".format(value))
+        print("Base value before transformation: ", value) # TODO: REMOVE
+        print("Binary value: ", "{:026b}".format(value)) # TODO: REMOVE
         credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
         # logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
         print(str(datetime.now()) + " Card detected: bits={} value={}".format(
@@ -633,9 +633,9 @@ def reader_detects_bits(bits, value, entrance):
         auth_method_is_and = and_delimiter in auth_method_name
         auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
 
-        print("auth_method_name: ", auth_method_name)
-        print("auth_method_keys: ", auth_method_keys)
-        print("credentials: ", credentials)
+        print("auth_method_name: ", auth_method_name) # TODO: REMOVE
+        print("auth_method_keys: ", auth_method_keys) # TODO: REMOVE
+        print("credentials: ", credentials) # TODO: REMOVE
 
         # Check for credentials not in auth_method_keys
         if any(map(lambda k: k not in auth_method_keys, credentials.keys())):
