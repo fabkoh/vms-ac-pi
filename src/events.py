@@ -28,7 +28,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 pin_type = "Pin"
 face_type = "Face"
 card_type = "Card"
-fingerprint_type = "Fingerprint"
+fingerprint_type = "FingerPrint"
 and_delimiter = " + "
 or_delimiter = " / "
 
@@ -563,6 +563,7 @@ def reader_detects_bits(bits, value, entrance):
 
     elif bits == card_bits:  # card
         credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
+        credentials[fingerprint_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
         # logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
         print(str(datetime.now()) + " Card detected: bits={} value={}".format(
             bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
