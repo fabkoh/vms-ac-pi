@@ -556,6 +556,7 @@ def reader_detects_bits(bits, value, entrance):
     # print("bits={} value={}".format(bits, value))
 
     # print(bits, value)
+    print("bits before checks={} value before edits={}".format(bits, value)) # TODO: REMOVE
     
     credential_added = False
     if bits == pin_bits:  # 1 number keyed in
