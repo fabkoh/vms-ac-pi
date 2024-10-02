@@ -567,7 +567,7 @@ def reader_detects_bits(bits, value, entrance):
         print("Base value before transformation: ", value) # TODO: REMOVE
         print("Binary value: ", "{:026b}".format(value)) # TODO: REMOVE
         # print(bin(value)[1:25])
-        factory_code = int(bin(value)[1:25]) >> 16
+        factory_code = int(bin(value)[1:25], 2) >> 16
         print(factory_code)
         # user_id = (bin(value[1:25]) << 8) >> 8
         # print("Factory code: ", factory_code) # TODO: REMOVE
