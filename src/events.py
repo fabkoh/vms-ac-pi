@@ -566,12 +566,12 @@ def reader_detects_bits(bits, value, entrance):
     elif bits == card_bits:  # card
         print("Base value before transformation: ", value) # TODO: REMOVE
         print("Binary value: ", "{:026b}".format(value)) # TODO: REMOVE
-        # print(bin(value)[1:25])
-        factory_code = int("{:026b}".format(value)[1:25], 2) >> 16
-        print(factory_code)
-        # user_id = (bin(value[1:25]) << 8) >> 8
-        # print("Factory code: ", factory_code) # TODO: REMOVE
-        # print("User ID: ", user_id) # TODO: REMOVE
+
+        bits = int("{:026b}".format(value)[1:25], 2)
+        factory_code = bits >> 16
+        user_id = (bits << 8) >> 8
+        print("Factory code: ", factory_code) # TODO: REMOVE
+        print("User ID: ", user_id) # TODO: REMOVE
 
         credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
         # logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
