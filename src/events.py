@@ -569,7 +569,7 @@ def reader_detects_bits(bits, value, entrance):
 
         bits = int("{:026b}".format(value)[1:25], 2)
         factory_code = bits >> 16
-        user_id = (bits << 8) >> 8
+        user_id = bits & 0xFFFF
         print("Factory code: ", factory_code) # TODO: REMOVE
         print("User ID: ", user_id) # TODO: REMOVE
 
