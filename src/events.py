@@ -557,27 +557,29 @@ def reader_detects_bits(bits, value, entrance):
 
     # print(bits, value)
     print("-----------------------------------------------------------") # TODO: REMOVE
-    print("bits before checks={} value before edits={}".format(bits, value)) # TODO: REMOVE
     
     credential_added = False
     if bits == pin_bits:  # 1 number keyed in
         credential_added = process_pin_value(value)
 
     elif bits == card_bits:  # card
-        print("Base value before transformation: ", value) # TODO: REMOVE
-        print("Binary value: ", "{:026b}".format(value)) # TODO: REMOVE
-
         bits = int("{:026b}".format(value)[1:25], 2)
         factory_code = bits >> 16
         user_id = bits & 0xFFFF
         print("Factory code: ", factory_code) # TODO: REMOVE
         print("User ID: ", user_id) # TODO: REMOVE
 
-        credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
-        # logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
-        print(str(datetime.now()) + " Card detected: bits={} value={}".format(
-            bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
-        credential_added = True
+        if factory_code == 0:
+            credentials[fingerprint_type] = str(user_id)
+            print(str(datetime.now()) + " Fingerprint detected: bits={} value={}".format(
+                bits, str(user_id)))
+            credential_added = True
+        else: # this is card
+            credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
+            # logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
+            print(str(datetime.now()) + " Card detected: bits={} value={}".format(
+                bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
+            credential_added = True
 
     elif bits == 8:  # if we receive an 8-bit number, split into two 4-bit values, means user press very quickly
         high_digit = (value >> 4) & 0xF  # Extract the high 4 bits
