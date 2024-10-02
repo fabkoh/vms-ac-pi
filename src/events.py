@@ -566,8 +566,9 @@ def reader_detects_bits(bits, value, entrance):
     elif bits == card_bits:  # card
         print("Base value before transformation: ", value) # TODO: REMOVE
         print("Binary value: ", "{:026b}".format(value)) # TODO: REMOVE
-        print(bin(value)[1:25])
-        # factory_code = bin(value)[1:25] >> 16
+        # print(bin(value)[1:25])
+        factory_code = (bin(value)[1:25]) >> 16
+        print(factory_code)
         # user_id = (bin(value[1:25]) << 8) >> 8
         # print("Factory code: ", factory_code) # TODO: REMOVE
         # print("User ID: ", user_id) # TODO: REMOVE
