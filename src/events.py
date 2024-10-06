@@ -575,10 +575,10 @@ def reader_detects_bits(bits, value, entrance):
                 bits, str(user_id)))
             credential_added = True
         else: # this is card
-            credentials[card_type] = "0" + str(int("{:026b}".format(value)[1:25], 2))
+            credentials[card_type] = "0" + str(bits)
             # logger.info("Card detected: bits={} value={}".format(bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
             print(str(datetime.now()) + " Card detected: bits={} value={}".format(
-                bits, "0" + str(int("{:026b}".format(value)[1:25], 2))))
+                bits, "0" + str(bits)))
             credential_added = True
 
     elif bits == 8:  # if we receive an 8-bit number, split into two 4-bit values, means user press very quickly
