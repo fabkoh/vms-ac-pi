@@ -556,7 +556,6 @@ def reader_detects_bits(bits, value, entrance):
     # print("bits={} value={}".format(bits, value))
 
     # print(bits, value)
-    print("-----------------------------------------------------------") # TODO: REMOVE
     
     credential_added = False
     if bits == pin_bits:  # 1 number keyed in
@@ -566,8 +565,6 @@ def reader_detects_bits(bits, value, entrance):
         bits = int("{:026b}".format(value)[1:25], 2)
         factory_code = bits >> 16
         user_id = bits & 0xFFFF
-        print("Factory code: ", factory_code) # TODO: REMOVE
-        print("User ID: ", user_id) # TODO: REMOVE
 
         if factory_code == 0:
             credentials[fingerprint_type] = str(user_id)
@@ -643,10 +640,6 @@ def reader_detects_bits(bits, value, entrance):
 
         auth_method_is_and = and_delimiter in auth_method_name
         auth_method_keys = auth_method_name.split(and_delimiter) if auth_method_is_and else auth_method_name.split(or_delimiter)
-
-        print("auth_method_name: ", auth_method_name) # TODO: REMOVE
-        print("auth_method_keys: ", auth_method_keys) # TODO: REMOVE
-        print("credentials: ", credentials) # TODO: REMOVE
 
         # Check for credentials not in auth_method_keys
         if any(map(lambda k: k not in auth_method_keys, credentials.keys())):
