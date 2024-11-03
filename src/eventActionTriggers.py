@@ -10,7 +10,8 @@ from lock import pending_logs_lock
 from executor import thread_pool_executor
 from var import server_url
 import gc
-
+from dateutil.rrule import rrulestr
+from dateutil.tz import tzlocal
 
 path = os.path.dirname(os.path.abspath(__file__))
 EVENT_ACTION_TRIGGERS_DATA = []
@@ -183,28 +184,57 @@ def check_datetime(schedule):
     Returns:
         active: if the schedule is current active
     '''
-    # # print(f"schedule: {schedule}")
-    # time_array = schedule.get(str(datetime.date.today()), None)
-    today = datetime.date.today().strftime("%Y-%m-%d")
-    # # print("Today:", today)
+    # # # print(f"schedule: {schedule}")
+    # # time_array = schedule.get(str(datetime.date.today()), None)
+    # today = datetime.date.today().strftime("%Y-%m-%d")
+    # # # print("Today:", today)
 
-    time_array = schedule.get(today, None)
-    # # print("Time Array:", time_array)
+    # time_array = schedule.get(today, None)
+    # # # print("Time Array:", time_array)
 
-    if time_array == None:
-        # # print("No schedule for today")
-        return False
-    # # print(f"time array is {time_array}")
-    curr_datetime = datetime.datetime.now()
-    curr_time = curr_datetime.strftime(
-        "%H") + ":" + curr_datetime.strftime("%M")  # "HH:MM"
-    for timing in time_array:
-        start_time = timing.get("starttime", "24:00")
-        end_time = timing.get("endtime", "00:00")
-        # # print(f"start time is {start_time}, end time is {end_time}")
-        # # print(f"curr time is {curr_time}")
-        if start_time <= curr_time <= end_time:
-            return True
+    # if time_array == None:
+    #     # # print("No schedule for today")
+    #     return False
+    # # # print(f"time array is {time_array}")
+    # curr_datetime = datetime.datetime.now()
+    # curr_time = curr_datetime.strftime(
+    #     "%H") + ":" + curr_datetime.strftime("%M")  # "HH:MM"
+    # for timing in time_array:
+    #     start_time = timing.get("starttime", "24:00")
+    #     end_time = timing.get("endtime", "00:00")
+    #     # # print(f"start time is {start_time}, end time is {end_time}")
+    #     # # print(f"curr time is {curr_time}")
+    #     if start_time <= curr_time <= end_time:
+    #         return True
+    # return False
+    if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
+        # print("before verify datetime: ", datetime.now())
+        try:
+            rule = rrulestr(schedule["rrule"])
+            
+            # Get the current time with local timezone
+            now = datetime.now(tzlocal())
+            
+            # Parse the start and end times as naive times
+            start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
+            if schedule["endtime"] == "24:00":
+                end_time = datetime.strptime("23:59:59", "%H:%M:%S").time()
+            else:
+                end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
+
+            # Adjust 'now' to yesterday to ensure today's occurrences are included
+            yesterday = now - datetime.timedelta(days=1)
+            next_occurrence = rule.after(yesterday, inc=True)
+            # print(next_occurrence.date(), now.date())
+            # Check if the next occurrence is today and within the time range
+            if next_occurrence.date() == now.date():
+                # print(start_time, now.time(), end_time)
+                if start_time <= now.time() <= end_time:
+                    return True
+            return False
+        except Exception as e:
+            print(e)
+    
     return False
 
 
@@ -212,7 +242,6 @@ def flush_output():
     '''Activates output'''
     import events
     import GPIOconfig
-    print("output events are: ", output_events)
     for event in output_events:
         # print("this is event")
         # print(event)
@@ -274,7 +303,6 @@ def queue_output(event):
 
     Args: eventManagement object
     '''
-    print("output queued")
     output_events.append(event)
 
 
@@ -299,7 +327,7 @@ debounce_delay = 1  # 1s debounce delay
 
 
 def event_trigger_cb(event_trigger):
-    print(f"event trigger is {event_trigger}")
+    # print(f"event trigger is {event_trigger}")
     # debounce logic
     if time.time() - event_trigger_cb.last_call_time < debounce_delay:
         return
