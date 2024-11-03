@@ -213,14 +213,14 @@ def check_datetime(schedule):
             rule = rrulestr(schedule["rrule"])
             
             # Get the current time with local timezone
-            now = datetime.now(tzlocal())
+            now = datetime.datetime.now(tzlocal())
             
             # Parse the start and end times as naive times
-            start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
+            start_time = datetime.datetime.strptime(schedule["starttime"], "%H:%M").time()
             if schedule["endtime"] == "24:00":
-                end_time = datetime.strptime("23:59:59", "%H:%M:%S").time()
+                end_time = datetime.datetime.strptime("23:59:59", "%H:%M:%S").time()
             else:
-                end_time = datetime.strptime(schedule["endtime"], "%H:%M").time()
+                end_time = datetime.datetime.strptime(schedule["endtime"], "%H:%M").time()
 
             # Adjust 'now' to yesterday to ensure today's occurrences are included
             yesterday = now - datetime.timedelta(days=1)
