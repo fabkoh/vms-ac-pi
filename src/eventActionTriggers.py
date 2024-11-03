@@ -212,6 +212,7 @@ def flush_output():
     '''Activates output'''
     import events
     import GPIOconfig
+    print("output events are: ", output_events)
     for event in output_events:
         # print("this is event")
         # print(event)
@@ -273,6 +274,7 @@ def queue_output(event):
 
     Args: eventManagement object
     '''
+    print("output queued")
     output_events.append(event)
 
 
