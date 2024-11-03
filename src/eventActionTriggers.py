@@ -179,34 +179,11 @@ def check_datetime(schedule):
     '''Helper function to check if schedule is currently active
 
     Args:
-        schedule: schedule adt (cdict mapping date to list of { starttime, endtime }, time is in hh:mm format. Check docs for more info
+        schedule: schedule rrule, starttime, endtime
 
     Returns:
         active: if the schedule is current active
     '''
-    # # # print(f"schedule: {schedule}")
-    # # time_array = schedule.get(str(datetime.date.today()), None)
-    # today = datetime.date.today().strftime("%Y-%m-%d")
-    # # # print("Today:", today)
-
-    # time_array = schedule.get(today, None)
-    # # # print("Time Array:", time_array)
-
-    # if time_array == None:
-    #     # # print("No schedule for today")
-    #     return False
-    # # # print(f"time array is {time_array}")
-    # curr_datetime = datetime.datetime.now()
-    # curr_time = curr_datetime.strftime(
-    #     "%H") + ":" + curr_datetime.strftime("%M")  # "HH:MM"
-    # for timing in time_array:
-    #     start_time = timing.get("starttime", "24:00")
-    #     end_time = timing.get("endtime", "00:00")
-    #     # # print(f"start time is {start_time}, end time is {end_time}")
-    #     # # print(f"curr time is {curr_time}")
-    #     if start_time <= curr_time <= end_time:
-    #         return True
-    # return False
     if "rrule" in schedule and "starttime" in schedule and "endtime" in schedule:
         # print("before verify datetime: ", datetime.now())
         try:
