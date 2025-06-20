@@ -106,6 +106,7 @@ def get_host_ip(hostIP=None):
 
 
 def main(post_to_etlas=False):
+    print("Healthcheck started")
 
     hostname = socket.gethostname()
 
@@ -186,6 +187,8 @@ def main(post_to_etlas=False):
         json.dump(config, outfile, indent=4)
         outfile.close()
 
+    print("Healthcheck open file block completed")
+
     if post_to_etlas:
         while True:
             try:
@@ -193,3 +196,5 @@ def main(post_to_etlas=False):
                 break
             except:
                 time.sleep(0.1)
+    
+    print("Healthcheck completed")
