@@ -1,3 +1,5 @@
+print("api.py before imports")
+
 import gc
 
 import flask
@@ -22,6 +24,8 @@ import threading
 import time
 
 from executor import thread_pool_executor
+
+print("api.py after imports")
 
 print("Start api.py")
  
@@ -289,7 +293,7 @@ def display_top(snapshot, key_type='traceback', limit=10):
 
 def log_memory_usage_every_hour():
     print("api.py in log_memory_usage_every_hour")
-    
+
     tracemalloc.start(25)  # Adjust stack depth as needed
     try:
         while True:  # Modify or remove loop as per your use case

@@ -1,3 +1,4 @@
+print("healthcheck before imports")
 
 import pigpio
 import json
@@ -16,6 +17,8 @@ import GPIOconfig
 from var import server_url
 from lock import config_lock
 # change_static_ip, get_default_gateway_windows
+
+print("healthcheck after imports")
 
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"

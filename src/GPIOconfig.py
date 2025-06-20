@@ -1,3 +1,5 @@
+print("GPIOconfig before imports")
+
 import threading
 import time
 import pigpio 
@@ -8,6 +10,8 @@ import gc
 from lock import config_lock
 from executor import thread_pool_executor
 
+print("GPIOconfig after imports")
+
 path = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -17,6 +21,8 @@ path = os.path.dirname(os.path.abspath(__file__))
    3. includes function to detect events 
    3. includes class Timer
 '''
+
+print("GPIOconfig.py starting")
 
 config = None
 
@@ -59,6 +65,8 @@ Gen_In_3=None
 Gen_Out_3=None
 
 def update_config():
+   print("GPIOconfig.py in update_config")
+
    '''call program.update_config() after calling this'''
    global config, GPIOpins, Fire, Relay_1, Relay_2, E1_IN_D0, E1_IN_D1, E1_IN_Buzz, \
       E1_IN_Led, E1_OUT_D0, E1_OUT_D1, E1_OUT_Buzz, E1_OUT_Led, E1_Mag, E1_Button, \
@@ -152,6 +160,8 @@ def update_config():
 
    except:
       pass
+
+   print("GPIOconfig.py finish update_config")
 
 update_config() # initialise
 
