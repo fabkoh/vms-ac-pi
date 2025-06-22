@@ -18,8 +18,6 @@ from var import server_url
 from lock import config_lock
 # change_static_ip, get_default_gateway_windows
 
-print("healthcheck after imports")
-
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
 
@@ -75,7 +73,6 @@ def system_call(command):
 
 
 def get_host_ip(hostIP=None):
-    print("Healthcheck get_host_ip started")
     if hostIP is None or hostIP == 'auto':
         hostIP = 'ip'
 
@@ -83,26 +80,17 @@ def get_host_ip(hostIP=None):
         hostIP = socket.getfqdn()
 
     elif hostIP == 'ip':
-        print("Healthcheck get_host_ip in elif block for ip")
         from socket import gaierror
-        print("Healthcheck get_host_ip before trycatch block")
         try:
-            print("Healthcheck get_host_ip in try part")
             hostIP = socket.gethostbyname(socket.getfqdn())
         except gaierror:
-            print("Healthcheck get_host_ip in catch part")
             logger.warn(
                 'gethostbyname(socket.getfqdn()) failed... trying on hostname()')
             hostIP = socket.gethostbyname(socket.gethostname())
-        print("Healthcheck get_host_ip after trycatch block")
 
-        print("Host IP is: " + str(hostIP))
-
-        print("Healthcheck get_host_ip before 127 block")
         if hostIP.startswith("127."):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             # doesn't have to be reachable
-            print("Healthcheck get_host_ip before while loop")
             while True:
                 try:
                     s.connect(('10.255.255.255', 1))
@@ -110,27 +98,19 @@ def get_host_ip(hostIP=None):
                     break
                 except:
                     time.sleep(0.1)
-            print("Healthcheck get_host_ip after while loop")
-        print("Healthcheck get_host_ip after 127 block")
 
-        print("Host IP is: " + str(hostIP))
-
-        print("Healthcheck get_host_ip before 169.264 block")
         if str(hostIP).startswith('169.254') and (not check_ip_static()):  # apipa, use static ip
             change_static_ip(
                 '192.168.1.230', get_default_gateway_windows(), '8.8.8.8')
             return get_host_ip('ip')
-        print("Healthcheck get_host_ip after 169.264 block")
 
     return str(hostIP)
 
 
 def main(post_to_etlas=False):
-    print("Healthcheck started")
 
     hostname = socket.gethostname()
 
-    print("Healthcheck start method definitions")
     def get_serialnum():
         return system_call("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2")
 
@@ -180,49 +160,33 @@ def main(post_to_etlas=False):
             readersConnection[reader] = "Connected"
         else:
             readersConnection[reader] = ""
-    print("Healthcheck end method definitions")
 
-    print("Healthcheck open file block started")
     with open(file, "w+") as outfile:
-        print("Healthcheck before json load try catch block")
         try:
             data = json.load(outfile)
         except:
             data = []
-        print("Healthcheck after json load try catch block")
 
-        print("Healthcheck before test_for_connection calls")
         readersConnection = config["controllerConfig"]["readersConnection"]
         test_for_connection(E1_IN_D0, E1_IN_D1, "E1_IN")
         test_for_connection(E2_IN_D0, E2_IN_D1, "E2_IN")
         test_for_connection(E1_OUT_D0, E1_OUT_D1, "E1_OUT")
         test_for_connection(E2_OUT_D0, E2_OUT_D1, "E2_OUT")
-        print("Healthcheck after test_for_connection calls")
 
-        print("Healthcheck before datetime update")
         now = datetime.now()
         current_date_time = now.strftime("%d-%m-%Y %H:%M:%S")
         readersConnection["dateAndTime"] = current_date_time
-        print("Healthcheck after datetime update")
 
-        print("Healthcheck before host information update")
-        print("Healthcheck before get_host_ip call")
         host_ip = str(get_host_ip())
-        print("Healthcheck after get_host_ip call")
         serial_num = str(get_serialnum().decode())
         mac = str(get_mac().decode())
         config["controllerConfig"]["controllerIp"] = host_ip
         config["controllerConfig"]["controllerSerialNo"] = serial_num[:-1]
         config["controllerConfig"]["controllerMAC"] = mac[:-1]
-        print("Healthcheck after host information update")
 
-        print("Healthcheck before config outfile dump")
         outfile.seek(0)
         json.dump(config, outfile, indent=4)
         outfile.close()
-        print("Healthcheck after config outfile dump")
-
-    print("Healthcheck open file block completed")
 
     if post_to_etlas:
         while True:
@@ -231,5 +195,3 @@ def main(post_to_etlas=False):
                 break
             except:
                 time.sleep(0.1)
-    
-    print("Healthcheck completed")
