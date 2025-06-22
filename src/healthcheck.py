@@ -189,13 +189,15 @@ def main(post_to_etlas=False):
         print("Healthcheck after datetime update")
 
         print("Healthcheck before host information update")
+        print("Healthcheck before get_host_ip call")
         host_ip = str(get_host_ip())
+        print("Healthcheck after get_host_ip call")
         serial_num = str(get_serialnum().decode())
         mac = str(get_mac().decode())
         config["controllerConfig"]["controllerIp"] = host_ip
         config["controllerConfig"]["controllerSerialNo"] = serial_num[:-1]
         config["controllerConfig"]["controllerMAC"] = mac[:-1]
-        print("Healthcheck before host information update")
+        print("Healthcheck after host information update")
 
         print("Healthcheck before config outfile dump")
         outfile.seek(0)
