@@ -87,17 +87,22 @@ def get_host_ip(hostIP=None):
         from socket import gaierror
         print("Healthcheck get_host_ip before trycatch block")
         try:
+            print("Healthcheck get_host_ip in try part")
             hostIP = socket.gethostbyname(socket.getfqdn())
         except gaierror:
+            print("Healthcheck get_host_ip in catch part")
             logger.warn(
                 'gethostbyname(socket.getfqdn()) failed... trying on hostname()')
             hostIP = socket.gethostbyname(socket.gethostname())
         print("Healthcheck get_host_ip after trycatch block")
 
+        print("Host IP is: " + str(hostIP))
+
         print("Healthcheck get_host_ip before 127 block")
         if hostIP.startswith("127."):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             # doesn't have to be reachable
+            print("Healthcheck get_host_ip before while loop")
             while True:
                 try:
                     s.connect(('10.255.255.255', 1))
@@ -105,7 +110,10 @@ def get_host_ip(hostIP=None):
                     break
                 except:
                     time.sleep(0.1)
+            print("Healthcheck get_host_ip after while loop")
         print("Healthcheck get_host_ip after 127 block")
+
+        print("Host IP is: " + str(hostIP))
 
         print("Healthcheck get_host_ip before 169.264 block")
         if str(hostIP).startswith('169.254') and (not check_ip_static()):  # apipa, use static ip
