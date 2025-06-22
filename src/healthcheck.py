@@ -167,31 +167,41 @@ def main(post_to_etlas=False):
 
     print("Healthcheck open file block started")
     with open(file, "w+") as outfile:
+        print("Healthcheck before json load try catch block")
         try:
             data = json.load(outfile)
         except:
             data = []
+        print("Healthcheck after json load try catch block")
 
+        print("Healthcheck before test_for_connection calls")
         readersConnection = config["controllerConfig"]["readersConnection"]
         test_for_connection(E1_IN_D0, E1_IN_D1, "E1_IN")
         test_for_connection(E2_IN_D0, E2_IN_D1, "E2_IN")
         test_for_connection(E1_OUT_D0, E1_OUT_D1, "E1_OUT")
         test_for_connection(E2_OUT_D0, E2_OUT_D1, "E2_OUT")
+        print("Healthcheck after test_for_connection calls")
 
+        print("Healthcheck before datetime update")
         now = datetime.now()
         current_date_time = now.strftime("%d-%m-%Y %H:%M:%S")
         readersConnection["dateAndTime"] = current_date_time
+        print("Healthcheck after datetime update")
 
+        print("Healthcheck before host information update")
         host_ip = str(get_host_ip())
         serial_num = str(get_serialnum().decode())
         mac = str(get_mac().decode())
         config["controllerConfig"]["controllerIp"] = host_ip
         config["controllerConfig"]["controllerSerialNo"] = serial_num[:-1]
         config["controllerConfig"]["controllerMAC"] = mac[:-1]
+        print("Healthcheck before host information update")
 
+        print("Healthcheck before config outfile dump")
         outfile.seek(0)
         json.dump(config, outfile, indent=4)
         outfile.close()
+        print("Healthcheck after config outfile dump")
 
     print("Healthcheck open file block completed")
 
