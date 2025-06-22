@@ -1,5 +1,3 @@
-print("api.py before imports")
-
 import gc
 
 import flask
@@ -24,10 +22,6 @@ import threading
 import time
 
 from executor import thread_pool_executor
-
-print("api.py after imports")
-
-print("Start api.py")
  
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
@@ -35,8 +29,6 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 @app.route('/api/status', methods=['GET'])
 def get_status():
-    print("api.py in get_status")
-
     '''returns healthcheck info
     
     Returns: (response)
@@ -77,14 +69,10 @@ def get_status():
 
 @app.route('/api/unlock/entrance/<entrance_id>', methods=['GET'])
 def unlock_entrance_unicon(entrance_id):
-    print("api.py in unlock_entrance_unicon")
-
     events.open_door_using_entrance_id(int(entrance_id))
     return flask.Response({},status=200)
 
 def update_config():
-    print("api.py in update_config")
-
     '''helper method to update config'''
     events.update_config()
     eventsMod.update_config()
@@ -95,8 +83,6 @@ def update_config():
 
 @app.route('/api/config', methods=['POST'])
 def post_config():
-    print("api.py in post_config")
-
     '''changes config.json and post changes to etlas, 
     aborts if controllerSerialNo is different
     
@@ -129,8 +115,6 @@ def post_config():
 
 @app.route('/api/reset', methods=['POST'])
 def post_reset():
-    print("api.py in post_reset")
-
     '''Resets the controller. Resets ip to 192.168.1.67. then posts new config to etlas
     
     Returns (response):
@@ -142,23 +126,17 @@ def post_reset():
 
 @app.route('/api/reboot', methods=['POST'])
 def post_reboot():
-    print("api.py in post_reboot")
-
     '''reboots the controller'''
     os.system('sudo reboot')
 
 @app.route('/api/shutdown', methods=['POST'])
 def post_shutdown():
-    print("api.py in post_shutdown")
-
     '''shutdowns the controller'''
     changeStatic.change_dhcp()
     os.system('sudo halt')
 
 @app.route('/api/entrance-name', methods=['POST'])
 def post_entrance_name():
-    print("api.py in post_entrance_name")
-
     '''changes config.json
 
     Args (request):
@@ -195,22 +173,16 @@ def post_entrance_name():
     
 @app.route('/api/healthcheck')
 def get_check():
-    print("api.py in get_check")
-
     healthcheck.main(True)
     return flask.Response({}, 204)
 
 def update_credOccur():
-    print("api.py in update_credOccur")
-
     '''helper method to update credOccur'''
     events.update_credOccur()
     events.check_entrance_status()
 
 @app.route('/api/credOccur', methods=['POST'])
 def post_credOccur():
-    print("api.py in post_credOccur")
-
     '''changes credOccur.json
 
     Check https://iss-sec.atlassian.net/wiki/spaces/ISSSEC/pages/194805765/JSON+File+for+credOccur+Schedules+and+AccessGroups
@@ -227,15 +199,11 @@ def post_credOccur():
     return flask.Response({}, 200)
 
 def update_eventActionTriggers():
-    print("api.py in update_eventActionTriggers")
-
     '''helper function to store all script updates'''
     eventActionTriggers.update_event_action_triggers()
 
 @app.route('/api/eventActionTriggers',methods=['POST'])
 def post_eventActionTriggers():
-    print("api.py in post_eventActionTriggers")
-
     '''changes eventActionTriggers
     
     Check for format
@@ -252,21 +220,15 @@ def post_eventActionTriggers():
 
 @app.route('/api/piProperty', methods=['GET'])
 def get_piProperty():
-    print("api.py in get_piProperty")
-
     data = piProperty.get_system_stats()
     return flask.Response(json.dumps(data), headers={ 'Content-type': 'application/json' }, status=200)
 
 @app.route('/api/exit', methods=['GET'])
 def exit_button_api():
-    print("api.py in exit_button_api")
-
     data = events.button_detects_change(5, "", "")
     return flask.Response('', status=204)
 
 def display_top(snapshot, key_type='traceback', limit=10):
-    print("api.py in display_top")
-
     snapshot = snapshot.filter_traces((
         tracemalloc.Filter(False, "<frozen importlib._bootstrap>"),
         tracemalloc.Filter(False, "<unknown>"),
@@ -292,8 +254,6 @@ def display_top(snapshot, key_type='traceback', limit=10):
         # print("Total allocated size: %.1f KiB" % (total / 1024), file=f)
 
 def log_memory_usage_every_hour():
-    print("api.py in log_memory_usage_every_hour")
-
     tracemalloc.start(25)  # Adjust stack depth as needed
     try:
         while True:  # Modify or remove loop as per your use case
@@ -306,6 +266,4 @@ def log_memory_usage_every_hour():
 
 thread_pool_executor.submit(log_memory_usage_every_hour)
 
-print("api.py before app.run")
 app.run(host='0.0.0.0',port=5000,debug = False)
-print("api.py after app.run")
