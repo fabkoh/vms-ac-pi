@@ -113,6 +113,7 @@ def main(post_to_etlas=False):
 
     hostname = socket.gethostname()
 
+    print("Healthcheck start method definitions")
     def get_serialnum():
         return system_call("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2")
 
@@ -162,7 +163,9 @@ def main(post_to_etlas=False):
             readersConnection[reader] = "Connected"
         else:
             readersConnection[reader] = ""
+    print("Healthcheck end method definitions")
 
+    print("Healthcheck open file block started")
     with open(file, "w+") as outfile:
         try:
             data = json.load(outfile)
