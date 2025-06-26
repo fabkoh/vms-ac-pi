@@ -90,7 +90,7 @@ def threaded_get_host_ip():
     print("In healthcheck.py: threaded_get_host_ip before config_lock")
     with config_lock:
         print("In healthcheck.py: threaded_get_host_ip inside config_lock")
-        fileconfig = open(configFilePath)
+        fileconfig = open(configFilePath, "r+")
         print("In healthcheck.py: threaded_get_host_ip opened config file")
 
         json_data = json.load(fileconfig)
