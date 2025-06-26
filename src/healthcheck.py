@@ -180,7 +180,7 @@ def main(post_to_etlas=False):
 
         print("In healthcheck.py: before get_host_ip")
         host_ip = str(get_host_ip())
-        if host_ip is not 'None':
+        if host_ip != 'None':
             config["controllerConfig"]["controllerIp"] = host_ip
         print("In healthcheck.py: after get_host_ip")
 
