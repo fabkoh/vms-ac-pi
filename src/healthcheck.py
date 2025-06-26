@@ -1,5 +1,3 @@
-print("healthcheck before imports")
-
 import pigpio
 import json
 from datetime import datetime
@@ -17,6 +15,8 @@ import GPIOconfig
 from var import server_url
 from lock import config_lock
 # change_static_ip, get_default_gateway_windows
+
+print("In healthcheck.py: start")
 
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
@@ -142,9 +142,6 @@ def main(post_to_etlas=False):
         r = requests.post(url, data=json.dumps(
             body), headers=headers, verify=False)
 
-        # print(r)
-        # print(r.status_code)
-
         if r.status_code == 201 or r.status_code == 200:
             print("SUCCESS")
 
@@ -177,12 +174,15 @@ def main(post_to_etlas=False):
         current_date_time = now.strftime("%d-%m-%Y %H:%M:%S")
         readersConnection["dateAndTime"] = current_date_time
 
-        host_ip = str(get_host_ip())
         serial_num = str(get_serialnum().decode())
         mac = str(get_mac().decode())
-        config["controllerConfig"]["controllerIp"] = host_ip
         config["controllerConfig"]["controllerSerialNo"] = serial_num[:-1]
         config["controllerConfig"]["controllerMAC"] = mac[:-1]
+
+        print("In healthcheck.py: before get_host_ip")
+        host_ip = str(get_host_ip())
+        config["controllerConfig"]["controllerIp"] = host_ip
+        print("In healthcheck.py: after get_host_ip")
 
         outfile.seek(0)
         json.dump(config, outfile, indent=4)
@@ -195,3 +195,5 @@ def main(post_to_etlas=False):
                 break
             except:
                 time.sleep(0.1)
+    
+    print("In healthcheck.py: end")
