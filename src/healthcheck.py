@@ -70,6 +70,10 @@ def system_call(command):
 
 
 def threaded_get_host_ip():
+    '''
+    This function runs in a separate thread to periodically check and update the host IP
+    in the config.json file.
+    '''
     print("In healthcheck.py: Starting threaded_get_host_ip on new thread")
 
     configFilePath = file
@@ -124,7 +128,7 @@ def get_host_ip(hostIP=None):
                     timeoutCount += 1
                     if timeoutCount > 100: # 10 seconds before timeout
                         print("In healhcheck.py: Timeout while trying to get host IP")
-                        thread_pool_executor.submit(threaded_get_host_ip)
+                        thread_pool_executor.submit(threaded_get_host_ip) ## Start new thread and continue with main process
                         return None
 
         if str(hostIP).startswith('169.254') and (not check_ip_static()):  # apipa, use static ip
@@ -208,7 +212,7 @@ def main(post_to_etlas=False):
         config["controllerConfig"]["controllerMAC"] = mac[:-1]
 
         host_ip = str(get_host_ip())
-        if host_ip != 'None':
+        if host_ip != 'None': ## Only write if a valid IP was found
             config["controllerConfig"]["controllerIp"] = host_ip
 
         outfile.seek(0)
