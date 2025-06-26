@@ -87,15 +87,23 @@ def threaded_get_host_ip():
             time.sleep(10)
             print("In healthcheck.py: Failed to get host IP, retrying...")
     
+    print("In healthcheck.py: threaded_get_host_ip before config_lock")
     with config_lock:
+        print("In healthcheck.py: threaded_get_host_ip inside config_lock")
         fileconfig = open(configFilePath)
+        print("In healthcheck.py: threaded_get_host_ip opened config file")
 
         json_data = json.load(fileconfig)
+        print("In healthcheck.py: threaded_get_host_ip loaded json data")
         json_data["controllerConfig"]["controllerIp"] = hostIP
+        print("In healthcheck.py: threaded_get_host_ip set controllerIp to", hostIP)
         fileconfig.seek(0)
         json.dump(json_data, fileconfig, indent=4)
+        print("In healthcheck.py: threaded_get_host_ip dumped json data")
 
         fileconfig.close()
+        print("In healthcheck.py: threaded_get_host_ip closed config file")
+    print("In healthcheck.py: threaded_get_host_ip after config_lock")
     
     print("In healthcheck.py: finished threaded_get_host_ip. The host IP written is:", hostIP)
 
