@@ -4,7 +4,6 @@ from datetime import datetime
 # Python Program to Get IP Address and send to server 250
 import socket
 import subprocess
-# import psutil
 import os
 import json
 import requests
@@ -14,7 +13,6 @@ from changeStatic import *
 import GPIOconfig
 from var import server_url
 from lock import config_lock
-# change_static_ip, get_default_gateway_windows
 
 print("In healthcheck.py: start")
 
@@ -78,19 +76,16 @@ def get_host_ip(hostIP=None):
 
     if hostIP == 'dns':
         hostIP = socket.getfqdn()
-
     elif hostIP == 'ip':
-        from socket import gaierror
         try:
             hostIP = socket.gethostbyname(socket.getfqdn())
-        except gaierror:
-            logger.warn(
-                'gethostbyname(socket.getfqdn()) failed... trying on hostname()')
+        except socket.gaierror:
             hostIP = socket.gethostbyname(socket.gethostname())
 
         if hostIP.startswith("127."):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            # doesn't have to be reachable
+            timeoutCount = 0
+
             while True:
                 try:
                     s.connect(('10.255.255.255', 1))
@@ -98,6 +93,10 @@ def get_host_ip(hostIP=None):
                     break
                 except:
                     time.sleep(0.1)
+                    timeoutCount += 1
+                    if timeoutCount > 100: # 10 seconds before timeout
+                        print("Timeout while trying to get host IP")
+                        return None
 
         if str(hostIP).startswith('169.254') and (not check_ip_static()):  # apipa, use static ip
             change_static_ip(
@@ -181,7 +180,8 @@ def main(post_to_etlas=False):
 
         print("In healthcheck.py: before get_host_ip")
         host_ip = str(get_host_ip())
-        config["controllerConfig"]["controllerIp"] = host_ip
+        if host_ip is not None:
+            config["controllerConfig"]["controllerIp"] = host_ip
         print("In healthcheck.py: after get_host_ip")
 
         outfile.seek(0)
