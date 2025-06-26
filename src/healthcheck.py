@@ -71,42 +71,6 @@ def system_call(command):
     return p.stdout.read()
 
 
-def get_host_ip(hostIP=None):
-    if hostIP is None or hostIP == 'auto':
-        hostIP = 'ip'
-
-    if hostIP == 'dns':
-        hostIP = socket.getfqdn()
-    elif hostIP == 'ip':
-        try:
-            hostIP = socket.gethostbyname(socket.getfqdn())
-        except socket.gaierror:
-            hostIP = socket.gethostbyname(socket.gethostname())
-
-        if hostIP.startswith("127."):
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            timeoutCount = 0
-
-            while True:
-                try:
-                    s.connect(('10.255.255.255', 1))
-                    hostIP = s.getsockname()[0]
-                    break
-                except:
-                    time.sleep(0.1)
-                    timeoutCount += 1
-                    if timeoutCount > 100: # 10 seconds before timeout
-                        print("Timeout while trying to get host IP")
-                        return None
-
-        if str(hostIP).startswith('169.254') and (not check_ip_static()):  # apipa, use static ip
-            change_static_ip(
-                '192.168.1.230', get_default_gateway_windows(), '8.8.8.8')
-            return get_host_ip('ip')
-
-    return str(hostIP)
-
-
 def threaded_get_host_ip():
     print("In healthcheck.py: starting threaded_get_host_ip")
 
@@ -134,6 +98,43 @@ def threaded_get_host_ip():
         fileconfig.close()
     
     print("In healthcheck.py: finished threaded_get_host_ip. The host IP written is:", hostIP)
+
+
+def get_host_ip(hostIP=None):
+    if hostIP is None or hostIP == 'auto':
+        hostIP = 'ip'
+
+    if hostIP == 'dns':
+        hostIP = socket.getfqdn()
+    elif hostIP == 'ip':
+        try:
+            hostIP = socket.gethostbyname(socket.getfqdn())
+        except socket.gaierror:
+            hostIP = socket.gethostbyname(socket.gethostname())
+
+        if hostIP.startswith("127."):
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            timeoutCount = 0
+
+            while True:
+                try:
+                    s.connect(('10.255.255.255', 1))
+                    hostIP = s.getsockname()[0]
+                    break
+                except:
+                    time.sleep(0.1)
+                    timeoutCount += 1
+                    if timeoutCount > 100: # 10 seconds before timeout
+                        print("Timeout while trying to get host IP")
+                        thread_pool_executor.submit(threaded_get_host_ip)
+                        return None
+
+        if str(hostIP).startswith('169.254') and (not check_ip_static()):  # apipa, use static ip
+            change_static_ip(
+                '192.168.1.230', get_default_gateway_windows(), '8.8.8.8')
+            return get_host_ip('ip')
+
+    return str(hostIP)
 
 
 def main(post_to_etlas=False):
