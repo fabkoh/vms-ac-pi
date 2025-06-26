@@ -13,6 +13,7 @@ from changeStatic import *
 import GPIOconfig
 from var import server_url
 from lock import config_lock
+from executor import thread_pool_executor
 
 print("In healthcheck.py: start")
 
@@ -104,6 +105,35 @@ def get_host_ip(hostIP=None):
             return get_host_ip('ip')
 
     return str(hostIP)
+
+
+def threaded_get_host_ip():
+    print("In healthcheck.py: starting threaded_get_host_ip")
+
+    configFilePath = file
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    hostIP = None
+
+    while True:
+        try:
+            s.connect(('10.255.255.255', 1))
+            hostIP = s.getsockname()[0]
+            break
+        except:
+            time.sleep(10)
+            print("In healthcheck.py: Failed to get host IP, retrying...")
+    
+    with config_lock:
+        fileconfig = open(configFilePath)
+
+        json_data = json.load(fileconfig)
+        json_data["controllerConfig"]["controllerIp"] = hostIP
+        fileconfig.seek(0)
+        json.dump(json_data, fileconfig, indent=4)
+
+        fileconfig.close()
+    
+    print("In healthcheck.py: finished threaded_get_host_ip. The host IP written is:", hostIP)
 
 
 def main(post_to_etlas=False):
