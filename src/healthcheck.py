@@ -1,11 +1,9 @@
-
 import pigpio
 import json
 from datetime import datetime
 # Python Program to Get IP Address and send to server 250
 import socket
 import subprocess
-# import psutil
 import os
 import json
 import requests
@@ -15,7 +13,7 @@ from changeStatic import *
 import GPIOconfig
 from var import server_url
 from lock import config_lock
-# change_static_ip, get_default_gateway_windows
+from executor import thread_pool_executor
 
 path = os.path.dirname(os.path.abspath(__file__))
 file = path+"/json/config.json"
@@ -71,24 +69,55 @@ def system_call(command):
     return p.stdout.read()
 
 
+def threaded_get_host_ip():
+    '''
+    This function runs in a separate thread to periodically check and update the host IP
+    in the config.json file.
+    '''
+    print("In healthcheck.py: Starting threaded_get_host_ip on new thread")
+
+    configFilePath = file
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    hostIP = None
+
+    while True:
+        try:
+            s.connect(('10.255.255.255', 1))
+            hostIP = s.getsockname()[0]
+            break
+        except:
+            time.sleep(10)
+            print("In healthcheck.py: Failed to get host IP, retrying...")
+    
+    with config_lock:
+        fileconfig = open(configFilePath, "r+")
+
+        json_data = json.load(fileconfig)
+        json_data["controllerConfig"]["controllerIp"] = hostIP
+        fileconfig.seek(0)
+        json.dump(json_data, fileconfig, indent=4)
+
+        fileconfig.close()
+    
+    print("In healthcheck.py: Finished threaded_get_host_ip. The host IP written is to config.json is:", hostIP)
+
+
 def get_host_ip(hostIP=None):
     if hostIP is None or hostIP == 'auto':
         hostIP = 'ip'
 
     if hostIP == 'dns':
         hostIP = socket.getfqdn()
-
     elif hostIP == 'ip':
-        from socket import gaierror
         try:
             hostIP = socket.gethostbyname(socket.getfqdn())
-        except gaierror:
-            logger.warn(
-                'gethostbyname(socket.getfqdn()) failed... trying on hostname()')
+        except socket.gaierror:
             hostIP = socket.gethostbyname(socket.gethostname())
+
         if hostIP.startswith("127."):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            # doesn't have to be reachable
+            timeoutCount = 0
+
             while True:
                 try:
                     s.connect(('10.255.255.255', 1))
@@ -96,6 +125,11 @@ def get_host_ip(hostIP=None):
                     break
                 except:
                     time.sleep(0.1)
+                    timeoutCount += 1
+                    if timeoutCount > 100: # 10 seconds before timeout
+                        print("In healhcheck.py: Timeout while trying to get host IP")
+                        thread_pool_executor.submit(threaded_get_host_ip) ## Start new thread and continue with main process
+                        return None
 
         if str(hostIP).startswith('169.254') and (not check_ip_static()):  # apipa, use static ip
             change_static_ip(
@@ -140,9 +174,6 @@ def main(post_to_etlas=False):
         r = requests.post(url, data=json.dumps(
             body), headers=headers, verify=False)
 
-        # print(r)
-        # print(r.status_code)
-
         if r.status_code == 201 or r.status_code == 200:
             print("SUCCESS")
 
@@ -175,12 +206,14 @@ def main(post_to_etlas=False):
         current_date_time = now.strftime("%d-%m-%Y %H:%M:%S")
         readersConnection["dateAndTime"] = current_date_time
 
-        host_ip = str(get_host_ip())
         serial_num = str(get_serialnum().decode())
         mac = str(get_mac().decode())
-        config["controllerConfig"]["controllerIp"] = host_ip
         config["controllerConfig"]["controllerSerialNo"] = serial_num[:-1]
         config["controllerConfig"]["controllerMAC"] = mac[:-1]
+
+        host_ip = str(get_host_ip())
+        if host_ip != 'None': ## Only write if a valid IP was found
+            config["controllerConfig"]["controllerIp"] = host_ip
 
         outfile.seek(0)
         json.dump(config, outfile, indent=4)
