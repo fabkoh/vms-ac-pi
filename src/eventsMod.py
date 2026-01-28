@@ -129,17 +129,21 @@ def invalid_pin_used(entrance, status):
     update_logs_and_server(dictionary)
 
 
-def pin_only_used(entrance, status):
+def pin_only_used(person_id, access_group_id, entrance, status):
     '''
     This functions creates a dictionary to send to backend using
     update_logs_and_server, and uses event_trigger_cb to trigger the output
     action for what should happen when only pin is used
 
         Parameters:
+            person_id: ID of the person
+            access_group_id: ID of the access group
             entrance: entrance ID
             status: direction of the scan (IN or OUT)
     '''
     dictionary = {
+        "person": {"personId": person_id},
+        "accessGroup": {"accessGroupId": access_group_id},
         "direction": status,
         "entrance": {"entranceId": entrance},
         "eventActionType": {"eventActionTypeId": 13},
