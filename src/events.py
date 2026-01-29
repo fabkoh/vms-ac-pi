@@ -666,7 +666,7 @@ def reader_detects_bits(bits, value, entrance):
                             led_and_buzzer_correct_cred(entrancename)
                             open_door()
                             if "Pin" == auth_method_name:
-                                eventsMod.pin_only_used(entrancename, entrance_direction)
+                                eventsMod.pin_only_used(person_id, access_group_id, entrancename, entrance_direction)
                             else:
                                 eventsMod.record_auth_scans(person_id, access_group_id, auth_method_name, entrancename, entrance_direction)
                             reset_cred_and_stop_timer()
