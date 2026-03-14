@@ -32,9 +32,9 @@ frontend-install:
 frontend-dev:
 	cd ../vms-ac-ui-next && npm run dev
 
-## Build frontend for production
+## Build frontend for production and run it
 frontend-build:
-	cd ../vms-ac-ui-next && npm run build
+	cd ../vms-ac-ui-next && npm run build && npm run start
 
 ## Lint frontend
 frontend-lint:
