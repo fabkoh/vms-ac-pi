@@ -1,3 +1,7 @@
 /venv
+/myenv
 **/__pycache__
 *.pyc
+
+# Per-developer config
+src/var.py
