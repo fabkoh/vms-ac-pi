@@ -106,7 +106,8 @@ def post_config():
             data = json.load(f)
             f.close()
     # check if this is the intended controller
-    assert(request_body['controllerSerialNo'] == data['controllerConfig']['controllerSerialNo'])
+    if request_body['controllerSerialNo'] != data['controllerConfig']['controllerSerialNo']:
+        flask.abort(400)
 
     changeStatic.change_ip(request_body['controllerIPStatic'], request_body['controllerIP'])
     healthcheck.main(True) # post new config to etlas

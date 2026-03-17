@@ -399,7 +399,7 @@ def event_trigger_cb(event_trigger):
             # thus, need to set this to prevent repeats
             # ex. door opened more than 10s and unauthenticated scan
             # if 2 unauthenicated scans, should only trigger at the first scan
-            if len(event.get("inputEvent", [])) > 1:
+            if len(event.get("inputEvents", [])) > 1:
                 activated[event_management_id] = True
             queue_output(event)
 
