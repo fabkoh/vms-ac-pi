@@ -94,7 +94,7 @@ def set_env_variables():
     os.environ['SECRET_ENCRYPTION_KEY'] = 'ISSSecretkey'
 
 def run_servers():
-    javacmd = 'java -jar "-Dspring.profiles.active=production" /home/etlas/vms-ac-backend-0.0.1-SNAPSHOT.jar'
+    javacmd = 'java -jar -D "spring.profiles.active=production" /home/etlas/vms-ac-backend-0.0.1-SNAPSHOT.jar'
     postgrescmd = 'sudo service postgresql start'
     os.system(javacmd)
     os.system(postgrescmd)
