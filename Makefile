@@ -22,6 +22,10 @@ backend-build:
 backend-test:
 	cd ../vms-ac-server && ./mvnw test
 
+## Run backend with local PostgreSQL (staging)
+backend-staging:
+	cd ../vms-ac-server && ./mvnw spring-boot:run -Dspring-boot.run.profiles=staging
+
 # ── Frontend (Next.js) ───────────────────────
 
 ## Install frontend dependencies
@@ -65,6 +69,13 @@ dev:
 	(cd ../vms-ac-ui-next && npm run dev) & \
 	wait
 
-.PHONY: backend-dev backend-dev-pg backend-build backend-test \
+## Run backend + frontend in staging
+staging:
+	@trap 'kill 0' EXIT; \
+	(cd ../vms-ac-server && ./mvnw spring-boot:run -Dspring-boot.run.profiles=staging) & \
+	(cd ../vms-ac-ui-next && npm run build && npm run start) & \
+	wait
+
+.PHONY: backend-dev backend-dev-pg backend-staging backend-build backend-test \
         frontend-install frontend-dev frontend-build frontend-lint \
-        pi-install pi-api setup dev
+        pi-install pi-api setup dev staging
