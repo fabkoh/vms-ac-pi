@@ -90,14 +90,14 @@ def get_gateway_ip():
 
 def set_env_variables():
     host_ip = str(get_host_ip())
-    os.environ['DEVICE_IP']=host_ip
+    os.environ['DEVICE_IP'] = host_ip
     os.environ['SECRET_ENCRYPTION_KEY'] = 'ISSSecretkey'
 
 def run_servers():
-    javacmd = 'java -jar -D "spring.profiles.active=production" /home/etlas/vms-ac-backend-0.0.1-SNAPSHOT.jar'
+    javacmd = 'java -Dspring.profiles.active=production -jar /home/etlas/vms-ac-backend-0.0.1-SNAPSHOT.jar'
     postgrescmd = 'sudo service postgresql start'
-    os.system(javacmd)
     os.system(postgrescmd)
+    os.system(javacmd)
 
 
 #def get_dns_servers():
