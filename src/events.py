@@ -9,7 +9,6 @@ import time
 import updateserver
 import os
 from dateutil.rrule import rrulestr
-from dateutil.tz import tzlocal
 
 from lock import config_lock
 import GPIOconfig
@@ -161,7 +160,7 @@ def verify_datetime(schedule):
             rule = rrulestr(schedule["rrule"])
             
             # Get the current time with local timezone
-            now = datetime.now(tzlocal())
+            now = datetime.now()
             
             # Parse the start and end times as naive times
             start_time = datetime.strptime(schedule["starttime"], "%H:%M").time()
