@@ -62,7 +62,6 @@ deploy-backend: backend-build
 ## Build + copy frontend to Pi
 deploy-frontend:
 	cd ../vms-ac-ui-next && npm run build
-	ssh $(PI_HOST) "rm -rf $(PI_UI_PATH)/.next"
 	rsync -avz --exclude='cache/' ../vms-ac-ui-next/.next $(PI_HOST):$(PI_UI_PATH)/
 	rsync -avz ../vms-ac-ui-next/public $(PI_HOST):$(PI_UI_PATH)/
 	rsync -avz ../vms-ac-ui-next/package.json $(PI_HOST):$(PI_UI_PATH)/
