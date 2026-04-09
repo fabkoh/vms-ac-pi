@@ -78,6 +78,12 @@ def setupRelayPin(relayPin):
     return
 
 
+# Pre-initialize GPIO at startup to avoid first-use delay on relay trigger
+setGpioMode()
+setupRelayPin(Relay_1)
+setupRelayPin(Relay_2)
+
+
 def setRelayPinHigh(relayPin):
     '''
     This function sets the relay pin to high, meaning it will be activated
