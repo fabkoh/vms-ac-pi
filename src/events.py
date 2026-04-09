@@ -8,12 +8,20 @@ import json
 import time
 import updateserver
 import os
-from dateutil.rrule import rrulestr
 
 from lock import config_lock
 import GPIOconfig
 
 path = os.path.dirname(os.path.abspath(__file__))
+
+# Warm up rrulestr regex cache so the first real credential check is not delayed
+try:
+    _warmup_rule = rrulestr("DTSTART:20260101T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO")
+    from datetime import timedelta as _td
+    _warmup_rule.after(datetime.now() - _td(days=1), inc=True)
+    del _warmup_rule, _td
+except Exception:
+    pass
 
 '''
     1. contains class Timer 
