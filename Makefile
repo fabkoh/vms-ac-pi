@@ -86,6 +86,26 @@ dev:
 	(cd ../vms-ac-ui-next && npm run dev) & \
 	wait
 
+## Run backend (demo profile) + frontend together — no Pi needed
+demo:
+	@trap 'kill 0' EXIT; \
+	(cd ../vms-ac-server && ./mvnw spring-boot:run -Dspring-boot.run.profiles=demo) & \
+	(cd ../vms-ac-ui-next && NEXT_PUBLIC_URI='' npm run dev) & \
+	wait
+
+## Build artifacts for manual upload to a VM (GCP e2-micro etc.)
+build-demo-artifacts: backend-build
+	cd ../vms-ac-ui-next && NEXT_PUBLIC_URI='' NEXT_PUBLIC_DEMO_MODE=true npm run build
+	mkdir -p deploy-artifacts
+	cp ../vms-ac-server/target/vms-ac-backend-0.0.1-SNAPSHOT.jar deploy-artifacts/app.jar
+	cp -r ../vms-ac-ui-next/.next/static ../vms-ac-ui-next/.next/standalone/.next/static
+	cp -r ../vms-ac-ui-next/public ../vms-ac-ui-next/.next/standalone/public
+	tar -czf deploy-artifacts/frontend.tar.gz -C ../vms-ac-ui-next/.next/standalone .
+	@echo "✓ Artifacts ready in vms-ac-pi/deploy-artifacts/"
+	@echo "  Upload: deploy-artifacts/app.jar"
+	@echo "  Upload: deploy-artifacts/frontend.tar.gz"
+	@echo "  Upload: deploy-artifacts/nginx.conf"
+	@echo "  Upload: deploy-artifacts/start.sh"
 ## Run backend + frontend in staging (local PostgreSQL)
 staging:
 	@trap 'kill 0' EXIT; \
@@ -95,5 +115,4 @@ staging:
 
 .PHONY: backend-dev backend-staging backend-build backend-test \
         frontend-install frontend-dev frontend-lint build-check \
-        pi-install setup dev staging \
         deploy-backend deploy-frontend deploy
